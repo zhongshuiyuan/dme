@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Dist.Dme.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:Dist.Dme.WebApi.Controllers.ValuesController.Get">
+            <summary>
+            获取数值
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
