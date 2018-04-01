@@ -5,20 +5,25 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dist.Dme.DAL
+namespace Dist.Dme.DAL.Context
 {
-    public class DbContext
+    public class ContextBase : IDbContext
     {
-        public DbContext()
+        protected SqlSugarClient Db;
+
+        public ContextBase(DbType dbType)
         {
             Db = new SqlSugarClient(new ConnectionConfig()
             {
                 ConnectionString = Config.ConnectionString,
-                DbType = DbType.Oracle,
+                DbType = dbType,
                 IsAutoCloseConnection = true
             });
         }
-        public SqlSugarClient Db;
-        public SimpleClient<DmeModel> DmeModelRepo { get { return new SimpleClient<DmeModel>(Db); } }
+
+        public SqlSugarClient GetDbContext()
+        {
+            return Db;
+        }
     }
 }

@@ -2274,6 +2274,16 @@
           "lib/netstandard1.3/System.Xml.XmlDocument.dll": {}
         }
       },
+      "Dist.Dme.Base/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Dist.Dme.Base.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Dist.Dme.Base.dll": {}
+        }
+      },
       "Dist.Dme.Model/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.0",
@@ -7306,6 +7316,11 @@
         "system.xml.xmldocument.nuspec"
       ]
     },
+    "Dist.Dme.Base/1.0.0": {
+      "type": "project",
+      "path": "../Dist.Dme.Base/Dist.Dme.Base.csproj",
+      "msbuildProject": "../Dist.Dme.Base/Dist.Dme.Base.csproj"
+    },
     "Dist.Dme.Model/1.0.0": {
       "type": "project",
       "path": "../Dist.Dme.Model/Dist.Dme.Model.csproj",
@@ -7314,6 +7329,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
+      "Dist.Dme.Base >= 1.0.0",
       "Dist.Dme.Model >= 1.0.0",
       "Microsoft.NETCore.App >= 2.0.0",
       "oracle.manageddataaccess.core >= 2.12.0-beta2",
@@ -7360,6 +7376,9 @@
           "projectReferences": {
             "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj": {
               "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj"
+            },
+            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj"
             }
           }
         }

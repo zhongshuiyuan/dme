@@ -9,3 +9,5 @@ D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.DAL\obj\Debug\netcoreapp2.0\Dist.Dme
 D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.DAL\obj\Debug\netcoreapp2.0\Dist.Dme.DAL.pdb
 D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.DAL\bin\Debug\netcoreapp2.0\Dist.Dme.Model.dll
 D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.DAL\bin\Debug\netcoreapp2.0\Dist.Dme.Model.pdb
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.DAL\bin\Debug\netcoreapp2.0\Dist.Dme.Base.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.DAL\bin\Debug\netcoreapp2.0\Dist.Dme.Base.pdb

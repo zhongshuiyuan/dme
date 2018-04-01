@@ -91,7 +91,7 @@ comment on column DME_MODEL_VERSION.id
 comment on column DME_MODEL_VERSION.syscode
   is '唯一编码';
 comment on column DME_MODEL_VERSION.name
-  is '名称';
+  is '版本名称';
 comment on column DME_MODEL_VERSION.model_id
   is '模型ID';
 comment on column DME_MODEL_VERSION.createtime
@@ -130,6 +130,7 @@ comment on column DME_MODEL.usercode
 	"ID" NUMBER(8) NOT NULL,
 	"RULESTEP_ID" NUMBER(8),
 	"MODEL_ID"  NUMBER(8),
+  "VERSION_ID"  NUMBER(8),
 	"DATASOURCE_ID"  NUMBER(8)
 );
 comment on table DME_RULESTEP_DATASOURCE
@@ -177,7 +178,7 @@ comment on column DME_RULESTEP_ATTRIBUTE.attribute_value
 	"ID" NUMBER(8) NOT NULL,
 	"MAJOR_VERSION" NUMBER(2),
 	"MINOR_VERSION" NUMBER(2),
-	"UPGRADE_DATE" DATE
+	"UPGRADE_TIME" DATE
 );
 -- Add comments to the table 
 comment on table DME_VERSION
@@ -242,7 +243,7 @@ comment on table DME_LOG
 comment on column DME_LOG.id
   is '主键';
 comment on column DME_LOG.logtype
-  is '日志类型，login（登录）、logout（登出）、';
+  is '日志类型，LOGIN（登录）、LOGOUT（登出）......';
 comment on column DME_LOG.loglevel
   is '日志级别，ERROR：错误日志
 MINIMAL：最小日志
@@ -345,7 +346,7 @@ comment on column DME_ALGORITHM_METADATA.type
 6、大整型类型（ValueMetaInterface.TYPE_BIGNUMBER=6）
 7、序列化类型（ValueMetaInterface.TYPE_SERIALIZABLE=7）
 8、二进制类型（ValueMetaInterface.TYPE_BINARY=8）
-9、纳秒时间类型（ValueMetaInterface.TYPE_BINARY=9）
+9、微秒时间类型（ValueMetaInterface.TYPE_TIMESTAMP=9）
 10、网络路径类型（ValueMetaInterface.TYPE_INET=10）';
 comment on column DME_ALGORITHM_METADATA.inout
   is '输入输出参数，输入：IN；输出：OUT';
@@ -408,6 +409,88 @@ maxvalue 9999999999999999999999999
 start with 1
 increment by 1
 cache 20;
+
+create sequence SEQ_DME_ALGORITHM
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
+create sequence SEQ_DME_ALGORITHM_METADATA
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
+create sequence SEQ_DME_DATABASETYPE
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
+create sequence SEQ_DME_DATASOURCE
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
+create sequence SEQ_DME_JOB
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
+create sequence SEQ_DME_MODEL_VERSION
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
+create sequence SEQ_DME_RULESTEP
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
+create sequence SEQ_DME_RULESTEP_ATTRIBUTE
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
+create sequence SEQ_DME_RULESTEP_DATASOURCE
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
+create sequence SEQ_DME_RULESTEP_HOP
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
+create sequence SEQ_DME_VERSION
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
+
+
+
+
 
 
 

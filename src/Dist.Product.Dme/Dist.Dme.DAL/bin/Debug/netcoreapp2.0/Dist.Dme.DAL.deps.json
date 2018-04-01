@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v2.0": {
       "Dist.Dme.DAL/1.0.0": {
         "dependencies": {
+          "Dist.Dme.Base": "1.0.0",
           "Dist.Dme.Model": "1.0.0",
           "Oracle.ManagedDataAccess.Core": "2.12.0-beta2",
           "sqlSugarCore": "4.6.4.7"
@@ -1436,6 +1437,14 @@
           "System.Xml.ReaderWriter": "4.3.0"
         }
       },
+      "Dist.Dme.Base/1.0.0": {
+        "dependencies": {
+          "sqlSugarCore": "4.6.4.7"
+        },
+        "runtime": {
+          "Dist.Dme.Base.dll": {}
+        }
+      },
       "Dist.Dme.Model/1.0.0": {
         "dependencies": {
           "sqlSugarCore": "4.6.4.7"
@@ -2298,6 +2307,11 @@
       "sha512": "sha512-lJ8AxvkX7GQxpC6GFCeBj8ThYVyQczx2+f/cWHJU8tjS7YfI6Cv6bon70jVEgs2CiFbmmM8b9j1oZVx0dSI2Ww==",
       "path": "system.xml.xmldocument/4.3.0",
       "hashPath": "system.xml.xmldocument.4.3.0.nupkg.sha512"
+    },
+    "Dist.Dme.Base/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "Dist.Dme.Model/1.0.0": {
       "type": "project",

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dist.Dme.DAL;
+using Dist.Dme.DAL.Context;
 using Dist.Dme.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +19,7 @@ namespace Dist.Dme.WebApi.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            DbContext cxt = new DbContext();
+            OracleContextBase cxt = new OracleContextBase();
             List<DmeModel> models = cxt.DmeModelRepo.GetList();
 
             return new string[] { "value1", "value2", models.Count.ToString() };
