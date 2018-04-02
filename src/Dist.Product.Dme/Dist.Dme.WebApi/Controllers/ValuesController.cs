@@ -19,9 +19,6 @@ namespace Dist.Dme.WebApi.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            OracleContextBase cxt = new OracleContextBase();
-            List<DmeModel> models = cxt.DmeModelRepo.GetList();
-
             return new string[] { "value1", "value2", models.Count.ToString() };
         }
 

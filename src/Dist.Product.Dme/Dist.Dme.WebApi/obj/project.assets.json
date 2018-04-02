@@ -5090,32 +5090,6 @@
           "lib/netstandard1.3/Microsoft.WindowsAzure.Storage.dll": {}
         }
       },
-      "Dist.Dme.Base/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v2.0",
-        "compile": {
-          "bin/placeholder/Dist.Dme.Base.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Dist.Dme.Base.dll": {}
-        }
-      },
-      "Dist.Dme.DAL/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v2.0",
-        "dependencies": {
-          "Dist.Dme.Base": "1.0.0",
-          "Dist.Dme.Model": "1.0.0",
-          "oracle.manageddataaccess.core": "2.12.0-beta2",
-          "sqlSugarCore": "4.6.4.7"
-        },
-        "compile": {
-          "bin/placeholder/Dist.Dme.DAL.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Dist.Dme.DAL.dll": {}
-        }
-      },
       "Dist.Dme.Model/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.0",
@@ -13362,16 +13336,6 @@
         "windowsazure.storage.nuspec"
       ]
     },
-    "Dist.Dme.Base/1.0.0": {
-      "type": "project",
-      "path": "../Dist.Dme.Base/Dist.Dme.Base.csproj",
-      "msbuildProject": "../Dist.Dme.Base/Dist.Dme.Base.csproj"
-    },
-    "Dist.Dme.DAL/1.0.0": {
-      "type": "project",
-      "path": "../Dist.Dme.DAL/Dist.Dme.DAL.csproj",
-      "msbuildProject": "../Dist.Dme.DAL/Dist.Dme.DAL.csproj"
-    },
     "Dist.Dme.Model/1.0.0": {
       "type": "project",
       "path": "../Dist.Dme.Model/Dist.Dme.Model.csproj",
@@ -13380,7 +13344,6 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
-      "Dist.Dme.DAL >= 1.0.0",
       "Dist.Dme.Model >= 1.0.0",
       "Microsoft.AspNetCore.All >= 2.0.6",
       "Microsoft.AspNetCore.Mvc.Versioning >= 2.1.0",
@@ -13429,9 +13392,6 @@
           "projectReferences": {
             "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj": {
               "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj"
-            },
-            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.DAL\\Dist.Dme.DAL.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.DAL\\Dist.Dme.DAL.csproj"
             }
           }
         }
