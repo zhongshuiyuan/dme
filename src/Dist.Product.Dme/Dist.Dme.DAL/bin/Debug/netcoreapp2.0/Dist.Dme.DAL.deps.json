@@ -1438,9 +1438,6 @@
         }
       },
       "Dist.Dme.Base/1.0.0": {
-        "dependencies": {
-          "sqlSugarCore": "4.6.4.7"
-        },
         "runtime": {
           "Dist.Dme.Base.dll": {}
         }

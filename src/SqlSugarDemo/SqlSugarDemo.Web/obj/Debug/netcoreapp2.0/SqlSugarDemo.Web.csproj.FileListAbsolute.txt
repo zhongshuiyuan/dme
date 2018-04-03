@@ -1,0 +1,13 @@
+E:\ME\SqlSugarDemo\SqlSugarDemo.Web\bin\Debug\netcoreapp2.0\SqlSugarDemo.Web.deps.json
+E:\ME\SqlSugarDemo\SqlSugarDemo.Web\bin\Debug\netcoreapp2.0\SqlSugarDemo.Web.runtimeconfig.json
+E:\ME\SqlSugarDemo\SqlSugarDemo.Web\bin\Debug\netcoreapp2.0\SqlSugarDemo.Web.runtimeconfig.dev.json
+E:\ME\SqlSugarDemo\SqlSugarDemo.Web\bin\Debug\netcoreapp2.0\SqlSugarDemo.Web.dll
+E:\ME\SqlSugarDemo\SqlSugarDemo.Web\bin\Debug\netcoreapp2.0\SqlSugarDemo.Web.pdb
+E:\ME\SqlSugarDemo\SqlSugarDemo.Web\obj\Debug\netcoreapp2.0\SqlSugarDemo.Web.csprojResolveAssemblyReference.cache
+E:\ME\SqlSugarDemo\SqlSugarDemo.Web\obj\Debug\netcoreapp2.0\SqlSugarDemo.Web.csproj.CoreCompileInputs.cache
+E:\ME\SqlSugarDemo\SqlSugarDemo.Web\obj\Debug\netcoreapp2.0\SqlSugarDemo.Web.AssemblyInfoInputs.cache
+E:\ME\SqlSugarDemo\SqlSugarDemo.Web\obj\Debug\netcoreapp2.0\SqlSugarDemo.Web.AssemblyInfo.cs
+E:\ME\SqlSugarDemo\SqlSugarDemo.Web\obj\Debug\netcoreapp2.0\SqlSugarDemo.Web.dll
+E:\ME\SqlSugarDemo\SqlSugarDemo.Web\obj\Debug\netcoreapp2.0\SqlSugarDemo.Web.pdb
+E:\ME\SqlSugarDemo\SqlSugarDemo.Web\bin\Debug\netcoreapp2.0\SqlSugarDemo.Busines.dll
+E:\ME\SqlSugarDemo\SqlSugarDemo.Web\bin\Debug\netcoreapp2.0\SqlSugarDemo.Busines.pdb

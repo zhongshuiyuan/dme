@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Impls\" />
+    <ProjectReference Include="..\Dist.Dme.DAL\Dist.Dme.DAL.csproj" />
+    <ProjectReference Include="..\Dist.Dme.Model\Dist.Dme.Model.csproj" />
   </ItemGroup>
 
 </Project>

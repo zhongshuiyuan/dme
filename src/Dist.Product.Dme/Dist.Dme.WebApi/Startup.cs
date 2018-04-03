@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Dist.Dme.Base.Conf;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,8 @@ namespace Dist.Dme.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            // 设置数据源，读取appsettings.json配置文件
+            SysConfig.DBConnectionString = this.Configuration.GetConnectionString("DataSource");
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info

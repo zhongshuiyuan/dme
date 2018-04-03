@@ -1,0 +1,9 @@
+E:\ME\SqlSugarDemo\SqlSugarDemo.Busines\bin\Debug\netcoreapp2.0\SqlSugarDemo.Busines.deps.json
+E:\ME\SqlSugarDemo\SqlSugarDemo.Busines\bin\Debug\netcoreapp2.0\SqlSugarDemo.Busines.dll
+E:\ME\SqlSugarDemo\SqlSugarDemo.Busines\bin\Debug\netcoreapp2.0\SqlSugarDemo.Busines.pdb
+E:\ME\SqlSugarDemo\SqlSugarDemo.Busines\obj\Debug\netcoreapp2.0\SqlSugarDemo.Busines.csprojResolveAssemblyReference.cache
+E:\ME\SqlSugarDemo\SqlSugarDemo.Busines\obj\Debug\netcoreapp2.0\SqlSugarDemo.Busines.csproj.CoreCompileInputs.cache
+E:\ME\SqlSugarDemo\SqlSugarDemo.Busines\obj\Debug\netcoreapp2.0\SqlSugarDemo.Busines.AssemblyInfoInputs.cache
+E:\ME\SqlSugarDemo\SqlSugarDemo.Busines\obj\Debug\netcoreapp2.0\SqlSugarDemo.Busines.AssemblyInfo.cs
+E:\ME\SqlSugarDemo\SqlSugarDemo.Busines\obj\Debug\netcoreapp2.0\SqlSugarDemo.Busines.dll
+E:\ME\SqlSugarDemo\SqlSugarDemo.Busines\obj\Debug\netcoreapp2.0\SqlSugarDemo.Busines.pdb

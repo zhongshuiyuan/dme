@@ -4,6 +4,17 @@
         <name>Dist.Dme.WebApi</name>
     </assembly>
     <members>
+        <member name="T:Dist.Dme.WebApi.Controllers.DataSourcesController">
+            <summary>
+            数据源服务
+            </summary>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes">
+            <summary>
+            获取所有数据库类型
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Dist.Dme.WebApi.Controllers.ValuesController.Get">
             <summary>
             获取数值

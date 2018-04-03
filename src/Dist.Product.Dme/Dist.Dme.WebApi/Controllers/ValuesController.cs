@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dist.Dme.DAL.Context;
-using Dist.Dme.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dist.Dme.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class ValuesController : Controller
     {
         // GET api/values
@@ -19,7 +17,7 @@ namespace Dist.Dme.WebApi.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2", models.Count.ToString() };
+            return new string[] { "value1", "value2" };
         }
 
         // GET api/values/5
