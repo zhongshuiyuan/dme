@@ -15,15 +15,31 @@ namespace Dist.Dme.Base.Framework
         /// <returns></returns>
         String SysCode { get; }
         /// <summary>
+        /// 名称
+        /// </summary>
+        String Name { get; }
+        /// <summary>
+        /// 别名
+        /// </summary>
+        String Alias { get; }
+        /// <summary>
+        /// 版本
+        /// </summary>
+        String Version { get; }
+        /// <summary>
+        /// 算法备注信息
+        /// </summary>
+        String Remark { get; }
+        /// <summary>
         /// 获取输入参数元数据
         /// </summary>
         /// <returns></returns>
-        Object GetInParametersMetadata();
+        Object GetInParameters();
         /// <summary>
         /// 获取输出参数元数据
         /// </summary>
         /// <returns></returns>
-        Object GetOutParametersMetadata();
+        Object GetOutParameters();
         /// <summary>
         /// 执行
         /// </summary>

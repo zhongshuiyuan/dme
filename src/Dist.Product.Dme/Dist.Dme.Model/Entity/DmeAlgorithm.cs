@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dist.Dme.Model
+namespace Dist.Dme.Model.Entity
 {
     [SugarTable("DME_ALGORITHM")]
     public class DmeAlgorithm
@@ -14,7 +14,7 @@ namespace Dist.Dme.Model
         public String Name { get; set; }
         public String Alias { get; set; }
         public String Version { get; set; }
-        public DateTime RegisterTime { get; set; }
+        public int RegisterTime { get; set; }
         public String Remark { get; set; }
         public String UserCode { get; set; }
         public String Path { get; set; }

@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "e0e84c14c37e61656a225d74bfa612a8568bb982"
+    "signature": "32d909c7a2b1e656317a7a48ea4a8adab9ab5a79"
   },
   "compilationOptions": {},
   "targets": {
@@ -15,26 +15,6 @@
         },
         "runtime": {
           "Dist.Dme.DAL.dll": {}
-        }
-      },
-      "Microsoft.CSharp/4.3.0": {
-        "dependencies": {
-          "System.Collections": "4.3.0",
-          "System.Diagnostics.Debug": "4.3.0",
-          "System.Dynamic.Runtime": "4.3.0",
-          "System.Globalization": "4.3.0",
-          "System.Linq": "4.3.0",
-          "System.Linq.Expressions": "4.3.0",
-          "System.ObjectModel": "4.3.0",
-          "System.Reflection": "4.3.0",
-          "System.Reflection.Extensions": "4.3.0",
-          "System.Reflection.Primitives": "4.3.0",
-          "System.Reflection.TypeExtensions": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Runtime.InteropServices": "4.3.0",
-          "System.Threading": "4.3.0"
         }
       },
       "Microsoft.Data.Sqlite/2.0.0": {
@@ -81,7 +61,7 @@
         "dependencies": {
           "Microsoft.Extensions.Configuration": "1.1.2",
           "Microsoft.Extensions.Configuration.FileExtensions": "1.1.2",
-          "Newtonsoft.Json": "10.0.3",
+          "Newtonsoft.Json": "11.0.2",
           "System.Dynamic.Runtime": "4.3.0",
           "System.Runtime.Serialization.Primitives": "4.3.0"
         },
@@ -178,16 +158,9 @@
           "lib/netstandard1.3/MySql.Data.dll": {}
         }
       },
-      "Newtonsoft.Json/10.0.3": {
-        "dependencies": {
-          "Microsoft.CSharp": "4.3.0",
-          "System.ComponentModel.TypeConverter": "4.3.0",
-          "System.Runtime.Serialization.Formatters": "4.3.0",
-          "System.Runtime.Serialization.Primitives": "4.3.0",
-          "System.Xml.XmlDocument": "4.3.0"
-        },
+      "Newtonsoft.Json/11.0.2": {
         "runtime": {
-          "lib/netstandard1.3/Newtonsoft.Json.dll": {}
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
       "Oracle.ManagedDataAccess.Core/2.12.0-beta2": {
@@ -415,7 +388,7 @@
         "dependencies": {
           "Microsoft.Data.Sqlite": "2.0.0",
           "MySql.Data": "6.10.4",
-          "Newtonsoft.Json": "10.0.3",
+          "Newtonsoft.Json": "11.0.2",
           "System.Data.Common": "4.3.0",
           "System.Data.SqlClient": "4.4.0",
           "System.Reflection.Emit.Lightweight": "4.3.0"
@@ -1380,13 +1353,6 @@
           "System.Runtime": "4.3.0"
         }
       },
-      "System.Threading.Tasks.Extensions/4.3.0": {
-        "dependencies": {
-          "System.Collections": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Threading.Tasks": "4.3.0"
-        }
-      },
       "System.Threading.Thread/4.3.0": {
         "dependencies": {
           "System.Runtime": "4.3.0"
@@ -1404,40 +1370,10 @@
           "System.Runtime": "4.3.0"
         }
       },
-      "System.Xml.ReaderWriter/4.3.0": {
-        "dependencies": {
-          "System.Collections": "4.3.0",
-          "System.Diagnostics.Debug": "4.3.0",
-          "System.Globalization": "4.3.0",
-          "System.IO": "4.3.0",
-          "System.IO.FileSystem": "4.3.0",
-          "System.IO.FileSystem.Primitives": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Runtime.InteropServices": "4.3.0",
-          "System.Text.Encoding": "4.3.0",
-          "System.Text.Encoding.Extensions": "4.3.0",
-          "System.Text.RegularExpressions": "4.3.0",
-          "System.Threading.Tasks": "4.3.0",
-          "System.Threading.Tasks.Extensions": "4.3.0"
-        }
-      },
-      "System.Xml.XmlDocument/4.3.0": {
-        "dependencies": {
-          "System.Collections": "4.3.0",
-          "System.Diagnostics.Debug": "4.3.0",
-          "System.Globalization": "4.3.0",
-          "System.IO": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Text.Encoding": "4.3.0",
-          "System.Threading": "4.3.0",
-          "System.Xml.ReaderWriter": "4.3.0"
-        }
-      },
       "Dist.Dme.Base/1.0.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "11.0.2"
+        },
         "runtime": {
           "Dist.Dme.Base.dll": {}
         }
@@ -1457,13 +1393,6 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
-    },
-    "Microsoft.CSharp/4.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-P+MBhIM0YX+JqROuf7i306ZLJEjQYA9uUyRDE+OqwUI5sh41e2ZbPQV3LfAPh+29cmceE1pUffXsGfR4eMY3KA==",
-      "path": "microsoft.csharp/4.3.0",
-      "hashPath": "microsoft.csharp.4.3.0.nupkg.sha512"
     },
     "Microsoft.Data.Sqlite/2.0.0": {
       "type": "package",
@@ -1563,12 +1492,12 @@
       "path": "mysql.data/6.10.4",
       "hashPath": "mysql.data.6.10.4.nupkg.sha512"
     },
-    "Newtonsoft.Json/10.0.3": {
+    "Newtonsoft.Json/11.0.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-hSXaFmh7hNCuEoC4XNY5DrRkLDzYHqPx/Ik23R4J86Z7PE/Y6YidhG602dFVdLBRSdG6xp9NabH3dXpcoxWvww==",
-      "path": "newtonsoft.json/10.0.3",
-      "hashPath": "newtonsoft.json.10.0.3.nupkg.sha512"
+      "sha512": "sha512-IvJe1pj7JHEsP8B8J8DwlMEx8UInrs/x+9oVY+oCD13jpLu4JbJU2WCIsMRn5C4yW9+DgkaO8uiVE5VHKjpmdQ==",
+      "path": "newtonsoft.json/11.0.2",
+      "hashPath": "newtonsoft.json.11.0.2.nupkg.sha512"
     },
     "Oracle.ManagedDataAccess.Core/2.12.0-beta2": {
       "type": "package",
@@ -2263,13 +2192,6 @@
       "path": "system.threading.tasks/4.3.0",
       "hashPath": "system.threading.tasks.4.3.0.nupkg.sha512"
     },
-    "System.Threading.Tasks.Extensions/4.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-npvJkVKl5rKXrtl1Kkm6OhOUaYGEiF9wFbppFRWSMoApKzt2PiPHT2Bb8a5sAWxprvdOAtvaARS9QYMznEUtug==",
-      "path": "system.threading.tasks.extensions/4.3.0",
-      "hashPath": "system.threading.tasks.extensions.4.3.0.nupkg.sha512"
-    },
     "System.Threading.Thread/4.3.0": {
       "type": "package",
       "serviceable": true,
@@ -2290,20 +2212,6 @@
       "sha512": "sha512-Z6YfyYTCg7lOZjJzBjONJTFKGN9/NIYKSxhU5GRd+DTwHSZyvWp1xuI5aR+dLg+ayyC5Xv57KiY4oJ0tMO89fQ==",
       "path": "system.threading.timer/4.3.0",
       "hashPath": "system.threading.timer.4.3.0.nupkg.sha512"
-    },
-    "System.Xml.ReaderWriter/4.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-GrprA+Z0RUXaR4N7/eW71j1rgMnEnEVlgii49GZyAjTH7uliMnrOU3HNFBr6fEDBCJCIdlVNq9hHbaDR621XBA==",
-      "path": "system.xml.readerwriter/4.3.0",
-      "hashPath": "system.xml.readerwriter.4.3.0.nupkg.sha512"
-    },
-    "System.Xml.XmlDocument/4.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-lJ8AxvkX7GQxpC6GFCeBj8ThYVyQczx2+f/cWHJU8tjS7YfI6Cv6bon70jVEgs2CiFbmmM8b9j1oZVx0dSI2Ww==",
-      "path": "system.xml.xmldocument/4.3.0",
-      "hashPath": "system.xml.xmldocument.4.3.0.nupkg.sha512"
     },
     "Dist.Dme.Base/1.0.0": {
       "type": "project",

@@ -2,7 +2,7 @@
 CREATE TABLE DME_RuleStep
 (
   "ID" NUMBER(8) NOT NULL,
-   "SYSCODE" VARCHAR2(38)
+   "SYSCODE" VARCHAR2(38),
   "MODEL_ID"  NUMBER(8),
   "ALGORITHM_ID"  NUMBER(8),
   "GUI_LOCATION_X" NUMBER(8),
@@ -35,7 +35,7 @@ comment on column DME_RULESTEP.syscode
   alter table DME_RULESTEP add primary key(id);
   create unique index UK_SYS_CODE on DME_RULESTEP (syscode);
 
-CREATE TABLE DME_Job
+CREATE TABLE DME_Task
 (
 	"ID" NUMBER(8),
 	"SYSCODE" VARCHAR2(38),
@@ -43,12 +43,12 @@ CREATE TABLE DME_Job
 	"STATUS" VARCHAR2(20),
 	"MODEL_ID" NUMBER(8),
 	"VERSION_ID" NUMBER(8),
-	"CREATETIME" DATE,
-	"LASTTIME" DATE,
+	"CREATETIME" number(20),
+	"LASTTIME" number(20),
 	"USERCODE" VARCHAR2(38)
 );
 -- Add comments to the table 
-comment on table DME_JOB
+comment on table DME_Task
   is '任务调度';
 -- Add comments to the columns 
 comment on column DME_JOB.id
@@ -65,9 +65,9 @@ comment on column DME_JOB.model_id
 comment on column DME_JOB.version_id
   is '版本ID';
 comment on column DME_JOB.createtime
-  is '创建时间';
+  is '创建时间，毫秒';
 comment on column DME_JOB.lasttime
-  is '最后更新时间';
+  is '最后更新时间，毫秒';
 comment on column DME_JOB.usercode
   is '用户唯一编码';
   
@@ -79,7 +79,7 @@ CREATE TABLE DME_Model_Version
 	"SYSCODE" VARCHAR2(38),
 	"NAME" VARCHAR2(50),
 	"MODEL_ID" NUMBER(8),
-	"CREATETIME" DATE,
+	"CREATETIME" number(20),
 	"USERCODE" VARCHAR2(38)
 );
 -- Add comments to the table 
@@ -95,7 +95,7 @@ comment on column DME_MODEL_VERSION.name
 comment on column DME_MODEL_VERSION.model_id
   is '模型ID';
 comment on column DME_MODEL_VERSION.createtime
-  is '创建时间';
+  is '创建时间，毫秒';
 comment on column DME_MODEL_VERSION.usercode
   is '用户唯一编码';
   alter table DME_MODEL_VERSION add primary key(id);
@@ -178,7 +178,7 @@ comment on column DME_RULESTEP_ATTRIBUTE.attribute_value
 	"ID" NUMBER(8) NOT NULL,
 	"MAJOR_VERSION" NUMBER(2),
 	"MINOR_VERSION" NUMBER(2),
-	"UPGRADE_TIME" DATE
+	"UPGRADE_TIME" number(20)
 );
 -- Add comments to the table 
 comment on table DME_VERSION
@@ -190,8 +190,8 @@ comment on column DME_VERSION.major_version
   is '主版本';
 comment on column DME_VERSION.minor_version
   is '次版本';
-comment on column DME_VERSION.upgrade_date
-  is '更新时间';
+comment on column DME_VERSION.UPGRADE_TIME
+  is '更新时间，毫秒';
   alter table DME_VERSION add primary key(id);
   
   CREATE TABLE DME_RuleStep_Hop
@@ -227,7 +227,7 @@ create table DME_LOG
   logtype    VARCHAR2(20),
   loglevel   VARCHAR2(20),
   usercode   VARCHAR2(38),
-  createtime DATE,
+  createtime number(20),
   address    VARCHAR2(38),
   remark     VARCHAR2(255),
   apps       VARCHAR2(255)
@@ -253,7 +253,7 @@ DEBUG：调试';
 comment on column DME_LOG.usercode
   is '用户唯一编码';
 comment on column DME_LOG.createtime
-  is '创建时间';
+  is '创建时间，毫秒';
 comment on column DME_LOG.address
   is '地址';
 comment on column DME_LOG.remark
@@ -291,7 +291,7 @@ CREATE TABLE DME_Algorithm
 	"NAME" VARCHAR2(50),
 	"ALIAS" VARCHAR2(50),
 	"VERSION" VARCHAR2(10) NOT NULL,
-	"REGISTERTIME" DATE,
+	"REGISTERTIME" number(20),
 	"REMARK" VARCHAR2(250),
 	"USERCODE" VARCHAR2(38),
   PATH VARCHAR2(512)
@@ -310,7 +310,7 @@ comment on column DME_ALGORITHM.alias
 comment on column DME_ALGORITHM.version
   is '版本';
 comment on column DME_ALGORITHM.registertime
-  is '注册时间';
+  is '注册时间，毫秒';
 comment on column DME_ALGORITHM.remark
   is '备注';
 comment on column DME_ALGORITHM.usercode
@@ -362,7 +362,7 @@ comment on column DME_ALGORITHM_METADATA.algorithm_id
 	"ISLOCAL" NUMBER(1) DEFAULT 0 NOT NULL,
 	"TYPE" VARCHAR2(20) NOT NULL,
 	"CONNECTION" CLOB,
-	"CREATETIME" DATE,
+	"CREATETIME" number(20),
 	"REMARK" VARCHAR2(250)
 );
 comment on table DME_DATASOURCE
@@ -396,11 +396,56 @@ connection值，是个json格式
 }
 ';
 comment on column DME_DATASOURCE.createtime
-  is '创建时间';
+  is '创建时间，毫秒';
 comment on column DME_DATASOURCE.remark
   is '备注';
 
 alter table DME_DATASOURCE add primary key(ID);
+
+-- Create table
+create table DME_USER
+(
+  id         number(8),
+  syscode    varchar2(38),
+  loginname  varchar2(50),
+  loginpwd   varchar2(50),
+  name       varchar2(50),
+  status     number(1),
+  createtime number(20),
+  email      varchar2(20),
+  telephone  varchar2(20),
+  usertype   number(1)
+)
+;
+-- Add comments to the table 
+comment on table DME_USER
+  is '用户信息表';
+-- Add comments to the columns 
+comment on column DME_USER.id
+  is '主键';
+comment on column DME_USER.syscode
+  is '唯一编码';
+comment on column DME_USER.loginname
+  is '登录名';
+comment on column DME_USER.loginpwd
+  is '登录密码';
+comment on column DME_USER.name
+  is '显示名称';
+comment on column DME_USER.status
+  is '用户状态，0：无效；1：有效；2：不正常；3：删除';
+comment on column DME_USER.createtime
+  is '注册时间，毫秒';
+comment on column DME_USER.email
+  is '邮箱';
+comment on column DME_USER.telephone
+  is '联系电话';
+comment on column DME_USER.usertype
+  is '用户类型。0：内置用户；1：管理员；2：普通用户';
+  
+  alter table DME_USER add primary key(id);
+  -- 设置默认值
+alter table DME_USER modify status default 1;
+alter table DME_USER modify usertype default 2;
 
 -- Create sequence 
 create sequence SEQ_DME_MODEL
@@ -438,7 +483,7 @@ start with 1
 increment by 1
 cache 20;
 
-create sequence SEQ_DME_JOB
+create sequence SEQ_DME_TASK
 minvalue 1
 maxvalue 9999999999999999999999999
 start with 1
@@ -486,6 +531,18 @@ maxvalue 9999999999999999999999999
 start with 1
 increment by 1
 cache 20;
+
+create sequence SEQ_DME_USER
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
+--测试数据
+insert into DME_USER
+values(seq_dme_user.nextval, lower(sys_guid()), 'dmeadmin','passw0rd', 'dme管理员',1, SYSDATE, '754236623@qq.com','13917059080',1);
+
 
 
 

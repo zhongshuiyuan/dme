@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dist.Dme.WebApi", "Dist.Dme
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Algorithms", "Algorithms", "{E85685DB-6C77-4703-9C92-0C38EEE1A23E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dist.Dme.Alg.LandConflictDetection", "Dist.Dme.Algorithms\Dist.Dme.Alg.LandConflictDetection\Dist.Dme.Alg.LandConflictDetection.csproj", "{1D82AD3A-5ED3-4511-915F-631F962B9FB1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,9 +43,16 @@ Global
 		{4F1665CF-5F29-4250-BA2B-A38F295EF11D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F1665CF-5F29-4250-BA2B-A38F295EF11D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F1665CF-5F29-4250-BA2B-A38F295EF11D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D82AD3A-5ED3-4511-915F-631F962B9FB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D82AD3A-5ED3-4511-915F-631F962B9FB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D82AD3A-5ED3-4511-915F-631F962B9FB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D82AD3A-5ED3-4511-915F-631F962B9FB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1D82AD3A-5ED3-4511-915F-631F962B9FB1} = {E85685DB-6C77-4703-9C92-0C38EEE1A23E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {74C104BB-B82A-44E2-8A59-9738060EC10F}

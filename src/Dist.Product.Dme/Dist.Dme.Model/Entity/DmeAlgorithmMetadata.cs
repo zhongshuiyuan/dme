@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dist.Dme.Model
+namespace Dist.Dme.Model.Entity
 {
     [SugarTable("DME_ALGORITHM_METADATA")]
     public class DmeAlgorithmMetadata

@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\Base\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

@@ -1,0 +1,11 @@
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.Algorithms\Dist.Dme.Alg.LandConflictDetection\bin\Debug\netcoreapp2.0\Dist.Dme.Alg.LandConflictDetection.deps.json
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.Algorithms\Dist.Dme.Alg.LandConflictDetection\bin\Debug\netcoreapp2.0\Dist.Dme.Alg.LandConflictDetection.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.Algorithms\Dist.Dme.Alg.LandConflictDetection\bin\Debug\netcoreapp2.0\Dist.Dme.Alg.LandConflictDetection.pdb
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.Algorithms\Dist.Dme.Alg.LandConflictDetection\bin\Debug\netcoreapp2.0\Dist.Dme.Base.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.Algorithms\Dist.Dme.Alg.LandConflictDetection\bin\Debug\netcoreapp2.0\Dist.Dme.Base.pdb
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.Algorithms\Dist.Dme.Alg.LandConflictDetection\obj\Debug\netcoreapp2.0\Dist.Dme.Alg.LandConflictDetection.csprojResolveAssemblyReference.cache
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.Algorithms\Dist.Dme.Alg.LandConflictDetection\obj\Debug\netcoreapp2.0\Dist.Dme.Alg.LandConflictDetection.csproj.CoreCompileInputs.cache
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.Algorithms\Dist.Dme.Alg.LandConflictDetection\obj\Debug\netcoreapp2.0\Dist.Dme.Alg.LandConflictDetection.AssemblyInfoInputs.cache
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.Algorithms\Dist.Dme.Alg.LandConflictDetection\obj\Debug\netcoreapp2.0\Dist.Dme.Alg.LandConflictDetection.AssemblyInfo.cs
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.Algorithms\Dist.Dme.Alg.LandConflictDetection\obj\Debug\netcoreapp2.0\Dist.Dme.Alg.LandConflictDetection.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.Algorithms\Dist.Dme.Alg.LandConflictDetection\obj\Debug\netcoreapp2.0\Dist.Dme.Alg.LandConflictDetection.pdb

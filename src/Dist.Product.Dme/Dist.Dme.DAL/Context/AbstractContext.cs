@@ -1,5 +1,5 @@
 ﻿using Dist.Dme.Base.Conf;
-using Dist.Dme.Model;
+using Dist.Dme.Model.Entity;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -38,7 +38,7 @@ namespace Dist.Dme.DAL.Context
         /// <summary>
         /// 用来处理DmeJob表的常用操作
         /// </summary>
-        public MySimpleClient<DmeJob> DmeJobDb { get { return new MySimpleClient<DmeJob>(base.GetDbContext()); } }
+        public MySimpleClient<DmeTask> DmeJobDb { get { return new MySimpleClient<DmeTask>(base.GetDbContext()); } }
         /// <summary>
         /// 用来处理DmeModelVersion表的常用操作
         /// </summary>
@@ -47,5 +47,9 @@ namespace Dist.Dme.DAL.Context
         /// 用来处理DmeVersion表的常用操作
         /// </summary>
         public MySimpleClient<DmeVersion> DmeVersionDb { get { return new MySimpleClient<DmeVersion>(base.GetDbContext()); } }
+        /// <summary>
+        /// 用来处理DmeUser表的常用操作
+        /// </summary>
+        public MySimpleClient<DmeUser> DmeUserDb { get { return new MySimpleClient<DmeUser>(base.GetDbContext()); } }
     }
 }

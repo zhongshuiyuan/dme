@@ -1,10 +1,13 @@
-﻿using Dist.Dme.Model;
+﻿using Dist.Dme.Model.Entity;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Dist.Dme.Service.Interfaces
 {
+    /// <summary>
+    /// 数据源服务
+    /// </summary>
     public interface IDataSourceService
     {
         /// <summary>

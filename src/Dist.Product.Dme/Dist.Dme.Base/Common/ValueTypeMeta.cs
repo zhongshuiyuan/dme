@@ -5,9 +5,9 @@ using System.Text;
 namespace Dist.Dme.Base.Common
 {
     /// <summary>
-    /// 值元数据，包括数据类型
+    /// 值类型元数据，包括数据类型
     /// </summary>
-    public class ValueMeta
+    public class ValueTypeMeta
     {
         /// <summary>
         /// 数字类型

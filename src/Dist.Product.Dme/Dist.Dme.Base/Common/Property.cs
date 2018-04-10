@@ -12,10 +12,18 @@ namespace Dist.Dme.Base.Common
         /// <summary>
         /// 名称
         /// </summary>
-        String Name { get; set; }
+        public String Name { get; set; }
         /// <summary>
         /// 类型
         /// </summary>
-        int Type { get; set; }
+        public int Type { get; set; }
+        /// <summary>
+        /// 属性值
+        /// </summary>
+        public object Value { get; set; }
+        /// <summary>
+        /// 默认值
+        /// </summary>
+        public object DefaultValue { get; set; }
     }
 }

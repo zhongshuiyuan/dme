@@ -1,5 +1,5 @@
 ﻿using Dist.Dme.DAL.Context;
-using Dist.Dme.Model;
+using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Interfaces;
 using System;
 using System.Collections.Generic;

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dist.Dme.Model
+namespace Dist.Dme.Model.Entity
 {
     [SugarTable("DME_VERSION")]
     public class DmeVersion
@@ -15,6 +15,6 @@ namespace Dist.Dme.Model
         [SugarColumn(ColumnName = "MINOR_VERSION")]
         public int MinorVersion { get; set; }
         [SugarColumn(ColumnName = "UPGRADE_TIME")]
-        public DateTime UpgradeTime { get; set; }
+        public int UpgradeTime { get; set; }
     }
 }

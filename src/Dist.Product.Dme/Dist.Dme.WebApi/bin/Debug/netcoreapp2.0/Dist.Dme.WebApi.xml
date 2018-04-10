@@ -4,6 +4,51 @@
         <name>Dist.Dme.WebApi</name>
     </assembly>
     <members>
+        <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.GetHeaderValue(System.String,Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            获得Header
+            </summary>
+            <param name="key">Header的键</param>
+            <returns>获得的值, 获取失败返回null</returns>
+            <param name="request">Request对象, 在Requst还没有初始化的时候需要手动传入, 相反则无需传, 如在过滤器里面, 需要传此参数, 否则只会永远返回null, 传了此参数, 会优先使用此参数</param>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.QueryString(System.String,Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            获得Get请求参数
+            </summary>
+            <param name="key">参数名称</param>
+            <param name="request">Request对象, 在Requst还没有初始化的时候需要手动传入, 相反则无需传, 如在过滤器里面, 需要传此参数, 否则只会永远返回null, 传了此参数, 会优先使用此参数</param>
+            <returns>获得的值, 获取失败返回null</returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.Form(System.String,Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            获得Post请求参数
+            </summary>
+            <param name="key">参数名称</param>
+            <param name="request">Request对象, 在Requst还没有初始化的时候需要手动传入, 相反则无需传, 如在过滤器里面, 需要传此参数, 否则只会永远返回null, 传了此参数, 会优先使用此参数</param>
+            <returns>获得的值, 获取失败返回null</returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.Success(System.Object)">
+            <summary>
+            成功
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.Fail(System.Object)">
+            <summary>
+            失败
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.Error(System.Object)">
+            <summary>
+            错误
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
         <member name="T:Dist.Dme.WebApi.Controllers.DataSourcesController">
             <summary>
             数据源服务
@@ -12,6 +57,24 @@
         <member name="M:Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes">
             <summary>
             获取所有数据库类型
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.DataSourcesController.GetDatabaseType(System.Int32)">
+            <summary>
+            获取具体某个数据库类型
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Dist.Dme.WebApi.Controllers.UsersController">
+            <summary>
+            数据源服务
+            </summary>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.UsersController.ListUsers">
+            <summary>
+            获取用户列表
             </summary>
             <returns></returns>
         </member>

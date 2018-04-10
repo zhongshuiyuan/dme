@@ -2879,21 +2879,13 @@
           "build/netstandard2.0/NETStandard.Library.targets": {}
         }
       },
-      "Newtonsoft.Json/10.0.3": {
+      "Newtonsoft.Json/11.0.2": {
         "type": "package",
-        "dependencies": {
-          "Microsoft.CSharp": "4.3.0",
-          "NETStandard.Library": "1.6.1",
-          "System.ComponentModel.TypeConverter": "4.3.0",
-          "System.Runtime.Serialization.Formatters": "4.3.0",
-          "System.Runtime.Serialization.Primitives": "4.3.0",
-          "System.Xml.XmlDocument": "4.3.0"
-        },
         "compile": {
-          "lib/netstandard1.3/Newtonsoft.Json.dll": {}
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/Newtonsoft.Json.dll": {}
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
       "Newtonsoft.Json.Bson/1.0.1": {
@@ -5283,7 +5275,7 @@
           "System.Xml.ReaderWriter": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/System.Xml.XmlDocument.dll": {}
+          "ref/netstandard1.3/_._": {}
         },
         "runtime": {
           "lib/netstandard1.3/System.Xml.XmlDocument.dll": {}
@@ -5375,6 +5367,9 @@
       "Dist.Dme.Base/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.0",
+        "dependencies": {
+          "Newtonsoft.Json": "11.0.2"
+        },
         "compile": {
           "bin/placeholder/Dist.Dme.Base.dll": {}
         },
@@ -8423,10 +8418,10 @@
         "netstandard.library.nuspec"
       ]
     },
-    "Newtonsoft.Json/10.0.3": {
-      "sha512": "hSXaFmh7hNCuEoC4XNY5DrRkLDzYHqPx/Ik23R4J86Z7PE/Y6YidhG602dFVdLBRSdG6xp9NabH3dXpcoxWvww==",
+    "Newtonsoft.Json/11.0.2": {
+      "sha512": "IvJe1pj7JHEsP8B8J8DwlMEx8UInrs/x+9oVY+oCD13jpLu4JbJU2WCIsMRn5C4yW9+DgkaO8uiVE5VHKjpmdQ==",
       "type": "package",
-      "path": "newtonsoft.json/10.0.3",
+      "path": "newtonsoft.json/11.0.2",
       "files": [
         "LICENSE.md",
         "lib/net20/Newtonsoft.Json.dll",
@@ -8441,13 +8436,14 @@
         "lib/netstandard1.0/Newtonsoft.Json.xml",
         "lib/netstandard1.3/Newtonsoft.Json.dll",
         "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
         "lib/portable-net40+sl5+win8+wp8+wpa81/Newtonsoft.Json.dll",
         "lib/portable-net40+sl5+win8+wp8+wpa81/Newtonsoft.Json.xml",
         "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.dll",
         "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.xml",
-        "newtonsoft.json.10.0.3.nupkg.sha512",
-        "newtonsoft.json.nuspec",
-        "tools/install.ps1"
+        "newtonsoft.json.11.0.2.nupkg.sha512",
+        "newtonsoft.json.nuspec"
       ]
     },
     "Newtonsoft.Json.Bson/1.0.1": {
