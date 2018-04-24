@@ -319,7 +319,7 @@ comment on column DME_ALGORITHM.path
   is '路径';
   alter table DME_ALGORITHM add primary key(ID);
   
-  CREATE TABLE DME_Algorithm_Metadata
+  CREATE TABLE DME_Algorithm_Meta
 (
 	"ID" NUMBER(8) NOT NULL,
 	"NAME" VARCHAR2(15),
@@ -328,16 +328,16 @@ comment on column DME_ALGORITHM.path
 	"INOUT" VARCHAR2(5),
 	"ALGORITHM_ID" NUMBER(8)
 );
-comment on table DME_ALGORITHM_METADATA
+comment on table DME_Algorithm_Meta
   is '算法元数据';
 -- Add comments to the columns 
-comment on column DME_ALGORITHM_METADATA.id
+comment on column DME_Algorithm_Meta.id
   is '主键';
-comment on column DME_ALGORITHM_METADATA.name
+comment on column DME_Algorithm_Meta.name
   is '参数名称';
-comment on column DME_ALGORITHM_METADATA.code
+comment on column DME_Algorithm_Meta.code
   is '参数编码';
-comment on column DME_ALGORITHM_METADATA.type
+comment on column DME_Algorithm_Meta.type
   is '参数类型，1、数字类型（ValueMetaInterface.TYPE_NUMBER=1）
 2、字符串类型（ValueMetaInterface.TYPE_STRING=2）
 3、时间类型（ValueMetaInterface.TYPE_DATE=3）
@@ -348,11 +348,11 @@ comment on column DME_ALGORITHM_METADATA.type
 8、二进制类型（ValueMetaInterface.TYPE_BINARY=8）
 9、微秒时间类型（ValueMetaInterface.TYPE_TIMESTAMP=9）
 10、网络路径类型（ValueMetaInterface.TYPE_INET=10）';
-comment on column DME_ALGORITHM_METADATA.inout
+comment on column DME_Algorithm_Meta.inout
   is '输入输出参数，输入：IN；输出：OUT';
-comment on column DME_ALGORITHM_METADATA.algorithm_id
+comment on column DME_Algorithm_Meta.algorithm_id
   is '算法ID';
-  alter table DME_ALGORITHM_METADATA add primary key(id);
+  alter table DME_Algorithm_Meta add primary key(id);
   
   CREATE TABLE DME_DataSource
 (
@@ -542,6 +542,18 @@ cache 20;
 --测试数据
 insert into DME_USER
 values(seq_dme_user.nextval, lower(sys_guid()), 'dmeadmin','passw0rd', 'dme管理员',1, SYSDATE, '754236623@qq.com','13917059080',1);
+
+-- Add/modify columns 
+alter table DME_ALGORITHM_META add isVisible integer default 0;
+-- Add comments to the columns 
+comment on column DME_ALGORITHM_META.isVisible
+  is '是否可见，0：不可见；1：可见。可用于在模型级别上显示，供最终用户编辑';
+  
+  -- Add/modify columns 
+alter table DME_ALGORITHM_META add remark varchar2(50);
+-- Add comments to the columns 
+comment on column DME_ALGORITHM_META.remark
+  is '备注信息';
 
 
 
