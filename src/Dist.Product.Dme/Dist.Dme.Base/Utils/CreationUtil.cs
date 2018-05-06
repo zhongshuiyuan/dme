@@ -10,7 +10,7 @@ namespace Dist.Dme.Base.Utils
     /// 使用IL来创建泛型对象，比使用Activator.CreateInstance(type)效率高很多
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class CreationHelper<T> where T : new()
+    public class CreationUtil<T> where T : new()
     {
         private static Func<T> objCreator = null;
 

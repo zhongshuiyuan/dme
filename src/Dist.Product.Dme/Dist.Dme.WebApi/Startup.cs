@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Dist.Dme.AECommon.Utils;
 using Dist.Dme.Base.Conf;
+using log4net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +19,8 @@ namespace Dist.Dme.WebApi
 {
     public class Startup
     {
+        private static ILog LOG = LogManager.GetLogger(typeof(Startup));
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;

@@ -50,10 +50,24 @@ namespace Dist.Dme.Base.Common
         /// </summary>
         public static int TYPE_INET = 10;
         /// <summary>
+        /// 本地文件路径
+        /// </summary>
+        public static int TYPE_LOCAL_FILE = 11;
+        /// <summary>
+        /// 本地mdb的要素类
+        /// </summary>
+        public static int TYPE_MDB_FEATURECLASS = 12;
+        /// <summary>
+        /// 本地gdb路径
+        /// </summary>
+        public static int TYPE_GDB_PATH = 13;
+        /// <summary>
         /// The Constant typeCodes
         /// </summary>
         static String[] typeCodes = new String[] {
-        "-", "Number", "String", "Date", "Boolean", "Integer", "BigNumber", "Serializable", "Binary", "Timestamp","Internet Address", };
+        "-", "Number", "String", "Date", "Boolean", "Integer", "BigNumber", "Serializable", "Binary",
+            "Timestamp","Internet Address", "Local File Path", "Local MDB Featureclass",
+            "Local GDB Path"};
         /// <summary>
         /// 获取类型的描述信息
         /// </summary>

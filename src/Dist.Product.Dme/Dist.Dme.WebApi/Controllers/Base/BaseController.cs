@@ -1,4 +1,5 @@
 ﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Framework;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -102,7 +103,7 @@ namespace Dist.Dme.WebApi.Controllers.Base
         /// <returns></returns>
         protected Result Success(Object data)
         {
-            return new Result(Result.SUCCESS, data, "操作成功", SysStatusCode.DME1000);
+            return new Result(STATUS.SUCCESS, "操作成功", SysStatusCode.DME1000, data);
         }
         /// <summary>
         /// 失败
@@ -111,7 +112,7 @@ namespace Dist.Dme.WebApi.Controllers.Base
         /// <returns></returns>
         protected Result Fail(Object data)
         {
-            return new Result(Result.FAIL, data, "操作失败", SysStatusCode.DME2000);
+            return new Result(STATUS.FAIL, "操作失败", SysStatusCode.DME2000, data);
         }
         /// <summary>
         /// 错误
@@ -120,7 +121,7 @@ namespace Dist.Dme.WebApi.Controllers.Base
         /// <returns></returns>
         protected Result Error(Object data)
         {
-            return new Result(Result.ERROR, data, "操作错误", SysStatusCode.DME3000);
+            return new Result(STATUS.ERROR, "操作错误", SysStatusCode.DME3000, data);
         }
     }
 }

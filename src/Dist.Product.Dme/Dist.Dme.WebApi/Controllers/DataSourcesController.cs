@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Impls;

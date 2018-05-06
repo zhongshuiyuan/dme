@@ -554,6 +554,12 @@ alter table DME_ALGORITHM_META add remark varchar2(50);
 -- Add comments to the columns 
 comment on column DME_ALGORITHM_META.remark
   is '备注信息';
+  
+  -- Add/modify columns 
+alter table DME_ALGORITHM_META add alias varchar2(30);
+-- Add comments to the columns 
+comment on column DME_ALGORITHM_META.alias
+  is '别名';
 
 
 

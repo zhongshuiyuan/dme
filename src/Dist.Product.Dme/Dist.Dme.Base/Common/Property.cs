@@ -14,6 +14,10 @@ namespace Dist.Dme.Base.Common
         /// </summary>
         public String Name { get; set; }
         /// <summary>
+        /// 别名
+        /// </summary>
+        public String Alias { get; set; }
+        /// <summary>
         /// 类型
         /// </summary>
         public int Type { get; set; }
@@ -33,15 +37,21 @@ namespace Dist.Dme.Base.Common
         /// 备注信息
         /// </summary>
         public String Remark { get; set; }
+        /// <summary>
+        /// 是否只读，1：只读；0：可编辑
+        /// </summary>
+        public int ReadOnly { get; set; }
 
-        public Property(string name, int type, object value, object defaultValue, int isVisible, string remark)
+        public Property(string name, string alias, int type, object value, object defaultValue, int isVisible, string remark, int readOnly = 0)
         {
             this.Name = name;
+            this.Alias = alias;
             this.Type = type;
             this.Value = value;
             this.DefaultValue = defaultValue;
             this.IsVisible = isVisible;
             this.Remark = remark;
+            this.ReadOnly = readOnly;
         }
     }
 }

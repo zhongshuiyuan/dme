@@ -1,0 +1,8 @@
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.AECommon\bin\x86\Debug\netcoreapp2.0\Dist.Dme.AECommon.deps.json
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.AECommon\bin\x86\Debug\netcoreapp2.0\Dist.Dme.AECommon.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.AECommon\bin\x86\Debug\netcoreapp2.0\Dist.Dme.AECommon.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.AECommon\obj\x86\Debug\netcoreapp2.0\Dist.Dme.AECommon.csproj.CoreCompileInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.AECommon\obj\x86\Debug\netcoreapp2.0\Dist.Dme.AECommon.AssemblyInfoInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.AECommon\obj\x86\Debug\netcoreapp2.0\Dist.Dme.AECommon.AssemblyInfo.cs
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.AECommon\obj\x86\Debug\netcoreapp2.0\Dist.Dme.AECommon.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.AECommon\obj\x86\Debug\netcoreapp2.0\Dist.Dme.AECommon.pdb

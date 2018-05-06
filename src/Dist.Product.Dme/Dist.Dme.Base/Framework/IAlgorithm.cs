@@ -41,13 +41,13 @@ namespace Dist.Dme.Base.Framework
         /// <returns></returns>
         Object GetOutParameters();
         /// <summary>
-        /// 初始化工作
+        /// 初始化工作，设置参数
         /// </summary>
         /// <returns></returns>
-        Boolean Init();
+        void Init(IDictionary<string, object> parameters);
         /// <summary>
         /// 执行
         /// </summary>
-        Boolean Execute();
+        Result Execute();
     }
 }
