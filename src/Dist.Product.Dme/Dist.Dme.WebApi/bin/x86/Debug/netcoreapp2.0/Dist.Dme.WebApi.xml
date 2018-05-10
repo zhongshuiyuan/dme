@@ -4,6 +4,30 @@
         <name>Dist.Dme.WebApi</name>
     </assembly>
     <members>
+        <member name="T:Dist.Dme.WebApi.Controllers.AlgorithmController">
+            <summary>
+            算法服务
+            </summary>
+        </member>
+        <member name="P:Dist.Dme.WebApi.Controllers.AlgorithmController.AlgorithmService">
+            <summary>
+            算法服务
+            </summary>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.ListModels(System.Int32)">
+            <summary>
+            获取所有算法
+            </summary>
+            <param name="hasMeta">是否获取算法的参数信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.AddAlgorithm(Dist.Dme.Model.DTO.AlgorithmAddReqDTO)">
+            <summary>
+            注册算法
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
         <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.GetHeaderValue(System.String,Microsoft.AspNetCore.Http.HttpRequest)">
             <summary>
             获得Header

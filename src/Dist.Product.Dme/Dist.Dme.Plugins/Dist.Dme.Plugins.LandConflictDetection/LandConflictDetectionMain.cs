@@ -6,7 +6,6 @@ using Dist.Dme.Base.Utils;
 using ESRI.ArcGIS;
 using ESRI.ArcGIS.Geodatabase;
 using log4net;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;

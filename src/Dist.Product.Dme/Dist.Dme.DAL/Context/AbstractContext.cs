@@ -30,6 +30,10 @@ namespace Dist.Dme.DAL.Context
         /// </summary>
         public MySimpleClient<DmeAlgorithm> DmeAlgorithmDb { get { return new MySimpleClient<DmeAlgorithm>(base.GetDbContext()); } }
         /// <summary>
+        /// 用来处理DmeAlgorithm元数据表的常用操作
+        /// </summary>
+        public MySimpleClient<DmeAlgorithmMeta> DmeAlgorithmMetaDb { get { return new MySimpleClient<DmeAlgorithmMeta>(base.GetDbContext()); } }
+        /// <summary>
         /// 用来处理DmeDatabaseType表的常用操作
         /// </summary>
         public MySimpleClient<DmeDatabaseType> DmeDatabaseTypeDb { get { return new MySimpleClient<DmeDatabaseType>(base.GetDbContext()); } }

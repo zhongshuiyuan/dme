@@ -19,10 +19,10 @@ namespace Dist.Dme.WebApi
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                //.UseKestrel()
-                //.UseContentRoot(Directory.GetCurrentDirectory())
-                //.UseUrls("http://*:7000")
-                //.UseIISIntegration()
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseUrls("http://*:7000")
+                .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
     }

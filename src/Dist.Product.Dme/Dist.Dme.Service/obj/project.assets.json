@@ -8262,13 +8262,10 @@
   "packageFolders": {
     "C:\\Users\\thinkpad\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Program Files (x86)\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
-    "restoreSettings": {
-      "hideWarningsAndErrors": true
-    },
     "restore": {
       "projectUniqueName": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Service\\Dist.Dme.Service.csproj",
       "projectName": "Dist.Dme.Service",
@@ -8278,7 +8275,7 @@
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
         "C:\\Users\\thinkpad\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -8297,11 +8294,11 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj"
-            },
             "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DAL\\Dist.Dme.DAL.csproj": {
               "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DAL\\Dist.Dme.DAL.csproj"
+            },
+            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj"
             },
             "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Plugins\\Dist.Dme.Plugins.LandConflictDetection\\Dist.Dme.Plugins.LandConflictDetection.csproj": {
               "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Plugins\\Dist.Dme.Plugins.LandConflictDetection\\Dist.Dme.Plugins.LandConflictDetection.csproj"
@@ -8338,7 +8335,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.AnalysisTools 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "message": "Package 'ESRI.ArcGIS.AnalysisTools 10.1.0.3035' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
       "libraryId": "ESRI.ArcGIS.AnalysisTools",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
@@ -8348,7 +8345,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.Carto 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "message": "Package 'ESRI.ArcGIS.Carto 10.1.0.3035' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
       "libraryId": "ESRI.ArcGIS.Carto",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
@@ -8358,7 +8355,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.DataManagementTools 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "message": "Package 'ESRI.ArcGIS.DataManagementTools 10.1.0.3035' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
       "libraryId": "ESRI.ArcGIS.DataManagementTools",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
@@ -8368,7 +8365,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.DataSourcesFile 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "message": "Package 'ESRI.ArcGIS.DataSourcesFile 10.1.0.3035' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
       "libraryId": "ESRI.ArcGIS.DataSourcesFile",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
@@ -8378,7 +8375,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.DataSourcesGDB 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "message": "Package 'ESRI.ArcGIS.DataSourcesGDB 10.1.0.3035' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
       "libraryId": "ESRI.ArcGIS.DataSourcesGDB",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
@@ -8388,7 +8385,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.DataSourcesOleDB 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "message": "Package 'ESRI.ArcGIS.DataSourcesOleDB 10.1.0.3035' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
       "libraryId": "ESRI.ArcGIS.DataSourcesOleDB",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
@@ -8398,7 +8395,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.DataSourcesRaster 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "message": "Package 'ESRI.ArcGIS.DataSourcesRaster 10.1.0.3035' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
       "libraryId": "ESRI.ArcGIS.DataSourcesRaster",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
@@ -8408,7 +8405,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.Display 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "message": "Package 'ESRI.ArcGIS.Display 10.1.0.3035' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
       "libraryId": "ESRI.ArcGIS.Display",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
@@ -8418,7 +8415,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.Geodatabase 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "message": "Package 'ESRI.ArcGIS.Geodatabase 10.1.0.3035' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
       "libraryId": "ESRI.ArcGIS.Geodatabase",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
@@ -8428,7 +8425,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.Geometry 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "message": "Package 'ESRI.ArcGIS.Geometry 10.1.0.3035' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
       "libraryId": "ESRI.ArcGIS.Geometry",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
@@ -8438,7 +8435,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.Geoprocessing 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "message": "Package 'ESRI.ArcGIS.Geoprocessing 10.1.0.3035' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
       "libraryId": "ESRI.ArcGIS.Geoprocessing",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
@@ -8448,7 +8445,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.Geoprocessor 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "message": "Package 'ESRI.ArcGIS.Geoprocessor 10.1.0.3035' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
       "libraryId": "ESRI.ArcGIS.Geoprocessor",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
@@ -8458,7 +8455,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.Server 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "message": "Package 'ESRI.ArcGIS.Server 10.1.0.3035' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
       "libraryId": "ESRI.ArcGIS.Server",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
@@ -8468,7 +8465,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.System 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "message": "Package 'ESRI.ArcGIS.System 10.1.0.3035' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
       "libraryId": "ESRI.ArcGIS.System",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
@@ -8478,7 +8475,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.Version 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "message": "Package 'ESRI.ArcGIS.Version 10.1.0.3035' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
       "libraryId": "ESRI.ArcGIS.Version",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"

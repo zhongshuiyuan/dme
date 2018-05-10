@@ -43,12 +43,12 @@ namespace Dist.Dme.Service.Impls
         public object ListModels(Boolean refAlgorithm)
         {
             List<DmeModel> models = base.DmeModelDb.GetList("CREATETIME", false);
+            if (null == models || 0 == models.Count)
+            {
+                return models;
+            }
             if (refAlgorithm)
             {
-                if (null == models || 0 == models.Count)
-                {
-                    return models;
-                }
                 IList<ModelAlgDTO> modelAlgDTOs = new List<ModelAlgDTO>();
                 ModelAlgDTO modelAlgDTO = null;
                 IList<DmeRuleStep> rules = null;

@@ -294,7 +294,7 @@ CREATE TABLE DME_Algorithm
 	"NAME" VARCHAR2(50),
 	"ALIAS" VARCHAR2(50),
 	"VERSION" VARCHAR2(10) NOT NULL,
-	"REGISTERTIME" number(20),
+	"CREATETIME" number(20),
 	"REMARK" VARCHAR2(250),
 	"USERCODE" VARCHAR2(38),
   PATH VARCHAR2(512)
@@ -312,7 +312,7 @@ comment on column DME_ALGORITHM.alias
   is '别名';
 comment on column DME_ALGORITHM.version
   is '版本';
-comment on column DME_ALGORITHM.registertime
+comment on column DME_ALGORITHM.CREATETIME
   is '注册时间，毫秒';
 comment on column DME_ALGORITHM.remark
   is '备注';
@@ -327,7 +327,7 @@ comment on column DME_ALGORITHM.path
 	"ID" NUMBER(8) NOT NULL,
 	"NAME" VARCHAR2(15),
 	"CODE" VARCHAR2(30),
-	"TYPE" NUMBER(1),
+	"DATATYPE" NUMBER(1),
 	"INOUT" VARCHAR2(5),
 	"ALGORITHM_ID" NUMBER(8)
 );
@@ -340,8 +340,8 @@ comment on column DME_Algorithm_Meta.name
   is '参数名称';
 comment on column DME_Algorithm_Meta.code
   is '参数编码';
-comment on column DME_Algorithm_Meta.type
-  is '参数类型，1、数字类型（ValueMetaInterface.TYPE_NUMBER=1）
+comment on column DME_Algorithm_Meta.DATATYPE
+  is '参数数据类型，1、数字类型（ValueMetaInterface.TYPE_NUMBER=1）
 2、字符串类型（ValueMetaInterface.TYPE_STRING=2）
 3、时间类型（ValueMetaInterface.TYPE_DATE=3）
 4、布尔类型（ValueMetaInterface.TYPE_BOOLEAN=4）
