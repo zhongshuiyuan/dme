@@ -895,6 +895,27 @@ namespace Dist.Dme.AECommon.Utils
             LOG.Info("完成拷贝图层");
             return true;
         }
+        /// <summary>
+        /// 打开图层
+        /// </summary>
+        /// <param name="featureClassPath">要素类完成目录和要素类名称，格式：目录|要素类</param>
+        /// <param name="featureClassPathSeparator">要素类路径分隔符</param>
+        /// <param name="workspace">输出打开的工作空间</param>
+        /// <param name="featureClass">输出打开的要素类</param>
+        public static void OpenFeatureClass(string featureClassPath, string featureClassPathSeparator, out IFeatureWorkspace workspace, out IFeatureClass featureClass)
+        {
+            string[] paths = featureClassPath.Split(featureClassPathSeparator);
+            if (2 == paths.Length)
+            {
+                workspace = WorkspaceServices.OpenWorkspace(paths[0]) as IFeatureWorkspace;
+                featureClass = workspace.OpenFeatureClass(paths[1]);
+            }
+            else
+            {
+                LOG.Error("数据源路径格式不正确");
+                throw new Exception("数据源路径格式不正确，格式应为：mdb路径" + featureClassPathSeparator + "要素类");
+            }
+        }
         #endregion
     }
 }

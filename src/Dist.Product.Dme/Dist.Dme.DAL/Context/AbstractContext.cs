@@ -1,5 +1,6 @@
 ﻿using Dist.Dme.Base.Conf;
 using Dist.Dme.Model.Entity;
+using log4net;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace Dist.Dme.DAL.Context
     /// </summary>
     public abstract class AbstractContext : ContextBase
     {
+        private static ILog LOG = LogManager.GetLogger(typeof(AbstractContext));
         /// <summary>
         /// oracle 类型
         /// </summary>
@@ -51,5 +53,9 @@ namespace Dist.Dme.DAL.Context
         /// 用来处理DmeUser表的常用操作
         /// </summary>
         public MySimpleClient<DmeUser> DmeUserDb { get { return new MySimpleClient<DmeUser>(base.GetDbContext()); } }
+        /// <summary>
+        /// 规则步骤关联
+        /// </summary>
+        public MySimpleClient<DmeRuleStep> DmeRulestepDb { get { return new MySimpleClient<DmeRuleStep>(base.GetDbContext()); } }
     }
 }

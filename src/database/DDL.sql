@@ -106,7 +106,8 @@ comment on column DME_MODEL_VERSION.usercode
 	"SYSCODE" VARCHAR2(38) NOT NULL,
 	"NAME" VARCHAR2(50) NOT NULL,
 	"REMARK" VARCHAR2(250),
-	"USERCODE" VARCHAR2(38)
+	"USERCODE" VARCHAR2(38),
+  "CREATETIME" number(20),
 );
 -- Add comments to the table 
 comment on table DME_MODEL
@@ -122,6 +123,8 @@ comment on column DME_MODEL.remark
   is '备注';
 comment on column DME_MODEL.usercode
   is '用户唯一编码';
+ comment on column DME_MODEL.CREATETIME
+  is '创建时间，毫秒';
   
   alter table DME_MODEL add primary key(id);
   

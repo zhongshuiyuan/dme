@@ -16,6 +16,7 @@
   <ItemGroup>
     <PackageReference Include="ESRI.ArcGIS.AnalysisTools" Version="10.1.0.3035" />
     <PackageReference Include="ESRI.ArcGIS.Carto" Version="10.1.0.3035" />
+    <PackageReference Include="ESRI.ArcGIS.DataManagementTools" Version="10.1.0.3035" />
     <PackageReference Include="ESRI.ArcGIS.DataSourcesFile" Version="10.1.0.3035" />
     <PackageReference Include="ESRI.ArcGIS.DataSourcesGDB" Version="10.1.0.3035" />
     <PackageReference Include="ESRI.ArcGIS.DataSourcesOleDB" Version="10.1.0.3035" />
@@ -25,6 +26,7 @@
     <PackageReference Include="ESRI.ArcGIS.Geometry" Version="10.1.0.3035" />
     <PackageReference Include="ESRI.ArcGIS.Geoprocessing" Version="10.1.0.3035" />
     <PackageReference Include="ESRI.ArcGIS.Geoprocessor" Version="10.1.0.3035" />
+    <PackageReference Include="ESRI.ArcGIS.Server" Version="10.1.0.3035" />
     <PackageReference Include="ESRI.ArcGIS.System" Version="10.1.0.3035" />
     <PackageReference Include="ESRI.ArcGIS.Version" Version="10.1.0.3035" />
     <PackageReference Include="log4net" Version="2.0.8" />

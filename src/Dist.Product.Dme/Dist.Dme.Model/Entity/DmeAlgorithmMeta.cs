@@ -16,5 +16,9 @@ namespace Dist.Dme.Model.Entity
         public String Inout { get; set; }
         [SugarColumn(ColumnName = "ALGORITHM_ID")]
         public int AlgorithmId { get; set; }
+        public int IsVisible { get; set; }
+        public String Remark { get; set; }
+        public String Alias { get; set; }
+        public int ReadOnly { get; set; }
     }
 }

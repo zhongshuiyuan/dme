@@ -15,11 +15,13 @@ namespace Dist.Dme.Model.Entity
         public int ModelId { get; set; }
         [SugarColumn(ColumnName = "VERSION_ID")]
         public int VersionId { get; set; }
+        [SugarColumn(ColumnName = "ALGORITHM_ID")]
         public int AlgorithmId { get; set; }
         [SugarColumn(ColumnName = "GUI_LOCATION_X")]
         public int GuiLocationX { get; set; }
         [SugarColumn(ColumnName = "GUI_LOCATION_Y")]
         public int GuiLocationY { get; set; }
+        [SugarColumn(ColumnName = "STEP_TYPE_ID")]
         public int StepTypeId { get; set; }
     }
 }

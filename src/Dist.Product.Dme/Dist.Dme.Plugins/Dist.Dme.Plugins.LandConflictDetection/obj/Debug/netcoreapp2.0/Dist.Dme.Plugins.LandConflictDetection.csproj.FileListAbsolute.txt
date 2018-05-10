@@ -13,3 +13,4 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Plugins\Dist.Dme.Plugins.LandConflic
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Plugins\Dist.Dme.Plugins.LandConflictDetection\obj\Debug\netcoreapp2.0\Dist.Dme.Plugins.LandConflictDetection.pdb
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Plugins\Dist.Dme.Plugins.LandConflictDetection\bin\Debug\netcoreapp2.0\Dist.Dme.Model.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Plugins\Dist.Dme.Plugins.LandConflictDetection\bin\Debug\netcoreapp2.0\Dist.Dme.Model.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Plugins\Dist.Dme.Plugins.LandConflictDetection\obj\Debug\netcoreapp2.0\Dist.Dme.Plugins.LandConflictDetection.csproj.CopyComplete

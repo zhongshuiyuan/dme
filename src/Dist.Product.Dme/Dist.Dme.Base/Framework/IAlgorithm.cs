@@ -34,17 +34,26 @@ namespace Dist.Dme.Base.Framework
         /// 获取输入参数元数据
         /// </summary>
         /// <returns></returns>
-        Object GetInParameters();
+        Object InParams { get; }
         /// <summary>
         /// 获取输出参数元数据
         /// </summary>
         /// <returns></returns>
-        Object GetOutParameters();
+        Object OutParams { get; }
+        /// <summary>
+        /// 特征参数，例如容差值、权重等等
+        /// </summary>
+        Object FeatureParams { get; }
         /// <summary>
         /// 初始化工作，设置参数
         /// </summary>
         /// <returns></returns>
         void Init(IDictionary<string, object> parameters);
+        /// <summary>
+        /// 获取算法json元数据信息
+        /// </summary>
+        /// <returns></returns>
+        object MetadataJSON { get; }
         /// <summary>
         /// 执行
         /// </summary>

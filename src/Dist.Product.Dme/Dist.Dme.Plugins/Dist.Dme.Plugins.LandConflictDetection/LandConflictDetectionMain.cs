@@ -6,6 +6,7 @@ using Dist.Dme.Base.Utils;
 using ESRI.ArcGIS;
 using ESRI.ArcGIS.Geodatabase;
 using log4net;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -66,7 +67,7 @@ namespace Dist.Dme.Plugins.LandConflictDetection
         /// <summary>
         /// 结果图层名称
         /// </summary>
-        public string ReulstLayerName { get { return "f_result"; } }
+        public string ReulstLayerName { get { return "FC_RESULT"; } }
 
         public LandConflictDetectionMain()
         {
@@ -95,51 +96,70 @@ namespace Dist.Dme.Plugins.LandConflictDetection
         public override Result Execute()
         {
             string resultGDBPath = this.ResultGDBPath;
-            if (!Directory.Exists(this.ResultGDBPath))
+            try
             {
-                DirectoryInfo dirInfo = Directory.CreateDirectory(this.ResultGDBPath);
+                if (!Directory.Exists(this.ResultGDBPath))
+                {
+                    DirectoryInfo dirInfo = Directory.CreateDirectory(this.ResultGDBPath);
+                }
+                resultGDBPath = Path.Combine(this.ResultGDBPath, string.Format("result_{0}.gdb", DateUtil.CurrentTimeMillis));
+                string pTempletMDBFile = AppDomain.CurrentDomain.BaseDirectory + "template/result.gdb";
+                long beginMillisecond = DateUtil.CurrentTimeMillis;
+                // 创建一份gdb
+                DirectFileUtil.CopyDirectInfo(pTempletMDBFile, resultGDBPath);
+                IWorkspace resultWorkspace = WorkspaceServices.OpenFileGdbWorkspace(resultGDBPath);
+                LOG.Info("创建GDB消耗时间：[" + (DateUtil.CurrentTimeMillis - beginMillisecond) + "] 毫秒");
+                // 拷贝源对比图层
+                beginMillisecond = DateUtil.CurrentTimeMillis;
+                //if (!WorkspaceServices.CopyLayer(new string[] { this.sourceLayerFirstFullPath, this.sourceLayerSecondFullPath }, resultGDBPath))
+                //{
+                //    LOG.Error("拷贝图层失败，中止计算");
+                //    return new Result(STATUS.ERROR, "拷贝图层失败", SysStatusCode.DME3000, false);
+                //}
+                //LOG.Info("拷贝源对比图层消耗时间：[" + (DateUtil.CurrentTimeMillis() - beginMillisecond) + "] 毫秒");
+                // 图层融合（union）
+                UnionTool unionTool = new UnionTool
+                {
+                    InputFeatures = new String[] { this.sourceLayerFirstFullPath, this.sourceLayerSecondFullPath },
+                    OutputFeature = resultGDBPath + "/" + this.ReulstLayerName
+                };
+                object result = unionTool.Excute();
+                if (null == result)
+                {
+                    return new Result(STATUS.ERROR, "图层联合分析失败", SysStatusCode.DME3000, false);
+                }
+                // 对输出图层进行规则计算
+                // TODO
+                return new Result(STATUS.SUCCESS, "差异分析完成", SysStatusCode.DME1000, true);
+            } catch (Exception ex)
+            {
+                LOG.Error("差异分析失败，详情：" + ex.Message);
+                return new Result(STATUS.ERROR, "差异分析失败，详情：" + ex.Message, SysStatusCode.DME3000, false);
             }
-            resultGDBPath = Path.Combine(this.ResultGDBPath, string.Format("result_{0}.gdb", DateTime.Now.Ticks));
-            string pTempletMDBFile = AppDomain.CurrentDomain.BaseDirectory + "template/result.gdb";
-            double beginMillisecond = DateUtil.CurrentTimeMillis();
-            // 创建一份gdb
-            DirectFileUtil.CopyDirectInfo(pTempletMDBFile, resultGDBPath);
-            IWorkspace resultWorkspace = WorkspaceServices.OpenFileGdbWorkspace(resultGDBPath);
-            LOG.Info("创建GDB消耗时间：[" + (DateUtil.CurrentTimeMillis() - beginMillisecond) + "] 毫秒");
-            // 拷贝源对比图层
-            beginMillisecond = DateUtil.CurrentTimeMillis();
-            if (!WorkspaceServices.CopyLayer(new string[] { this.sourceLayerFirstFullPath, this.sourceLayerSecondFullPath }, resultGDBPath))
-            {
-                LOG.Error("拷贝图层失败，中止计算");
-                return new Result(STATUS.ERROR, "拷贝图层失败", SysStatusCode.DME3000, false);
-            }
-            LOG.Info("拷贝源对比图层消耗时间：[" + (DateUtil.CurrentTimeMillis() - beginMillisecond) + "] 毫秒");
-            // 图层融合（union）
-            UnionTool unionTool = new UnionTool
-            {
-                InputFeatures = new String[] { this.sourceLayerFirstFullPath, this.sourceLayerSecondFullPath },
-                OutputFeature = resultGDBPath + "/" + this.ReulstLayerName
-            };
-            object result = unionTool.Excute();
-            if (null == result)
-            {
-                return new Result(STATUS.ERROR, "图层联合分析失败", SysStatusCode.DME3000, false);
-            }
-            // 对输出图层进行规则计算
-
-            return new Result(STATUS.SUCCESS, "差异分析完成", SysStatusCode.DME1000, true);
         }
 
-        public override object GetInParameters()
+        public override object InParams
         {
-            return base.InputParameters;
+            get
+            {
+                return base.InputParameters;
+            }
         }
 
-        public override object GetOutParameters()
+        public override object OutParams
         {
-            return base.OutputParameters;
+            get
+            {
+                return base.OutputParameters;
+            }
         }
-
+        public override object FeatureParams
+        {
+            get
+            {
+                return base.FeatureParameters;
+            }
+        }
         public override void Init(IDictionary<string, object> parameters)
         {
             if (!parameters.ContainsKey("m_featureClass_source_first"))
@@ -170,7 +190,7 @@ namespace Dist.Dme.Plugins.LandConflictDetection
             }
 
             this.m_featureClass_source_first = parameters["m_featureClass_source_first"].ToString();
-            this.OpenFeatureClass(this.m_featureClass_source_first, out this.m_localWorkspace_first, out this.m_featureClass_first);
+            WorkspaceServices.OpenFeatureClass(this.m_featureClass_source_first, SEPARATOR_FEATURE_PATH, out this.m_localWorkspace_first, out this.m_featureClass_first);
             if (this.m_featureClass_first.FeatureDataset != null)
             {
                 this.sourceLayerFirstFullPath = this.m_featureClass_source_first.Split(SEPARATOR_FEATURE_PATH)[0] + "/" + this.m_featureClass_first.FeatureDataset.Name + "/" + this.m_featureClass_source_first.Split(SEPARATOR_FEATURE_PATH)[1];
@@ -180,7 +200,7 @@ namespace Dist.Dme.Plugins.LandConflictDetection
                 this.sourceLayerFirstFullPath = this.m_featureClass_source_first.Split(SEPARATOR_FEATURE_PATH)[0] + "/" + this.m_featureClass_source_first.Split(SEPARATOR_FEATURE_PATH)[1];
             }
             this.m_featureClass_source_second = parameters["m_featureClass_source_second"].ToString();
-            this.OpenFeatureClass(this.m_featureClass_source_second, out this.m_localWorkspace_second, out this.m_featureClass_second);
+            WorkspaceServices.OpenFeatureClass(this.m_featureClass_source_second, SEPARATOR_FEATURE_PATH, out this.m_localWorkspace_second, out this.m_featureClass_second);
             if (this.m_featureClass_second.FeatureDataset != null)
             {
                 this.sourceLayerSecondFullPath = this.m_featureClass_source_second.Split(SEPARATOR_FEATURE_PATH)[0] + "/" + this.m_featureClass_second.FeatureDataset.Name + "/" + this.m_featureClass_source_second.Split(SEPARATOR_FEATURE_PATH)[1];
@@ -192,26 +212,23 @@ namespace Dist.Dme.Plugins.LandConflictDetection
 
             this.m_yddm_first = parameters["m_yddm_first"].ToString();
             this.m_yddm_second = parameters["m_yddm_second"].ToString();
-
         }
-        /// <summary>
-        /// 打开图层
-        /// </summary>
-        /// <param name="featureClassPath">要素类完整路径</param>
-        /// <param name="workspace">输出打开的工作空间</param>
-        /// <param name="featureClass">输出打开的要素类</param>
-        private void OpenFeatureClass(string featureClassPath, out IFeatureWorkspace workspace, out IFeatureClass featureClass)
+        public override object MetadataJSON
         {
-            string[] paths = featureClassPath.Split(SEPARATOR_FEATURE_PATH);
-            if (2 == paths.Length)
+            get
             {
-                workspace = WorkspaceServices.OpenMdbWorspace(paths[0]) as IFeatureWorkspace;
-                featureClass = this.m_localWorkspace_first.OpenFeatureClass(paths[1]);
-            }
-            else
-            {
-                LOG.Error("数据源路径格式不正确");
-                throw new Exception("数据源路径格式不正确，格式应为：mdb路径"+ SEPARATOR_FEATURE_PATH + "要素类");
+                IDictionary<string, System.Object> dictionary = new Dictionary<string, System.Object>
+                {
+                    ["SysCode"] = this.SysCode,
+                    ["Name"] = this.Name,
+                    ["Alias"] = this.Alias,
+                    ["Version"] = this.Version,
+                    ["Remark"] = this.Remark,
+                    ["InputParameters"] = this.InputParameters,
+                    ["OutputParameters"] = this.OutputParameters,
+                    ["FeatureParameters"] = this.FeatureParameters
+                };
+                return dictionary;// JsonConvert.SerializeObject(dictionary);
             }
         }
     }

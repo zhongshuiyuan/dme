@@ -22,3 +22,4 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.0\Dist.
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.0\Dist.Dme.WebApi.AssemblyInfo.cs
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.0\Dist.Dme.WebApi.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.0\Dist.Dme.WebApi.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.0\Dist.Dme.WebApi.csproj.CopyComplete

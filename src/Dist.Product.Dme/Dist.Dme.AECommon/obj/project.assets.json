@@ -20,6 +20,15 @@
           "lib/ESRI.ArcGIS.Carto.dll": {}
         }
       },
+      "ESRI.ArcGIS.DataManagementTools/10.1.0.3035": {
+        "type": "package",
+        "compile": {
+          "lib/ESRI.ArcGIS.DataManagementTools.dll": {}
+        },
+        "runtime": {
+          "lib/ESRI.ArcGIS.DataManagementTools.dll": {}
+        }
+      },
       "ESRI.ArcGIS.DataSourcesFile/10.1.0.3035": {
         "type": "package",
         "compile": {
@@ -99,6 +108,15 @@
         },
         "runtime": {
           "lib/ESRI.ArcGIS.Geoprocessor.dll": {}
+        }
+      },
+      "ESRI.ArcGIS.Server/10.1.0.3035": {
+        "type": "package",
+        "compile": {
+          "lib/ESRI.ArcGIS.Server.dll": {}
+        },
+        "runtime": {
+          "lib/ESRI.ArcGIS.Server.dll": {}
         }
       },
       "ESRI.ArcGIS.System/10.1.0.3035": {
@@ -1627,6 +1645,16 @@
         "lib/ESRI.ArcGIS.Carto.dll"
       ]
     },
+    "ESRI.ArcGIS.DataManagementTools/10.1.0.3035": {
+      "sha512": "Y/MkeX+LlvwYJRFbusmPkpHn9+2Apu60/jaB5QR4nwXhu7OO9aRxUTjmuMjdYMoRFU5RpIWRTa3/u3mIPk5Z8g==",
+      "type": "package",
+      "path": "esri.arcgis.datamanagementtools/10.1.0.3035",
+      "files": [
+        "esri.arcgis.datamanagementtools.10.1.0.3035.nupkg.sha512",
+        "esri.arcgis.datamanagementtools.nuspec",
+        "lib/ESRI.ArcGIS.DataManagementTools.dll"
+      ]
+    },
     "ESRI.ArcGIS.DataSourcesFile/10.1.0.3035": {
       "sha512": "6vLJQGRWWKNf+knbm+1pzQX8a8sUAkxfOX8UnfJbTfoWcPfVlstqfpskuHeZ/qv8X0INYqunBqFsi+hJ/pRWEA==",
       "type": "package",
@@ -1715,6 +1743,16 @@
         "esri.arcgis.geoprocessor.10.1.0.3035.nupkg.sha512",
         "esri.arcgis.geoprocessor.nuspec",
         "lib/ESRI.ArcGIS.Geoprocessor.dll"
+      ]
+    },
+    "ESRI.ArcGIS.Server/10.1.0.3035": {
+      "sha512": "f3ZVfUJQETtIhCvoMpO8kNiIqvDm11YL7ds104l4v292oCY6WPpE2T+S4mpshgv984QV/1ZneWboQavlECGvUA==",
+      "type": "package",
+      "path": "esri.arcgis.server/10.1.0.3035",
+      "files": [
+        "esri.arcgis.server.10.1.0.3035.nupkg.sha512",
+        "esri.arcgis.server.nuspec",
+        "lib/ESRI.ArcGIS.Server.dll"
       ]
     },
     "ESRI.ArcGIS.System/10.1.0.3035": {
@@ -5430,6 +5468,7 @@
     ".NETCoreApp,Version=v2.0": [
       "ESRI.ArcGIS.AnalysisTools >= 10.1.0.3035",
       "ESRI.ArcGIS.Carto >= 10.1.0.3035",
+      "ESRI.ArcGIS.DataManagementTools >= 10.1.0.3035",
       "ESRI.ArcGIS.DataSourcesFile >= 10.1.0.3035",
       "ESRI.ArcGIS.DataSourcesGDB >= 10.1.0.3035",
       "ESRI.ArcGIS.DataSourcesOleDB >= 10.1.0.3035",
@@ -5439,6 +5478,7 @@
       "ESRI.ArcGIS.Geometry >= 10.1.0.3035",
       "ESRI.ArcGIS.Geoprocessing >= 10.1.0.3035",
       "ESRI.ArcGIS.Geoprocessor >= 10.1.0.3035",
+      "ESRI.ArcGIS.Server >= 10.1.0.3035",
       "ESRI.ArcGIS.System >= 10.1.0.3035",
       "ESRI.ArcGIS.Version >= 10.1.0.3035",
       "Microsoft.NETCore.App >= 2.0.0",
@@ -5502,6 +5542,10 @@
             "target": "Package",
             "version": "[10.1.0.3035, )"
           },
+          "ESRI.ArcGIS.DataManagementTools": {
+            "target": "Package",
+            "version": "[10.1.0.3035, )"
+          },
           "ESRI.ArcGIS.DataSourcesFile": {
             "target": "Package",
             "version": "[10.1.0.3035, )"
@@ -5535,6 +5579,10 @@
             "version": "[10.1.0.3035, )"
           },
           "ESRI.ArcGIS.Geoprocessor": {
+            "target": "Package",
+            "version": "[10.1.0.3035, )"
+          },
+          "ESRI.ArcGIS.Server": {
             "target": "Package",
             "version": "[10.1.0.3035, )"
           },
@@ -5582,6 +5630,16 @@
       "warningLevel": 1,
       "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.Carto 10.1.0.3035”。此包可能与项目不完全兼容。",
       "libraryId": "ESRI.ArcGIS.Carto",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v2.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.DataManagementTools 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "libraryId": "ESRI.ArcGIS.DataManagementTools",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
       ]
@@ -5672,6 +5730,16 @@
       "warningLevel": 1,
       "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.Geoprocessor 10.1.0.3035”。此包可能与项目不完全兼容。",
       "libraryId": "ESRI.ArcGIS.Geoprocessor",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v2.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“ESRI.ArcGIS.Server 10.1.0.3035”。此包可能与项目不完全兼容。",
+      "libraryId": "ESRI.ArcGIS.Server",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
       ]

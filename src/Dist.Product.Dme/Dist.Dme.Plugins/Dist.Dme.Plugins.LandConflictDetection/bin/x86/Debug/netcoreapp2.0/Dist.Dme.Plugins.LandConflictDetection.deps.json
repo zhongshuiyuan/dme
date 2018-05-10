@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "5c03f8d93e6d9fbf06e39e1c2c0e8573dccb3bca"
+    "signature": "871186f9efaae9c511d52876b0bf92b6e99648ec"
   },
   "compilationOptions": {},
   "targets": {
@@ -27,6 +27,11 @@
       "ESRI.ArcGIS.Carto/10.1.0.3035": {
         "runtime": {
           "lib/ESRI.ArcGIS.Carto.dll": {}
+        }
+      },
+      "ESRI.ArcGIS.DataManagementTools/10.1.0.3035": {
+        "runtime": {
+          "lib/ESRI.ArcGIS.DataManagementTools.dll": {}
         }
       },
       "ESRI.ArcGIS.DataSourcesFile/10.1.0.3035": {
@@ -72,6 +77,11 @@
       "ESRI.ArcGIS.Geoprocessor/10.1.0.3035": {
         "runtime": {
           "lib/ESRI.ArcGIS.Geoprocessor.dll": {}
+        }
+      },
+      "ESRI.ArcGIS.Server/10.1.0.3035": {
+        "runtime": {
+          "lib/ESRI.ArcGIS.Server.dll": {}
         }
       },
       "ESRI.ArcGIS.System/10.1.0.3035": {
@@ -1650,6 +1660,7 @@
         "dependencies": {
           "ESRI.ArcGIS.AnalysisTools": "10.1.0.3035",
           "ESRI.ArcGIS.Carto": "10.1.0.3035",
+          "ESRI.ArcGIS.DataManagementTools": "10.1.0.3035",
           "ESRI.ArcGIS.DataSourcesFile": "10.1.0.3035",
           "ESRI.ArcGIS.DataSourcesGDB": "10.1.0.3035",
           "ESRI.ArcGIS.DataSourcesOleDB": "10.1.0.3035",
@@ -1659,6 +1670,7 @@
           "ESRI.ArcGIS.Geometry": "10.1.0.3035",
           "ESRI.ArcGIS.Geoprocessing": "10.1.0.3035",
           "ESRI.ArcGIS.Geoprocessor": "10.1.0.3035",
+          "ESRI.ArcGIS.Server": "10.1.0.3035",
           "ESRI.ArcGIS.System": "10.1.0.3035",
           "ESRI.ArcGIS.Version": "10.1.0.3035",
           "log4net": "2.0.8"
@@ -1704,6 +1716,13 @@
       "sha512": "sha512-0qTMrwrSSOVLH7GjSekkDaVcY797h+ahPHEOgZWLt1IcMnrYjJ1TvRC6BT8oXJ0ScXKfukHasw90ilPvbjxF9w==",
       "path": "esri.arcgis.carto/10.1.0.3035",
       "hashPath": "esri.arcgis.carto.10.1.0.3035.nupkg.sha512"
+    },
+    "ESRI.ArcGIS.DataManagementTools/10.1.0.3035": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Y/MkeX+LlvwYJRFbusmPkpHn9+2Apu60/jaB5QR4nwXhu7OO9aRxUTjmuMjdYMoRFU5RpIWRTa3/u3mIPk5Z8g==",
+      "path": "esri.arcgis.datamanagementtools/10.1.0.3035",
+      "hashPath": "esri.arcgis.datamanagementtools.10.1.0.3035.nupkg.sha512"
     },
     "ESRI.ArcGIS.DataSourcesFile/10.1.0.3035": {
       "type": "package",
@@ -1767,6 +1786,13 @@
       "sha512": "sha512-sGv0zFrjD95C1BR9xTqDIIN8dzjC+LGX8zZQi4RTPQMKEnnuSy6J91GyrV3GbUfXYmragzJgXBTGHpmceNcBwQ==",
       "path": "esri.arcgis.geoprocessor/10.1.0.3035",
       "hashPath": "esri.arcgis.geoprocessor.10.1.0.3035.nupkg.sha512"
+    },
+    "ESRI.ArcGIS.Server/10.1.0.3035": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-f3ZVfUJQETtIhCvoMpO8kNiIqvDm11YL7ds104l4v292oCY6WPpE2T+S4mpshgv984QV/1ZneWboQavlECGvUA==",
+      "path": "esri.arcgis.server/10.1.0.3035",
+      "hashPath": "esri.arcgis.server.10.1.0.3035.nupkg.sha512"
     },
     "ESRI.ArcGIS.System/10.1.0.3035": {
       "type": "package",

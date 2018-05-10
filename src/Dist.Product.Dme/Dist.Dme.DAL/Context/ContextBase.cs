@@ -8,10 +8,12 @@ using System.Text;
 
 namespace Dist.Dme.DAL.Context
 {
+    using log4net;
     using SqlSugar;
 
     public class ContextBase : IDbContext
     {
+        private static ILog LOG = LogManager.GetLogger(typeof(ContextBase));
         protected SqlSugarClient Db;
 
         public ContextBase(DbType dbType, String connectionConfig, bool IsAutoCloseConnection)
@@ -20,7 +22,9 @@ namespace Dist.Dme.DAL.Context
             {
                 ConnectionString = connectionConfig,
                 DbType = dbType,
-                IsAutoCloseConnection = IsAutoCloseConnection
+                IsAutoCloseConnection = IsAutoCloseConnection,
+                //设为true，表示相同线程是同一个SqlSugarClient
+                IsShardSameThread = true 
             });
             Db.Ado.IsEnableLogEvent = true;
             Db.Ado.LogEventStarting = (sql, pars) =>
@@ -28,6 +32,45 @@ namespace Dist.Dme.DAL.Context
                 Console.WriteLine(sql + "\r\n" + Db.Utilities.SerializeObject(pars.ToDictionary(it => it.ParameterName, it => it.Value)));
                 Console.WriteLine();
             };
+            // AOP LOG
+            Db.Aop.OnLogExecuting = (sql, pars) => //SQL executing event (pre-execution)
+            {
+            
+            };
+            Db.Aop.OnLogExecuted = (sql, pars) => //SQL executed event
+            {
+             
+            };
+            Db.Aop.OnError = (exp) =>//SQL execution error event
+            {
+              
+            };
+            Db.Aop.OnExecutingChangeSql = (sql, pars) => //SQL executing event (pre-execution,SQL script can be modified)
+            {
+                return new KeyValuePair<string, SugarParameter[]>(sql, pars);
+            };
+
+        }
+        /// <summary>
+        /// 开启事务
+        /// </summary>
+        public void BeginTran()
+        {
+            Db.Ado.BeginTran();
+        }
+        /// <summary>
+        /// 提交事务
+        /// </summary>
+        public void CommitTran()
+        {
+            Db.Ado.CommitTran();
+        }
+        /// <summary>
+        /// 回滚事务
+        /// </summary>
+        public void RollbackTran()
+        {
+            Db.Ado.RollbackTran();
         }
         // <summary>
         /// 初始化ORM连接对象

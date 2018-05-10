@@ -11,3 +11,4 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DAL\obj\Debug\netcoreapp2.0\Dist.Dme
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DAL\obj\Debug\netcoreapp2.0\Dist.Dme.DAL.AssemblyInfo.cs
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DAL\obj\Debug\netcoreapp2.0\Dist.Dme.DAL.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DAL\obj\Debug\netcoreapp2.0\Dist.Dme.DAL.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DAL\obj\Debug\netcoreapp2.0\Dist.Dme.DAL.csproj.CopyComplete

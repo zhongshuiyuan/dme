@@ -77,15 +77,16 @@
             模型服务
             </summary>
         </member>
-        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.GetLandConflictInputParameters">
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.ListModels(System.Int32)">
             <summary>
-            获取用地冲突分析输入参数
+            获取所有模型
             </summary>
+            <param name="refAlgorithm">是否获取关联的算法信息</param>
             <returns></returns>
         </member>
-        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.GetLandConflictOutputParameters">
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.GetLandConflictMetadata">
             <summary>
-            获取用地冲突分析输出参数
+            获取用地冲突分析元数据信息
             </summary>
             <returns></returns>
         </member>
@@ -96,6 +97,13 @@
             <param name="dto">参数输入</param>
             <returns></returns>
         </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.AddModel(Dist.Dme.Model.DTO.ModelAddReqDTO)">
+            <summary>
+            注册模型
+            </summary>
+            <param name="dto">参数模型</param>
+            <returns></returns>
+        </member>
         <member name="T:Dist.Dme.WebApi.Controllers.UsersController">
             <summary>
             数据源服务
@@ -104,12 +112,6 @@
         <member name="M:Dist.Dme.WebApi.Controllers.UsersController.ListUsers">
             <summary>
             获取用户列表
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Dist.Dme.WebApi.Controllers.ValuesController.Get">
-            <summary>
-            获取数值
             </summary>
             <returns></returns>
         </member>

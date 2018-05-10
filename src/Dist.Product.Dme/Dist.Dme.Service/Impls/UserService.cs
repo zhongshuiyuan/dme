@@ -4,6 +4,7 @@ using Dist.Dme.Model;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Interfaces;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,6 +16,7 @@ namespace Dist.Dme.Service.Impls
     /// </summary>
     public class UserService : AbstractContext, IUserService
     {
+        private static ILog LOG = LogManager.GetLogger(typeof(UserService));
         public IList<UserInfoDTO> ListUsers()
         {
             List<DmeUser> users = base.DmeUserDb.GetList();

@@ -14,7 +14,7 @@ namespace Dist.Dme.Model.Entity
         public String Name { get; set; }
         public String Alias { get; set; }
         public String Version { get; set; }
-        public int RegisterTime { get; set; }
+        public long CreateTime { get; set; }
         public String Remark { get; set; }
         public String UserCode { get; set; }
         public String Path { get; set; }

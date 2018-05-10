@@ -56,7 +56,7 @@ namespace Dist.Dme.AECommon.AnalysisTools
             catch (Exception ex)
             {
                 LOG.Error("执行feature union出现异常，详情：" + ex.Message);
-                return null;
+                throw ex;
             }
         }
         void GPProgressChanged(object sender, ProgressChangedEventArgs e)
