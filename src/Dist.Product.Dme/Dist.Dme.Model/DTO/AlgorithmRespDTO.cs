@@ -17,7 +17,6 @@ namespace Dist.Dme.Model.DTO
         public String Version { get; set; }
         public long CreateTime { get; set; }
         public String Remark { get; set; }
-        public String UserCode { get; set; }
         public String Path { get; set; }
         public IList<DmeAlgorithmMeta> Metas { get; set; }
     }

@@ -14,7 +14,6 @@ namespace Dist.Dme.Model.DTO
         public String SysCode { get; set; }
         public String Name { get; set; }
         public String Remark { get; set; }
-        public String UserCode { get; set; }
         public long CreateTime { get; set; }
         /// <summary>
         /// 模型关联的算法

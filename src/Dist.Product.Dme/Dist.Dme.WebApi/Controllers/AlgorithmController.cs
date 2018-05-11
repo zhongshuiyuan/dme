@@ -1,4 +1,5 @@
 ﻿using Dist.Dme.Base.Framework;
+using Dist.Dme.Base.Framework.AlgorithmTypes;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Plugins.LandConflictDetection.DTO;
 using Dist.Dme.Service.Impls;
@@ -26,7 +27,7 @@ namespace Dist.Dme.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("v1/")]
-        public Result ListModels([FromQuery(Name = "hasmeta")] int hasMeta = 0)
+        public Result ListAlgorithm([FromQuery(Name = "hasmeta")] int hasMeta = 0)
         {
             return base.Success(AlgorithmService.ListAlgorithm(1 == hasMeta));
         }
@@ -41,6 +42,29 @@ namespace Dist.Dme.WebApi.Controllers
         {
             return base.Success(AlgorithmService.AddAlgorithm(dto));
         }
-        
+        /// <summary>
+        /// 算法开发平台类型
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("devtypes/v1")]
+        public Result ListAlgorithmType()
+        {
+            return base.Success(AlgorithmTypesFactory.ListAlgorithmType());
+        }
+        /// <summary>
+        /// 算法的执行器，需要注入算法的参数
+        /// </summary>
+        /// <param name="algCode">算法唯一编码</param>
+        /// <param name="dto">参数信息值，键值对格式</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("executor/v1/{algCode}")]
+        public Result ExecuteAlgorithm(string algCode, [FromBody]BaseRequestDTO dto)
+        {
+            AlgorithmRespDTO algInfo = (AlgorithmRespDTO)AlgorithmService.GetAlgorithmByCode(algCode, true);
+
+            return base.Success("");
+        }
     }
 }

@@ -4591,6 +4591,22 @@
           "Dist.Dme.AECommon.dll": {}
         }
       },
+      "Dist.Dme.Algorithms.LandConflictDetection/1.0.0": {
+        "dependencies": {
+          "Dist.Dme.AECommon": "1.0.0",
+          "Dist.Dme.Base": "1.0.0",
+          "Dist.Dme.Model": "1.0.0",
+          "ESRI.ArcGIS.Geodatabase": "10.1.0.3035",
+          "ESRI.ArcGIS.Version": "10.1.0.3035",
+          "log4net": "2.0.8"
+        },
+        "runtime": {
+          "Dist.Dme.Algorithms.LandConflictDetection.dll": {}
+        },
+        "compile": {
+          "Dist.Dme.Algorithms.LandConflictDetection.dll": {}
+        }
+      },
       "Dist.Dme.Base/1.0.0": {
         "dependencies": {
           "Newtonsoft.Json": "11.0.2"
@@ -4628,27 +4644,11 @@
           "Dist.Dme.Model.dll": {}
         }
       },
-      "Dist.Dme.Plugins.LandConflictDetection/1.0.0": {
-        "dependencies": {
-          "Dist.Dme.AECommon": "1.0.0",
-          "Dist.Dme.Base": "1.0.0",
-          "Dist.Dme.Model": "1.0.0",
-          "ESRI.ArcGIS.Geodatabase": "10.1.0.3035",
-          "ESRI.ArcGIS.Version": "10.1.0.3035",
-          "log4net": "2.0.8"
-        },
-        "runtime": {
-          "Dist.Dme.Plugins.LandConflictDetection.dll": {}
-        },
-        "compile": {
-          "Dist.Dme.Plugins.LandConflictDetection.dll": {}
-        }
-      },
       "Dist.Dme.Service/1.0.0": {
         "dependencies": {
+          "Dist.Dme.Algorithms.LandConflictDetection": "1.0.0",
           "Dist.Dme.DAL": "1.0.0",
-          "Dist.Dme.Model": "1.0.0",
-          "Dist.Dme.Plugins.LandConflictDetection": "1.0.0"
+          "Dist.Dme.Model": "1.0.0"
         },
         "runtime": {
           "Dist.Dme.Service.dll": {}
@@ -7219,6 +7219,11 @@
       "serviceable": false,
       "sha512": ""
     },
+    "Dist.Dme.Algorithms.LandConflictDetection/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "Dist.Dme.Base/1.0.0": {
       "type": "project",
       "serviceable": false,
@@ -7230,11 +7235,6 @@
       "sha512": ""
     },
     "Dist.Dme.Model/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Dist.Dme.Plugins.LandConflictDetection/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

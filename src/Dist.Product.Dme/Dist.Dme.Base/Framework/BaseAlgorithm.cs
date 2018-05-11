@@ -1,4 +1,5 @@
 ﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Framework.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace Dist.Dme.Base.Framework
         public abstract object OutParams { get; }
         public abstract object FeatureParams { get; }
         public abstract void Init(IDictionary<string, object> parameters);
+        public abstract IAlgorithmDevType AlgorithmType { get; }
         public virtual object MetadataJSON
         {
             get
@@ -31,6 +33,7 @@ namespace Dist.Dme.Base.Framework
                 return JsonConvert.SerializeObject(dictionary);
             }
         }
+
         /// <summary>
         /// 输入参数
         /// </summary>

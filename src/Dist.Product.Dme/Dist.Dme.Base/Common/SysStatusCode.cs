@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Dist.Dme.Base.Common
+﻿namespace Dist.Dme.Base.Common
 {
     /// <summary>
     /// 系统状态码

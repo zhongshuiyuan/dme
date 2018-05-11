@@ -42,9 +42,10 @@ namespace Dist.Dme.Service.Impls
             }
             return algs;
         }
-        private AlgorithmRespDTO GetAlgorithmByCode(String code, bool hasMeta)
+        public AlgorithmRespDTO GetAlgorithmByCode(String code, bool hasMeta)
         {
-            DmeAlgorithm alg = base.Db.Queryable<DmeAlgorithm>().Where(a => a.SysCode == code).First();
+            // single，如果找不到实体，则抛出异常
+            DmeAlgorithm alg = base.Db.Queryable<DmeAlgorithm>().Single(a => a.SysCode == code);
             AlgorithmRespDTO algorithmDTO = ClassValueCopier<AlgorithmRespDTO>.Copy(alg);
             IList<DmeAlgorithmMeta>  metas = base.Db.Queryable<DmeAlgorithmMeta>().Where(meta => meta.AlgorithmId == alg.Id).ToList();
             if (metas !=null  && metas.Count >0)

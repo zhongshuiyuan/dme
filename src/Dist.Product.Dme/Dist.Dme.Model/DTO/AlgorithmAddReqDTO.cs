@@ -17,7 +17,6 @@ namespace Dist.Dme.Model.DTO
         public String Alias { get; set; }
         public String Version { get; set; }
         public String Remark { get; set; }
-        public String UserCode { get; set; }
         public String Path { get; set; }
         [Required]
         public IList<AlgorithmMetaReqDTO> Metas { get; set; }

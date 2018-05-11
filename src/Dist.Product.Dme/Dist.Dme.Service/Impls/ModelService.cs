@@ -1,7 +1,6 @@
-﻿using Dist.Dme.Base.Framework;
+﻿using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.DAL.Context;
-using Dist.Dme.Model;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.Plugins.LandConflictDetection;
@@ -10,7 +9,6 @@ using log4net;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Dist.Dme.Service.Impls
 {
@@ -112,6 +110,19 @@ namespace Dist.Dme.Service.Impls
                 return model;
             });
             return dbResult.Data;
+        }
+
+        public object ExecuteModel(string code, string versionCode)
+        {
+            // Single方法，如果查询数据库没有数据，抛出异常
+            DmeModel model = base.Db.Queryable<DmeModel>().Single(m => m.SysCode == code);
+            // 查询模型版本
+            DmeModelVersion modelVersion = base.Db.Queryable<DmeModelVersion>().Single(mv => mv.SysCode == versionCode);
+            // 查找关联的算法信息
+            IList<DmeRuleStep> ruleSteps = base.Db.Queryable<DmeRuleStep>().Where(rs => rs.ModelId == model.Id).Where(rs => rs.VersionId == modelVersion.Id).ToList();
+
+
+            throw new NotImplementedException();
         }
     }
 }

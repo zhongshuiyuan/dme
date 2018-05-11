@@ -28,6 +28,12 @@
             <param name="dto"></param>
             <returns></returns>
         </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.ListAlgorithmType">
+            <summary>
+            算法开发平台类型
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.GetHeaderValue(System.String,Microsoft.AspNetCore.Http.HttpRequest)">
             <summary>
             获得Header

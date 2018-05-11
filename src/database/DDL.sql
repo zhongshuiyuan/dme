@@ -44,8 +44,7 @@ CREATE TABLE DME_Task
 	"MODEL_ID" NUMBER(8),
 	"VERSION_ID" NUMBER(8),
 	"CREATETIME" number(20),
-	"LASTTIME" number(20),
-	"USERCODE" VARCHAR2(38)
+	"LASTTIME" number(20)
 );
 -- Add comments to the table 
 comment on table DME_Task
@@ -68,8 +67,6 @@ comment on column DME_JOB.createtime
   is '创建时间，毫秒';
 comment on column DME_JOB.lasttime
   is '最后更新时间，毫秒';
-comment on column DME_JOB.usercode
-  is '用户唯一编码';
   
 alter table DME_JOB add primary key(id);
 
@@ -79,8 +76,7 @@ CREATE TABLE DME_Model_Version
 	"SYSCODE" VARCHAR2(38),
 	"NAME" VARCHAR2(50),
 	"MODEL_ID" NUMBER(8),
-	"CREATETIME" number(20),
-	"USERCODE" VARCHAR2(38)
+	"CREATETIME" number(20)
 );
 -- Add comments to the table 
 comment on table DME_MODEL_VERSION
@@ -96,8 +92,6 @@ comment on column DME_MODEL_VERSION.model_id
   is '模型ID';
 comment on column DME_MODEL_VERSION.createtime
   is '创建时间，毫秒';
-comment on column DME_MODEL_VERSION.usercode
-  is '用户唯一编码';
   alter table DME_MODEL_VERSION add primary key(id);
   
   CREATE TABLE DME_Model
@@ -106,7 +100,6 @@ comment on column DME_MODEL_VERSION.usercode
 	"SYSCODE" VARCHAR2(38) NOT NULL,
 	"NAME" VARCHAR2(50) NOT NULL,
 	"REMARK" VARCHAR2(250),
-	"USERCODE" VARCHAR2(38),
   "CREATETIME" number(20),
 );
 -- Add comments to the table 
@@ -121,8 +114,6 @@ comment on column DME_MODEL.name
   is '名称';
 comment on column DME_MODEL.remark
   is '备注';
-comment on column DME_MODEL.usercode
-  is '用户唯一编码';
  comment on column DME_MODEL.CREATETIME
   is '创建时间，毫秒';
   
@@ -233,7 +224,9 @@ create table DME_LOG
   createtime number(20),
   address    VARCHAR2(38),
   remark     VARCHAR2(255),
-  apps       VARCHAR2(255)
+  apps       VARCHAR2(255),
+  ObjectType VARCHAR2(30),
+  ObjectValue VARCHAR2(50)
 )
 tablespace DME
   pctfree 10
@@ -263,6 +256,11 @@ comment on column DME_LOG.remark
   is '备注';
 comment on column DME_LOG.apps
   is '应用';
+comment on column DME_LOG.ObjectType
+  is '日志对象类型，如：算法、模型等等';
+comment on column DME_LOG.ObjectValue
+  is '对象值，记录具体的对象标识值';  
+  
   alter table DME_LOG add primary key(ID);
   
   CREATE TABLE DME_DatabaseType
@@ -296,8 +294,8 @@ CREATE TABLE DME_Algorithm
 	"VERSION" VARCHAR2(10) NOT NULL,
 	"CREATETIME" number(20),
 	"REMARK" VARCHAR2(250),
-	"USERCODE" VARCHAR2(38),
-  PATH VARCHAR2(512)
+  TYPE VARCHAR2(10),
+  EXTENSION CLOB
 );
 comment on table DME_ALGORITHM
   is '算法';
@@ -316,10 +314,11 @@ comment on column DME_ALGORITHM.CREATETIME
   is '注册时间，毫秒';
 comment on column DME_ALGORITHM.remark
   is '备注';
-comment on column DME_ALGORITHM.usercode
-  is '用户唯一编码';
-comment on column DME_ALGORITHM.path
-  is '路径';
+comment on column DME_ALGORITHM.type
+  is '算法类型，如：DLL，JAR，URI等等';
+comment on column DME_ALGORITHM.EXTENSION
+  is '扩展信息，格式：JSON。如果type=DLL，则存储DLL的assembly，主类.主方法，DLL路径等等信息';  
+  
   alter table DME_ALGORITHM add primary key(ID);
   
   CREATE TABLE DME_Algorithm_Meta

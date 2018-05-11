@@ -22,6 +22,5 @@ namespace Dist.Dme.Model.Entity
         public int VersionId { get; set; }
         public int CreateTime { get; set; }
         public int LastTime { get; set; }
-        public String UserCode { get; set; }
     }
 }

@@ -6,4 +6,3 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.AECommon\obj\x86\Debug\netcoreapp2.0
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.AECommon\obj\x86\Debug\netcoreapp2.0\Dist.Dme.AECommon.AssemblyInfo.cs
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.AECommon\obj\x86\Debug\netcoreapp2.0\Dist.Dme.AECommon.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.AECommon\obj\x86\Debug\netcoreapp2.0\Dist.Dme.AECommon.pdb
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.AECommon\obj\x86\Debug\netcoreapp2.0\Dist.Dme.AECommon.csprojResolveAssemblyReference.cache
