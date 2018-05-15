@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "fea4f377588b805591546e5275e1691b3f2b4881"
+    "signature": "9e1f18dd39ce25dd64e19dda51590ef114ecd45c"
   },
   "compilationOptions": {},
   "targets": {
@@ -16,6 +16,11 @@
         },
         "runtime": {
           "Dist.Dme.DAL.dll": {}
+        }
+      },
+      "LessJie.System.Web.Http/1.0.0": {
+        "runtime": {
+          "lib/System.Web.Http.dll": {}
         }
       },
       "log4net/2.0.8": {
@@ -1587,7 +1592,9 @@
       },
       "Dist.Dme.Base/1.0.0": {
         "dependencies": {
-          "Newtonsoft.Json": "11.0.2"
+          "LessJie.System.Web.Http": "1.0.0",
+          "Newtonsoft.Json": "11.0.2",
+          "log4net": "2.0.8"
         },
         "runtime": {
           "Dist.Dme.Base.dll": {}
@@ -1608,6 +1615,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "LessJie.System.Web.Http/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6OFq2UNxTuZ95fC1vTtdwyT68MmxG4VBVGYmEAR0+e7x3hBmZb9yWF9NMAhYbtHNWWNY2jZBEvOL5qNfv3WDJw==",
+      "path": "lessjie.system.web.http/1.0.0",
+      "hashPath": "lessjie.system.web.http.1.0.0.nupkg.sha512"
     },
     "log4net/2.0.8": {
       "type": "package",

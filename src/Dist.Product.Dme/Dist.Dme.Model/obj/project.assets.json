@@ -777,7 +777,7 @@
           "lib/netstandard1.1/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
-      "sqlSugarCore/4.6.4.7": {
+      "sqlSugarCore/4.6.4.9": {
         "type": "package",
         "dependencies": {
           "Microsoft.Data.Sqlite": "2.0.0",
@@ -3446,13 +3446,13 @@
         "sqlitepclraw.provider.e_sqlite3.netstandard11.nuspec"
       ]
     },
-    "sqlSugarCore/4.6.4.7": {
-      "sha512": "AcqKRZumwyizkl7EdT8tSDoyC6M9wp9lJeExct3Ewrgrw/5ph7rXoDqNhn0rjhUrMJYuckTX1zDBfQwbqE7I2A==",
+    "sqlSugarCore/4.6.4.9": {
+      "sha512": "BIY0s68mJE/sjdoRSTr8otMTqRq+EHH1KxlifaKevj/DSv93iB4dhVQKfO/3u9eedtrA4GYJdnh/vhTiIbXddQ==",
       "type": "package",
-      "path": "sqlsugarcore/4.6.4.7",
+      "path": "sqlsugarcore/4.6.4.9",
       "files": [
         "lib/netstandard2.0/SqlSugar.dll",
-        "sqlsugarcore.4.6.4.7.nupkg.sha512",
+        "sqlsugarcore.4.6.4.9.nupkg.sha512",
         "sqlsugarcore.nuspec"
       ]
     },
@@ -7275,7 +7275,7 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
       "Microsoft.NETCore.App >= 2.0.0",
-      "sqlSugarCore >= 4.6.4.7"
+      "sqlSugarCore >= 4.6.4.9"
     ]
   },
   "packageFolders": {
@@ -7289,11 +7289,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj",
+      "projectUniqueName": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj",
       "projectName": "Dist.Dme.Model",
-      "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj",
+      "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj",
       "packagesPath": "C:\\Users\\thinkpad\\.nuget\\packages\\",
-      "outputPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Model\\obj\\",
+      "outputPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Model\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
@@ -7335,7 +7335,7 @@
           },
           "sqlSugarCore": {
             "target": "Package",
-            "version": "[4.6.4.7, )"
+            "version": "[4.6.4.9, )"
           }
         },
         "imports": [

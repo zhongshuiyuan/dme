@@ -313,7 +313,7 @@ namespace Dist.Dme.AECommon.Utils
             }
             catch (Exception ex)
             {
-                Console.WriteLine("空间数据库打开错误");
+                LOG.Error("空间数据库打开错误" + ex.Message);
                 return null;
             }
             return pWorkspace;
@@ -329,7 +329,7 @@ namespace Dist.Dme.AECommon.Utils
             }
             catch (Exception ex)
             {
-                ;
+                LOG.Error(ex);
             }
             return pWorkspace;
         }
@@ -350,7 +350,7 @@ namespace Dist.Dme.AECommon.Utils
             }
             catch (Exception ex)
             {
-                ;
+                LOG.Error(ex);
             }
             return pWorkspace;
 
@@ -367,7 +367,7 @@ namespace Dist.Dme.AECommon.Utils
             }
             catch (Exception ex)
             {
-                ;// MessageBox.Show(ex.Message);
+                LOG.Error(ex);
             }
             return pWorkspace;
         }
@@ -385,7 +385,7 @@ namespace Dist.Dme.AECommon.Utils
             }
             catch (Exception ex)
             {
-                ;// MessageBox.Show(ex.Message);
+                LOG.Error(ex);
             }
             return pWorkspace;
         }
@@ -393,15 +393,17 @@ namespace Dist.Dme.AECommon.Utils
         public static IWorkspaceName OpenTextFileWorkspaceName(string TextFilePath)
         {
 
-            IWorkspaceName pWorkspaceName = new WorkspaceNameClass();
-            pWorkspaceName.WorkspaceFactoryProgID = "esriDataSourcesOleDB.TextFileWorkspaceFactory";
+            IWorkspaceName pWorkspaceName = new WorkspaceNameClass
+            {
+                WorkspaceFactoryProgID = "esriDataSourcesOleDB.TextFileWorkspaceFactory"
+            };
             try
             {
                 pWorkspaceName.PathName = TextFilePath;
             }
             catch (Exception ex)
             {
-                ;// MessageBox.Show(ex.Message);
+                LOG.Error(ex);
             }
             return pWorkspaceName;
         }
@@ -409,23 +411,27 @@ namespace Dist.Dme.AECommon.Utils
         public static IWorkspaceName OpenTinWorkspaceName(string TinFilePath)
         {
 
-            IWorkspaceName pWorkspaceName = new WorkspaceNameClass();
-            pWorkspaceName.WorkspaceFactoryProgID = "esriDataSourcesFile.TinWorkspaceFactory";
+            IWorkspaceName pWorkspaceName = new WorkspaceNameClass
+            {
+                WorkspaceFactoryProgID = "esriDataSourcesFile.TinWorkspaceFactory"
+            };
             try
             {
                 pWorkspaceName.PathName = TinFilePath;
             }
             catch (Exception ex)
             {
-                ;// MessageBox.Show(ex.Message);
+                LOG.Error(ex);
             }
             return pWorkspaceName;
         }
 
         public static IWorkspaceName OpenVpfWorkspaceName(string VpfFilePath)
         {
-            IWorkspaceName pWorkspaceName = new WorkspaceNameClass();
-            pWorkspaceName.WorkspaceFactoryProgID = "esriDataSourcesFile.VpfWorkspaceFactory";
+            IWorkspaceName pWorkspaceName = new WorkspaceNameClass
+            {
+                WorkspaceFactoryProgID = "esriDataSourcesFile.VpfWorkspaceFactory"
+            };
             try
             {
                 pWorkspaceName.PathName = VpfFilePath;
@@ -433,7 +439,7 @@ namespace Dist.Dme.AECommon.Utils
             }
             catch (Exception ex)
             {
-                ;// MessageBox.Show(ex.Message);
+                LOG.Error(ex);
             }
             return pWorkspaceName;
         }
@@ -447,7 +453,7 @@ namespace Dist.Dme.AECommon.Utils
             }
             catch (Exception ex)
             {
-                ;// MessageBox.Show(ex.Message);
+                LOG.Error(ex);
             }
             return pCadDwgDataset;
         }
@@ -471,6 +477,7 @@ namespace Dist.Dme.AECommon.Utils
             }
             catch (Exception ex)
             {
+                LOG.Error(ex);
                 return false;
             }
         }
@@ -481,9 +488,11 @@ namespace Dist.Dme.AECommon.Utils
         {
             try
             {
-                IDatasetName cadDatasetName = new CadDrawingNameClass();
-                cadDatasetName.Name = cadFileName;
-                cadDatasetName.WorkspaceName = workspaceName;
+                IDatasetName cadDatasetName = new CadDrawingNameClass
+                {
+                    Name = cadFileName,
+                    WorkspaceName = workspaceName
+                };
 
                 //Open the CAD drawing
                 IName name = (IName)cadDatasetName;
@@ -492,7 +501,7 @@ namespace Dist.Dme.AECommon.Utils
             }
             catch (Exception ex)
             {
-                ;// MessageBox.Show(ex.Message);
+                LOG.Error(ex);
             }
             return null;
         }
@@ -502,9 +511,11 @@ namespace Dist.Dme.AECommon.Utils
         {
             try
             {
-                IDatasetName pFeatureDatasetName = new FeatureDatasetNameClass();
-                pFeatureDatasetName.Name = FeatureDatasetName;
-                pFeatureDatasetName.WorkspaceName = workspaceName;
+                IDatasetName pFeatureDatasetName = new FeatureDatasetNameClass
+                {
+                    Name = FeatureDatasetName,
+                    WorkspaceName = workspaceName
+                };
 
                 //Open the FeatureDataset
                 IName name = (IName)pFeatureDatasetName;
@@ -512,7 +523,7 @@ namespace Dist.Dme.AECommon.Utils
             }
             catch (Exception ex)
             {
-                ;// MessageBox.Show(ex.Message);
+                LOG.Error(ex);
             }
             return null;
         }
@@ -521,9 +532,11 @@ namespace Dist.Dme.AECommon.Utils
         {
             try
             {
-                IDatasetName pCoverageDatasetName = new CoverageNameClass();
-                pCoverageDatasetName.Name = CoverageDatasetName;
-                pCoverageDatasetName.WorkspaceName = workspaceName;
+                IDatasetName pCoverageDatasetName = new CoverageNameClass
+                {
+                    Name = CoverageDatasetName,
+                    WorkspaceName = workspaceName
+                };
 
                 //Open the FeatureDataset
                 IName name = (IName)pCoverageDatasetName;
@@ -531,7 +544,7 @@ namespace Dist.Dme.AECommon.Utils
             }
             catch (Exception ex)
             {
-                ;// MessageBox.Show(ex.Message);
+                LOG.Error(ex);
             }
             return null;
         }
@@ -594,8 +607,8 @@ namespace Dist.Dme.AECommon.Utils
             }
             catch (Exception ex)
             {
+                LOG.Error(ex);
                 return null;
-
             }
 
             return annoLayer;
@@ -650,9 +663,11 @@ namespace Dist.Dme.AECommon.Utils
         {
             try
             {
-                IDatasetName pRasterDatasetName = new RasterDatasetNameClass();
-                pRasterDatasetName.Name = RasterDatasetName;
-                pRasterDatasetName.WorkspaceName = workspaceName;
+                IDatasetName pRasterDatasetName = new RasterDatasetNameClass
+                {
+                    Name = RasterDatasetName,
+                    WorkspaceName = workspaceName
+                };
 
                 //Open the FeatureDataset
                 IName name = (IName)pRasterDatasetName;
@@ -660,7 +675,7 @@ namespace Dist.Dme.AECommon.Utils
             }
             catch (Exception ex)
             {
-                ;// MessageBox.Show(ex.Message);
+                LOG.Error(ex);
             }
             return null;
         }
@@ -674,7 +689,7 @@ namespace Dist.Dme.AECommon.Utils
             }
             catch (Exception ex)
             {
-                ;// MessageBox.Show(ex.Message);
+                LOG.Error(ex);
                 return null;
             }
         }
@@ -734,7 +749,9 @@ namespace Dist.Dme.AECommon.Utils
                 pRasterBand = pRasterBandColl.get_BandByName(strBandName);
             }
             catch (Exception ex)
-            { }
+            {
+                LOG.Error(ex);
+            }
             pRasterWorkspace = null;
             pRasterDataset = null;
             pRasterBandColl = null;
@@ -857,9 +874,8 @@ namespace Dist.Dme.AECommon.Utils
             }
             else if (sourceLayer.IndexOf(".sde") != -1)
             {
-                string user = "", message = "";
                 PathName = sourceLayer.Substring(0, sourceLayer.IndexOf(".sde") + 4);
-                pWorkspace = WorkspaceServices.OpenSdeWorkspace(PathName, out user, out message);
+                pWorkspace = WorkspaceServices.OpenSdeWorkspace(PathName, out string user, out string message);
             }
             return pWorkspace;
         }
@@ -881,9 +897,11 @@ namespace Dist.Dme.AECommon.Utils
                     IFeatureClass featureClass = (pWorkspace as IFeatureWorkspace).OpenFeatureClass(pLayerName);
                     IWorkspace pOutWorkspace = WorkspaceServices.OpenWorkspace(targetDatabase);
 
-                    ExportUtil exportUtil = new ExportUtil();
-                    exportUtil.InputFeatureClass = featureClass;
-                    exportUtil.OutWorkspace = pOutWorkspace;
+                    ExportUtil exportUtil = new ExportUtil
+                    {
+                        InputFeatureClass = featureClass,
+                        OutWorkspace = pOutWorkspace
+                    };
                     exportUtil.Excute();
                 }
                 catch (Exception ex)

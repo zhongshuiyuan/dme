@@ -5496,11 +5496,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.AECommon\\Dist.Dme.AECommon.csproj",
+      "projectUniqueName": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.AECommon\\Dist.Dme.AECommon.csproj",
       "projectName": "Dist.Dme.AECommon",
-      "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.AECommon\\Dist.Dme.AECommon.csproj",
+      "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.AECommon\\Dist.Dme.AECommon.csproj",
       "packagesPath": "C:\\Users\\thinkpad\\.nuget\\packages\\",
-      "outputPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.AECommon\\obj\\",
+      "outputPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.AECommon\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",

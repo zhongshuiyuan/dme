@@ -50,25 +50,25 @@ CREATE TABLE DME_Task
 comment on table DME_Task
   is '任务调度';
 -- Add comments to the columns 
-comment on column DME_JOB.id
+comment on column DME_Task.id
   is '主键';
-comment on column DME_JOB.syscode
+comment on column DME_Task.syscode
   is '唯一编码';
-comment on column DME_JOB.name
+comment on column DME_Task.name
   is '名称';
-comment on column DME_JOB.status
+comment on column DME_Task.status
   is '状态，运行中：running，停止：stop，成功：success，失败：fail
 ';
-comment on column DME_JOB.model_id
+comment on column DME_Task.model_id
   is '模型ID';
-comment on column DME_JOB.version_id
+comment on column DME_Task.version_id
   is '版本ID';
-comment on column DME_JOB.createtime
+comment on column DME_Task.createtime
   is '创建时间，毫秒';
-comment on column DME_JOB.lasttime
+comment on column DME_Task.lasttime
   is '最后更新时间，毫秒';
   
-alter table DME_JOB add primary key(id);
+alter table DME_Task add primary key(id);
 
 CREATE TABLE DME_Model_Version
 (

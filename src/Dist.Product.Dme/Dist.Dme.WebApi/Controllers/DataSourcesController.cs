@@ -19,8 +19,11 @@ namespace Dist.Dme.WebApi.Controllers
     [Route("api/datasources")]
     public class DataSourcesController : BaseController
     {
-        private IDataSourceService dataSourceService = new DataSourceService();
-
+        public IDataSourceService DataSourceService { get; private set; }
+        public DataSourcesController(IDataSourceService dataSourceService)
+        {
+            this.DataSourceService = dataSourceService;
+        }
         /// <summary>
         /// 获取所有数据库类型
         /// </summary>
@@ -29,7 +32,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/databasetypes")]
         public Result ListDatabaseTypes()
         {
-            return base.Success(dataSourceService.ListDatabaseTypes());
+            return base.Success(DataSourceService.ListDatabaseTypes());
         }
         /// <summary>
         /// 获取具体某个数据库类型
@@ -40,7 +43,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/databasetypes/{id}")]
         public Result GetDatabaseType(int id)
         {
-            return base.Success(dataSourceService.GetDatabaseType(id));
+            return base.Success(DataSourceService.GetDatabaseType(id));
         }
     }
 }

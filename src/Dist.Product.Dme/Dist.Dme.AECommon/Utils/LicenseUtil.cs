@@ -44,6 +44,7 @@ namespace Dist.Dme.AECommon.Utils
             }
             catch (Exception ex)
             {
+                LOG.Error(ex);
                 //TraceHandler.AddException(ex);
 
             }

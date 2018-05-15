@@ -16,7 +16,7 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="code">算法唯一编码</param>
         /// <param name="hasMeta">是否需要获取算法元数据信息</param>
         /// <returns></returns>
-        object GetAlgorithmByCode(String code, bool hasMeta);
+        AlgorithmRespDTO GetAlgorithmByCode(String code, bool hasMeta);
         /// <summary>
         /// 获取算法列表
         /// </summary>

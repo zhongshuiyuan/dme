@@ -1,0 +1,9 @@
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisCache\bin\Debug\netcoreapp2.0\Dist.Dme.DisCache.deps.json
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisCache\bin\Debug\netcoreapp2.0\Dist.Dme.DisCache.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisCache\bin\Debug\netcoreapp2.0\Dist.Dme.DisCache.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisCache\obj\Debug\netcoreapp2.0\Dist.Dme.DisCache.csproj.CoreCompileInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisCache\obj\Debug\netcoreapp2.0\Dist.Dme.DisCache.AssemblyInfoInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisCache\obj\Debug\netcoreapp2.0\Dist.Dme.DisCache.AssemblyInfo.cs
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisCache\obj\Debug\netcoreapp2.0\Dist.Dme.DisCache.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisCache\obj\Debug\netcoreapp2.0\Dist.Dme.DisCache.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisCache\obj\Debug\netcoreapp2.0\Dist.Dme.DisCache.csprojResolveAssemblyReference.cache

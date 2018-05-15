@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "871186f9efaae9c511d52876b0bf92b6e99648ec"
+    "signature": "ba5bffea2e138fd5df16942ce28d5ec4b890414d"
   },
   "compilationOptions": {},
   "targets": {
@@ -125,6 +125,23 @@
         },
         "runtime": {
           "lib/netstandard1.3/log4net.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi.Client/5.2.6": {
+        "dependencies": {
+          "Newtonsoft.Json": "11.0.2",
+          "Newtonsoft.Json.Bson": "1.0.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Net.Http.Formatting.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi.Core/5.2.6": {
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Client": "5.2.6"
+        },
+        "runtime": {
+          "lib/net45/System.Web.Http.dll": {}
         }
       },
       "Microsoft.Data.Sqlite/2.0.0": {
@@ -271,6 +288,14 @@
       "Newtonsoft.Json/11.0.2": {
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+        }
+      },
+      "Newtonsoft.Json.Bson/1.0.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "11.0.2"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {}
         }
       },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
@@ -494,7 +519,7 @@
           "lib/netstandard1.1/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
-      "sqlSugarCore/4.6.4.7": {
+      "sqlSugarCore/4.6.4.9": {
         "dependencies": {
           "Microsoft.Data.Sqlite": "2.0.0",
           "MySql.Data": "6.10.4",
@@ -1681,7 +1706,9 @@
       },
       "Dist.Dme.Base/1.0.0": {
         "dependencies": {
-          "Newtonsoft.Json": "11.0.2"
+          "Microsoft.AspNet.WebApi.Core": "5.2.6",
+          "Newtonsoft.Json": "11.0.2",
+          "log4net": "2.0.8"
         },
         "runtime": {
           "Dist.Dme.Base.dll": {}
@@ -1689,7 +1716,7 @@
       },
       "Dist.Dme.Model/1.0.0": {
         "dependencies": {
-          "sqlSugarCore": "4.6.4.7"
+          "sqlSugarCore": "4.6.4.9"
         },
         "runtime": {
           "Dist.Dme.Model.dll": {}
@@ -1815,6 +1842,20 @@
       "path": "log4net/2.0.8",
       "hashPath": "log4net.2.0.8.nupkg.sha512"
     },
+    "Microsoft.AspNet.WebApi.Client/5.2.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rMDlyePoxggkmN/qgha1+BR2Uy+dOr38xKCQOPfVNKGY07R2nYJGMTKJFE1XFgwD70RYUNazf2fqutjJF18XgQ==",
+      "path": "microsoft.aspnet.webapi.client/5.2.6",
+      "hashPath": "microsoft.aspnet.webapi.client.5.2.6.nupkg.sha512"
+    },
+    "Microsoft.AspNet.WebApi.Core/5.2.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QMFixs/MvKZXjfUbV0gXxF85LKi+keu/zJKv13upg/JlcxJ+wdLSYzyHO/sgPPUuFVstgndK6Zt3VduWeqFmHQ==",
+      "path": "microsoft.aspnet.webapi.core/5.2.6",
+      "hashPath": "microsoft.aspnet.webapi.core.5.2.6.nupkg.sha512"
+    },
     "Microsoft.Data.Sqlite/2.0.0": {
       "type": "package",
       "serviceable": true,
@@ -1919,6 +1960,13 @@
       "sha512": "sha512-IvJe1pj7JHEsP8B8J8DwlMEx8UInrs/x+9oVY+oCD13jpLu4JbJU2WCIsMRn5C4yW9+DgkaO8uiVE5VHKjpmdQ==",
       "path": "newtonsoft.json/11.0.2",
       "hashPath": "newtonsoft.json.11.0.2.nupkg.sha512"
+    },
+    "Newtonsoft.Json.Bson/1.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5PYT/IqQ+UK31AmZiSS102R6EsTo+LGTSI8bp7WAUqDKaF4wHXD8U9u4WxTI1vc64tYi++8p3dk3WWNqPFgldw==",
+      "path": "newtonsoft.json.bson/1.0.1",
+      "hashPath": "newtonsoft.json.bson.1.0.1.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
       "type": "package",
@@ -2116,12 +2164,12 @@
       "path": "sqlitepclraw.provider.e_sqlite3.netstandard11/1.1.7",
       "hashPath": "sqlitepclraw.provider.e_sqlite3.netstandard11.1.1.7.nupkg.sha512"
     },
-    "sqlSugarCore/4.6.4.7": {
+    "sqlSugarCore/4.6.4.9": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-AcqKRZumwyizkl7EdT8tSDoyC6M9wp9lJeExct3Ewrgrw/5ph7rXoDqNhn0rjhUrMJYuckTX1zDBfQwbqE7I2A==",
-      "path": "sqlsugarcore/4.6.4.7",
-      "hashPath": "sqlsugarcore.4.6.4.7.nupkg.sha512"
+      "sha512": "sha512-BIY0s68mJE/sjdoRSTr8otMTqRq+EHH1KxlifaKevj/DSv93iB4dhVQKfO/3u9eedtrA4GYJdnh/vhTiIbXddQ==",
+      "path": "sqlsugarcore/4.6.4.9",
+      "hashPath": "sqlsugarcore.4.6.4.9.nupkg.sha512"
     },
     "System.AppContext/4.1.0": {
       "type": "package",

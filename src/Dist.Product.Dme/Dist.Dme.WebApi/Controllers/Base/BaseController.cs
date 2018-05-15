@@ -1,5 +1,6 @@
 ﻿using Dist.Dme.Base.Common;
 using Dist.Dme.Base.Framework;
+using Dist.Dme.Base.Framework.Exception;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -8,6 +9,10 @@ using System.Net;
 
 namespace Dist.Dme.WebApi.Controllers.Base
 {
+    /// <summary>
+    /// WebApiExceptionFilterAttribute：统一处理异常信息
+    /// </summary>
+    [WebApiExceptionFilterAttribute]
     public class BaseController : Controller
     {
         /// <summary>

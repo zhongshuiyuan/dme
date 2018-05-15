@@ -1,4 +1,7 @@
-﻿using Dist.Dme.AECommon.AnalysisTools;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Dist.Dme.AECommon.AnalysisTools;
 using Dist.Dme.AECommon.Utils;
 using Dist.Dme.Base.Common;
 using Dist.Dme.Base.Framework;
@@ -8,9 +11,6 @@ using Dist.Dme.Base.Utils;
 using ESRI.ArcGIS;
 using ESRI.ArcGIS.Geodatabase;
 using log4net;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Dist.Dme.Plugins.LandConflictDetection
 {
@@ -33,7 +33,7 @@ namespace Dist.Dme.Plugins.LandConflictDetection
         /// <summary>
         /// 要素路径分隔符
         /// </summary>
-        private static String SEPARATOR_FEATURE_PATH = "|";
+        private static String SEPARATOR_FEATURE_PATH = "|"; 
         private IFeatureWorkspace m_localWorkspace_first;
         private string m_database_first;
         /// <summary>

@@ -2,15 +2,6 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v2.0": {
-      "LessJie.System.Web.Http/1.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/System.Web.Http.dll": {}
-        },
-        "runtime": {
-          "lib/System.Web.Http.dll": {}
-        }
-      },
       "log4net/2.0.8": {
         "type": "package",
         "dependencies": {
@@ -46,6 +37,31 @@
         },
         "runtime": {
           "lib/netstandard1.3/log4net.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi.Client/5.2.6": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "10.0.1",
+          "Newtonsoft.Json.Bson": "1.0.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/System.Net.Http.Formatting.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Net.Http.Formatting.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi.Core/5.2.6": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Client": "5.2.6"
+        },
+        "compile": {
+          "lib/net45/System.Web.Http.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Web.Http.dll": {}
         }
       },
       "Microsoft.NETCore.App/2.0.0": {
@@ -296,6 +312,19 @@
         },
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+        }
+      },
+      "Newtonsoft.Json.Bson/1.0.1": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "10.0.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {}
         }
       },
       "runtime.native.System/4.0.0": {
@@ -1508,17 +1537,6 @@
     }
   },
   "libraries": {
-    "LessJie.System.Web.Http/1.0.0": {
-      "sha512": "6OFq2UNxTuZ95fC1vTtdwyT68MmxG4VBVGYmEAR0+e7x3hBmZb9yWF9NMAhYbtHNWWNY2jZBEvOL5qNfv3WDJw==",
-      "type": "package",
-      "path": "lessjie.system.web.http/1.0.0",
-      "files": [
-        "lessjie.system.web.http.1.0.0.nupkg.sha512",
-        "lessjie.system.web.http.nuspec",
-        "lib/System.Web.Http.dll",
-        "lib/System.Web.Http.xml"
-      ]
-    },
     "log4net/2.0.8": {
       "sha512": "N41MQGHZImiCfn0cUuSBjZxrcNfIQCuCgQP0rpgB3J/NWponEh3lc1LxJEuIsPAR9Oc1jVvfkNNFCY1C5hf9LA==",
       "type": "package",
@@ -1539,6 +1557,35 @@
         "lib/netstandard1.3/log4net.dll",
         "log4net.2.0.8.nupkg.sha512",
         "log4net.nuspec"
+      ]
+    },
+    "Microsoft.AspNet.WebApi.Client/5.2.6": {
+      "sha512": "rMDlyePoxggkmN/qgha1+BR2Uy+dOr38xKCQOPfVNKGY07R2nYJGMTKJFE1XFgwD70RYUNazf2fqutjJF18XgQ==",
+      "type": "package",
+      "path": "microsoft.aspnet.webapi.client/5.2.6",
+      "files": [
+        ".signature.p7s",
+        "lib/net45/System.Net.Http.Formatting.dll",
+        "lib/net45/System.Net.Http.Formatting.xml",
+        "lib/netstandard2.0/System.Net.Http.Formatting.dll",
+        "lib/netstandard2.0/System.Net.Http.Formatting.xml",
+        "lib/portable-wp8+netcore45+net45+wp81+wpa81/System.Net.Http.Formatting.dll",
+        "lib/portable-wp8+netcore45+net45+wp81+wpa81/System.Net.Http.Formatting.xml",
+        "microsoft.aspnet.webapi.client.5.2.6.nupkg.sha512",
+        "microsoft.aspnet.webapi.client.nuspec"
+      ]
+    },
+    "Microsoft.AspNet.WebApi.Core/5.2.6": {
+      "sha512": "QMFixs/MvKZXjfUbV0gXxF85LKi+keu/zJKv13upg/JlcxJ+wdLSYzyHO/sgPPUuFVstgndK6Zt3VduWeqFmHQ==",
+      "type": "package",
+      "path": "microsoft.aspnet.webapi.core/5.2.6",
+      "files": [
+        ".signature.p7s",
+        "Content/web.config.transform",
+        "lib/net45/System.Web.Http.dll",
+        "lib/net45/System.Web.Http.xml",
+        "microsoft.aspnet.webapi.core.5.2.6.nupkg.sha512",
+        "microsoft.aspnet.webapi.core.nuspec"
       ]
     },
     "Microsoft.NETCore.App/2.0.0": {
@@ -2101,6 +2148,19 @@
         "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.xml",
         "newtonsoft.json.11.0.2.nupkg.sha512",
         "newtonsoft.json.nuspec"
+      ]
+    },
+    "Newtonsoft.Json.Bson/1.0.1": {
+      "sha512": "5PYT/IqQ+UK31AmZiSS102R6EsTo+LGTSI8bp7WAUqDKaF4wHXD8U9u4WxTI1vc64tYi++8p3dk3WWNqPFgldw==",
+      "type": "package",
+      "path": "newtonsoft.json.bson/1.0.1",
+      "files": [
+        "lib/net45/Newtonsoft.Json.Bson.dll",
+        "lib/net45/Newtonsoft.Json.Bson.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.Bson.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.Bson.xml",
+        "newtonsoft.json.bson.1.0.1.nupkg.sha512",
+        "newtonsoft.json.bson.nuspec"
       ]
     },
     "runtime.native.System/4.0.0": {
@@ -5238,7 +5298,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
-      "LessJie.System.Web.Http >= 1.0.0",
+      "Microsoft.AspNet.WebApi.Core >= 5.2.6",
       "Microsoft.NETCore.App >= 2.0.0",
       "Newtonsoft.Json >= 11.0.2",
       "log4net >= 2.0.8"
@@ -5255,11 +5315,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj",
+      "projectUniqueName": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj",
       "projectName": "Dist.Dme.Base",
-      "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj",
+      "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj",
       "packagesPath": "C:\\Users\\thinkpad\\.nuget\\packages\\",
-      "outputPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Base\\obj\\",
+      "outputPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Base\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
@@ -5293,9 +5353,9 @@
     "frameworks": {
       "netcoreapp2.0": {
         "dependencies": {
-          "LessJie.System.Web.Http": {
+          "Microsoft.AspNet.WebApi.Core": {
             "target": "Package",
-            "version": "[1.0.0, )"
+            "version": "[5.2.6, )"
           },
           "Microsoft.NETCore.App": {
             "suppressParent": "All",
@@ -5325,8 +5385,8 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“LessJie.System.Web.Http 1.0.0”。此包可能与项目不完全兼容。",
-      "libraryId": "LessJie.System.Web.Http",
+      "message": "已使用“.NETFramework,Version=v4.6.1”而不是项目目标框架“.NETCoreApp,Version=v2.0”还原包“Microsoft.AspNet.WebApi.Core 5.2.6”。此包可能与项目不完全兼容。",
+      "libraryId": "Microsoft.AspNet.WebApi.Core",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.0"
       ]

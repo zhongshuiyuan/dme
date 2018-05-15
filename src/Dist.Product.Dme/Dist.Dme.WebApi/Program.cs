@@ -21,7 +21,7 @@ namespace Dist.Dme.WebApi
             WebHost.CreateDefaultBuilder(args)
                 //.UseKestrel()
                 //.UseContentRoot(Directory.GetCurrentDirectory())
-                //.UseUrls("http://*:7000")
+                //.UseUrls("http://*:7321")
                 //.UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();

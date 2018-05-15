@@ -19,7 +19,11 @@ namespace Dist.Dme.WebApi.Controllers
         /// <summary>
         /// 算法服务
         /// </summary>
-        private static IAlgorithmService AlgorithmService => new AlgorithmService();
+        public IAlgorithmService  AlgorithmService { get; private set; }
+        public AlgorithmController(IAlgorithmService algorithmService)
+        {
+            this.AlgorithmService = algorithmService;
+        }
         /// <summary>
         /// 获取所有算法
         /// </summary>
@@ -63,7 +67,7 @@ namespace Dist.Dme.WebApi.Controllers
         public Result ExecuteAlgorithm(string algCode, [FromBody]BaseRequestDTO dto)
         {
             AlgorithmRespDTO algInfo = (AlgorithmRespDTO)AlgorithmService.GetAlgorithmByCode(algCode, true);
-
+            
             return base.Success("");
         }
     }

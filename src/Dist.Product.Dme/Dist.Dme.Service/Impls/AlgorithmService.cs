@@ -3,6 +3,7 @@ using Dist.Dme.DAL.Context;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Interfaces;
+using Newtonsoft.Json;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,10 @@ namespace Dist.Dme.Service.Impls
                 foreach (var alg in algs)
                 {
                     algorithmDTO = ClassValueCopier<AlgorithmRespDTO>.Copy(alg);
+                    if(!string.IsNullOrEmpty(alg.Extension))
+                    {
+                        algorithmDTO.Extension = JsonConvert.DeserializeObject(alg.Extension);
+                    }
                     algDTOs.Add(algorithmDTO);
                     metas = base.Db.Queryable<DmeAlgorithmMeta>().Where(meta => meta.AlgorithmId == alg.Id).ToList();
                     if (null == metas || 0 == metas.Count)

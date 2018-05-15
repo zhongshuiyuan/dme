@@ -14,7 +14,7 @@
             算法服务
             </summary>
         </member>
-        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.ListModels(System.Int32)">
+        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.ListAlgorithm(System.Int32)">
             <summary>
             获取所有算法
             </summary>
@@ -33,6 +33,19 @@
             算法开发平台类型
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.ExecuteAlgorithm(System.String,Dist.Dme.Model.DTO.BaseRequestDTO)">
+            <summary>
+            算法的执行器，需要注入算法的参数
+            </summary>
+            <param name="algCode">算法唯一编码</param>
+            <param name="dto">参数信息值，键值对格式</param>
+            <returns></returns>
+        </member>
+        <member name="T:Dist.Dme.WebApi.Controllers.Base.BaseController">
+            <summary>
+            WebApiExceptionFilterAttribute：统一处理异常信息
+            </summary>
         </member>
         <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.GetHeaderValue(System.String,Microsoft.AspNetCore.Http.HttpRequest)">
             <summary>
@@ -139,10 +152,32 @@
             数据源服务
             </summary>
         </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.UsersController.#ctor(Dist.Dme.Service.Interfaces.IUserService,Dist.Dme.DisCache.Interfaces.ICacheService)">
+            <summary>
+            自动注入（DI）
+            </summary>
+            <param name="userService"></param>
+            <param name="cacheService"></param>
+        </member>
         <member name="M:Dist.Dme.WebApi.Controllers.UsersController.ListUsers">
             <summary>
             获取用户列表
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.UsersController.AddCache(System.String,System.String)">
+            <summary>
+            添加缓存
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.UsersController.GetCache(System.String)">
+            <summary>
+            获取缓存
+            </summary>
+            <param name="key"></param>
             <returns></returns>
         </member>
     </members>

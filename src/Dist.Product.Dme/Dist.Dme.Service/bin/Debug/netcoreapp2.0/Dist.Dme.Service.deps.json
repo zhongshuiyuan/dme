@@ -1,16 +1,16 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "95ae14e1d8fefe68d6e6e6b44b468952496658a9"
+    "signature": "12f3471dec6226901209080b84fbad0fd889f81e"
   },
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.0": {
       "Dist.Dme.Service/1.0.0": {
         "dependencies": {
+          "Dist.Dme.Algorithms.LandConflictDetection": "1.0.0",
           "Dist.Dme.DAL": "1.0.0",
-          "Dist.Dme.Model": "1.0.0",
-          "Dist.Dme.Plugins.LandConflictDetection": "1.0.0"
+          "Dist.Dme.Model": "1.0.0"
         },
         "runtime": {
           "Dist.Dme.Service.dll": {}
@@ -89,6 +89,11 @@
       "ESRI.ArcGIS.Version/10.1.0.3035": {
         "runtime": {
           "lib/ESRI.ArcGIS.Version.dll": {}
+        }
+      },
+      "LessJie.System.Web.Http/1.0.0": {
+        "runtime": {
+          "lib/System.Web.Http.dll": {}
         }
       },
       "log4net/2.0.8": {
@@ -1681,9 +1686,24 @@
           "Dist.Dme.AECommon.dll": {}
         }
       },
+      "Dist.Dme.Algorithms.LandConflictDetection/1.0.0": {
+        "dependencies": {
+          "Dist.Dme.AECommon": "1.0.0",
+          "Dist.Dme.Base": "1.0.0",
+          "Dist.Dme.Model": "1.0.0",
+          "ESRI.ArcGIS.Geodatabase": "10.1.0.3035",
+          "ESRI.ArcGIS.Version": "10.1.0.3035",
+          "log4net": "2.0.8"
+        },
+        "runtime": {
+          "Dist.Dme.Algorithms.LandConflictDetection.dll": {}
+        }
+      },
       "Dist.Dme.Base/1.0.0": {
         "dependencies": {
-          "Newtonsoft.Json": "11.0.2"
+          "LessJie.System.Web.Http": "1.0.0",
+          "Newtonsoft.Json": "11.0.2",
+          "log4net": "2.0.8"
         },
         "runtime": {
           "Dist.Dme.Base.dll": {}
@@ -1707,19 +1727,6 @@
         },
         "runtime": {
           "Dist.Dme.Model.dll": {}
-        }
-      },
-      "Dist.Dme.Plugins.LandConflictDetection/1.0.0": {
-        "dependencies": {
-          "Dist.Dme.AECommon": "1.0.0",
-          "Dist.Dme.Base": "1.0.0",
-          "Dist.Dme.Model": "1.0.0",
-          "ESRI.ArcGIS.Geodatabase": "10.1.0.3035",
-          "ESRI.ArcGIS.Version": "10.1.0.3035",
-          "log4net": "2.0.8"
-        },
-        "runtime": {
-          "Dist.Dme.Plugins.LandConflictDetection.dll": {}
         }
       }
     }
@@ -1834,6 +1841,13 @@
       "sha512": "sha512-HBgr6TqkAAkoBAvvY36nU7tcGWovZ9KPmFvRd5R6MLKEf5c9TB3DQhlOi1RxArp0LvcvLiJ9LfIwe1rpdK3JQg==",
       "path": "esri.arcgis.version/10.1.0.3035",
       "hashPath": "esri.arcgis.version.10.1.0.3035.nupkg.sha512"
+    },
+    "LessJie.System.Web.Http/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6OFq2UNxTuZ95fC1vTtdwyT68MmxG4VBVGYmEAR0+e7x3hBmZb9yWF9NMAhYbtHNWWNY2jZBEvOL5qNfv3WDJw==",
+      "path": "lessjie.system.web.http/1.0.0",
+      "hashPath": "lessjie.system.web.http.1.0.0.nupkg.sha512"
     },
     "log4net/2.0.8": {
       "type": "package",
@@ -2757,6 +2771,11 @@
       "serviceable": false,
       "sha512": ""
     },
+    "Dist.Dme.Algorithms.LandConflictDetection/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "Dist.Dme.Base/1.0.0": {
       "type": "project",
       "serviceable": false,
@@ -2768,11 +2787,6 @@
       "sha512": ""
     },
     "Dist.Dme.Model/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Dist.Dme.Plugins.LandConflictDetection/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

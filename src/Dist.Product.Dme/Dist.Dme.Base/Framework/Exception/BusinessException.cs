@@ -12,16 +12,19 @@ namespace Dist.Dme.Base.Framework.Exception
         /// <summary>
         /// 业务异常编码
         /// </summary>
-        public int Code;
+        public int Code { get; set; }
 
-        public BusinessException() : base()
+        public BusinessException() 
+            : base()
         {
 
         }
-        public BusinessException(string message) : base(message)
+        public BusinessException(string message)
+            : base(message)
         {
         }
-        public BusinessException(int code, string message) : base(message)
+        public BusinessException(int code, string message) 
+            : base(message)
         {
             this.Code = code;
         }

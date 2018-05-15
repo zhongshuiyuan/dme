@@ -18,7 +18,11 @@ namespace Dist.Dme.WebApi.Controllers
         /// <summary>
         /// 模型服务
         /// </summary>
-        private static IModelService ModelService => new ModelService();
+        public IModelService ModelService { get; private set; }
+        public ModelsController(IModelService modelService)
+        {
+            this.ModelService = modelService;
+        }
         /// <summary>
         /// 获取所有模型
         /// </summary>

@@ -16,7 +16,7 @@
   <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="oracle.manageddataaccess.core" Version="2.12.0-beta2" />
-    <PackageReference Include="sqlSugarCore" Version="4.6.4.7" />
+    <PackageReference Include="sqlSugarCore" Version="4.6.4.9" />
   </ItemGroup>
 
   <ItemGroup>

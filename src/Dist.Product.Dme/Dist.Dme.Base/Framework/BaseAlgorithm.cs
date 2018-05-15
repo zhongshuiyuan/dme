@@ -46,6 +46,5 @@ namespace Dist.Dme.Base.Framework
         /// 权重参数
         /// </summary>
         protected IDictionary<String, Property> FeatureParameters = new Dictionary<String, Property>();
-
     }
 }

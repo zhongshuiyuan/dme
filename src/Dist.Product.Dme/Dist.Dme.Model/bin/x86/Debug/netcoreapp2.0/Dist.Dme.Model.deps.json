@@ -1,14 +1,14 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "8c232bf3412e3168fd766afd31a389ada3703224"
+    "signature": "59109a759e7f0c0e383a32b16a34d322f5f37722"
   },
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.0": {
       "Dist.Dme.Model/1.0.0": {
         "dependencies": {
-          "sqlSugarCore": "4.6.4.7"
+          "sqlSugarCore": "4.6.4.9"
         },
         "runtime": {
           "Dist.Dme.Model.dll": {}
@@ -403,7 +403,7 @@
           "lib/netstandard1.1/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
-      "sqlSugarCore/4.6.4.7": {
+      "sqlSugarCore/4.6.4.9": {
         "dependencies": {
           "Microsoft.Data.Sqlite": "2.0.0",
           "MySql.Data": "6.10.4",
@@ -1738,12 +1738,12 @@
       "path": "sqlitepclraw.provider.e_sqlite3.netstandard11/1.1.7",
       "hashPath": "sqlitepclraw.provider.e_sqlite3.netstandard11.1.1.7.nupkg.sha512"
     },
-    "sqlSugarCore/4.6.4.7": {
+    "sqlSugarCore/4.6.4.9": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-AcqKRZumwyizkl7EdT8tSDoyC6M9wp9lJeExct3Ewrgrw/5ph7rXoDqNhn0rjhUrMJYuckTX1zDBfQwbqE7I2A==",
-      "path": "sqlsugarcore/4.6.4.7",
-      "hashPath": "sqlsugarcore.4.6.4.7.nupkg.sha512"
+      "sha512": "sha512-BIY0s68mJE/sjdoRSTr8otMTqRq+EHH1KxlifaKevj/DSv93iB4dhVQKfO/3u9eedtrA4GYJdnh/vhTiIbXddQ==",
+      "path": "sqlsugarcore/4.6.4.9",
+      "hashPath": "sqlsugarcore.4.6.4.9.nupkg.sha512"
     },
     "System.Buffers/4.3.0": {
       "type": "package",

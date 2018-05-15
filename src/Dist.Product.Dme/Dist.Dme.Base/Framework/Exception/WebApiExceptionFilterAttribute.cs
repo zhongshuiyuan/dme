@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+// 需要依赖：Microsoft.AspNet.WebApi.Core.dll，其它的可能会缺失dll
 using System.Web.Http.Filters;
 
 namespace Dist.Dme.Base.Framework.Exception
