@@ -8,10 +8,10 @@ namespace Dist.Dme.Base.Framework.AlgorithmTypes
     public class AlgorithmTypesFactory
     {
         /// <summary>
-        /// 获取算法类型
+        /// 获取算法开发平台类型
         /// </summary>
         /// <returns></returns>
-        public static object ListAlgorithmType()
+        public static object ListAlgorithmDevType()
         {
             var types = AppDomain.CurrentDomain.GetAssemblies()
                      .SelectMany(a => a.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IAlgorithmDevType))))

@@ -21,6 +21,12 @@
             <param name="hasMeta">是否获取算法的参数信息</param>
             <returns></returns>
         </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.ListAlgorithmMetadatasLocal">
+            <summary>
+            获取本地DLL算法元数据
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.AddAlgorithm(Dist.Dme.Model.DTO.AlgorithmAddReqDTO)">
             <summary>
             注册算法
@@ -92,6 +98,32 @@
             <param name="data"></param>
             <returns></returns>
         </member>
+        <member name="T:Dist.Dme.WebApi.Controllers.CacheController">
+            <summary>
+            数据源服务
+            </summary>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.CacheController.#ctor(Dist.Dme.DisCache.Interfaces.ICacheService)">
+            <summary>
+            自动注入（DI）
+            </summary>
+            <param name="cacheService"></param>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.CacheController.AddCache(System.String,System.Object)">
+            <summary>
+            添加缓存
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.CacheController.GetCache(System.String)">
+            <summary>
+            获取缓存
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
         <member name="T:Dist.Dme.WebApi.Controllers.DataSourcesController">
             <summary>
             数据源服务
@@ -149,35 +181,19 @@
         </member>
         <member name="T:Dist.Dme.WebApi.Controllers.UsersController">
             <summary>
-            数据源服务
+            用户服务
             </summary>
         </member>
-        <member name="M:Dist.Dme.WebApi.Controllers.UsersController.#ctor(Dist.Dme.Service.Interfaces.IUserService,Dist.Dme.DisCache.Interfaces.ICacheService)">
+        <member name="M:Dist.Dme.WebApi.Controllers.UsersController.#ctor(Dist.Dme.Service.Interfaces.IUserService)">
             <summary>
             自动注入（DI）
             </summary>
             <param name="userService"></param>
-            <param name="cacheService"></param>
         </member>
         <member name="M:Dist.Dme.WebApi.Controllers.UsersController.ListUsers">
             <summary>
             获取用户列表
             </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Dist.Dme.WebApi.Controllers.UsersController.AddCache(System.String,System.String)">
-            <summary>
-            添加缓存
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Dist.Dme.WebApi.Controllers.UsersController.GetCache(System.String)">
-            <summary>
-            获取缓存
-            </summary>
-            <param name="key"></param>
             <returns></returns>
         </member>
     </members>

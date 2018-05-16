@@ -33,7 +33,17 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/")]
         public Result ListAlgorithm([FromQuery(Name = "hasmeta")] int hasMeta = 0)
         {
-            return base.Success(AlgorithmService.ListAlgorithm(1 == hasMeta));
+            return base.Success(AlgorithmService.ListAlgorithms(1 == hasMeta));
+        }
+        /// <summary>
+        /// 获取本地DLL算法元数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("v1/metadata/local")]
+        public Result ListAlgorithmMetadatasLocal()
+        {
+            return base.Success(AlgorithmService.ListAlgorithmMetadatasLocal());
         }
         /// <summary>
         /// 注册算法
@@ -54,7 +64,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("devtypes/v1")]
         public Result ListAlgorithmType()
         {
-            return base.Success(AlgorithmTypesFactory.ListAlgorithmType());
+            return base.Success(AlgorithmTypesFactory.ListAlgorithmDevType());
         }
         /// <summary>
         /// 算法的执行器，需要注入算法的参数

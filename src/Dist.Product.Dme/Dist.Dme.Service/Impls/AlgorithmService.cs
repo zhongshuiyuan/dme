@@ -1,12 +1,15 @@
-﻿using Dist.Dme.Base.Utils;
+﻿using Dist.Dme.Base.Framework.Interfaces;
+using Dist.Dme.Base.Utils;
 using Dist.Dme.DAL.Context;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Interfaces;
+using log4net;
 using Newtonsoft.Json;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Dist.Dme.Service.Impls
@@ -16,7 +19,9 @@ namespace Dist.Dme.Service.Impls
     /// </summary>
     public class AlgorithmService : AbstractContext, IAlgorithmService
     {
-        public object ListAlgorithm(bool hasMeta)
+        private static ILog LOG = LogManager.GetLogger(typeof(AlgorithmService));
+
+        public object ListAlgorithms(bool hasMeta)
         {
             List<DmeAlgorithm> algs = base.DmeAlgorithmDb.GetList("CREATETIME", false);
             if (null == algs || 0 == algs.Count)
@@ -87,6 +92,42 @@ namespace Dist.Dme.Service.Impls
                 return this.GetAlgorithmByCode(alg.SysCode, true);
             });
             return result.Data;
+        }
+
+        public object ListAlgorithmMetadatasLocal()
+        {
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                   .SelectMany(a => a.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IAlgorithm))))
+                   .ToArray();
+            if (null == types || 0 == types.Count())
+            {
+                return new List<IAlgorithm>();
+            }
+            IList<object> localAlgorithms = new List<object>();
+            object temp = null;
+            foreach (var type in types)
+            {
+                if (type.IsAbstract)
+                {
+                    // 抽象类排除
+                    continue;
+                }
+                try
+                {
+                    temp = type.Assembly.CreateInstance(type.FullName, true);
+                    if (null == temp)
+                    {
+                        continue;
+                    }
+                    localAlgorithms.Add(((IAlgorithm)temp).MetadataJSON);
+                }
+                catch (Exception ex)
+                {
+                    LOG.Error("获取本地算法对象失败", ex);
+                    continue;
+                }
+            }
+            return localAlgorithms;
         }
     }
 }

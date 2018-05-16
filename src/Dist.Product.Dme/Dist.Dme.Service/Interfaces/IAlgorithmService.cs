@@ -22,12 +22,17 @@ namespace Dist.Dme.Service.Interfaces
         /// </summary>
         /// <param name="hasMeta">是否需要获取算法元数据信息</param>
         /// <returns></returns>
-        object ListAlgorithm(Boolean hasMeta);
+        object ListAlgorithms(Boolean hasMeta);
         /// <summary>
         /// 注册算法
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
         object AddAlgorithm(AlgorithmAddReqDTO dto);
+        /// <summary>
+        /// 获取本地dll的所有算法对象元数据信息
+        /// </summary>
+        /// <returns></returns>
+        object ListAlgorithmMetadatasLocal();
     }
 }

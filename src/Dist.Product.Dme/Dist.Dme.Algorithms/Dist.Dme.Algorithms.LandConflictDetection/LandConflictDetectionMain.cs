@@ -81,20 +81,21 @@ namespace Dist.Dme.Plugins.LandConflictDetection
                 throw new Exception("arcgis license init error");
             }
             LicenseUtil.CheckOutLicenseAdvanced();
+
             // 初始化输入参数
-            base.InputParameters.Add("m_featureClass_source_first",
-                new Property("m_featureClass_source_first", "总规用地的图层信息", ValueTypeMeta.TYPE_MDB_FEATURECLASS, "", "", 1, "总规用地的图层信息，格式：mdb路径"+ SEPARATOR_FEATURE_PATH + "要素类"));
-            base.InputParameters.Add("m_featureClass_source_second",
-                new Property("m_featureClass_source_second", "控规用地的图层信息", ValueTypeMeta.TYPE_MDB_FEATURECLASS, "", "", 1, "控规用地的图层路径信息，格式：mdb路径" + SEPARATOR_FEATURE_PATH + "要素类"));
-            base.InputParameters.Add("m_yddm_first",
-                new Property("m_yddm_zgyd", "总规用地代码属性", ValueTypeMeta.TYPE_STRING, "", "", 1, "总规用地代码属性"));
-            base.InputParameters.Add("m_yddm_second",
-                new Property("m_yddm_second", "控规用地代码属性", ValueTypeMeta.TYPE_STRING, "", "", 1, "控规用地代码属性"));
+            base.InputParameters.Add(nameof(this.m_featureClass_source_first),
+                new Property(nameof(this.m_featureClass_source_first), "总规用地的图层信息", ValueTypeMeta.TYPE_MDB_FEATURECLASS, "", "", 1, "总规用地的图层信息，格式：mdb路径"+ SEPARATOR_FEATURE_PATH + "要素类"));
+            base.InputParameters.Add(nameof(this.m_featureClass_source_second),
+                new Property(nameof(this.m_featureClass_source_second), "控规用地的图层信息", ValueTypeMeta.TYPE_MDB_FEATURECLASS, "", "", 1, "控规用地的图层路径信息，格式：mdb路径" + SEPARATOR_FEATURE_PATH + "要素类"));
+            base.InputParameters.Add(nameof(this.m_yddm_first),
+                new Property(nameof(this.m_yddm_first), "总规用地代码属性", ValueTypeMeta.TYPE_STRING, "", "", 1, "总规用地代码属性"));
+            base.InputParameters.Add(nameof(this.m_yddm_second),
+                new Property(nameof(this.m_yddm_second), "控规用地代码属性", ValueTypeMeta.TYPE_STRING, "", "", 1, "控规用地代码属性"));
 
             // 初始化输出参数
             string resultGDBDir = System.AppDomain.CurrentDomain.BaseDirectory + "/result/";
-            base.OutputParameters.Add("ResultGDBPath", new Property("ResultGDBPath", "输出结果", ValueTypeMeta.TYPE_GDB_PATH, resultGDBDir, resultGDBDir, 1, "分析结果为gdb文件"));
-            base.OutputParameters.Add("ReulstLayerName", new Property("ReulstLayerName", "图层名称", ValueTypeMeta.TYPE_STRING, this.ReulstLayerName, this.ReulstLayerName, 1, "分析结果为gdb文件", 1));
+            base.OutputParameters.Add(nameof(this.ResultGDBPath), new Property(nameof(this.ResultGDBPath), "输出结果", ValueTypeMeta.TYPE_GDB_PATH, resultGDBDir, resultGDBDir, 1, "分析结果为gdb文件"));
+            base.OutputParameters.Add(nameof(this.ReulstLayerName), new Property(nameof(this.ReulstLayerName), "图层名称", ValueTypeMeta.TYPE_STRING, this.ReulstLayerName, this.ReulstLayerName, 1, "分析结果为gdb文件", 1));
         }
 
         public override Result Execute()
@@ -166,34 +167,34 @@ namespace Dist.Dme.Plugins.LandConflictDetection
         }
         public override void Init(IDictionary<string, object> parameters)
         {
-            if (!parameters.ContainsKey("m_featureClass_source_first"))
+            if (!parameters.ContainsKey(nameof(this.m_featureClass_source_first)))
             {
                 throw new Exception("没有找到输入参数【总规用地图层】");
             }
-            if (!parameters.ContainsKey("m_yddm_first"))
+            if (!parameters.ContainsKey(nameof(this.m_yddm_first)))
             {
                 throw new Exception("没有找到输入参数【总规用地代码属性】");
             }
-            if (!parameters.ContainsKey("m_featureClass_source_second"))
+            if (!parameters.ContainsKey(nameof(this.m_featureClass_source_second)))
             {
                 throw new Exception("没有找到输入参数【控规用地图层】");
             }
-            if (!parameters.ContainsKey("m_yddm_second"))
+            if (!parameters.ContainsKey(nameof(this.m_yddm_second)))
             {
                 throw new Exception("没有找到输入参数【控规用地代码属性】");
             }
-            if (!parameters.ContainsKey("ResultGDBPath"))
+            if (!parameters.ContainsKey(nameof(this.ResultGDBPath)))
             {
                 LOG.Info("没有指定新的输出路径，现在使用默认路径");
-                this.ResultGDBPath = base.OutputParameters["ResultGDBPath"].DefaultValue.ToString();
+                this.ResultGDBPath = base.OutputParameters[nameof(this.ResultGDBPath)].DefaultValue.ToString();
             }
             else
             {
                 LOG.Info("使用新的输出路径");
-                this.ResultGDBPath = parameters["ResultGDBPath"].ToString();
+                this.ResultGDBPath = parameters[nameof(this.ResultGDBPath)].ToString();
             }
 
-            this.m_featureClass_source_first = parameters["m_featureClass_source_first"].ToString();
+            this.m_featureClass_source_first = parameters[nameof(this.m_featureClass_source_first)].ToString();
             WorkspaceServices.OpenFeatureClass(this.m_featureClass_source_first, SEPARATOR_FEATURE_PATH, out this.m_localWorkspace_first, out this.m_featureClass_first);
             if (this.m_featureClass_first.FeatureDataset != null)
             {
@@ -203,7 +204,7 @@ namespace Dist.Dme.Plugins.LandConflictDetection
             {
                 this.sourceLayerFirstFullPath = this.m_featureClass_source_first.Split(SEPARATOR_FEATURE_PATH)[0] + "/" + this.m_featureClass_source_first.Split(SEPARATOR_FEATURE_PATH)[1];
             }
-            this.m_featureClass_source_second = parameters["m_featureClass_source_second"].ToString();
+            this.m_featureClass_source_second = parameters[nameof(this.m_featureClass_source_second)].ToString();
             WorkspaceServices.OpenFeatureClass(this.m_featureClass_source_second, SEPARATOR_FEATURE_PATH, out this.m_localWorkspace_second, out this.m_featureClass_second);
             if (this.m_featureClass_second.FeatureDataset != null)
             {
@@ -214,8 +215,8 @@ namespace Dist.Dme.Plugins.LandConflictDetection
                 this.sourceLayerSecondFullPath = this.m_featureClass_source_second.Split(SEPARATOR_FEATURE_PATH)[0] + "/" + this.m_featureClass_source_second.Split(SEPARATOR_FEATURE_PATH)[1];
             }
 
-            this.m_yddm_first = parameters["m_yddm_first"].ToString();
-            this.m_yddm_second = parameters["m_yddm_second"].ToString();
+            this.m_yddm_first = parameters[nameof(this.m_yddm_first)].ToString();
+            this.m_yddm_second = parameters[nameof(this.m_yddm_second)].ToString();
         }
         public override object MetadataJSON
         {
@@ -223,14 +224,15 @@ namespace Dist.Dme.Plugins.LandConflictDetection
             {
                 IDictionary<string, System.Object> dictionary = new Dictionary<string, System.Object>
                 {
-                    ["SysCode"] = this.SysCode,
-                    ["Name"] = this.Name,
-                    ["Alias"] = this.Alias,
-                    ["Version"] = this.Version,
-                    ["Remark"] = this.Remark,
-                    ["InputParameters"] = this.InputParameters,
-                    ["OutputParameters"] = this.OutputParameters,
-                    ["FeatureParameters"] = this.FeatureParameters
+                    [nameof(this.SysCode)] = this.SysCode,
+                    [nameof(this.Name)] = this.Name,
+                    [nameof(this.Alias)] = this.Alias,
+                    [nameof(this.Version)] = this.Version,
+                    [nameof(this.Remark)] = this.Remark,
+                    [nameof(this.InputParameters)] = this.InputParameters,
+                    [nameof(this.OutputParameters)] = this.OutputParameters,
+                    [nameof(this.FeatureParameters)] = this.FeatureParameters,
+                    [nameof(AlgorithmType)] = this.AlgorithmType
                 };
                 return dictionary;// JsonConvert.SerializeObject(dictionary);
             }
