@@ -324,9 +324,9 @@ comment on column DME_ALGORITHM.EXTENSION
   CREATE TABLE DME_Algorithm_Meta
 (
 	"ID" NUMBER(8) NOT NULL,
-	"NAME" VARCHAR2(15),
+	"NAME" VARCHAR2(50),
 	"CODE" VARCHAR2(30),
-	"DATATYPE" NUMBER(1),
+	"DATATYPE" NUMBER(2),
 	"INOUT" VARCHAR2(5),
 	"ALGORITHM_ID" NUMBER(8)
 );
@@ -341,17 +341,21 @@ comment on column DME_Algorithm_Meta.code
   is '参数编码';
 comment on column DME_Algorithm_Meta.DATATYPE
   is '参数数据类型，1、数字类型（ValueMetaInterface.TYPE_NUMBER=1）
-2、字符串类型（ValueMetaInterface.TYPE_STRING=2）
-3、时间类型（ValueMetaInterface.TYPE_DATE=3）
-4、布尔类型（ValueMetaInterface.TYPE_BOOLEAN=4）
-5、整型类型（ValueMetaInterface.TYPE_INTEGER=5）
-6、大整型类型（ValueMetaInterface.TYPE_BIGNUMBER=6）
-7、序列化类型（ValueMetaInterface.TYPE_SERIALIZABLE=7）
-8、二进制类型（ValueMetaInterface.TYPE_BINARY=8）
-9、微秒时间类型（ValueMetaInterface.TYPE_TIMESTAMP=9）
-10、网络路径类型（ValueMetaInterface.TYPE_INET=10）';
+2、字符串类型（ValueTypeMeta.TYPE_STRING=2）
+3、时间类型（ValueTypeMeta.TYPE_DATE=3）
+4、布尔类型（ValueTypeMeta.TYPE_BOOLEAN=4）
+5、整型类型（ValueTypeMeta.TYPE_INTEGER=5）
+6、大整型类型（ValueTypeMeta.TYPE_BIGNUMBER=6）
+7、序列化类型（ValueTypeMeta.TYPE_SERIALIZABLE=7）
+8、二进制类型（ValueTypeMeta.TYPE_BINARY=8）
+9、微秒时间类型（ValueTypeMeta.TYPE_TIMESTAMP=9）
+10、网络路径类型（ValueTypeMeta.TYPE_INET=10）
+11、本地文件路径（ValueTypeMeta.TYPE_LOCAL_FILE=11）
+12、本地mdb的要素类（ValueTypeMeta.TYPE_MDB_FEATURECLASS=12）
+13、本地gdb路径（ValueTypeMeta.TYPE_GDB_PATH=13）
+14、时间毫秒（ValueTypeMeta.TYPE_MILLISECOND=14）';
 comment on column DME_Algorithm_Meta.inout
-  is '输入输出参数，输入：IN；输出：OUT';
+  is '输入输出参数，输入：IN；输出：OUT；特征参数类型：IN_F';
 comment on column DME_Algorithm_Meta.algorithm_id
   is '算法ID';
   alter table DME_Algorithm_Meta add primary key(id);
@@ -552,7 +556,7 @@ comment on column DME_ALGORITHM_META.isVisible
   is '是否可见，0：不可见；1：可见。可用于在模型级别上显示，供最终用户编辑';
   
   -- Add/modify columns 
-alter table DME_ALGORITHM_META add remark varchar2(50);
+alter table DME_ALGORITHM_META add remark varchar2(255);
 -- Add comments to the columns 
 comment on column DME_ALGORITHM_META.remark
   is '备注信息';
@@ -562,6 +566,58 @@ alter table DME_ALGORITHM_META add alias varchar2(30);
 -- Add comments to the columns 
 comment on column DME_ALGORITHM_META.alias
   is '别名';
+  
+-- Add/modify columns 
+alter table DME_ALGORITHM_META add readonly1 integer default 0;
+-- Add comments to the columns 
+comment on column DME_ALGORITHM_META.readonly1
+  is '是否只读，1：只读；0：可编辑';
+  
+  -- Add/modify columns 
+alter table DME_RULESTEP add step_name varchar2(50);
+-- Add comments to the columns 
+comment on column DME_RULESTEP.step_name
+  is '步骤名称';
+
+-- Create table
+create table DME_RULESTEP_TYPE
+(
+  id     number(8),
+  code   varchar2(50),
+  name   varchar2(100),
+  remark varchar2(255)
+)
+;
+-- Add comments to the table 
+comment on table DME_RULESTEP_TYPE
+  is '规则步骤类型';
+-- Add comments to the columns 
+comment on column DME_RULESTEP_TYPE.id
+  is '主键ID';
+comment on column DME_RULESTEP_TYPE.code
+  is '步骤类型唯一代码';
+comment on column DME_RULESTEP_TYPE.name
+  is '步骤类型名称';
+comment on column DME_RULESTEP_TYPE.remark
+  is '步骤类型备注';
+  
+  alter table DME_RULESTEP_TYPE add primary key(id);
+  create sequence SEQ_DME_RULESTEP_TYPE
+  minvalue 1
+  maxvalue 9999999999999999999999999
+  start with 1
+  increment by 1
+  cache 20;
+  
+  insert into DME_RULESTEP_TYPE 
+values(SEQ_DME_RULESTEP_TYPE.NEXTVAL, 'AlgorithmInput', '算法输入', '选择已注册的算法，配置算法参数');
+
+-- 删除规则步骤模型的算法id属性
+--如果STEP_TYPE_ID=1，即：AlgorithmInput，则算法的id需要在DME_RULESTEP_ATTRIBUTE存储，以code=algorithm_id标识
+alter table DME_RULESTEP drop column algorithm_id;
+
+
+
 
 
 

@@ -47,5 +47,11 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="parameters"></param>
         /// <returns></returns>
         object LandConflictExecute(IDictionary<String, Object> parameters);
+        /// <summary>
+        /// 复制模型的一个版本
+        /// </summary>
+        /// <param name="versionCode">版本唯一编码</param>
+        /// <returns></returns>
+        object CopyModelVersion(string versionCode);
     }
 }

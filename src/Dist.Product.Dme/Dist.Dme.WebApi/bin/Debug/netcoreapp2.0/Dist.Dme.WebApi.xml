@@ -16,9 +16,9 @@
         </member>
         <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.ListAlgorithm(System.Int32)">
             <summary>
-            获取所有算法
+            获取所有算法。
             </summary>
-            <param name="hasMeta">是否获取算法的参数信息</param>
+            <param name="needMeta">是否获取算法的参数信息。0：表示否；1：表示是</param>
             <returns></returns>
         </member>
         <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.ListAlgorithmMetadatasLocal">
@@ -27,11 +27,18 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.AddAlgorithm(Dist.Dme.Model.DTO.AlgorithmAddReqDTO)">
+        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.RegistryAlgorithm(Dist.Dme.Model.DTO.AlgorithmAddReqDTO)">
             <summary>
             注册算法
             </summary>
             <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.RegistryAlgorithmFromLocal(System.String)">
+            <summary>
+            注册本地算法（从本地DLL获取）
+            </summary>
+            <param name="algCode">算法唯一编码。输入为空，说明是遍历全部</param>
             <returns></returns>
         </member>
         <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.ListAlgorithmType">

@@ -20,9 +20,9 @@ namespace Dist.Dme.Service.Interfaces
         /// <summary>
         /// 获取算法列表
         /// </summary>
-        /// <param name="hasMeta">是否需要获取算法元数据信息</param>
+        /// <param name="needMeta">是否需要获取算法元数据信息</param>
         /// <returns></returns>
-        object ListAlgorithms(Boolean hasMeta);
+        object ListAlgorithms(Boolean needMeta);
         /// <summary>
         /// 注册算法
         /// </summary>
@@ -34,5 +34,11 @@ namespace Dist.Dme.Service.Interfaces
         /// </summary>
         /// <returns></returns>
         object ListAlgorithmMetadatasLocal();
+        /// <summary>
+        /// 从本地查找算法，并注册算法
+        /// </summary>
+        /// <param name="algCode">算法唯一编码</param>
+        /// <returns></returns>
+        object RegistryAlgorithmFromLocal(string algCode);
     }
 }

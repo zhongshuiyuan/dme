@@ -1,4 +1,6 @@
-﻿using Dist.Dme.Base.Framework.Interfaces;
+﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Framework.Exception;
+using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.DAL.Context;
 using Dist.Dme.Model.DTO;
@@ -21,14 +23,14 @@ namespace Dist.Dme.Service.Impls
     {
         private static ILog LOG = LogManager.GetLogger(typeof(AlgorithmService));
 
-        public object ListAlgorithms(bool hasMeta)
+        public object ListAlgorithms(bool needMeta)
         {
             List<DmeAlgorithm> algs = base.DmeAlgorithmDb.GetList("CREATETIME", false);
             if (null == algs || 0 == algs.Count)
             {
                 return algs;
             }
-            if (hasMeta)
+            if (needMeta)
             {
                 IList<AlgorithmRespDTO> algDTOs = new List<AlgorithmRespDTO>();
                 AlgorithmRespDTO algorithmDTO = null;
@@ -70,26 +72,46 @@ namespace Dist.Dme.Service.Impls
             {
                 DmeAlgorithm alg = base.Db.Queryable<DmeAlgorithm>().Where(a => a.SysCode == dto.SysCode).First();
                 if (null == alg)
-                { 
+                {
                     alg = ClassValueCopier<DmeAlgorithm>.Copy(dto);
                     alg.CreateTime = DateUtil.CurrentTimeMillis;
+                    alg.Extension = JsonConvert.SerializeObject(dto.Extension);
                     alg.Id = base.DmeAlgorithmDb.InsertReturnIdentity(alg);
-                    AlgorithmRespDTO algorithmRespDTO = ClassValueCopier<AlgorithmRespDTO>.Copy(alg);
+                }
+                else
+                {
+                    // 进行更新操作
+                    alg.Name = dto.Name;
+                    alg.Alias = dto.Alias;
+                    alg.Version = dto.Version;
+                    alg.Remark = dto.Remark;
+                    alg.Type = dto.Type;
+                    alg.Extension = JsonConvert.SerializeObject(dto.Extension);
+                    if (!base.DmeAlgorithmDb.Update(alg))
+                    {
+                        throw new BusinessException(SystemStatusCode.DME3000, "更新算法信息失败，无详情信息。");
+                    }
                     if (dto.Metas != null && dto.Metas.Count > 0)
                     {
-                        algorithmRespDTO.Metas = new List<DmeAlgorithmMeta>();
-                        DmeAlgorithmMeta meta = null;
-                        foreach (var item in dto.Metas)
-                        {
-                            meta = ClassValueCopier<DmeAlgorithmMeta>.Copy(item);
-                            meta.AlgorithmId = alg.Id;
-                            meta.Id = base.DmeAlgorithmMetaDb.InsertReturnIdentity(meta);
-                            algorithmRespDTO.Metas.Add(meta);
-                        }
+                        // 删除算法的输入输出参数这些元数据信息，必须ExecuteCommand，否则无效
+                        base.Db.Deleteable<DmeAlgorithmMeta>().Where(am => am.AlgorithmId == alg.Id).ExecuteCommand();
                     }
-                    return algorithmRespDTO;
                 }
-                return this.GetAlgorithmByCode(alg.SysCode, true);
+                // 重新注册算法参数元数据
+                AlgorithmRespDTO algorithmRespDTO = ClassValueCopier<AlgorithmRespDTO>.Copy(alg);
+                if (dto.Metas != null && dto.Metas.Count > 0)
+                {
+                    algorithmRespDTO.Metas = new List<DmeAlgorithmMeta>();
+                    DmeAlgorithmMeta meta = null;
+                    foreach (var item in dto.Metas)
+                    {
+                        meta = ClassValueCopier<DmeAlgorithmMeta>.Copy(item);
+                        meta.AlgorithmId = alg.Id;
+                        meta.Id = base.DmeAlgorithmMetaDb.InsertReturnIdentity(meta);
+                        algorithmRespDTO.Metas.Add(meta);
+                    }
+                }
+                return algorithmRespDTO;
             });
             return result.Data;
         }
@@ -103,8 +125,9 @@ namespace Dist.Dme.Service.Impls
             {
                 return new List<IAlgorithm>();
             }
-            IList<object> localAlgorithms = new List<object>();
-            object temp = null;
+            // 元数据集合
+            IList<object> localAlgorithmMetadatas = new List<object>();
+            IAlgorithm temp = null;
             foreach (var type in types)
             {
                 if (type.IsAbstract)
@@ -114,12 +137,12 @@ namespace Dist.Dme.Service.Impls
                 }
                 try
                 {
-                    temp = type.Assembly.CreateInstance(type.FullName, true);
+                    temp = (IAlgorithm)type.Assembly.CreateInstance(type.FullName, true);
                     if (null == temp)
                     {
                         continue;
                     }
-                    localAlgorithms.Add(((IAlgorithm)temp).MetadataJSON);
+                    localAlgorithmMetadatas.Add(temp.MetadataJSON);
                 }
                 catch (Exception ex)
                 {
@@ -127,7 +150,96 @@ namespace Dist.Dme.Service.Impls
                     continue;
                 }
             }
-            return localAlgorithms;
+            return localAlgorithmMetadatas;
+        }
+
+        public object RegistryAlgorithmFromLocal(string algCode)
+        {
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                  .SelectMany(a => a.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IAlgorithm))))
+                  .ToArray();
+            if (null == types || 0 == types.Count())
+            {
+                LOG.Warn($"没有找到算法接口[{nameof(IAlgorithm)}]的相关实现体");
+                return false;
+            }
+            IAlgorithm tempAlgorithm = null;
+            foreach (var type in types)
+            {
+                if (type.IsAbstract)
+                {
+                    // 抽象类排除
+                    continue;
+                }
+                try
+                {
+                    tempAlgorithm = (IAlgorithm)type.Assembly.CreateInstance(type.FullName, true);
+                    if (null == tempAlgorithm)
+                    {
+                        continue;
+                    }
+                    if (string.IsNullOrEmpty(algCode) || algCode.Equals(tempAlgorithm.SysCode))
+                    {
+                        AlgorithmAddReqDTO algorithmAddReqDTO = new AlgorithmAddReqDTO
+                        {
+                            SysCode = tempAlgorithm.SysCode,
+                            Name = tempAlgorithm.Name,
+                            Alias = tempAlgorithm.Alias,
+                            Version = tempAlgorithm.Version,
+                            Remark = tempAlgorithm.Remark,
+                            Type = tempAlgorithm.AlgorithmType.Code,
+                            Extension = JsonConvert.SerializeObject(tempAlgorithm.AlgorithmType.Metadata)
+                        };
+                        algorithmAddReqDTO.Metas = new List<AlgorithmMetaReqDTO>();
+                        // 输入参数
+                        this.GetAlgParameters((IDictionary<String, Property>)tempAlgorithm.InParams, ParameterType.IN, algorithmAddReqDTO);
+                        // 输出参数
+                        this.GetAlgParameters((IDictionary<String, Property>)tempAlgorithm.OutParams, ParameterType.OUT, algorithmAddReqDTO);
+                        // 特征参数
+                        this.GetAlgParameters((IDictionary<String, Property>)tempAlgorithm.FeatureParams, ParameterType.IN_F, algorithmAddReqDTO);
+                        // 持久化数据
+                        this.AddAlgorithm(algorithmAddReqDTO);
+                        if (string.IsNullOrEmpty(algCode))
+                        {
+                            // 表示所有，继续遍历其它算法
+                            continue;
+                        }
+                        else
+                        {
+                            // 表示指定算法
+                            break;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LOG.Error("从本地注册算法对象失败", ex);
+                    continue;
+                }
+            }
+            return true;
+        }
+
+        private void GetAlgParameters(IDictionary<String, Property> parameters, string parameterType, AlgorithmAddReqDTO algorithmAddReqDTO)
+        {
+            if (parameters != null && parameters.Count > 0)
+            {
+                AlgorithmMetaReqDTO tempAlgMeta = null;
+                foreach (var item in parameters)
+                {
+                    tempAlgMeta = new AlgorithmMetaReqDTO
+                    {
+                        Name = item.Value.Name,
+                        DataType = item.Value.DataType,
+                        Inout = parameterType,
+                        IsVisible = item.Value.IsVisible,
+                        Remark = item.Value.Remark,
+                        Alias = item.Value.Alias,
+                        ReadOnly = item.Value.ReadOnly
+                    };
+                    algorithmAddReqDTO.Metas.Add(tempAlgMeta);
+                }
+            }
         }
     }
 }

@@ -37,6 +37,6 @@ namespace Dist.Dme.Model.DTO
         /// <summary>
         /// 是否只读。1：只读；0：可编辑
         /// </summary>
-        public int ReadOnly { get; set; } = 1;
+        public int ReadOnly { get; set; } = 0;
     }
 }

@@ -13,7 +13,7 @@ namespace Dist.Dme.Base.Framework.Interfaces
         /// <summary>
         /// 包含的所有步骤
         /// </summary>
-        IList<IStep> Steps { get; set; }
+        IList<IRuleStep> Steps { get; set; }
         /// <summary>
         /// 模型元数据
         /// </summary>

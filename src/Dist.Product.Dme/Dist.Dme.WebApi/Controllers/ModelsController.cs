@@ -5,6 +5,7 @@ using Dist.Dme.Service.Impls;
 using Dist.Dme.Service.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Dist.Dme.WebApi.Controllers
@@ -73,28 +74,49 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("landconflict/v1/execute")]
         public Result LandConflictExecute([FromBody][Required]LandConflictReqDTO dto)
         {
-            dto.Parameters.Add("m_featureClass_source_first", @"D:\work\data\zgkg.mdb|BZY_YDGH_PY");
-            dto.Parameters.Add("m_featureClass_source_second", @"D:\work\data\zgkg.mdb|BKY_YDGH_PY");
-            dto.Parameters.Add("m_yddm_second", "YDDM");
-            dto.Parameters.Add("m_yddm_first", "YDDM");
+            dto.Parameters.Add("FeatureClass_Source_First", @"D:\work\data\zgkg.mdb|BZY_YDGH_PY");
+            dto.Parameters.Add("FeatureClass_Source_Second", @"D:\work\data\zgkg.mdb|BKY_YDGH_PY");
+            dto.Parameters.Add("Yddm_Second", "YDDM");
+            dto.Parameters.Add("Yddm_First", "YDDM");
             
             return base.Success(ModelService.LandConflictExecute(dto.Parameters));
         }
         /// <summary>
         /// 注册模型
         /// </summary>
-        /// <param name="dto">参数模型</param>
+        /// <param name="dto">参数模型，当SysCode为空时，系统会自动附上一个唯一编码</param>
         /// <returns></returns>
         [HttpPost]
         [Route("/v1")]
         public Result AddModel([FromBody]ModelAddReqDTO dto)
         {
+            if (!string.IsNullOrEmpty(dto.SysCode) && !Guid.TryParse(dto.SysCode, out Guid guid))
+            {
+                return base.Fail($"唯一编码格式无效[{dto.SysCode}]");
+            }
             if (ModelState.IsValid)
             {
                 return base.Success(ModelService.AddModel(dto));
             }
             // 参数验证失败
             return base.Error(ModelState);
+        }
+        /// <summary>
+        /// 根据模型版本进行复制
+        /// </summary>
+        /// <param name="modelVersionCode">模型版本唯一编码</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("v1/copy/{modelVersionCode}")]
+        public Result Copy(string modelVersionCode)
+        {
+            throw new NotImplementedException();
+        }
+        [HttpPost]
+        [Route("rulestep/v1")]
+        public Result NewRuleStep(string modelVersionCode)
+        {
+            throw new NotImplementedException();
         }
     }
 }

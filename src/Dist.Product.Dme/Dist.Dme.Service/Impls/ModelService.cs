@@ -1,4 +1,6 @@
-﻿using Dist.Dme.Base.Framework.Interfaces;
+﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Framework.Exception;
+using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.DAL.Context;
 using Dist.Dme.Model.DTO;
@@ -82,11 +84,17 @@ namespace Dist.Dme.Service.Impls
         }
         public object AddModel(ModelAddReqDTO dto)
         {
+            if (string.IsNullOrEmpty(dto.SysCode))
+            {
+                // 自动赋予一个唯一编码
+                dto.SysCode = GuidUtil.NewGuid();
+            }
             // 使用事务
             DbResult< DmeModel > dbResult = base.Db.Ado.UseTran<DmeModel>(()=> 
             {
-                // 如果没有找的，则会抛出异常。base.DmeModelDb.GetContext().Queryable<DmeModel>().Single(m => m.SysCode == dto.SysCode);
-                DmeModel model = base.Db.Queryable<DmeModel>().Where(m => m.SysCode == dto.SysCode).First();
+                // 查询单条没有数据返回NULL, Single超过1条会报错，First不会
+                // base.DmeModelDb.GetContext().Queryable<DmeModel>().Single(m => m.SysCode == dto.SysCode);
+                DmeModel model = base.Db.Queryable<DmeModel>().Where(m => m.SysCode == dto.SysCode).Single();
                 if (null == model)
                 {
                     model = ClassValueCopier<DmeModel>.Copy(dto);
@@ -121,6 +129,17 @@ namespace Dist.Dme.Service.Impls
             // 查找关联的算法信息
             IList<DmeRuleStep> ruleSteps = base.Db.Queryable<DmeRuleStep>().Where(rs => rs.ModelId == model.Id).Where(rs => rs.VersionId == modelVersion.Id).ToList();
 
+
+            throw new NotImplementedException();
+        }
+
+        public object CopyModelVersion(string versionCode)
+        {
+            DmeModelVersion modelVersion = base.Db.Queryable<DmeModelVersion>().Where(mv => mv.SysCode == versionCode).Single();
+            if (null == modelVersion)
+            {
+                throw new BusinessException(SystemStatusCode.DME2000, $"模型版本[{versionCode}]不存在，或模型版本编码无效");
+            }
 
             throw new NotImplementedException();
         }

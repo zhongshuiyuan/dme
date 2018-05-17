@@ -18,9 +18,9 @@ namespace Dist.Dme.Base.Common
         /// </summary>
         public String Alias { get; set; }
         /// <summary>
-        /// 类型
+        /// 数据类型
         /// </summary>
-        public int Type { get; set; }
+        public int DataType { get; set; }
         /// <summary>
         /// 属性值
         /// </summary>
@@ -42,11 +42,11 @@ namespace Dist.Dme.Base.Common
         /// </summary>
         public int ReadOnly { get; set; }
 
-        public Property(string name, string alias, int type, object value, object defaultValue, int isVisible, string remark, int readOnly = 0)
+        public Property(string name, string alias, int dataType, object value, object defaultValue, int isVisible, string remark, int readOnly = 0)
         {
             this.Name = name;
             this.Alias = alias;
-            this.Type = type;
+            this.DataType = dataType;
             this.Value = value;
             this.DefaultValue = defaultValue;
             this.IsVisible = isVisible;

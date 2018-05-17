@@ -18,7 +18,7 @@ namespace Dist.Dme.Model.DTO
         public String Version { get; set; }
         public String Remark { get; set; }
         public String Type { get; set; }
-        public String Extension { get; set; }
+        public object Extension { get; set; }
         [Required]
         public IList<AlgorithmMetaReqDTO> Metas { get; set; }
     }

@@ -6,6 +6,7 @@ using Dist.Dme.Service.Impls;
 using Dist.Dme.Service.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Dist.Dme.WebApi.Controllers
@@ -25,22 +26,22 @@ namespace Dist.Dme.WebApi.Controllers
             this.AlgorithmService = algorithmService;
         }
         /// <summary>
-        /// 获取所有算法
+        /// 获取所有算法。
         /// </summary>
-        /// <param name="hasMeta">是否获取算法的参数信息</param>
+        /// <param name="needMeta">是否获取算法的参数信息。0：表示否；1：表示是</param>
         /// <returns></returns>
         [HttpGet]
         [Route("v1/")]
-        public Result ListAlgorithm([FromQuery(Name = "hasmeta")] int hasMeta = 0)
+        public Result ListAlgorithm([FromQuery(Name = "needmeta")] int needMeta = 0)
         {
-            return base.Success(AlgorithmService.ListAlgorithms(1 == hasMeta));
+            return base.Success(AlgorithmService.ListAlgorithms(1 == needMeta));
         }
         /// <summary>
         /// 获取本地DLL算法元数据
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("v1/metadata/local")]
+        [Route("metadata/v1/local")]
         public Result ListAlgorithmMetadatasLocal()
         {
             return base.Success(AlgorithmService.ListAlgorithmMetadatasLocal());
@@ -51,10 +52,26 @@ namespace Dist.Dme.WebApi.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("v1/")]
-        public Result AddAlgorithm([FromBody] AlgorithmAddReqDTO dto)
+        [Route("register/v1/")]
+        public Result RegistryAlgorithm([FromBody] AlgorithmAddReqDTO dto)
         {
             return base.Success(AlgorithmService.AddAlgorithm(dto));
+        }
+        /// <summary>
+        /// 注册本地算法（从本地DLL获取）
+        /// </summary>
+        /// <param name="algCode">算法唯一编码。输入为空，说明是遍历全部</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("register/v1/local")]
+        public Result RegistryAlgorithmFromLocal([FromQuery(Name = "algcode")]string algCode)
+        {
+            if (!string.IsNullOrEmpty(algCode) && !Guid.TryParse(algCode, out Guid guid))
+            {
+                return base.Fail($"算法编码格式无效[{algCode}]");
+            }
+
+            return base.Success(this.AlgorithmService.RegistryAlgorithmFromLocal(algCode));
         }
         /// <summary>
         /// 算法开发平台类型
@@ -72,8 +89,8 @@ namespace Dist.Dme.WebApi.Controllers
         /// <param name="algCode">算法唯一编码</param>
         /// <param name="dto">参数信息值，键值对格式</param>
         /// <returns></returns>
-        [HttpGet]
-        [Route("executor/v1/{algCode}")]
+        [HttpPost]
+        [Route("execute/v1/{algCode}")]
         public Result ExecuteAlgorithm(string algCode, [FromBody]BaseRequestDTO dto)
         {
             AlgorithmRespDTO algInfo = (AlgorithmRespDTO)AlgorithmService.GetAlgorithmByCode(algCode, true);

@@ -62,12 +62,16 @@ namespace Dist.Dme.Base.Common
         /// </summary>
         public static int TYPE_GDB_PATH = 13;
         /// <summary>
+        /// 时间毫秒
+        /// </summary>
+        public static int TYPE_MILLISECOND = 14;
+        /// <summary>
         /// The Constant typeCodes
         /// </summary>
         static String[] typeCodes = new String[] {
         "-", "Number", "String", "Date", "Boolean", "Integer", "BigNumber", "Serializable", "Binary",
             "Timestamp","Internet Address", "Local File Path", "Local MDB Featureclass",
-            "Local GDB Path"};
+            "Local GDB Path", "Millisecond"};
         /// <summary>
         /// 获取类型的描述信息
         /// </summary>

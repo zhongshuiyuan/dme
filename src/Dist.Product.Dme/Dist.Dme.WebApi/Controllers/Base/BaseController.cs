@@ -108,7 +108,7 @@ namespace Dist.Dme.WebApi.Controllers.Base
         /// <returns></returns>
         protected Result Success(Object data)
         {
-            return new Result(STATUS.SUCCESS, "操作成功", SysStatusCode.DME1000, data);
+            return new Result(STATUS.SUCCESS, "操作成功", SystemStatusCode.DME1000, data);
         }
         /// <summary>
         /// 失败
@@ -117,7 +117,7 @@ namespace Dist.Dme.WebApi.Controllers.Base
         /// <returns></returns>
         protected Result Fail(Object data)
         {
-            return new Result(STATUS.FAIL, "操作失败", SysStatusCode.DME2000, data);
+            return new Result(STATUS.FAIL, "操作失败", SystemStatusCode.DME2000, data);
         }
         /// <summary>
         /// 错误
@@ -126,7 +126,7 @@ namespace Dist.Dme.WebApi.Controllers.Base
         /// <returns></returns>
         protected Result Error(Object data)
         {
-            return new Result(STATUS.ERROR, "操作错误", SysStatusCode.DME3000, data);
+            return new Result(STATUS.ERROR, "操作错误", SystemStatusCode.DME3000, data);
         }
     }
 }

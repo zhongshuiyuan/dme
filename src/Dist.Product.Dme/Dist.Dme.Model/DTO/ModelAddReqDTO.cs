@@ -10,7 +10,6 @@ namespace Dist.Dme.Model.DTO
     /// </summary>
     public class ModelAddReqDTO
     {
-        [Required(AllowEmptyStrings =false)]
         public String SysCode { get; set; }
         [Required(AllowEmptyStrings = false)]
         public String Name { get; set; }
