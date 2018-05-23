@@ -19,6 +19,6 @@ namespace Dist.Dme.Model.Entity
         [SugarColumn(ColumnName = "ATTRIBUTE_CODE")]
         public String AttributeCode { get; set; }
         [SugarColumn(ColumnName = "ATTRIBUTE_VALUE")]
-        public String AttributeValue { get; set; }
+        public object AttributeValue { get; set; }
     }
 }

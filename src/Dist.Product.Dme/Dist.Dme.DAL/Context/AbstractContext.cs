@@ -60,6 +60,16 @@ namespace Dist.Dme.DAL.Context
         /// <summary>
         /// 规则步骤关联
         /// </summary>
-        public MySimpleClient<DmeRuleStep> DmeRulestepDb { get { return new MySimpleClient<DmeRuleStep>(base.GetDbContext()); } }
+        public MySimpleClient<DmeRuleStep> DmeRuleStepDb { get { return new MySimpleClient<DmeRuleStep>(base.GetDbContext()); } }
+        /// <summary>
+        /// 规则步骤类型
+        /// </summary>
+        public MySimpleClient<DmeRuleStepType> DmeRuleStepTypeDb { get { return new MySimpleClient<DmeRuleStepType>(base.GetDbContext()); } }
+        /// <summary>
+        /// 规则步骤属性
+        /// </summary>
+        public MySimpleClient<DmeRuleStepAttribute> DmeRuleStepAttributeDb { get { return new MySimpleClient<DmeRuleStepAttribute>(base.GetDbContext()); } }
+
+        
     }
 }

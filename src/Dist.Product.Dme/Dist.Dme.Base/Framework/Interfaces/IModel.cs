@@ -18,5 +18,12 @@ namespace Dist.Dme.Base.Framework.Interfaces
         /// 模型元数据
         /// </summary>
         IModelMeta ModelMeta { get; set; }
+        /// <summary>
+        /// 检测模型
+        /// </summary>
+        /// <param name="modelId">模型id</param>
+        /// <param name="versionId">模型版本id</param>
+        /// <returns></returns>
+        object CheckModel(int modelId, int versionId);
     }
 }

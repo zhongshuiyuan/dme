@@ -7,7 +7,7 @@ namespace Dist.Dme.Base.Framework.Interfaces
     public interface IRuleStepType
     {
         /// <summary>
-        /// 步骤类型唯一编码
+        /// 步骤类型唯一代码
         /// </summary>
         string Code { get; }
         /// <summary>
@@ -17,6 +17,7 @@ namespace Dist.Dme.Base.Framework.Interfaces
         /// <summary>
         /// 备注信息
         /// </summary>
-        string Remark { get;}
+        string Remark { get; }
+        object 
     }
 }

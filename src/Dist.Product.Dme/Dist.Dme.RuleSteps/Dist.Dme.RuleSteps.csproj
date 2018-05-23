@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Dist.Dme.Base\Dist.Dme.Base.csproj" />
+    <ProjectReference Include="..\Dist.Dme.DAL\Dist.Dme.DAL.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -58,7 +58,7 @@ namespace Dist.Dme.Service.Impls
                 {
                     modelAlgDTO = ClassValueCopier<ModelAlgDTO>.Copy(m);
                     modelAlgDTOs.Add(modelAlgDTO);
-                    rules = base.DmeRulestepDb.GetContext().Queryable<DmeRuleStep>().Where("MODEL_ID = '" + m.Id + "'").ToList();
+                    rules = base.DmeRuleStepDb.GetContext().Queryable<DmeRuleStep>().Where("MODEL_ID = '" + m.Id + "'").ToList();
                     if (null == rules || 0 == rules.Count)
                     {
                         continue;
@@ -66,6 +66,8 @@ namespace Dist.Dme.Service.Impls
                     algs = new List<DmeAlgorithm>();
                     foreach (var rule in rules)
                     {
+                        
+                        // 判断关联的步骤是不是算法输入？
                         algorithm = base.DmeAlgorithmDb.GetById(rule.AlgorithmId);
                         if (null == algorithm)
                         {

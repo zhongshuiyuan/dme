@@ -602,6 +602,8 @@ comment on column DME_RULESTEP_TYPE.remark
   is '步骤类型备注';
   
   alter table DME_RULESTEP_TYPE add primary key(id);
+  create unique index UK_DME_RULESTEP_TYPE_CODE on DME_RULESTEP_TYPE (code);
+
   create sequence SEQ_DME_RULESTEP_TYPE
   minvalue 1
   maxvalue 9999999999999999999999999

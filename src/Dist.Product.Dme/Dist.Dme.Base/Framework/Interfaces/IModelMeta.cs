@@ -22,9 +22,6 @@ namespace Dist.Dme.Base.Framework.Interfaces
         /// 备注信息
         /// </summary>
         String Remark { get; }
-        /// <summary>
-        /// 创建者
-        /// </summary>
-        String Creator { get; set; }
+
     }
 }
