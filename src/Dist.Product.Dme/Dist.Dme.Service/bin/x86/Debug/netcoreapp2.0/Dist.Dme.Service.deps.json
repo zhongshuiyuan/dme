@@ -1723,7 +1723,8 @@
         "dependencies": {
           "Microsoft.AspNet.WebApi.Core": "5.2.6",
           "Newtonsoft.Json": "11.0.2",
-          "log4net": "2.0.8"
+          "log4net": "2.0.8",
+          "sqlSugarCore": "4.6.4.9"
         },
         "runtime": {
           "Dist.Dme.Base.dll": {}

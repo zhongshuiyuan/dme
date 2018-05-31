@@ -43,7 +43,7 @@ namespace Dist.Dme.Base.Framework
         /// </summary>
         protected IDictionary<String, Property> OutputParameters = new Dictionary<String, Property>();
         /// <summary>
-        /// 权重参数
+        /// 特征参数
         /// </summary>
         protected IDictionary<String, Property> FeatureParameters = new Dictionary<String, Property>();
     }

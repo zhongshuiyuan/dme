@@ -11,13 +11,13 @@ namespace Dist.Dme.DAL.Context
     /// <summary>
     /// 业务上下文
     /// </summary>
-    public abstract class AbstractContext : ContextBase
+    public class Repository : RepositoryBase
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(AbstractContext));
+        private static ILog LOG = LogManager.GetLogger(typeof(Repository));
         /// <summary>
         /// oracle 类型
         /// </summary>
-        public AbstractContext() : base(DbType.Oracle, SysConfig.DBConnectionString, true)
+        public Repository() : base(DbType.Oracle, SysConfig.DBConnectionString, true)
         {
           
         }

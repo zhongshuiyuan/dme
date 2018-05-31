@@ -27,13 +27,29 @@ namespace Dist.Dme.WebApi.Controllers
         /// <summary>
         /// 获取所有模型
         /// </summary>
-        /// <param name="refAlgorithm">是否获取关联的算法信息</param>
+        /// <param name="detail">是否获取详情信息，0：否；1：是</param>
         /// <returns></returns>
         [HttpGet]
         [Route("/v1/")]
-        public Result ListModels([FromQuery(Name = "refalgs")] int refAlgorithm = 0)
+        public Result ListModels([FromQuery(Name = "detail")] int detail = 0)
         {
-            return base.Success(ModelService.ListModels(1 == refAlgorithm));
+            return base.Success(ModelService.ListModels(1 == detail));
+        }
+        /// <summary>
+        /// 根据模型唯一编码获取模型
+        /// </summary>
+        /// <param name="code">模型唯一编码</param>
+        /// <param name="detail">是否获取详情</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("v1/{code}")]
+        public Result GetModel(string code, [FromQuery(Name = "detail")] int detail =0)
+        {
+            if (!this.ModelService.IsBizGuid(code))
+            {
+                return base.Fail($"业务编码格式不正确[{code}]");
+            }
+            return base.Success(ModelService.GetModelMetadata(code, 1 == detail));
         }
         /// <summary>
         /// 获取用地冲突分析输入参数
@@ -88,11 +104,11 @@ namespace Dist.Dme.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("/v1")]
-        public Result AddModel([FromBody]ModelAddReqDTO dto)
+        public Result NewModel([FromBody]ModelAddReqDTO dto)
         {
             if (!string.IsNullOrEmpty(dto.SysCode) && !Guid.TryParse(dto.SysCode, out Guid guid))
             {
-                return base.Fail($"唯一编码格式无效[{dto.SysCode}]");
+                return base.Fail($"业务编码格式不正确[{dto.SysCode}]");
             }
             if (ModelState.IsValid)
             {
@@ -112,11 +128,21 @@ namespace Dist.Dme.WebApi.Controllers
         {
             throw new NotImplementedException();
         }
-        [HttpPost]
-        [Route("rulestep/v1")]
-        public Result NewRuleStep(string modelVersionCode)
+        /// <summary>
+        /// 保存整个模型的规则步骤信息
+        /// </summary>
+        /// <param name="info">步骤信息</param>
+        /// <returns></returns>
+        [HttpPost, HttpPut]
+        [Route("rulesteps/v1")]
+        public Result SaveRuleStepInfos([FromBody] ModelRuleStepInfoDTO info)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+            {
+                return base.Error(ModelState);
+            }
+            return base.Success(this.ModelService.SaveRuleStepInfos(info));
         }
+        
     }
 }

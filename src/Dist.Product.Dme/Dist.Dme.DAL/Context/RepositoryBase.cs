@@ -8,15 +8,16 @@ using System.Text;
 
 namespace Dist.Dme.DAL.Context
 {
+    using Dist.Dme.Base.Framework.Interfaces;
     using log4net;
     using SqlSugar;
 
-    public class ContextBase : IDbContext
+    public class RepositoryBase : IRepository
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(ContextBase));
+        private static ILog LOG = LogManager.GetLogger(typeof(RepositoryBase));
         protected SqlSugarClient Db;
 
-        public ContextBase(DbType dbType, String connectionConfig, bool IsAutoCloseConnection)
+        public RepositoryBase(DbType dbType, String connectionConfig, bool IsAutoCloseConnection)
         {
             Db = new SqlSugarClient(new ConnectionConfig()
             {

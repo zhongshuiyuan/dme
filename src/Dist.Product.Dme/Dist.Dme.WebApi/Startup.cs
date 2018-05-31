@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dist.Dme.AECommon.Utils;
 using Dist.Dme.Base.Conf;
+using Dist.Dme.Base.Framework.Interfaces;
+using Dist.Dme.DAL.Context;
 using Dist.Dme.DisCache.Define;
 using Dist.Dme.DisCache.Impls;
 using Dist.Dme.DisCache.Interfaces;
@@ -75,6 +77,8 @@ namespace Dist.Dme.WebApi
                 });
                 services.AddSingleton<ICacheService, MemoryCacheService>();
             }
+            // 注册知识库
+            services.AddSingleton<IRepository, Repository>();
             // 注册用户服务
             services.AddSingleton<IUserService, UserService>();
             // 注册模型服务
@@ -83,7 +87,7 @@ namespace Dist.Dme.WebApi
             services.AddSingleton<IDataSourceService, DataSourceService>();
             // 注册算法服务
             services.AddSingleton<IAlgorithmService, AlgorithmService>();
-
+         
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info

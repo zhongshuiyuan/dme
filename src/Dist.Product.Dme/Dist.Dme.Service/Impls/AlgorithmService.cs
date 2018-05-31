@@ -1,4 +1,5 @@
 ﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.Exception;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
@@ -19,13 +20,17 @@ namespace Dist.Dme.Service.Impls
     /// <summary>
     /// 算法服务实现
     /// </summary>
-    public class AlgorithmService : AbstractContext, IAlgorithmService
+    public class AlgorithmService : BaseBizService, IAlgorithmService
     {
         private static ILog LOG = LogManager.GetLogger(typeof(AlgorithmService));
+        public AlgorithmService(IRepository repository)
+        {
+            base.Repository = repository;
+        }
 
         public object ListAlgorithms(bool needMeta)
         {
-            List<DmeAlgorithm> algs = base.DmeAlgorithmDb.GetList("CREATETIME", false);
+            List<DmeAlgorithm> algs = base.Repository.GetDbContext().Queryable<DmeAlgorithm>().OrderBy(alg => alg.CreateTime, OrderByType.Desc).ToList();
             if (null == algs || 0 == algs.Count)
             {
                 return algs;
@@ -43,7 +48,7 @@ namespace Dist.Dme.Service.Impls
                         algorithmDTO.Extension = JsonConvert.DeserializeObject(alg.Extension);
                     }
                     algDTOs.Add(algorithmDTO);
-                    metas = base.Db.Queryable<DmeAlgorithmMeta>().Where(meta => meta.AlgorithmId == alg.Id).ToList();
+                    metas = base.Repository.GetDbContext().Queryable<DmeAlgorithmMeta>().Where(meta => meta.AlgorithmId == alg.Id).ToList();
                     if (null == metas || 0 == metas.Count)
                     {
                         continue;
@@ -57,9 +62,9 @@ namespace Dist.Dme.Service.Impls
         public AlgorithmRespDTO GetAlgorithmByCode(String code, bool hasMeta)
         {
             // single，如果找不到实体，则抛出异常
-            DmeAlgorithm alg = base.Db.Queryable<DmeAlgorithm>().Single(a => a.SysCode == code);
+            DmeAlgorithm alg = base.Repository.GetDbContext().Queryable<DmeAlgorithm>().Single(a => a.SysCode == code);
             AlgorithmRespDTO algorithmDTO = ClassValueCopier<AlgorithmRespDTO>.Copy(alg);
-            IList<DmeAlgorithmMeta>  metas = base.Db.Queryable<DmeAlgorithmMeta>().Where(meta => meta.AlgorithmId == alg.Id).ToList();
+            IList<DmeAlgorithmMeta>  metas = base.Repository.GetDbContext().Queryable<DmeAlgorithmMeta>().Where(meta => meta.AlgorithmId == alg.Id).ToList();
             if (metas !=null  && metas.Count >0)
             {
                 algorithmDTO.Metas = metas;
@@ -68,15 +73,15 @@ namespace Dist.Dme.Service.Impls
         }
         public object AddAlgorithm(AlgorithmAddReqDTO dto)
         {
-            DbResult<AlgorithmRespDTO> result = base.Db.Ado.UseTran<AlgorithmRespDTO>(() => 
+            DbResult<AlgorithmRespDTO> result = base.Repository.GetDbContext().Ado.UseTran<AlgorithmRespDTO>(() => 
             {
-                DmeAlgorithm alg = base.Db.Queryable<DmeAlgorithm>().Where(a => a.SysCode == dto.SysCode).First();
+                DmeAlgorithm alg = base.Repository.GetDbContext().Queryable<DmeAlgorithm>().Where(a => a.SysCode == dto.SysCode).First();
                 if (null == alg)
                 {
                     alg = ClassValueCopier<DmeAlgorithm>.Copy(dto);
                     alg.CreateTime = DateUtil.CurrentTimeMillis;
                     alg.Extension = JsonConvert.SerializeObject(dto.Extension);
-                    alg.Id = base.DmeAlgorithmDb.InsertReturnIdentity(alg);
+                    alg.Id = base.Repository.GetDbContext().Insertable<DmeAlgorithm>(alg).ExecuteReturnIdentity();
                 }
                 else
                 {
@@ -87,14 +92,14 @@ namespace Dist.Dme.Service.Impls
                     alg.Remark = dto.Remark;
                     alg.Type = dto.Type;
                     alg.Extension = JsonConvert.SerializeObject(dto.Extension);
-                    if (!base.DmeAlgorithmDb.Update(alg))
+                    if (!base.Repository.GetDbContext().Updateable<DmeAlgorithm>().ExecuteCommandHasChange())
                     {
                         throw new BusinessException(SystemStatusCode.DME3000, "更新算法信息失败，无详情信息。");
                     }
                     if (dto.Metas != null && dto.Metas.Count > 0)
                     {
                         // 删除算法的输入输出参数这些元数据信息，必须ExecuteCommand，否则无效
-                        base.Db.Deleteable<DmeAlgorithmMeta>().Where(am => am.AlgorithmId == alg.Id).ExecuteCommand();
+                        base.Repository.GetDbContext().Deleteable<DmeAlgorithmMeta>().Where(am => am.AlgorithmId == alg.Id).ExecuteCommand();
                     }
                 }
                 // 重新注册算法参数元数据
@@ -107,7 +112,7 @@ namespace Dist.Dme.Service.Impls
                     {
                         meta = ClassValueCopier<DmeAlgorithmMeta>.Copy(item);
                         meta.AlgorithmId = alg.Id;
-                        meta.Id = base.DmeAlgorithmMetaDb.InsertReturnIdentity(meta);
+                        meta.Id = base.Repository.GetDbContext().Insertable<DmeAlgorithmMeta>(meta).ExecuteReturnIdentity();
                         algorithmRespDTO.Metas.Add(meta);
                     }
                 }

@@ -66,9 +66,9 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("register/v1/local")]
         public Result RegistryAlgorithmFromLocal([FromQuery(Name = "algcode")]string algCode)
         {
-            if (!string.IsNullOrEmpty(algCode) && !Guid.TryParse(algCode, out Guid guid))
+            if (!string.IsNullOrEmpty(algCode) && !this.AlgorithmService.IsBizGuid(algCode))
             {
-                return base.Fail($"算法编码格式无效[{algCode}]");
+                return base.Fail($"算法编码格式无效[{algCode}]，格式如：97e1dd1f6c664128b93815f56256d0f1");
             }
 
             return base.Success(this.AlgorithmService.RegistryAlgorithmFromLocal(algCode));

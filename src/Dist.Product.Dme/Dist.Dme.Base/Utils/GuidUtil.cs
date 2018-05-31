@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Dist.Dme.Base.Utils
 {
@@ -29,6 +30,30 @@ namespace Dist.Dme.Base.Utils
                 guid = guid.ToUpper();
             }
             return guid;
+        }
+        /// <summary>
+        /// 判断是否一个guid
+        /// </summary>
+        /// <param name="regexStr">正则表达式</param>
+        /// <param name="expression">验证的字符</param>
+        /// <returns></returns>
+        public static bool IsGUID(string regexStr, string expression)
+        {
+            if (string.IsNullOrEmpty(expression))
+            {
+                return false;
+            }
+            if (string.IsNullOrEmpty(regexStr))
+            {
+                return Guid.TryParse(expression, out Guid guid);
+            }
+            Regex guidReg = new Regex(regexStr);
+            return guidReg.IsMatch(expression);
+            //if (expression != null)
+            //{
+                // Regex guidRegEx = new Regex(@"^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$");
+                //return guidRegEx.IsMatch(expression);
+            //}
         }
     }
 }

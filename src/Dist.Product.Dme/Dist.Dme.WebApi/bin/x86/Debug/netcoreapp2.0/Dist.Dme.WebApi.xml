@@ -163,7 +163,15 @@
             <summary>
             获取所有模型
             </summary>
-            <param name="refAlgorithm">是否获取关联的算法信息</param>
+            <param name="detail">是否获取详情信息，0：否；1：是</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.GetModel(System.String,System.Int32)">
+            <summary>
+            根据模型唯一编码获取模型
+            </summary>
+            <param name="code">模型唯一编码</param>
+            <param name="detail">是否获取详情</param>
             <returns></returns>
         </member>
         <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.GetLandConflictMetadata">
@@ -179,11 +187,25 @@
             <param name="dto">参数输入</param>
             <returns></returns>
         </member>
-        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.AddModel(Dist.Dme.Model.DTO.ModelAddReqDTO)">
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.NewModel(Dist.Dme.Model.DTO.ModelAddReqDTO)">
             <summary>
             注册模型
             </summary>
-            <param name="dto">参数模型</param>
+            <param name="dto">参数模型，当SysCode为空时，系统会自动附上一个唯一编码</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.Copy(System.String)">
+            <summary>
+            根据模型版本进行复制
+            </summary>
+            <param name="modelVersionCode">模型版本唯一编码</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.SaveRuleStepInfos(Dist.Dme.Model.DTO.ModelRuleStepInfoDTO)">
+            <summary>
+            保存整个模型的规则步骤信息
+            </summary>
+            <param name="info">步骤信息</param>
             <returns></returns>
         </member>
         <member name="T:Dist.Dme.WebApi.Controllers.UsersController">

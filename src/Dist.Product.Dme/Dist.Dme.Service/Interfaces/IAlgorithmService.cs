@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Model.DTO;
 
 namespace Dist.Dme.Service.Interfaces
@@ -8,7 +9,7 @@ namespace Dist.Dme.Service.Interfaces
     /// <summary>
     /// 算法服务
     /// </summary>
-    public interface IAlgorithmService
+    public interface IAlgorithmService : IBizService
     {
         /// <summary>
         /// 获取单个算法

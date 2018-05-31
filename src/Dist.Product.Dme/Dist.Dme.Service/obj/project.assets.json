@@ -2707,7 +2707,8 @@
         "dependencies": {
           "Microsoft.AspNet.WebApi.Core": "5.2.6",
           "Newtonsoft.Json": "11.0.2",
-          "log4net": "2.0.8"
+          "log4net": "2.0.8",
+          "sqlSugarCore": "4.6.4.9"
         },
         "compile": {
           "bin/placeholder/Dist.Dme.Base.dll": {}
@@ -8373,7 +8374,7 @@
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "C:\\Users\\thinkpad\\AppData\\Local\\Esri\\NuGet": {},
-        "http://192.168.200.115:9998/nuget": {},
+        "http://192.168.1.166:5001/nuget": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

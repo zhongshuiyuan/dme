@@ -18,6 +18,6 @@ namespace Dist.Dme.Base.Framework.Interfaces
         /// 备注信息
         /// </summary>
         string Remark { get; }
-        object 
+        
     }
 }

@@ -6,9 +6,9 @@ using System.Text;
 namespace Dist.Dme.Model.DTO
 {
     /// <summary>
-    /// 模型与算法结合转换模型
+    /// 模型
     /// </summary>
-    public class ModelAlgDTO
+    public class ModelDTO
     {
         public int Id { get; set; }
         public String SysCode { get; set; }
@@ -16,8 +16,8 @@ namespace Dist.Dme.Model.DTO
         public String Remark { get; set; }
         public long CreateTime { get; set; }
         /// <summary>
-        /// 模型关联的算法
+        /// 模型关联的步骤
         /// </summary>
-        public IList<DmeAlgorithm> Algorithms { get; set; }
+        public IList<RuleStepDTO> RuleSteps { get; set; } = new List<RuleStepDTO>();
     }
 }
