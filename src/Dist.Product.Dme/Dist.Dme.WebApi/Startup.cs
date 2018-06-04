@@ -11,6 +11,7 @@ using Dist.Dme.DisCache.Define;
 using Dist.Dme.DisCache.Impls;
 using Dist.Dme.DisCache.Interfaces;
 using Dist.Dme.DisCache.Redis;
+using Dist.Dme.DisFS.Mongo;
 using Dist.Dme.Service.Impls;
 using Dist.Dme.Service.Interfaces;
 using log4net;
@@ -23,6 +24,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
+using MongoDB.Driver;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Dist.Dme.WebApi
@@ -46,7 +48,7 @@ namespace Dist.Dme.WebApi
             SysConfig.DBConnectionString = this.Configuration.GetConnectionString("DataSource");
             // 注册缓存对象
             services.AddMemoryCache();
-           IConfigurationSection cacheProviderSection = this.Configuration.GetSection("CacheProvider");
+           IConfigurationSection cacheProviderSection = this.Configuration.GetSection("ConnectionStrings").GetSection("CacheProvider");
             if (cacheProviderSection != null)
             {
                 string type = cacheProviderSection.GetValue<string>("type");
@@ -76,6 +78,19 @@ namespace Dist.Dme.WebApi
                     return cache;
                 });
                 services.AddSingleton<ICacheService, MemoryCacheService>();
+            }
+            // mongo
+            IConfigurationSection mongoSection = this.Configuration.GetSection("ConnectionStrings").GetSection("Mongo");
+            if (mongoSection != null)
+            {
+                // 注册mongo连接信息
+                MongodbHost mongohost = mongoSection.Get<MongodbHost>();
+                services.AddSingleton(typeof(MongodbHost), mongohost);
+                // IMongoClient mongoClient = new MongoClient(mongohost.Connection);
+                IMongoClient mongoClient = MongodbManager<object>.GetMongodbClient(mongohost.Connection);
+                services.AddSingleton(typeof(IMongoClient), mongoClient);
+                IMongoDatabase mongoDatabase = mongoClient.GetDatabase(mongohost.DataBase);
+                services.AddSingleton(typeof(IMongoDatabase), mongoDatabase);
             }
             // 注册知识库
             services.AddSingleton<IRepository, Repository>();

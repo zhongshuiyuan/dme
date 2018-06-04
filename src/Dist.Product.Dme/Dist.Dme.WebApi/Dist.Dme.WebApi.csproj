@@ -41,6 +41,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Dist.Dme.Base\Dist.Dme.Base.csproj" />
     <ProjectReference Include="..\Dist.Dme.DisCache\Dist.Dme.DisCache.csproj" />
+    <ProjectReference Include="..\Dist.Dme.DisFS\Dist.Dme.DisFS.csproj" />
     <ProjectReference Include="..\Dist.Dme.Service\Dist.Dme.Service.csproj" />
   </ItemGroup>
 

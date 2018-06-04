@@ -1,7 +1,10 @@
 ﻿using Dist.Dme.Base.Framework;
 using Dist.Dme.DisCache.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
+using log4net;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace Dist.Dme.WebApi.Controllers
 {
@@ -11,6 +14,7 @@ namespace Dist.Dme.WebApi.Controllers
     [Route("api/cache")]
     public class CacheController : BaseController
     {
+        private static ILog LOG = LogManager.GetLogger(typeof(CacheController));
         public ICacheService CacheService { get; private set; }
         /// <summary>
         /// 自动注入（DI）
@@ -24,13 +28,16 @@ namespace Dist.Dme.WebApi.Controllers
         /// <summary>
         /// 添加缓存
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
+        /// <param name="keyValuePair">使用动态类型dynamic，传过来是个json字符串，键值对</param>
         /// <returns></returns>
+        /// 需要使用FromBody
         [HttpPost]
-        [Route("v1/cache/{key}/{value}")]
-        public Result AddCache(string key, object value)
+        [Route("v1/")]
+        public Result AddCache([FromBody]dynamic keyValuePair)
         {
+            string key = Convert.ToString(keyValuePair.key);
+            object value = keyValuePair.value;
+            LOG.Info($"添加缓存，key:{key}, value:{value}");
             return base.Success(this.CacheService.Add(key, value));
         }
         /// <summary>
@@ -39,7 +46,7 @@ namespace Dist.Dme.WebApi.Controllers
         /// <param name="key"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("v1/cache/{key}")]
+        [Route("v1/{key}")]
         public Result GetCache(string key)
         {
             return base.Success(this.CacheService.Get<object>(key));

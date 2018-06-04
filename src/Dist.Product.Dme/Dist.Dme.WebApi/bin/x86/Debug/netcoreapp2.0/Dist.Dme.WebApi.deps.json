@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "6b95452fd2b031609c7cebe87bc91aedb064de17"
+    "signature": "952435b84909785d01ccd803b26bdb497780b6a7"
   },
   "compilationOptions": {
     "defines": [
@@ -25,6 +25,7 @@
         "dependencies": {
           "Dist.Dme.Base": "1.0.0",
           "Dist.Dme.DisCache": "1.0.0",
+          "Dist.Dme.DisFS": "1.0.0",
           "Dist.Dme.Service": "1.0.0",
           "Microsoft.AspNetCore.All": "2.0.8",
           "Microsoft.AspNetCore.Mvc.Versioning": "2.2.0",
@@ -38,6 +39,32 @@
         },
         "compile": {
           "Dist.Dme.WebApi.dll": {}
+        }
+      },
+      "DnsClient/1.0.7": {
+        "dependencies": {
+          "Microsoft.Win32.Primitives": "4.3.0",
+          "NETStandard.Library": "2.0.0",
+          "System.Buffers": "4.4.0",
+          "System.Collections": "4.3.0",
+          "System.Collections.Concurrent": "4.3.0",
+          "System.Globalization.Extensions": "4.3.0",
+          "System.IO.FileSystem": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Net.NameResolution": "4.3.0",
+          "System.Net.NetworkInformation": "4.3.0",
+          "System.Net.Sockets": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Runtime.InteropServices.RuntimeInformation": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Threading": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/DnsClient.dll": {}
+        },
+        "compile": {
+          "lib/netstandard1.3/DnsClient.dll": {}
         }
       },
       "ESRI.ArcGIS.AnalysisTools/10.1.0.3035": {
@@ -2639,6 +2666,68 @@
           "ref/netstandard2.0/Microsoft.Win32.Registry.dll": {}
         }
       },
+      "MongoDB.Bson/2.6.1": {
+        "dependencies": {
+          "NETStandard.Library": "2.0.0",
+          "System.Collections.NonGeneric": "4.3.0",
+          "System.Diagnostics.Process": "4.3.0",
+          "System.Dynamic.Runtime": "4.3.0",
+          "System.Reflection.Emit.Lightweight": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.5/MongoDB.Bson.dll": {}
+        },
+        "compile": {
+          "lib/netstandard1.5/MongoDB.Bson.dll": {}
+        }
+      },
+      "MongoDB.Driver/2.6.1": {
+        "dependencies": {
+          "MongoDB.Bson": "2.6.1",
+          "MongoDB.Driver.Core": "2.6.1",
+          "NETStandard.Library": "2.0.0",
+          "System.ComponentModel.TypeConverter": "4.3.0",
+          "System.Linq.Queryable": "4.0.1"
+        },
+        "runtime": {
+          "lib/netstandard1.5/MongoDB.Driver.dll": {}
+        },
+        "compile": {
+          "lib/netstandard1.5/MongoDB.Driver.dll": {}
+        }
+      },
+      "MongoDB.Driver.Core/2.6.1": {
+        "dependencies": {
+          "DnsClient": "1.0.7",
+          "MongoDB.Bson": "2.6.1",
+          "NETStandard.Library": "2.0.0",
+          "System.Collections.Specialized": "4.3.0",
+          "System.Diagnostics.TraceSource": "4.3.0",
+          "System.Net.NameResolution": "4.3.0",
+          "System.Net.Security": "4.3.1",
+          "System.Security.SecureString": "4.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.5/MongoDB.Driver.Core.dll": {}
+        },
+        "compile": {
+          "lib/netstandard1.5/MongoDB.Driver.Core.dll": {}
+        }
+      },
+      "MongoDB.Driver.GridFS/2.6.1": {
+        "dependencies": {
+          "MongoDB.Bson": "2.6.1",
+          "MongoDB.Driver": "2.6.1",
+          "MongoDB.Driver.Core": "2.6.1",
+          "NETStandard.Library": "2.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.5/MongoDB.Driver.GridFS.dll": {}
+        },
+        "compile": {
+          "lib/netstandard1.5/MongoDB.Driver.GridFS.dll": {}
+        }
+      },
       "MySql.Data/6.10.4": {
         "dependencies": {
           "Microsoft.Extensions.Configuration.Json": "2.0.2",
@@ -4437,6 +4526,28 @@
           "ref/netstandard2.0/System.Security.Principal.Windows.dll": {}
         }
       },
+      "System.Security.SecureString/4.0.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "2.0.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Handles": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Security.Cryptography.Primitives": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Threading": "4.3.0"
+        },
+        "runtimeTargets": {
+          "runtime/unix/lib/_._": {
+            "rid": "unix",
+            "assetType": "runtime"
+          },
+          "runtime/win/lib/_._": {
+            "rid": "win",
+            "assetType": "runtime"
+          }
+        }
+      },
       "System.Spatial/5.8.2": {
         "runtime": {
           "lib/netstandard1.1/System.Spatial.dll": {}
@@ -4778,6 +4889,19 @@
           "Dist.Dme.DisCache.dll": {}
         }
       },
+      "Dist.Dme.DisFS/1.0.0": {
+        "dependencies": {
+          "MongoDB.Driver": "2.6.1",
+          "MongoDB.Driver.GridFS": "2.6.1",
+          "log4net": "2.0.8"
+        },
+        "runtime": {
+          "Dist.Dme.DisFS.dll": {}
+        },
+        "compile": {
+          "Dist.Dme.DisFS.dll": {}
+        }
+      },
       "Dist.Dme.Model/1.0.0": {
         "dependencies": {
           "sqlSugarCore": "4.6.4.9"
@@ -4793,6 +4917,7 @@
         "dependencies": {
           "Dist.Dme.Algorithms.LandConflictDetection": "1.0.0",
           "Dist.Dme.DAL": "1.0.0",
+          "Dist.Dme.DisFS": "1.0.0",
           "Dist.Dme.Model": "1.0.0"
         },
         "runtime": {
@@ -4985,6 +5110,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "DnsClient/1.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-f3k5ufhUSL658fy/ac1mReqRIr0jGMyOJFvBqJ+7cASq01NIysYbrrRDjboYKAGrd0Y2mc1A749uQvT8vAA91A==",
+      "path": "dnsclient/1.0.7",
+      "hashPath": "dnsclient.1.0.7.nupkg.sha512"
     },
     "ESRI.ArcGIS.AnalysisTools/10.1.0.3035": {
       "type": "package",
@@ -6323,6 +6455,34 @@
       "path": "microsoft.win32.registry/4.4.0",
       "hashPath": "microsoft.win32.registry.4.4.0.nupkg.sha512"
     },
+    "MongoDB.Bson/2.6.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pKSE9nG9OZX2uPjSI/AGWLGtOVINNiUbLpJYtFN/0oxWams0KbXOW6tFXAoL1iXuWUR3RxSz8u4DIhueCSm/Jg==",
+      "path": "mongodb.bson/2.6.1",
+      "hashPath": "mongodb.bson.2.6.1.nupkg.sha512"
+    },
+    "MongoDB.Driver/2.6.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GwEKCHKjmgcsinLiLs7q54YoS4n03e+Ax/21j4PvppTYQAIpPusX/qdaU/gvZbpH97k/LmSGBN/5cdxN6mvFGw==",
+      "path": "mongodb.driver/2.6.1",
+      "hashPath": "mongodb.driver.2.6.1.nupkg.sha512"
+    },
+    "MongoDB.Driver.Core/2.6.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lBjITp66o0OX5PHp5INxYTOz7RZa2GCPpKXUYZMo+1Cxy8TtIDiba6PmP6XB5KO+Zw/8AeofSh4ofj1uHxXuqQ==",
+      "path": "mongodb.driver.core/2.6.1",
+      "hashPath": "mongodb.driver.core.2.6.1.nupkg.sha512"
+    },
+    "MongoDB.Driver.GridFS/2.6.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GRUUQqzkH+Xdrd6hQt2KC1/w9j2zC+jEMAH+SerNjf0wGrp0V+ZLN898jyKw3il7WBNxLa5qIEDU533iA5gJIQ==",
+      "path": "mongodb.driver.gridfs/2.6.1",
+      "hashPath": "mongodb.driver.gridfs.2.6.1.nupkg.sha512"
+    },
     "MySql.Data/6.10.4": {
       "type": "package",
       "serviceable": true,
@@ -7254,6 +7414,13 @@
       "path": "system.security.principal.windows/4.4.0",
       "hashPath": "system.security.principal.windows.4.4.0.nupkg.sha512"
     },
+    "System.Security.SecureString/4.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sqzq9GD6/b0yqPuMpgIKBuoLf4VKAj8oAfh4kXSzPaN6eoKY3hRi9C5L27uip25qlU+BGPfb0xh2Rmbwc4jFVA==",
+      "path": "system.security.securestring/4.0.0",
+      "hashPath": "system.security.securestring.4.0.0.nupkg.sha512"
+    },
     "System.Spatial/5.8.2": {
       "type": "package",
       "serviceable": true,
@@ -7429,6 +7596,11 @@
       "sha512": ""
     },
     "Dist.Dme.DisCache/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Dist.Dme.DisFS/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

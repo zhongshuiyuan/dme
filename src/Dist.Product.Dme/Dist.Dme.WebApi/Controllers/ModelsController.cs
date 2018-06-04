@@ -30,7 +30,7 @@ namespace Dist.Dme.WebApi.Controllers
         /// <param name="detail">是否获取详情信息，0：否；1：是</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("/v1/")]
+        [Route("v1/")]
         public Result ListModels([FromQuery(Name = "detail")] int detail = 0)
         {
             return base.Success(ModelService.ListModels(1 == detail));
@@ -90,8 +90,8 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("landconflict/v1/execute")]
         public Result LandConflictExecute([FromBody][Required]LandConflictReqDTO dto)
         {
-            dto.Parameters.Add("FeatureClass_Source_First", @"D:\work\data\zgkg.mdb|BZY_YDGH_PY");
-            dto.Parameters.Add("FeatureClass_Source_Second", @"D:\work\data\zgkg.mdb|BKY_YDGH_PY");
+            dto.Parameters.Add("FeatureClass_Source_First", @"D:\work\data\zgkg.mdb&BZY_YDGH_PY");
+            dto.Parameters.Add("FeatureClass_Source_Second", @"D:\work\data\zgkg.mdb&BKY_YDGH_PY");
             dto.Parameters.Add("Yddm_Second", "YDDM");
             dto.Parameters.Add("Yddm_First", "YDDM");
             
@@ -103,10 +103,10 @@ namespace Dist.Dme.WebApi.Controllers
         /// <param name="dto">参数模型，当SysCode为空时，系统会自动附上一个唯一编码</param>
         /// <returns></returns>
         [HttpPost]
-        [Route("/v1")]
+        [Route("v1/")]
         public Result NewModel([FromBody]ModelAddReqDTO dto)
         {
-            if (!string.IsNullOrEmpty(dto.SysCode) && !Guid.TryParse(dto.SysCode, out Guid guid))
+            if (!this.ModelService.IsBizGuid(dto.SysCode))
             {
                 return base.Fail($"业务编码格式不正确[{dto.SysCode}]");
             }
@@ -124,9 +124,9 @@ namespace Dist.Dme.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("v1/copy/{modelVersionCode}")]
-        public Result Copy(string modelVersionCode)
+        public Result CopyFromModelVersion(string modelVersionCode)
         {
-            throw new NotImplementedException();
+            return base.Success(this.ModelService.CopyFromModelVersion(modelVersionCode));
         }
         /// <summary>
         /// 保存整个模型的规则步骤信息
@@ -134,7 +134,7 @@ namespace Dist.Dme.WebApi.Controllers
         /// <param name="info">步骤信息</param>
         /// <returns></returns>
         [HttpPost, HttpPut]
-        [Route("rulesteps/v1")]
+        [Route("rulesteps/v1/info")]
         public Result SaveRuleStepInfos([FromBody] ModelRuleStepInfoDTO info)
         {
             if (!ModelState.IsValid)

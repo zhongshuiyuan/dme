@@ -17,3 +17,5 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\obj\x86\Debug\netcoreapp2.0\
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\obj\x86\Debug\netcoreapp2.0\Dist.Dme.Service.AssemblyInfo.cs
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\obj\x86\Debug\netcoreapp2.0\Dist.Dme.Service.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\obj\x86\Debug\netcoreapp2.0\Dist.Dme.Service.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\bin\x86\Debug\netcoreapp2.0\Dist.Dme.DisFS.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\bin\x86\Debug\netcoreapp2.0\Dist.Dme.DisFS.pdb

@@ -14,7 +14,7 @@ namespace Dist.Dme.Base.Common
         /// </summary>
         public static int TYPE_NUMBER = 1;
         /// <summary>
-        /// 字符串类型
+        /// 简单的字符串类型
         /// </summary>
         public static int TYPE_STRING = 2;
         /// <summary>
@@ -66,12 +66,16 @@ namespace Dist.Dme.Base.Common
         /// </summary>
         public static int TYPE_MILLISECOND = 14;
         /// <summary>
+        /// 文件夹
+        /// </summary>
+        public static int TYPE_FOLDER = 15;
+        /// <summary>
         /// The Constant typeCodes
         /// </summary>
         static String[] typeCodes = new String[] {
         "-", "Number", "String", "Date", "Boolean", "Integer", "BigNumber", "Serializable", "Binary",
             "Timestamp","Internet Address", "Local File Path", "Local MDB Featureclass",
-            "Local GDB Path", "Millisecond"};
+            "Local GDB Path", "Millisecond", "Folder"};
         /// <summary>
         /// 获取类型的描述信息
         /// </summary>

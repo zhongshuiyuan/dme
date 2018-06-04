@@ -61,5 +61,11 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="info">信息</param>
         /// <returns></returns>
         object SaveRuleStepInfos(ModelRuleStepInfoDTO info);
+        /// <summary>
+        /// 复制一个模型版本
+        /// </summary>
+        /// <param name="modelVersionCode"></param>
+        /// <returns></returns>
+        object CopyFromModelVersion(string modelVersionCode);
     }
 }

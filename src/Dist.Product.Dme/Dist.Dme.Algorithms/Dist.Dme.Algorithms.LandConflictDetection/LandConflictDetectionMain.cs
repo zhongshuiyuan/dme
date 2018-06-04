@@ -33,7 +33,7 @@ namespace Dist.Dme.Plugins.LandConflictDetection
         /// <summary>
         /// 要素路径分隔符
         /// </summary>
-        private static String SEPARATOR_FEATURE_PATH = "|"; 
+        private static String SEPARATOR_FEATURE_PATH = "&"; 
         private IFeatureWorkspace m_localWorkspace_first;
         private string m_database_first;
         /// <summary>

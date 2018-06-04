@@ -24,3 +24,5 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\obj\x86\Debug\netcoreapp2.0\D
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\obj\x86\Debug\netcoreapp2.0\Dist.Dme.WebApi.pdb
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.DisCache.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.DisCache.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.DisFS.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.DisFS.pdb

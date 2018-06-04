@@ -1,4 +1,5 @@
 ﻿using Dist.Dme.Base.Framework.Interfaces;
+using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using System;
 using System.Collections.Generic;
@@ -22,5 +23,11 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="id"></param>
         /// <returns></returns>
         DmeDatabaseType GetDatabaseType(int id);
+        /// <summary>
+        /// 添加数据源实例
+        /// </summary>
+        /// <param name="datasourceAddDTO">数据源信息</param>
+        /// <returns></returns>
+        object AddDataSource(DatasourceAddDTO datasourceAddDTO);
     }
 }

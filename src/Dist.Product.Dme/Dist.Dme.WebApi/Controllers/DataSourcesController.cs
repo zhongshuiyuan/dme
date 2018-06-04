@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Dist.Dme.Base.Common;
 using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Utils;
+using Dist.Dme.DisFS.Mongo;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Impls;
 using Dist.Dme.Service.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace Dist.Dme.WebApi.Controllers
 {
@@ -20,9 +24,13 @@ namespace Dist.Dme.WebApi.Controllers
     public class DataSourcesController : BaseController
     {
         public IDataSourceService DataSourceService { get; private set; }
-        public DataSourcesController(IDataSourceService dataSourceService)
+        public IMongoDatabase MongoDatabase { get; private set; }
+        public MongodbHost MongodbHost { get; private set; }
+        public DataSourcesController(IDataSourceService dataSourceService, IMongoDatabase mongoDatabase, MongodbHost mongodbHost)
         {
             this.DataSourceService = dataSourceService;
+            this.MongoDatabase = mongoDatabase;
+            this.MongodbHost = mongodbHost;
         }
         /// <summary>
         /// 获取所有数据库类型
@@ -44,6 +52,13 @@ namespace Dist.Dme.WebApi.Controllers
         public Result GetDatabaseType(int id)
         {
             return base.Success(DataSourceService.GetDatabaseType(id));
+        }
+        [HttpGet]
+        [Route("v1/data")]
+        public void UploadDataset()
+        {
+            ObjectId objectId = MongodbHelper<object>.UploadFileFromPath(this.MongodbHost, "d:\\abc.JPG");
+            System.Console.WriteLine(objectId);
         }
     }
 }

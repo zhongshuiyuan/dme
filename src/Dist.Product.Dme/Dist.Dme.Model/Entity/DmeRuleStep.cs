@@ -21,5 +21,7 @@ namespace Dist.Dme.Model.Entity
         public double GuiLocationY { get; set; }
         [SugarColumn(ColumnName = "STEP_TYPE_ID")]
         public int StepTypeId { get; set; }
+        [SugarColumn(ColumnName = "STEP_NAME")]
+        public string StepName { get; set; }
     }
 }

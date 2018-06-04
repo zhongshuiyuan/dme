@@ -2,6 +2,33 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v2.0": {
+      "DnsClient/1.0.7": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Win32.Primitives": "4.3.0",
+          "NETStandard.Library": "1.6.1",
+          "System.Buffers": "4.3.0",
+          "System.Collections": "4.3.0",
+          "System.Collections.Concurrent": "4.3.0",
+          "System.Globalization.Extensions": "4.3.0",
+          "System.IO.FileSystem": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Net.NameResolution": "4.3.0",
+          "System.Net.NetworkInformation": "4.3.0",
+          "System.Net.Sockets": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Runtime.InteropServices.RuntimeInformation": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Threading": "4.3.0"
+        },
+        "compile": {
+          "lib/netstandard1.3/DnsClient.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/DnsClient.dll": {}
+        }
+      },
       "ESRI.ArcGIS.AnalysisTools/10.1.0.3035": {
         "type": "package",
         "compile": {
@@ -2987,7 +3014,7 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
         }
       },
       "Microsoft.Win32.Registry/4.4.0": {
@@ -3012,6 +3039,72 @@
             "assetType": "runtime",
             "rid": "win"
           }
+        }
+      },
+      "MongoDB.Bson/2.6.1": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "System.Collections.NonGeneric": "4.0.1",
+          "System.Diagnostics.Process": "4.1.0",
+          "System.Dynamic.Runtime": "4.0.11",
+          "System.Reflection.Emit.Lightweight": "4.0.1"
+        },
+        "compile": {
+          "lib/netstandard1.5/MongoDB.Bson.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/MongoDB.Bson.dll": {}
+        }
+      },
+      "MongoDB.Driver/2.6.1": {
+        "type": "package",
+        "dependencies": {
+          "MongoDB.Bson": "2.6.1",
+          "MongoDB.Driver.Core": "2.6.1",
+          "NETStandard.Library": "1.6.1",
+          "System.ComponentModel.TypeConverter": "4.1.0",
+          "System.Linq.Queryable": "4.0.1"
+        },
+        "compile": {
+          "lib/netstandard1.5/MongoDB.Driver.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/MongoDB.Driver.dll": {}
+        }
+      },
+      "MongoDB.Driver.Core/2.6.1": {
+        "type": "package",
+        "dependencies": {
+          "DnsClient": "1.0.7",
+          "MongoDB.Bson": "2.6.1",
+          "NETStandard.Library": "1.6.1",
+          "System.Collections.Specialized": "4.0.1",
+          "System.Diagnostics.TraceSource": "4.0.0",
+          "System.Net.NameResolution": "4.3.0",
+          "System.Net.Security": "4.0.0",
+          "System.Security.SecureString": "4.0.0"
+        },
+        "compile": {
+          "lib/netstandard1.5/MongoDB.Driver.Core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/MongoDB.Driver.Core.dll": {}
+        }
+      },
+      "MongoDB.Driver.GridFS/2.6.1": {
+        "type": "package",
+        "dependencies": {
+          "MongoDB.Bson": "2.6.1",
+          "MongoDB.Driver": "2.6.1",
+          "MongoDB.Driver.Core": "2.6.1",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.5/MongoDB.Driver.GridFS.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/MongoDB.Driver.GridFS.dll": {}
         }
       },
       "MySql.Data/6.10.4": {
@@ -4206,7 +4299,7 @@
           "System.Runtime.InteropServices": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/System.Globalization.Extensions.dll": {}
         },
         "runtimeTargets": {
           "runtimes/unix/lib/netstandard1.3/System.Globalization.Extensions.dll": {
@@ -5384,6 +5477,32 @@
           }
         }
       },
+      "System.Security.SecureString/4.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.0.1",
+          "System.Resources.ResourceManager": "4.0.1",
+          "System.Runtime": "4.1.0",
+          "System.Runtime.Handles": "4.0.1",
+          "System.Runtime.InteropServices": "4.1.0",
+          "System.Security.Cryptography.Primitives": "4.0.0",
+          "System.Text.Encoding": "4.0.11",
+          "System.Threading": "4.0.11"
+        },
+        "compile": {
+          "ref/netstandard1.3/System.Security.SecureString.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netstandard1.3/System.Security.SecureString.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netstandard1.3/System.Security.SecureString.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
       "System.Spatial/5.8.2": {
         "type": "package",
         "compile": {
@@ -5852,6 +5971,21 @@
           "bin/placeholder/Dist.Dme.DisCache.dll": {}
         }
       },
+      "Dist.Dme.DisFS/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.0",
+        "dependencies": {
+          "MongoDB.Driver": "2.6.1",
+          "MongoDB.Driver.GridFS": "2.6.1",
+          "log4net": "2.0.8"
+        },
+        "compile": {
+          "bin/placeholder/Dist.Dme.DisFS.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Dist.Dme.DisFS.dll": {}
+        }
+      },
       "Dist.Dme.Model/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.0",
@@ -5871,6 +6005,7 @@
         "dependencies": {
           "Dist.Dme.Algorithms.LandConflictDetection": "1.0.0",
           "Dist.Dme.DAL": "1.0.0",
+          "Dist.Dme.DisFS": "1.0.0",
           "Dist.Dme.Model": "1.0.0"
         },
         "compile": {
@@ -5883,6 +6018,19 @@
     }
   },
   "libraries": {
+    "DnsClient/1.0.7": {
+      "sha512": "f3k5ufhUSL658fy/ac1mReqRIr0jGMyOJFvBqJ+7cASq01NIysYbrrRDjboYKAGrd0Y2mc1A749uQvT8vAA91A==",
+      "type": "package",
+      "path": "dnsclient/1.0.7",
+      "files": [
+        "dnsclient.1.0.7.nupkg.sha512",
+        "dnsclient.nuspec",
+        "lib/net45/DnsClient.dll",
+        "lib/net45/DnsClient.xml",
+        "lib/netstandard1.3/DnsClient.dll",
+        "lib/netstandard1.3/DnsClient.xml"
+      ]
+    },
     "ESRI.ArcGIS.AnalysisTools/10.1.0.3035": {
       "sha512": "1S8dqi3avPhn7bvnC+x4T7YVX1eMRT/kzxDbwSb1k6vF8VTawXc0cKfjxIkk4Q6iQxVsmpatWetWc02gRErAlw==",
       "type": "package",
@@ -9114,6 +9262,62 @@
         "runtimes/win/lib/netstandard1.3/Microsoft.Win32.Registry.dll",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "MongoDB.Bson/2.6.1": {
+      "sha512": "pKSE9nG9OZX2uPjSI/AGWLGtOVINNiUbLpJYtFN/0oxWams0KbXOW6tFXAoL1iXuWUR3RxSz8u4DIhueCSm/Jg==",
+      "type": "package",
+      "path": "mongodb.bson/2.6.1",
+      "files": [
+        "License.rtf",
+        "lib/net45/MongoDB.Bson.dll",
+        "lib/net45/MongoDB.Bson.xml",
+        "lib/netstandard1.5/MongoDB.Bson.dll",
+        "lib/netstandard1.5/MongoDB.Bson.xml",
+        "mongodb.bson.2.6.1.nupkg.sha512",
+        "mongodb.bson.nuspec"
+      ]
+    },
+    "MongoDB.Driver/2.6.1": {
+      "sha512": "GwEKCHKjmgcsinLiLs7q54YoS4n03e+Ax/21j4PvppTYQAIpPusX/qdaU/gvZbpH97k/LmSGBN/5cdxN6mvFGw==",
+      "type": "package",
+      "path": "mongodb.driver/2.6.1",
+      "files": [
+        "License.rtf",
+        "lib/net45/MongoDB.Driver.dll",
+        "lib/net45/MongoDB.Driver.xml",
+        "lib/netstandard1.5/MongoDB.Driver.dll",
+        "lib/netstandard1.5/MongoDB.Driver.xml",
+        "mongodb.driver.2.6.1.nupkg.sha512",
+        "mongodb.driver.nuspec"
+      ]
+    },
+    "MongoDB.Driver.Core/2.6.1": {
+      "sha512": "lBjITp66o0OX5PHp5INxYTOz7RZa2GCPpKXUYZMo+1Cxy8TtIDiba6PmP6XB5KO+Zw/8AeofSh4ofj1uHxXuqQ==",
+      "type": "package",
+      "path": "mongodb.driver.core/2.6.1",
+      "files": [
+        "License.rtf",
+        "lib/net45/MongoDB.Driver.Core.dll",
+        "lib/net45/MongoDB.Driver.Core.xml",
+        "lib/netstandard1.5/MongoDB.Driver.Core.dll",
+        "lib/netstandard1.5/MongoDB.Driver.Core.xml",
+        "mongodb.driver.core.2.6.1.nupkg.sha512",
+        "mongodb.driver.core.nuspec"
+      ]
+    },
+    "MongoDB.Driver.GridFS/2.6.1": {
+      "sha512": "GRUUQqzkH+Xdrd6hQt2KC1/w9j2zC+jEMAH+SerNjf0wGrp0V+ZLN898jyKw3il7WBNxLa5qIEDU533iA5gJIQ==",
+      "type": "package",
+      "path": "mongodb.driver.gridfs/2.6.1",
+      "files": [
+        "License.rtf",
+        "lib/net45/MongoDB.Driver.GridFS.dll",
+        "lib/net45/MongoDB.Driver.GridFS.xml",
+        "lib/netstandard1.5/MongoDB.Driver.GridFS.dll",
+        "lib/netstandard1.5/MongoDB.Driver.GridFS.xml",
+        "mongodb.driver.gridfs.2.6.1.nupkg.sha512",
+        "mongodb.driver.gridfs.nuspec"
       ]
     },
     "MySql.Data/6.10.4": {
@@ -14034,6 +14238,45 @@
         "version.txt"
       ]
     },
+    "System.Security.SecureString/4.0.0": {
+      "sha512": "sqzq9GD6/b0yqPuMpgIKBuoLf4VKAj8oAfh4kXSzPaN6eoKY3hRi9C5L27uip25qlU+BGPfb0xh2Rmbwc4jFVA==",
+      "type": "package",
+      "path": "system.security.securestring/4.0.0",
+      "files": [
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net46/System.Security.SecureString.dll",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net46/System.Security.SecureString.dll",
+        "ref/netstandard1.3/System.Security.SecureString.dll",
+        "ref/netstandard1.3/System.Security.SecureString.xml",
+        "ref/netstandard1.3/de/System.Security.SecureString.xml",
+        "ref/netstandard1.3/es/System.Security.SecureString.xml",
+        "ref/netstandard1.3/fr/System.Security.SecureString.xml",
+        "ref/netstandard1.3/it/System.Security.SecureString.xml",
+        "ref/netstandard1.3/ja/System.Security.SecureString.xml",
+        "ref/netstandard1.3/ko/System.Security.SecureString.xml",
+        "ref/netstandard1.3/ru/System.Security.SecureString.xml",
+        "ref/netstandard1.3/zh-hans/System.Security.SecureString.xml",
+        "ref/netstandard1.3/zh-hant/System.Security.SecureString.xml",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "runtimes/unix/lib/netstandard1.3/System.Security.SecureString.dll",
+        "runtimes/win/lib/net46/System.Security.SecureString.dll",
+        "runtimes/win/lib/netstandard1.3/System.Security.SecureString.dll",
+        "system.security.securestring.4.0.0.nupkg.sha512",
+        "system.security.securestring.nuspec"
+      ]
+    },
     "System.Spatial/5.8.2": {
       "sha512": "0RfZZJ8RlrfjoBPAF6pczX4Nd2kyLM8EX1PCP5Rqs/jOhJBUPYhpXjIsVAYN7kocj9IJ9XoJWAxWgXIDtJY2Ag==",
       "type": "package",
@@ -15151,6 +15394,11 @@
       "path": "../Dist.Dme.DisCache/Dist.Dme.DisCache.csproj",
       "msbuildProject": "../Dist.Dme.DisCache/Dist.Dme.DisCache.csproj"
     },
+    "Dist.Dme.DisFS/1.0.0": {
+      "type": "project",
+      "path": "../Dist.Dme.DisFS/Dist.Dme.DisFS.csproj",
+      "msbuildProject": "../Dist.Dme.DisFS/Dist.Dme.DisFS.csproj"
+    },
     "Dist.Dme.Model/1.0.0": {
       "type": "project",
       "path": "../Dist.Dme.Model/Dist.Dme.Model.csproj",
@@ -15166,6 +15414,7 @@
     ".NETCoreApp,Version=v2.0": [
       "Dist.Dme.Base >= 1.0.0",
       "Dist.Dme.DisCache >= 1.0.0",
+      "Dist.Dme.DisFS >= 1.0.0",
       "Dist.Dme.Service >= 1.0.0",
       "Microsoft.AspNetCore.All >= 2.0.8",
       "Microsoft.AspNetCore.Mvc.Versioning >= 2.2.0",
@@ -15218,6 +15467,9 @@
             },
             "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DisCache\\Dist.Dme.DisCache.csproj": {
               "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DisCache\\Dist.Dme.DisCache.csproj"
+            },
+            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DisFS\\Dist.Dme.DisFS.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DisFS\\Dist.Dme.DisFS.csproj"
             },
             "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj": {
               "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj"

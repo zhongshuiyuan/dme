@@ -16,8 +16,8 @@ namespace Dist.Dme.Model.DTO
         public String Remark { get; set; }
         public long CreateTime { get; set; }
         /// <summary>
-        /// 模型关联的步骤
+        /// 模型版本集合
         /// </summary>
-        public IList<RuleStepDTO> RuleSteps { get; set; } = new List<RuleStepDTO>();
+        public IList<ModelVersionDTO> Versions { get; set; } = new List<ModelVersionDTO>();
     }
 }

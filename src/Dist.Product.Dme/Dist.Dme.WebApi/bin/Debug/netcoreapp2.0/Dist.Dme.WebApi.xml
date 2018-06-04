@@ -116,13 +116,13 @@
             </summary>
             <param name="cacheService"></param>
         </member>
-        <member name="M:Dist.Dme.WebApi.Controllers.CacheController.AddCache(System.String,System.Object)">
+        <member name="M:Dist.Dme.WebApi.Controllers.CacheController.AddCache(System.Object)">
             <summary>
             添加缓存
             </summary>
-            <param name="key"></param>
-            <param name="value"></param>
+            <param name="keyValuePair">使用动态类型dynamic，传过来是个json字符串，键值对</param>
             <returns></returns>
+            需要使用FromBody
         </member>
         <member name="M:Dist.Dme.WebApi.Controllers.CacheController.GetCache(System.String)">
             <summary>
@@ -194,7 +194,7 @@
             <param name="dto">参数模型，当SysCode为空时，系统会自动附上一个唯一编码</param>
             <returns></returns>
         </member>
-        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.Copy(System.String)">
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.CopyFromModelVersion(System.String)">
             <summary>
             根据模型版本进行复制
             </summary>

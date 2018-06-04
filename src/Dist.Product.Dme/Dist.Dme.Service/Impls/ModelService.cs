@@ -56,21 +56,42 @@ namespace Dist.Dme.Service.Impls
             {
                 return modelDTO;
             }
-            IList<DmeRuleStep> ruleStepEntities = base.Repository.GetDbContext().Queryable<DmeRuleStep>().Where(rs => rs.ModelId == model.Id).ToList();
-            if (null == ruleStepEntities || 0 == ruleStepEntities.Count)
+            // 获取模型版本
+            IList<DmeModelVersion> versions = base.Repository.GetDbContext().Queryable<DmeModelVersion>().Where(mv => mv.ModelId == model.Id).ToList();
+            if (null == versions || 0 == versions.Count)
             {
                 return modelDTO;
             }
-            RuleStepDTO ruleStepDTO = null;
-            foreach (var rule in ruleStepEntities)
+            
+            foreach (var v in versions)
             {
-                ruleStepDTO = ClassValueCopier<RuleStepDTO>.Copy(rule);
-                // 获取步骤类型实体
-                ruleStepDTO.StepType = base.Repository.GetDbContext().Queryable<DmeRuleStepType>().Where(rst => rst.Id == rule.StepTypeId).Single();
-                // 检索步骤的属性值信息
-                ruleStepDTO.RuleStepAttributes = base.Repository.GetDbContext().Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == rule.Id).ToList();
-                modelDTO.RuleSteps.Add(ruleStepDTO);
+                ModelVersionDTO versionDTO = ClassValueCopier<ModelVersionDTO>.Copy(v);
+                modelDTO.Versions.Add(versionDTO);
+                IList<DmeRuleStep> ruleStepEntities = base.Repository.GetDbContext().Queryable<DmeRuleStep>().Where(rs => rs.ModelId == model.Id && rs.VersionId == v.Id).ToList();
+                if (null == ruleStepEntities || 0 == ruleStepEntities.Count)
+                {
+                    continue;
+                }
+                RuleStepDTO ruleStepDTO = null;
+                foreach (var rule in ruleStepEntities)
+                {
+                    ruleStepDTO = ClassValueCopier<RuleStepDTO>.Copy(rule);
+                    versionDTO.Steps.Add(ruleStepDTO);
+                    // 获取步骤类型实体
+                    ruleStepDTO.StepType = base.Repository.GetDbContext().Queryable<DmeRuleStepType>().Where(rst => rst.Id == rule.StepTypeId).Single();
+                    // 检索步骤的属性值信息
+                    IList<DmeRuleStepAttribute> attributes = base.Repository.GetDbContext().Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == rule.Id).ToList();
+                    if (null == attributes || 0 == attributes.Count)
+                    {
+                        continue;
+                    }
+                    foreach (var att in attributes)
+                    {
+                        ruleStepDTO.Attributes.Add(new KeyValuePair<string, object>(att.AttributeCode, att.AttributeValue));
+                    }
+                }
             }
+           
             return modelDTO;
         }
 
@@ -169,7 +190,7 @@ namespace Dist.Dme.Service.Impls
             // 开始事务
             return base.Repository.GetDbContext().Ado.UseTran<object>(()=>
             {
-                // 根据模型版本号，获取模型信息
+                // 根据模型版本号，获取模型版本信息
                 DmeModelVersion modelVersion = base.Repository.GetDbContext().Queryable<DmeModelVersion>().Single(mv => mv.SysCode == info.ModelVersionCode);
                 // 清除模型的步骤信息
                 base.Repository.GetDbContext().Deleteable<DmeRuleStep>(rs => rs.ModelId == modelVersion.ModelId && rs.VersionId == modelVersion.Id).ExecuteCommand();
@@ -229,6 +250,50 @@ namespace Dist.Dme.Service.Impls
                             });
                         }
                         base.Repository.GetDbContext().Insertable<DmeRuleStepHop>(ruleStepHops).ExecuteCommandAsync();
+                    }
+                }
+                return true;
+            }).Data;
+        }
+        public object CopyFromModelVersion(string modelVersionCode)
+        {
+            // 开始事务
+            return base.Repository.GetDbContext().Ado.UseTran<object>(() =>
+            {
+                // 根据模型版本号，获取模型版本信息
+                DmeModelVersion modelVersion = base.Repository.GetDbContext().Queryable<DmeModelVersion>().Single(mv => mv.SysCode == modelVersionCode);
+                DmeModelVersion newVersion = new DmeModelVersion
+                {
+                    CreateTime = DateUtil.CurrentTimeMillis,
+                    ModelId = modelVersion.ModelId
+                };
+                newVersion.Name = $"版本-{newVersion.CreateTime}";
+                newVersion.SysCode = GuidUtil.NewGuid();
+                newVersion.Id = base.Repository.GetDbContext().Insertable<DmeModelVersion>(newVersion).ExecuteReturnIdentity();
+                // 获取被复制的版本的步骤信息
+                IList<DmeRuleStep> oldRuleSteps = base.Repository.GetDbContext().Queryable<DmeRuleStep>().Where(rs => rs.ModelId == modelVersion.ModelId && rs.VersionId == modelVersion.Id).ToList();
+                if (oldRuleSteps?.Count > 0)
+                {
+                    foreach (var step in oldRuleSteps)
+                    {
+                        DmeRuleStep newRuleStep = ClassValueCopier<DmeRuleStep>.Copy(step, new String[] { "Id", "SysCode", "VersionId" });
+                        newRuleStep.SysCode = GuidUtil.NewGuid();
+                        newRuleStep.VersionId = newVersion.Id;
+                        newRuleStep.Id = base.Repository.GetDbContext().Insertable<DmeRuleStep>(newRuleStep).ExecuteReturnIdentity();
+                        // 获取步骤的属性信息
+                        IList<DmeRuleStepAttribute> oldRuleStepAttributes = base.Repository.GetDbContext().Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.ModelId == modelVersion.ModelId && rsa.VersionId == modelVersion.Id).ToList();
+                        if (oldRuleStepAttributes?.Count > 0)
+                        {
+                            List<DmeRuleStepAttribute> newRuleStepAtts = new List<DmeRuleStepAttribute>();
+                            foreach (var att in oldRuleStepAttributes)
+                            {
+                                DmeRuleStepAttribute newRuleStepAtt = ClassValueCopier<DmeRuleStepAttribute>.Copy(att, new String[] { "Id", "RuleStepId", "VersionId" });
+                                newRuleStepAtt.RuleStepId = newRuleStep.Id;
+                                newRuleStepAtt.VersionId = newVersion.Id;
+                                newRuleStepAtts.Add(newRuleStepAtt);
+                            }
+                            base.Repository.GetDbContext().Insertable<DmeRuleStepAttribute>(newRuleStepAtts.ToArray()).ExecuteCommand();
+                        }
                     }
                 }
                 return true;

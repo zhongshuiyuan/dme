@@ -26,7 +26,7 @@ namespace Dist.Dme.DisFS.Mongo
                 { "Name", "朝阳" }
             };
             //3.批量修改
-            var kk = TMongodbHelper<PhoneEntity>.UpdateManay(host, dic, filter);
+            var kk = MongodbHelper<PhoneEntity>.UpdateManay(host, dic, filter);
 
 
             //根据条件查询集合
@@ -41,7 +41,7 @@ namespace Dist.Dme.DisFS.Mongo
             var field = new[] { "Name", "Price", "AddTime" };
             //3.排序字段
             var sort = Builders<PhoneEntity>.Sort.Descending("AddTime");
-            var res = TMongodbHelper<PhoneEntity>.FindList(host, filter, field, sort);
+            var res = MongodbHelper<PhoneEntity>.FindList(host, filter, field, sort);
 
 
             //分页查询，查询条件
@@ -55,7 +55,7 @@ namespace Dist.Dme.DisFS.Mongo
             //排序条件
             sort = Builders<PhoneEntity>.Sort.Descending("AddTime");
 
-            res = TMongodbHelper<PhoneEntity>.FindListByPage(host, filter, 2, 10, out long count, null, sort);
+            res = MongodbHelper<PhoneEntity>.FindListByPage(host, filter, 2, 10, out long count, null, sort);
         }
     }
 

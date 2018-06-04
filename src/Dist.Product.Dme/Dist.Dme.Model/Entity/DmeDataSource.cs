@@ -13,6 +13,7 @@ namespace Dist.Dme.Model.Entity
         public String SysCode { get; set; }
         public String Name { get; set; }
         public int IsLocal { get; set; }
+        public String Type { get; set; }
         public String Connection { get; set; }
         public int CreateTime { get; set; }
         public String Remark { get; set; }
