@@ -6,16 +6,19 @@ using System.Collections.Concurrent;
 namespace Dist.Dme.DisFS.Mongo
 {
     /// <summary>
-    /// mongo管理类
+    /// mongo管理类，客户端版本需要比服务器端版本低才能成功，否则出现版本兼容性问题。
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public static class MongodbManager<T> where T : class
     {
         /// <summary>
-        /// 缓存
+        /// mongodb客户端缓存
         /// </summary>
         private static ConcurrentDictionary<string, Lazy<MongoClient>> MongoClientCache =
             new ConcurrentDictionary<string, Lazy<MongoClient>>();
+        /// <summary>
+        /// mongodb bucket缓存
+        /// </summary>
         private static ConcurrentDictionary<string, Lazy<GridFSBucket>> GridFSBucketCache =
             new ConcurrentDictionary<string, Lazy<GridFSBucket>>();
 
@@ -58,7 +61,7 @@ namespace Dist.Dme.DisFS.Mongo
         public static GridFSBucket GetGridFSBucket(MongodbHost host)
         {
             if (string.IsNullOrWhiteSpace(host.Connection)) throw new ArgumentException("MongoDB Connection String is Empty");
-            if (string.IsNullOrWhiteSpace(host.DataBase)) throw new ArgumentException("MongoDB DataBase String is Empty");
+            if (string.IsNullOrWhiteSpace(host.DataBase)) throw new ArgumentException("MongoDB DataBase is Empty");
 
             return GridFSBucketCache.GetOrAdd(host.DataBase, new Lazy<GridFSBucket>(() =>
             {

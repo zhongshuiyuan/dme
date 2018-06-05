@@ -18,7 +18,7 @@ namespace Dist.Dme.DisFS.Mongo
     public static class MongodbHelper<T> where T : class, new()
     {
         private static ILog LOG = LogManager.GetLogger(typeof(T));
-        #region +Add 添加一条数据
+        #region Add 添加一条数据
         /// <summary>
         /// 添加一条数据
         /// </summary>
@@ -40,7 +40,7 @@ namespace Dist.Dme.DisFS.Mongo
         }
         #endregion
 
-        #region +AddAsync 异步添加一条数据
+        #region AddAsync 异步添加一条数据
         /// <summary>
         /// 异步添加一条数据
         /// </summary>
@@ -62,7 +62,7 @@ namespace Dist.Dme.DisFS.Mongo
         }
         #endregion
 
-        #region +InsertMany 批量插入
+        #region InsertMany 批量插入
         /// <summary>
         /// 批量插入
         /// </summary>
@@ -85,7 +85,7 @@ namespace Dist.Dme.DisFS.Mongo
         }
         #endregion
 
-        #region +InsertManyAsync 异步批量插入
+        #region InsertManyAsync 异步批量插入
         /// <summary>
         /// 异步批量插入
         /// </summary>
@@ -107,7 +107,7 @@ namespace Dist.Dme.DisFS.Mongo
         }
         #endregion
 
-        #region +Update 修改一条数据
+        #region Update 修改一条数据
         /// <summary>
         /// 修改一条数据
         /// </summary>
@@ -138,7 +138,7 @@ namespace Dist.Dme.DisFS.Mongo
         }
         #endregion
 
-        #region +UpdateAsync 异步修改一条数据
+        #region UpdateAsync 异步修改一条数据
         /// <summary>
         /// 异步修改一条数据
         /// </summary>
@@ -169,7 +169,7 @@ namespace Dist.Dme.DisFS.Mongo
         }
         #endregion
 
-        #region +UpdateManay 批量修改数据
+        #region UpdateManay 批量修改数据
         /// <summary>
         /// 批量修改数据
         /// </summary>
@@ -201,7 +201,7 @@ namespace Dist.Dme.DisFS.Mongo
         }
         #endregion
 
-        #region +UpdateManayAsync 异步批量修改数据
+        #region UpdateManayAsync 异步批量修改数据
         /// <summary>
         /// 异步批量修改数据
         /// </summary>
@@ -616,7 +616,7 @@ namespace Dist.Dme.DisFS.Mongo
         }
         #endregion
 
-        #region 文件类操作
+        #region File文件类操作
         /// <summary>
         /// 通过字节流上传文件
         /// </summary>
@@ -690,7 +690,7 @@ namespace Dist.Dme.DisFS.Mongo
             var bucket = MongodbManager<GridFSBucket>.GetGridFSBucket(host);
             FileStream fileStream = new FileStream(filePath, FileMode.Open);
          
-            return bucket.UploadFromStream(fileStream.Name, fileStream, options);
+            return bucket.UploadFromStream(Path.GetFileName(filePath), fileStream, options);
         }
         /// <summary>
         /// 上传文件流，并附上元数据
@@ -747,7 +747,7 @@ namespace Dist.Dme.DisFS.Mongo
         /// 
         /// </summary>
         /// <param name="host"></param>
-        /// <param name="id">文件id，注意这个是files_id的值，而不是_id的值</param>
+        /// <param name="id">文件id，fs.files中的_id，也对应fs.chunks的files_id</param>
         /// <param name="options">下载选项</param>
         public static Stream DownloadFileToStream(MongodbHost host, BsonValue id, GridFSDownloadOptions options = null)
         {
@@ -890,7 +890,7 @@ namespace Dist.Dme.DisFS.Mongo
         /// 重命名
         /// </summary>
         /// <param name="host">mongo服务器信息</param>
-        /// <param name="id">文件id，注意这个是files_id的值，而不是_id的值</param>
+        /// <param name="id">文件id，fs.files中的_id，也对应fs.chunks的files_id</param>
         /// <param name="newFileName">新文件名称</param>
         public static void RenameFile(MongodbHost host, BsonValue id, string newFileName)
         {
@@ -918,7 +918,7 @@ namespace Dist.Dme.DisFS.Mongo
         /// 根据id删除文件
         /// </summary>
         /// <param name="host"></param>
-        /// <param name="id">_id还是files_id？</param>
+        /// <param name="id">文件id，fs.files中的_id，也对应fs.chunks的files_id</param>
         public static void DeleteFileById(MongodbHost host, string id)
         {
             var bucket = MongodbManager<GridFSBucket>.GetGridFSBucket(host);

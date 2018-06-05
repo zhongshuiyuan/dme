@@ -398,7 +398,8 @@ connection值，是个json格式
     "database":"orcl",
     "port":1521,
     "username":"bhoa",
-    "password":"Encrypted 2be98afc86aa7f2e4cb79ce10dc9aa0db"
+    "encrypted":1
+    "password":"2be98afc86aa7f2e4cb79ce10dc9aa0db"
 }
 ';
 comment on column DME_DATASOURCE.createtime
