@@ -4803,37 +4803,11 @@
           "lib/netstandard1.3/Microsoft.WindowsAzure.Storage.dll": {}
         }
       },
-      "Dist.Dme.AECommon/1.0.0": {
-        "dependencies": {
-          "ESRI.ArcGIS.AnalysisTools": "10.1.0.3035",
-          "ESRI.ArcGIS.Carto": "10.1.0.3035",
-          "ESRI.ArcGIS.DataManagementTools": "10.1.0.3035",
-          "ESRI.ArcGIS.DataSourcesFile": "10.1.0.3035",
-          "ESRI.ArcGIS.DataSourcesGDB": "10.1.0.3035",
-          "ESRI.ArcGIS.DataSourcesOleDB": "10.1.0.3035",
-          "ESRI.ArcGIS.DataSourcesRaster": "10.1.0.3035",
-          "ESRI.ArcGIS.Display": "10.1.0.3035",
-          "ESRI.ArcGIS.Geodatabase": "10.1.0.3035",
-          "ESRI.ArcGIS.Geometry": "10.1.0.3035",
-          "ESRI.ArcGIS.Geoprocessing": "10.1.0.3035",
-          "ESRI.ArcGIS.Geoprocessor": "10.1.0.3035",
-          "ESRI.ArcGIS.Server": "10.1.0.3035",
-          "ESRI.ArcGIS.System": "10.1.0.3035",
-          "ESRI.ArcGIS.Version": "10.1.0.3035",
-          "log4net": "2.0.8"
-        },
-        "runtime": {
-          "Dist.Dme.AECommon.dll": {}
-        },
-        "compile": {
-          "Dist.Dme.AECommon.dll": {}
-        }
-      },
       "Dist.Dme.Algorithms.LandConflictDetection/1.0.0": {
         "dependencies": {
-          "Dist.Dme.AECommon": "1.0.0",
           "Dist.Dme.Base": "1.0.0",
           "Dist.Dme.Model": "1.0.0",
+          "Dist.Dme.SRCE": "1.0.0",
           "ESRI.ArcGIS.Geodatabase": "10.1.0.3035",
           "ESRI.ArcGIS.Version": "10.1.0.3035",
           "log4net": "2.0.8"
@@ -4925,6 +4899,32 @@
         },
         "compile": {
           "Dist.Dme.Service.dll": {}
+        }
+      },
+      "Dist.Dme.SRCE/1.0.0": {
+        "dependencies": {
+          "ESRI.ArcGIS.AnalysisTools": "10.1.0.3035",
+          "ESRI.ArcGIS.Carto": "10.1.0.3035",
+          "ESRI.ArcGIS.DataManagementTools": "10.1.0.3035",
+          "ESRI.ArcGIS.DataSourcesFile": "10.1.0.3035",
+          "ESRI.ArcGIS.DataSourcesGDB": "10.1.0.3035",
+          "ESRI.ArcGIS.DataSourcesOleDB": "10.1.0.3035",
+          "ESRI.ArcGIS.DataSourcesRaster": "10.1.0.3035",
+          "ESRI.ArcGIS.Display": "10.1.0.3035",
+          "ESRI.ArcGIS.Geodatabase": "10.1.0.3035",
+          "ESRI.ArcGIS.Geometry": "10.1.0.3035",
+          "ESRI.ArcGIS.Geoprocessing": "10.1.0.3035",
+          "ESRI.ArcGIS.Geoprocessor": "10.1.0.3035",
+          "ESRI.ArcGIS.Server": "10.1.0.3035",
+          "ESRI.ArcGIS.System": "10.1.0.3035",
+          "ESRI.ArcGIS.Version": "10.1.0.3035",
+          "log4net": "2.0.8"
+        },
+        "runtime": {
+          "Dist.Dme.SRCE.dll": {}
+        },
+        "compile": {
+          "Dist.Dme.SRCE.dll": {}
         }
       },
       "Microsoft.NETCore.App/2.0.0": {
@@ -7575,11 +7575,6 @@
       "path": "windowsazure.storage/8.1.4",
       "hashPath": "windowsazure.storage.8.1.4.nupkg.sha512"
     },
-    "Dist.Dme.AECommon/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
     "Dist.Dme.Algorithms.LandConflictDetection/1.0.0": {
       "type": "project",
       "serviceable": false,
@@ -7611,6 +7606,11 @@
       "sha512": ""
     },
     "Dist.Dme.Service/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Dist.Dme.SRCE/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

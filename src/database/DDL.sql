@@ -384,7 +384,7 @@ comment on column DME_DATASOURCE.islocal
   is '是否本地数据源，0：远程；1：本地';
 comment on column DME_DATASOURCE.type
   is '数据源类型，大写字母标识
-如果ISLOCAL=0，表示远程，则TYPE可以为关系型数据库：ORACLE、MYSQL、SQLSERVER；或者网络路径数据：MDB、GDB、EXCEL
+如果ISLOCAL=0，表示远程，则TYPE可以为关系型数据库：ORACLE、MYSQL、SQLSERVER、MONGODB；或者网络路径数据：MDB、GDB、EXCEL
 如果ISLOCAL=1，表示本地，则TYPE可以为：MDB、GDB、EXCEL
 ';
 comment on column DME_DATASOURCE.connection

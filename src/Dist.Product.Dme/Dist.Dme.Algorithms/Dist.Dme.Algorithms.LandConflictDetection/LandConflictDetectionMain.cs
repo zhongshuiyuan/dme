@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Dist.Dme.AECommon.AnalysisTools;
-using Dist.Dme.AECommon.Utils;
 using Dist.Dme.Base.Common;
 using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.AlgorithmTypes;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
+using Dist.Dme.SRCE.Esri.AnalysisTools;
+using Dist.Dme.SRCE.Esri.Utils;
 using ESRI.ArcGIS;
 using ESRI.ArcGIS.Geodatabase;
 using log4net;

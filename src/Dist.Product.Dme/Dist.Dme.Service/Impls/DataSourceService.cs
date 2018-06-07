@@ -1,7 +1,7 @@
 ﻿using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.DAL.Context;
-using Dist.Dme.DisFS.Mongo;
+using Dist.Dme.DisFS.Adapters.Mongo;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Interfaces;

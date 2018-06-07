@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Dist.Dme.Base.Common;
-using Dist.Dme.Base.Framework;
-using Dist.Dme.Base.Utils;
-using Dist.Dme.DisFS.Mongo;
-using Dist.Dme.Model.Entity;
-using Dist.Dme.Service.Impls;
+﻿using Dist.Dme.Base.Framework;
+using Dist.Dme.DisFS.Adapters.Mongo;
 using Dist.Dme.Service.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
@@ -57,7 +48,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/data")]
         public void UploadDataset()
         {
-            ObjectId objectId = MongodbHelper<object>.UploadFileFromPath(this.MongodbHost, "d:\\abc.JPG");
+            ObjectId objectId = MongodbHelper<object>.UploadFileFromPath(this.MongodbHost, @"D:\work\dist\c_产品管理\g_规划协查\飞灵姐提供的重庆分析工具\demo数据\论坛版测试数据.mdb");
             System.Console.WriteLine(objectId);
         }
     }

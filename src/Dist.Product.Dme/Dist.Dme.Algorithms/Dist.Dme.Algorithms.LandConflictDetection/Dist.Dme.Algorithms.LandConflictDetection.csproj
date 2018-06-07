@@ -20,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Dist.Dme.AECommon\Dist.Dme.AECommon.csproj" />
     <ProjectReference Include="..\..\Dist.Dme.Base\Dist.Dme.Base.csproj" />
     <ProjectReference Include="..\..\Dist.Dme.Model\Dist.Dme.Model.csproj" />
+    <ProjectReference Include="..\..\Dist.Dme.SRCE\Dist.Dme.SRCE.csproj" />
   </ItemGroup>
 
 </Project>

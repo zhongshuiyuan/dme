@@ -4,7 +4,6 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\D
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.WebApi.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.WebApi.pdb
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.WebApi.xml
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.AECommon.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.Algorithms.LandConflictDetection.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.Base.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.DAL.dll
@@ -12,7 +11,6 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\D
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.Service.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.Base.pdb
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.Service.pdb
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.AECommon.pdb
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.Model.pdb
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.Algorithms.LandConflictDetection.pdb
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.DAL.pdb
@@ -26,3 +24,5 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\D
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.DisCache.pdb
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.DisFS.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.DisFS.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.SRCE.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.SRCE.pdb
