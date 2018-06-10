@@ -9,7 +9,7 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
     /// <summary>
     /// mongo文件存储
     /// </summary>
-    public class MongodbFSAdapter : IDisFileAdapter
+    public class MongodbFSAdapter : IDisFSAdapter
     {
         private MongodbHost host;
         public MongodbFSAdapter(MongodbHost host)

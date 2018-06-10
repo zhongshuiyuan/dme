@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Dist.Dme.Algorithms\Dist.Dme.Algorithms.Overlay\Dist.Dme.Algorithms.Overlay.csproj" />
     <ProjectReference Include="..\Dist.Dme.Base\Dist.Dme.Base.csproj" />
     <ProjectReference Include="..\Dist.Dme.DisCache\Dist.Dme.DisCache.csproj" />
     <ProjectReference Include="..\Dist.Dme.DisFS\Dist.Dme.DisFS.csproj" />

@@ -41,17 +41,39 @@ namespace Dist.Dme.Base.Common
         /// 是否只读，1：只读；0：可编辑
         /// </summary>
         public int ReadOnly { get; set; }
+        /// <summary>
+        /// 属性值集，提供下拉选择
+        /// </summary>
+        public object[] ValueSet { get; set; }
+        /// <summary>
+        /// 是否必须，1：需要；0：可选
+        /// </summary>
+        public int Required { get; set; }
 
-        public Property(string name, string alias, int dataType, object value, object defaultValue, int isVisible, string remark, int readOnly = 0)
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="name">名称</param>
+        /// <param name="alias">别名</param>
+        /// <param name="dataType">数据类型</param>
+        /// <param name="value">值</param>
+        /// <param name="defaultValue">默认值</param>
+        /// <param name="remark">备注</param>
+        /// <param name="valueSet">值的可选集</param>
+        /// <param name="isVisible">是否可见</param>
+        /// <param name="readOnly">是否只读</param>
+        public Property(string name, string alias, ValueTypeEnum dataType, object value, object defaultValue, string remark, object[] valueSet, int isVisible = 1, int readOnly = 0, int required = 1)
         {
             this.Name = name;
             this.Alias = alias;
-            this.DataType = dataType;
+            this.DataType = (int)dataType;
             this.Value = value;
             this.DefaultValue = defaultValue;
+            this.ValueSet = valueSet;
             this.IsVisible = isVisible;
             this.Remark = remark;
             this.ReadOnly = readOnly;
+            this.Required = required;
         }
     }
 }

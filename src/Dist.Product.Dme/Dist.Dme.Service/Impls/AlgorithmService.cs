@@ -94,7 +94,7 @@ namespace Dist.Dme.Service.Impls
                     alg.Extension = JsonConvert.SerializeObject(dto.Extension);
                     if (!base.Repository.GetDbContext().Updateable<DmeAlgorithm>().ExecuteCommandHasChange())
                     {
-                        throw new BusinessException(SystemStatusCode.DME3000, "更新算法信息失败，无详情信息。");
+                        throw new BusinessException(SystemStatusCode.DME_ERROR, "更新算法信息失败，无详情信息。");
                     }
                     if (dto.Metas != null && dto.Metas.Count > 0)
                     {

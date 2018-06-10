@@ -5,11 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dist.Dme.SRCE.Esri.AnalysisTools
+namespace Dist.Dme.SRCE.Esri.AnalysisTools.Overlay
 {
     /// <summary>
     /// 联合。
-    /// 多边形叠合，输出层为保留原来两个输入图层的所有多边形
+    /// 要素类的叠合，输出层为保留原来两个输入图层的所有多边形
     /// </summary>
     public sealed class UnionTool
     {

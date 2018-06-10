@@ -16,9 +16,27 @@ namespace Dist.Dme.Base.Framework
         public abstract string Remark { get; }
 
         public abstract Result Execute();
-        public abstract object InParams { get; }
-        public abstract object OutParams { get; }
-        public abstract object FeatureParams { get; }
+        public object InParams
+        {
+            get
+            {
+                return this.InputParameters;
+            }
+        }
+        public object OutParams
+        {
+            get
+            {
+                return this.OutputParameters;
+            }
+        }
+        public object FeatureParams
+        {
+            get
+            {
+                return this.FeatureParameters;
+            }
+        }
         public abstract void Init(IDictionary<string, object> parameters);
         public abstract IAlgorithmDevType AlgorithmType { get; }
         public virtual object MetadataJSON

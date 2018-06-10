@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Dist.Dme.Base.Common;
+﻿using Dist.Dme.Base.Common;
 using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.AlgorithmTypes;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
-using Dist.Dme.SRCE.Esri.AnalysisTools;
+using Dist.Dme.SRCE.Esri.AnalysisTools.Overlay;
 using Dist.Dme.SRCE.Esri.Utils;
 using ESRI.ArcGIS;
 using ESRI.ArcGIS.Geodatabase;
 using log4net;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Dist.Dme.Plugins.LandConflictDetection
 {
@@ -84,18 +84,18 @@ namespace Dist.Dme.Plugins.LandConflictDetection
 
             // 初始化输入参数
             base.InputParameters.Add(nameof(this.FeatureClass_Source_First),
-                new Property(nameof(this.FeatureClass_Source_First), "总规用地的图层信息", ValueTypeMeta.TYPE_MDB_FEATURECLASS, "", "", 1, "总规用地的图层信息，格式：mdb路径"+ SEPARATOR_FEATURE_PATH + "要素类"));
+                new Property(nameof(this.FeatureClass_Source_First), "总规用地的图层信息", ValueTypeEnum.TYPE_MDB_FEATURECLASS, "", "", "总规用地的图层信息，格式：mdb路径" + SEPARATOR_FEATURE_PATH + "要素类名称", null));
             base.InputParameters.Add(nameof(this.FeatureClass_Source_Second),
-                new Property(nameof(this.FeatureClass_Source_Second), "控规用地的图层信息", ValueTypeMeta.TYPE_MDB_FEATURECLASS, "", "", 1, "控规用地的图层路径信息，格式：mdb路径" + SEPARATOR_FEATURE_PATH + "要素类"));
+                new Property(nameof(this.FeatureClass_Source_Second), "控规用地的图层信息", ValueTypeEnum.TYPE_MDB_FEATURECLASS, "", "", "控规用地的图层路径信息，格式：mdb路径" + SEPARATOR_FEATURE_PATH + "要素类名称", null));
             base.InputParameters.Add(nameof(this.Yddm_First),
-                new Property(nameof(this.Yddm_First), "总规用地代码属性", ValueTypeMeta.TYPE_STRING, "", "", 1, "总规用地代码属性"));
+                new Property(nameof(this.Yddm_First), "总规用地代码属性", ValueTypeEnum.TYPE_STRING, "", "", "总规用地代码属性", null));
             base.InputParameters.Add(nameof(this.Yddm_Second),
-                new Property(nameof(this.Yddm_Second), "控规用地代码属性", ValueTypeMeta.TYPE_STRING, "", "", 1, "控规用地代码属性"));
+                new Property(nameof(this.Yddm_Second), "控规用地代码属性", ValueTypeEnum.TYPE_STRING, "", "", "控规用地代码属性", null));
 
             // 初始化输出参数
             string resultGDBDir = System.AppDomain.CurrentDomain.BaseDirectory + "/result/";
-            base.OutputParameters.Add(nameof(this.ResultGDBPath), new Property(nameof(this.ResultGDBPath), "输出结果", ValueTypeMeta.TYPE_GDB_PATH, resultGDBDir, resultGDBDir, 1, "分析结果为gdb文件"));
-            base.OutputParameters.Add(nameof(this.ReulstLayerName), new Property(nameof(this.ReulstLayerName), "图层名称", ValueTypeMeta.TYPE_STRING, this.ReulstLayerName, this.ReulstLayerName, 1, "分析结果为gdb文件", 1));
+            base.OutputParameters.Add(nameof(this.ResultGDBPath), new Property(nameof(this.ResultGDBPath), "输出结果", ValueTypeEnum.TYPE_GDB_PATH, resultGDBDir, resultGDBDir, "分析结果为gdb文件", null));
+            base.OutputParameters.Add(nameof(this.ReulstLayerName), new Property(nameof(this.ReulstLayerName), "图层名称", ValueTypeEnum.TYPE_STRING, this.ReulstLayerName, this.ReulstLayerName, "分析结果为gdb文件", null));
         }
 
         public override Result Execute()
@@ -112,7 +112,7 @@ namespace Dist.Dme.Plugins.LandConflictDetection
                 long beginMillisecond = DateUtil.CurrentTimeMillis;
                 // 创建一份gdb
                 DirectFileUtil.CopyDirectInfo(pTempletMDBFile, resultGDBPath);
-                IWorkspace resultWorkspace = WorkspaceServices.OpenFileGdbWorkspace(resultGDBPath);
+                IWorkspace resultWorkspace = WorkspaceUtil.OpenFileGdbWorkspace(resultGDBPath);
                 LOG.Info("创建GDB消耗时间：[" + (DateUtil.CurrentTimeMillis - beginMillisecond) + "] 毫秒");
                 // 拷贝源对比图层
                 beginMillisecond = DateUtil.CurrentTimeMillis;
@@ -131,40 +131,18 @@ namespace Dist.Dme.Plugins.LandConflictDetection
                 object result = unionTool.Excute();
                 if (null == result)
                 {
-                    return new Result(STATUS.ERROR, "图层联合分析失败", SystemStatusCode.DME3000, false);
+                    return new Result(STATUS.ERROR, "图层联合分析失败", SystemStatusCode.DME_ERROR, false);
                 }
                 // 对输出图层进行规则计算
                 // TODO
-                return new Result(STATUS.SUCCESS, "差异分析完成", SystemStatusCode.DME1000, true);
+                return new Result(STATUS.SUCCESS, "差异分析完成", SystemStatusCode.DME_SUCCESS, true);
             } catch (Exception ex)
             {
                 LOG.Error("差异分析失败，详情：" + ex.Message);
-                return new Result(STATUS.ERROR, "差异分析失败，详情：" + ex.Message, SystemStatusCode.DME3000, false);
+                return new Result(STATUS.ERROR, "差异分析失败，详情：" + ex.Message, SystemStatusCode.DME_ERROR, false);
             }
         }
 
-        public override object InParams
-        {
-            get
-            {
-                return base.InputParameters;
-            }
-        }
-
-        public override object OutParams
-        {
-            get
-            {
-                return base.OutputParameters;
-            }
-        }
-        public override object FeatureParams
-        {
-            get
-            {
-                return base.FeatureParameters;
-            }
-        }
         public override void Init(IDictionary<string, object> parameters)
         {
             if (!parameters.ContainsKey(nameof(this.FeatureClass_Source_First)))
@@ -195,9 +173,10 @@ namespace Dist.Dme.Plugins.LandConflictDetection
             }
 
             this.FeatureClass_Source_First = parameters[nameof(this.FeatureClass_Source_First)].ToString();
-            WorkspaceServices.OpenFeatureClass(this.FeatureClass_Source_First, SEPARATOR_FEATURE_PATH, out this.m_localWorkspace_first, out this.m_featureClass_first);
+            WorkspaceUtil.OpenFeatureClass(this.FeatureClass_Source_First, SEPARATOR_FEATURE_PATH, out this.m_localWorkspace_first, out this.m_featureClass_first);
             if (this.m_featureClass_first.FeatureDataset != null)
             {
+                // 注意有要素集情况下的路径格式
                 this.sourceLayerFirstFullPath = this.FeatureClass_Source_First.Split(SEPARATOR_FEATURE_PATH)[0] + "/" + this.m_featureClass_first.FeatureDataset.Name + "/" + this.FeatureClass_Source_First.Split(SEPARATOR_FEATURE_PATH)[1];
             }
             else
@@ -205,7 +184,7 @@ namespace Dist.Dme.Plugins.LandConflictDetection
                 this.sourceLayerFirstFullPath = this.FeatureClass_Source_First.Split(SEPARATOR_FEATURE_PATH)[0] + "/" + this.FeatureClass_Source_First.Split(SEPARATOR_FEATURE_PATH)[1];
             }
             this.FeatureClass_Source_Second = parameters[nameof(this.FeatureClass_Source_Second)].ToString();
-            WorkspaceServices.OpenFeatureClass(this.FeatureClass_Source_Second, SEPARATOR_FEATURE_PATH, out this.m_localWorkspace_second, out this.m_featureClass_second);
+            WorkspaceUtil.OpenFeatureClass(this.FeatureClass_Source_Second, SEPARATOR_FEATURE_PATH, out this.m_localWorkspace_second, out this.m_featureClass_second);
             if (this.m_featureClass_second.FeatureDataset != null)
             {
                 this.sourceLayerSecondFullPath = this.FeatureClass_Source_Second.Split(SEPARATOR_FEATURE_PATH)[0] + "/" + this.m_featureClass_second.FeatureDataset.Name + "/" + this.FeatureClass_Source_Second.Split(SEPARATOR_FEATURE_PATH)[1];

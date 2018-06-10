@@ -179,7 +179,7 @@ namespace Dist.Dme.Service.Impls
             DmeModelVersion modelVersion = base.Repository.GetDbContext().Queryable<DmeModelVersion>().Where(mv => mv.SysCode == versionCode).Single();
             if (null == modelVersion)
             {
-                throw new BusinessException(SystemStatusCode.DME2000, $"模型版本[{versionCode}]不存在，或模型版本编码无效");
+                throw new BusinessException(SystemStatusCode.DME_FAIL, $"模型版本[{versionCode}]不存在，或模型版本编码无效");
             }
 
             throw new NotImplementedException();

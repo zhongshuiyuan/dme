@@ -8,14 +8,14 @@
         /// <summary>
         ///  业务成功状态码 
         /// </summary>
-        public const int DME1000 = 1000;
+        public const int DME_SUCCESS = 1000;
         /// <summary>
         /// 业务失败状态码
         /// </summary>
-        public const int DME2000 = 2000;
+        public const int DME_FAIL = 2000;
         /// <summary>
         /// 业务错误状态码
         /// </summary>
-        public const int DME3000 = 3000;
+        public const int DME_ERROR = 3000;
     }
 }

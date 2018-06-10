@@ -24,8 +24,10 @@ namespace Dist.Dme.SRCE.Esri.Utils
         {
             try
             {
-                PingOptions pingOption = new PingOptions();
-                pingOption.DontFragment = true;
+                PingOptions pingOption = new PingOptions
+                {
+                    DontFragment = true
+                };
                 Ping pingSender = new Ping();
                 string data = "sendData:this is a test!";
                 byte[] buffer = Encoding.ASCII.GetBytes(data);
@@ -64,8 +66,10 @@ namespace Dist.Dme.SRCE.Esri.Utils
                     strIP = Dns.GetHostEntry(strIP).AddressList[0].ToString();
                 }
 
-                Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                sock.SendTimeout = 120;
+                Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+                {
+                    SendTimeout = 120
+                };
 
                 isip = IPAddress.TryParse(strIP, out ip);
 

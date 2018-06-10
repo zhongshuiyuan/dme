@@ -62,13 +62,13 @@ namespace Dist.Dme.SRCE.Esri.Utils
             dataSetName.WorkspaceName = outWorkspaceName;
             dataSetName.Name = inDataSet.Name;
 
-            IFieldChecker fieldChecker = new FieldCheckerClass();
-            fieldChecker.InputWorkspace = inWorkspace;
-            fieldChecker.ValidateWorkspace = OutWorkspace;
+            IFieldChecker fieldChecker = new FieldCheckerClass
+            {
+                InputWorkspace = inWorkspace,
+                ValidateWorkspace = OutWorkspace
+            };
             IFields fields = InputFeatureClass.Fields;
-            IFields outFields = null;
-            IEnumFieldError enumFieldError = null;
-            fieldChecker.Validate(fields, out enumFieldError, out outFields);
+            fieldChecker.Validate(fields, out IEnumFieldError enumFieldError, out IFields outFields);
             IFeatureDataConverter featureDataConverter = null;
 
             IField geometryField;
@@ -349,17 +349,18 @@ namespace Dist.Dme.SRCE.Esri.Utils
             {
                 IFeatureWorkspaceAnno pAnnoWrksps = pTargetWrksps as IFeatureWorkspaceAnno;
                 if (pAnnoWrksps == null || pRefAnnoFtCls == null) return null;
-                IAnnotationClassExtension pAnnoExten = pRefAnnoFtCls.Extension as IAnnotationClassExtension;
-                if (pAnnoExten != null)
+                if (pRefAnnoFtCls.Extension is IAnnotationClassExtension pAnnoExten)
                 {
                     IClone pClone = pAnnoExten.AnnoProperties as IClone;
                     IAnnotateLayerPropertiesCollection pAnnoProCol = (IAnnotateLayerPropertiesCollection)pClone.Clone();
 
                     esriUnits eUnits = pAnnoExten.ReferenceScaleUnits;
                     double dbScale = pAnnoExten.ReferenceScale;
-                    IGraphicsLayerScale pGraScale = new GraphicsLayerScaleClass();
-                    pGraScale.ReferenceScale = dbScale;
-                    pGraScale.Units = eUnits;
+                    IGraphicsLayerScale pGraScale = new GraphicsLayerScaleClass
+                    {
+                        ReferenceScale = dbScale,
+                        Units = eUnits
+                    };
 
                     pClone = pAnnoExten.SymbolCollection as IClone;
                     ISymbolCollection pSymbolCol = (ISymbolCollection)pClone.Clone();

@@ -14,9 +14,15 @@ using Dist.Dme.SRCE.Esri.Utils;
 
 namespace Dist.Dme.SRCE.Esri.Utils
 {
-    public sealed class WorkspaceServices
+    public sealed class WorkspaceUtil
     {
-        private static log4net.ILog LOG = LogManager.GetLogger(typeof(WorkspaceServices));
+        private static log4net.ILog LOG = LogManager.GetLogger(typeof(WorkspaceUtil));
+        /// <summary>
+        /// 通过sde连接信息打开工作空间
+        /// 格式："SERVER=Kona;DATABASE=sde;INSTANCE=5151;USER=Editor;PASSWORD=Editor;VERSION=sde.DEFAULT" 
+        /// </summary>
+        /// <param name="connstr">sde连接信息</param>
+        /// <returns></returns>
         public static IWorkspace OpenSdeWorkspace(string connstr)
         {
             try
@@ -38,7 +44,7 @@ namespace Dist.Dme.SRCE.Esri.Utils
         /// </summary>
         /// <param name="pWorkspace"></param>
         /// <returns></returns>
-        public static string GetConnectStr(IWorkspace pWorkspace)
+        public static string GetSDEConnectStr(IWorkspace pWorkspace)
         {
             if (pWorkspace == null) return "";
             string str = "SERVER={0};INSTANCE={1};VERSION=sde.DEFAULT;USER={2};PASSWORD={3}";
@@ -51,7 +57,7 @@ namespace Dist.Dme.SRCE.Esri.Utils
         }
 
         /// <summary>
-        /// 创建MDB工作空间
+        /// 打开MDB工作空间
         /// </summary>
         /// <param name="strFilePath"></param>
         /// <returns></returns>
@@ -82,7 +88,17 @@ namespace Dist.Dme.SRCE.Esri.Utils
         }
 
         #region 空间数据库操作服务
-        public static IWorkspace OpenSdeWorkspace(string user, string password, string server, string instance, string database, string version)
+        /// <summary>
+        /// 通过直连方式打开SDE工作空间
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <param name="server"></param>
+        /// <param name="instance">sde:oracle11g:orcl</param>
+        /// <param name="database">数据库实例名</param>
+        /// <param name="version">默认版本，SDE.DEFAULT</param>
+        /// <returns></returns>
+        public static IWorkspace OpenSdeWorkspace(string user, string password, string server, string instance, string database, string version = "SDE.DEFAULT")
         {
             try
             {
@@ -108,9 +124,9 @@ namespace Dist.Dme.SRCE.Esri.Utils
         }
 
         /// <summary>
-        /// 连接SDE
+        /// 通过sde文件连接SDE
         /// </summary>
-        /// <param name="sdeFile"></param>
+        /// <param name="sdeFile">sde的连接配置文件</param>
         /// <param name="message"></param>
         /// <returns></returns>
         public static IWorkspace OpenSdeWorkspace(string sdeFile, out string sdeUser, out string message)
@@ -861,22 +877,22 @@ namespace Dist.Dme.SRCE.Esri.Utils
             IWorkspace pWorkspace = null;
             if (sourceLayer.IndexOf(".shp") != -1)
             {
-                pWorkspace = WorkspaceServices.OpenShapeFileWorkspace(PathName);
+                pWorkspace = WorkspaceUtil.OpenShapeFileWorkspace(PathName);
             }
             else if (sourceLayer.IndexOf(".mdb") != -1)
             {
                 PathName = sourceLayer.Substring(0, sourceLayer.IndexOf(".mdb") + 4);
-                pWorkspace = WorkspaceServices.OpenMdbWorspace(PathName);
+                pWorkspace = WorkspaceUtil.OpenMdbWorspace(PathName);
             }
             else if (sourceLayer.IndexOf(".gdb") != -1)
             {
                 PathName = sourceLayer.Substring(0, sourceLayer.IndexOf(".gdb") + 4);
-                pWorkspace = WorkspaceServices.OpenFileGdbWorkspace(PathName);
+                pWorkspace = WorkspaceUtil.OpenFileGdbWorkspace(PathName);
             }
             else if (sourceLayer.IndexOf(".sde") != -1)
             {
                 PathName = sourceLayer.Substring(0, sourceLayer.IndexOf(".sde") + 4);
-                pWorkspace = WorkspaceServices.OpenSdeWorkspace(PathName, out string user, out string message);
+                pWorkspace = WorkspaceUtil.OpenSdeWorkspace(PathName, out string user, out string message);
             }
             return pWorkspace;
         }
@@ -893,10 +909,10 @@ namespace Dist.Dme.SRCE.Esri.Utils
                 {
                     string pLayerName = System.IO.Path.GetFileName(sourceLayer);
  
-                    IWorkspace pWorkspace = WorkspaceServices.OpenWorkspace(sourceLayer);
+                    IWorkspace pWorkspace = WorkspaceUtil.OpenWorkspace(sourceLayer);
                    
                     IFeatureClass featureClass = (pWorkspace as IFeatureWorkspace).OpenFeatureClass(pLayerName);
-                    IWorkspace pOutWorkspace = WorkspaceServices.OpenWorkspace(targetDatabase);
+                    IWorkspace pOutWorkspace = WorkspaceUtil.OpenWorkspace(targetDatabase);
 
                     ExportUtil exportUtil = new ExportUtil
                     {
@@ -926,7 +942,7 @@ namespace Dist.Dme.SRCE.Esri.Utils
             string[] paths = featureClassPath.Split(featureClassPathSeparator);
             if (2 == paths.Length)
             {
-                workspace = WorkspaceServices.OpenWorkspace(paths[0]) as IFeatureWorkspace;
+                workspace = WorkspaceUtil.OpenWorkspace(paths[0]) as IFeatureWorkspace;
                 featureClass = workspace.OpenFeatureClass(paths[1]);
             }
             else
@@ -936,5 +952,29 @@ namespace Dist.Dme.SRCE.Esri.Utils
             }
         }
         #endregion
+        /// <summary>
+        /// 释放对象
+        /// </summary>
+        /// <param name="obj"></param>
+        public static void ReleaseComObject(object obj)
+        {
+            try
+            {
+                if ((obj != null))
+                {
+                    int nCount = 0;
+                    do
+                    {
+                        nCount = System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
+                    }
+                    while ((nCount > 0));
+                }
+                obj = null;
+            }
+            catch (Exception ex)
+            {
+                LOG.Error("释放对象出错", ex);
+            }
+        }
     }
 }
