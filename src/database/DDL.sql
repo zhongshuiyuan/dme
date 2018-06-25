@@ -263,26 +263,26 @@ comment on column DME_LOG.ObjectValue
   
   alter table DME_LOG add primary key(ID);
   
-  CREATE TABLE DME_DatabaseType
+  CREATE TABLE DME_DataSource_Type
 (
 	"ID" NUMBER(8) NOT NULL,
 	"SYSCODE" VARCHAR2(38) NOT NULL,
 	"CODE" VARCHAR2(50),
 	"REMARK" VARCHAR2(255)
 );
-comment on table DME_DATABASETYPE
+comment on table DME_DataSource_Type
   is '数据库类型';
 -- Add comments to the columns 
-comment on column DME_DATABASETYPE.id
+comment on column DME_DataSource_Type.id
   is '主键';
-comment on column DME_DATABASETYPE.syscode
+comment on column DME_DataSource_Type.syscode
   is '唯一编码';
-comment on column DME_DATABASETYPE.code
+comment on column DME_DataSource_Type.code
   is '编码';
-comment on column DME_DATABASETYPE.remark
+comment on column DME_DataSource_Type.remark
   is '备注';
 
-alter table DME_DATABASETYPE add primary key(ID);
+alter table DME_DataSource_Type add primary key(ID);
 
 
 CREATE TABLE DME_Algorithm
@@ -476,7 +476,7 @@ start with 1
 increment by 1
 cache 20;
 
-create sequence SEQ_DME_DATABASETYPE
+create sequence SEQ_DME_DATASOURCE_TYPE
 minvalue 1
 maxvalue 9999999999999999999999999
 start with 1

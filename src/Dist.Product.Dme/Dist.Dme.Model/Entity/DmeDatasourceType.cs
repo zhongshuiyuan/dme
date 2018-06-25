@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Dist.Dme.Model.Entity
 {
-    [SugarTable("DME_DATABASETYPE")]
-    public class DmeDatabaseType
+    [SugarTable("DME_DATASOURCE_TYPE")]
+    public class DmeDataSourceType
     {
-        [SugarColumn(IsPrimaryKey = true, ColumnName = "ID", OracleSequenceName = "SEQ_DME_DATABASETYPE")]
+        [SugarColumn(IsPrimaryKey = true, ColumnName = "ID", OracleSequenceName = "SEQ_DME_DATASOURCE_TYPE")]
         public int Id { get; set; }
         public String SysCode { get; set; }
         public String Code { get; set; }

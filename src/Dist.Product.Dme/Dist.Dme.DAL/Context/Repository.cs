@@ -36,7 +36,7 @@ namespace Dist.Dme.DAL.Context
         /// <summary>
         /// 用来处理DmeDatabaseType表的常用操作
         /// </summary>
-        public MySimpleClient<DmeDatabaseType> DmeDatabaseTypeDb { get { return new MySimpleClient<DmeDatabaseType>(base.GetDbContext()); } }
+        public MySimpleClient<DmeDataSourceType> DmeDatabaseTypeDb { get { return new MySimpleClient<DmeDataSourceType>(base.GetDbContext()); } }
         /// <summary>
         /// 用来处理DmeDataSource表的常用操作
         /// </summary>

@@ -22,13 +22,13 @@ namespace Dist.Dme.Service.Impls
             base.Repository = repository;
             this.mongoHost = host;
         }
-        public List<DmeDatabaseType> ListDatabaseTypes()
+        public List<DmeDataSourceType> ListDatabaseTypes()
         {
-            return base.Repository.GetDbContext().Queryable<DmeDatabaseType>().ToList();
+            return base.Repository.GetDbContext().Queryable<DmeDataSourceType>().ToList();
         }
-        public DmeDatabaseType GetDatabaseType(int id)
+        public DmeDataSourceType GetDatabaseType(int id)
         {
-            return base.Repository.GetDbContext().Queryable<DmeDatabaseType>().Single(dt => dt.Id == id);
+            return base.Repository.GetDbContext().Queryable<DmeDataSourceType>().Single(dt => dt.Id == id);
         }
 
         public object AddDataSource(DatasourceAddDTO datasourceAddDTO)

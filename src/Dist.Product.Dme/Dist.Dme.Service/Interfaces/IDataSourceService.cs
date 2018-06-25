@@ -16,13 +16,13 @@ namespace Dist.Dme.Service.Interfaces
         /// 获取所有数据库类型
         /// </summary>
         /// <returns></returns>
-        List<DmeDatabaseType> ListDatabaseTypes();
+        List<DmeDataSourceType> ListDatabaseTypes();
         /// <summary>
         /// 获取单个数据库类型
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        DmeDatabaseType GetDatabaseType(int id);
+        DmeDataSourceType GetDatabaseType(int id);
         /// <summary>
         /// 添加数据源实例
         /// </summary>
