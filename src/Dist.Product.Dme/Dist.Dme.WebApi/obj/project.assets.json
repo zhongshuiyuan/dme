@@ -5893,6 +5893,22 @@
           "bin/placeholder/Dist.Dme.Algorithms.LandConflictDetection.dll": {}
         }
       },
+      "Dist.Dme.Algorithms.Overlay/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.0",
+        "dependencies": {
+          "Dist.Dme.Base": "1.0.0",
+          "Dist.Dme.SRCE": "1.0.0",
+          "ESRI.ArcGIS.Version": "10.1.0.3035",
+          "log4net": "2.0.8"
+        },
+        "compile": {
+          "bin/placeholder/Dist.Dme.Algorithms.Overlay.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Dist.Dme.Algorithms.Overlay.dll": {}
+        }
+      },
       "Dist.Dme.Base/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.0",
@@ -5976,9 +5992,11 @@
         "framework": ".NETCoreApp,Version=v2.0",
         "dependencies": {
           "Dist.Dme.Algorithms.LandConflictDetection": "1.0.0",
+          "Dist.Dme.Algorithms.Overlay": "1.0.0",
           "Dist.Dme.DAL": "1.0.0",
           "Dist.Dme.DisFS": "1.0.0",
-          "Dist.Dme.Model": "1.0.0"
+          "Dist.Dme.Model": "1.0.0",
+          "Newtonsoft.Json": "11.0.2"
         },
         "compile": {
           "bin/placeholder/Dist.Dme.Service.dll": {}
@@ -5991,6 +6009,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.0",
         "dependencies": {
+          "Dist.Dme.Base": "1.0.0",
+          "Dist.Dme.Model": "1.0.0",
           "ESRI.ArcGIS.AnalysisTools": "10.1.0.3035",
           "ESRI.ArcGIS.Carto": "10.1.0.3035",
           "ESRI.ArcGIS.DataManagementTools": "10.1.0.3035",
@@ -15374,6 +15394,11 @@
       "path": "../Dist.Dme.Algorithms/Dist.Dme.Algorithms.LandConflictDetection/Dist.Dme.Algorithms.LandConflictDetection.csproj",
       "msbuildProject": "../Dist.Dme.Algorithms/Dist.Dme.Algorithms.LandConflictDetection/Dist.Dme.Algorithms.LandConflictDetection.csproj"
     },
+    "Dist.Dme.Algorithms.Overlay/1.0.0": {
+      "type": "project",
+      "path": "../Dist.Dme.Algorithms/Dist.Dme.Algorithms.Overlay/Dist.Dme.Algorithms.Overlay.csproj",
+      "msbuildProject": "../Dist.Dme.Algorithms/Dist.Dme.Algorithms.Overlay/Dist.Dme.Algorithms.Overlay.csproj"
+    },
     "Dist.Dme.Base/1.0.0": {
       "type": "project",
       "path": "../Dist.Dme.Base/Dist.Dme.Base.csproj",
@@ -15412,7 +15437,6 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
-      "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj",
       "Dist.Dme.Base >= 1.0.0",
       "Dist.Dme.DisCache >= 1.0.0",
       "Dist.Dme.DisFS >= 1.0.0",
@@ -15474,9 +15498,6 @@
             },
             "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj": {
               "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj"
-            },
-            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj"
             }
           }
         }
@@ -15520,15 +15541,6 @@
     }
   },
   "logs": [
-    {
-      "code": "NU1105",
-      "level": "Error",
-      "message": "找不到“D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj”的项目信息。项目文件可能无效或可能缺少还原必需的目标。",
-      "libraryId": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v2.0"
-      ]
-    },
     {
       "code": "NU1701",
       "level": "Warning",

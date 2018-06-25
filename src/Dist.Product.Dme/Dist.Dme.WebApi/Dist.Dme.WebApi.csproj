@@ -14,11 +14,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-    <DocumentationFile>bin\Debug\netcoreapp2.0\Dist.Dme.WebApi.xml</DocumentationFile>
+    <DocumentationFile>D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.WebApi.xml</DocumentationFile>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <NoWarn>1591</NoWarn>
     <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>D:\gitrep\dme\src\Dist.Product.Dme\Bin\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,11 +40,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dist.Dme.Algorithms\Dist.Dme.Algorithms.Overlay\Dist.Dme.Algorithms.Overlay.csproj" />
     <ProjectReference Include="..\Dist.Dme.Base\Dist.Dme.Base.csproj" />
     <ProjectReference Include="..\Dist.Dme.DisCache\Dist.Dme.DisCache.csproj" />
     <ProjectReference Include="..\Dist.Dme.DisFS\Dist.Dme.DisFS.csproj" />
     <ProjectReference Include="..\Dist.Dme.Service\Dist.Dme.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="register.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

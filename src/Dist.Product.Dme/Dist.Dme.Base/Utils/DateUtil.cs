@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Dist.Dme.Base.Utils
 {
-    public class DateUtil
+    public sealed class DateUtil
     {
         /// <summary>
         /// 获取当前时间毫秒数

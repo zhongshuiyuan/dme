@@ -11,12 +11,14 @@ using System.IO;
 using System.Text;
 using log4net;
 using Dist.Dme.SRCE.Esri.Utils;
+using Dist.Dme.Base.Utils;
 
 namespace Dist.Dme.SRCE.Esri.Utils
 {
     public sealed class WorkspaceUtil
     {
         private static log4net.ILog LOG = LogManager.GetLogger(typeof(WorkspaceUtil));
+
         /// <summary>
         /// 通过sde连接信息打开工作空间
         /// 格式："SERVER=Kona;DATABASE=sde;INSTANCE=5151;USER=Editor;PASSWORD=Editor;VERSION=sde.DEFAULT" 
@@ -98,14 +100,14 @@ namespace Dist.Dme.SRCE.Esri.Utils
         /// <param name="database">数据库实例名</param>
         /// <param name="version">默认版本，SDE.DEFAULT</param>
         /// <returns></returns>
-        public static IWorkspace OpenSdeWorkspace(string user, string password, string server, string instance, string database, string version = "SDE.DEFAULT")
+        public static IWorkspace OpenSdeWorkspace(string user, string password, string server, string instance = "sde:oracle11g", string database = "ORCL", string version = "SDE.DEFAULT")
         {
             try
             {
                 IPropertySet propertySet = new PropertySetClass();
                 propertySet.SetProperty("SERVER", server);
-                propertySet.SetProperty("INSTANCE", instance);
-                propertySet.SetProperty("DATABASE", database);
+                propertySet.SetProperty("INSTANCE", $"sde:oracle11g:{server}/{database}");
+                // propertySet.SetProperty("DATABASE", database);
                 propertySet.SetProperty("USER", user);
                 propertySet.SetProperty("PASSWORD", password);
                 propertySet.SetProperty("VERSION", version);
@@ -192,7 +194,11 @@ namespace Dist.Dme.SRCE.Esri.Utils
             }
             return pWorkSpace;
         }
-
+        /// <summary>
+        /// 打开gdb文件
+        /// </summary>
+        /// <param name="database"></param>
+        /// <returns></returns>
         public static IWorkspace OpenFileGdbWorkspace(string database)
         {
             try
@@ -209,7 +215,11 @@ namespace Dist.Dme.SRCE.Esri.Utils
                 return null;
             }
         }
-
+        /// <summary>
+        /// 打开personal geodatabase工作空间
+        /// </summary>
+        /// <param name="database">mdb文件所在的路径</param>
+        /// <returns></returns>
         public static IWorkspace OpenPGDBWorkspace(string database)
         {
             try
@@ -226,30 +236,17 @@ namespace Dist.Dme.SRCE.Esri.Utils
                 return null;
             }
         }
-
-        public static IWorkspace OpenShapeFileWorkspace(string dirName)
-        {
-            IWorkspaceFactory workspaceFactory = null;
-            try
-            {
-                workspaceFactory = null;
-                workspaceFactory = new ShapefileWorkspaceFactory();
-            }
-            catch (Exception ex)
-            {
-                LOG.Error("shape文件打开错误，详情：" + ex.Message);
-                // Console.WriteLine("空间数据库打开错误");
-                return null;
-            }
-            return workspaceFactory.OpenFromFile(dirName, 0);
-        }
-
-        public static IWorkspace OpenShpFileWorkspace(string workspacePath)
+        /// <summary>
+        /// 打开shape文件工作空间
+        /// </summary>
+        /// <param name="shapeFileFoderPath">shape文件所在的文件夹</param>
+        /// <returns></returns>
+        public static IWorkspace OpenShapeFileWorkspace(string shapeFileFoderPath)
         {
             IWorkspaceFactory workspaceFactory = new ShapefileWorkspaceFactoryClass(); ;
             IWorkspace pWorkspace = null;
             IPropertySet pSet = new PropertySetClass();
-            pSet.SetProperty("DATABASE", workspacePath);
+            pSet.SetProperty("DATABASE", shapeFileFoderPath);
             try
             {
                 pWorkspace = workspaceFactory.Open(pSet, 0);
@@ -262,15 +259,42 @@ namespace Dist.Dme.SRCE.Esri.Utils
             }
             return pWorkspace;
         }
-
-        public static IWorkspace OpenCadWorkspace(string cadFilePath)
+        /// <summary>
+        /// 打开coverage工作空间
+        /// </summary>
+        /// <param name="coverageFoderPath">coverage所在文件夹路径</param>
+        /// <returns></returns>
+        public static IWorkspace OpenCoverageWorkspace(string coverageFoderPath)
+        {
+            IWorkspaceFactory workspaceFactory = new ArcInfoWorkspaceFactory(); ;
+            IWorkspace pWorkspace = null;
+          
+            try
+            {
+                pWorkspace = workspaceFactory.OpenFromFile(coverageFoderPath, 0);
+            }
+            catch (Exception ex)
+            {
+                LOG.Error("coverage文件打开错误，详情：" + ex.Message);
+                return null;
+            }
+            return pWorkspace;
+        }
+        /// <summary>
+        /// 打开CAD工作空间
+        /// PS：打开cad要素时候，需要注意格式：cad文件名:要素类名称。cad文件名需要包含扩展名
+        /// 如："buildings.dxf:polygon"
+        /// </summary>
+        /// <param name="cadFolderPath">cad所在的文件夹路径</param>
+        /// <returns></returns>
+        public static IWorkspace OpenCadWorkspace(string cadFolderPath)
         {
             IWorkspaceFactory pCADWorkSpaceFc = null;
             IWorkspace pWorkspace = null;
             try
             {
                 pCADWorkSpaceFc = new CadWorkspaceFactoryClass();
-                pWorkspace = pCADWorkSpaceFc.OpenFromFile(cadFilePath, 0);
+                pWorkspace = pCADWorkSpaceFc.OpenFromFile(cadFolderPath, 0);
             }
             catch (Exception ex)
             {
@@ -280,35 +304,20 @@ namespace Dist.Dme.SRCE.Esri.Utils
             }
             return pWorkspace;
         }
-
-        public static IWorkspace OpenArcInfoWorkspace(string dirPath)
-        {
-            IPropertySet propertySet = new PropertySetClass();
-            propertySet.SetProperty("DATABASE", dirPath);
-            IWorkspaceFactory pFactory = new ArcInfoWorkspaceFactoryClass();
-            IWorkspace pWorkspace = null;
-            try
-            {
-                pWorkspace = pFactory.Open(propertySet, 0);
-            }
-            catch (Exception ex)
-            {
-                LOG.Error("arcinfo文件打开错误，详情：" + ex.Message);
-                // Console.WriteLine("空间数据库打开错误");
-                return null;
-            }
-            pFactory = null;
-            return pWorkspace;
-        }
-
-        public static IWorkspace OpenRasterWorkspace(string rasterFilePath)
+    
+        /// <summary>
+        /// 打开栅格数据工作空间
+        /// </summary>
+        /// <param name="rasterFolderPath">栅格数据所在的文件夹路径</param>
+        /// <returns></returns>
+        public static IWorkspace OpenRasterWorkspace(string rasterFolderPath)
         {
             IWorkspaceFactory pRasterWorkSpaceFc = null;
             IWorkspace pWorkspace = null;
             try
             {
                 pRasterWorkSpaceFc = new RasterWorkspaceFactoryClass();
-                pWorkspace = pRasterWorkSpaceFc.OpenFromFile(rasterFilePath, 0);
+                pWorkspace = pRasterWorkSpaceFc.OpenFromFile(rasterFolderPath, 0);
             }
             catch (Exception ex)
             {
@@ -318,61 +327,33 @@ namespace Dist.Dme.SRCE.Esri.Utils
             }
             return pWorkspace;
         }
-
-        public static ITinWorkspace OpenTinWorkspace(string tinPath)
+        /// <summary>
+        /// 打开不规则三角网数据工作空间
+        /// </summary>
+        /// <param name="tinFolderPath">TIN所在文件夹路径</param>
+        /// <returns></returns>
+        public static IWorkspace OpenTinWorkspace(string tinFolderPath)
         {
             IWorkspaceFactory pTinWorkSpaceFc = null;
-            ITinWorkspace pWorkspace = null;
-            try
-            {
-                pTinWorkSpaceFc = new TinWorkspaceFactoryClass();
-                pWorkspace = (ITinWorkspace)pTinWorkSpaceFc.OpenFromFile(tinPath, 0);
-            }
-            catch (Exception ex)
-            {
-                LOG.Error("空间数据库打开错误" + ex.Message);
-                return null;
-            }
-            return pWorkspace;
-        }
-        public static IWorkspace OpenCADWorkspace(string CADFolderPath)
-        {
-            IWorkspaceFactory pCADWorkSpaceFc = null;
             IWorkspace pWorkspace = null;
             try
             {
-                pCADWorkSpaceFc = new CadWorkspaceFactoryClass();
-                pWorkspace = pCADWorkSpaceFc.OpenFromFile(CADFolderPath, 0);
+                pTinWorkSpaceFc = new TinWorkspaceFactoryClass();
+                pWorkspace = pTinWorkSpaceFc.OpenFromFile(tinFolderPath, 0);
             }
             catch (Exception ex)
             {
-                LOG.Error(ex);
+                LOG.Error("TIN数据开错误" + ex.Message);
+                return null;
             }
             return pWorkspace;
         }
 
         /// <summary>
-        /// for ArcInfo coverages and Info tables.
+        /// 打开本地Excel工作空间
         /// </summary>
-        /// <param name="DirPath"></param>
+        /// <param name="ExcelFilePath"></param>
         /// <returns></returns>
-        public static IWorkspace OpenArcinfoWorkspace(string DirPath)
-        {
-            IWorkspaceFactory pArcinfoWorkSpaceFc = null;
-            IWorkspace pWorkspace = null;
-            try
-            {
-                pArcinfoWorkSpaceFc = new ArcInfoWorkspaceFactoryClass();
-                pWorkspace = pArcinfoWorkSpaceFc.OpenFromFile(DirPath, 0);
-            }
-            catch (Exception ex)
-            {
-                LOG.Error(ex);
-            }
-            return pWorkspace;
-
-        }
-
         public static IWorkspace OpenExcelWorkspace(string ExcelFilePath)
         {
             IWorkspaceFactory pExcelWorkSpaceFc = null;
@@ -477,7 +458,7 @@ namespace Dist.Dme.SRCE.Esri.Utils
 
         #endregion
 
-        #region//数据库内容操作
+        #region 数据库内容操作
         public static bool IsTableExist(IWorkspace wrkSpace, string featClass)
         {
             try
@@ -524,34 +505,33 @@ namespace Dist.Dme.SRCE.Esri.Utils
         }
 
 
-        public static IFeatureDataset GetFeatureDataset(IWorkspaceName workspaceName, string FeatureDatasetName)
+        public static IFeatureDataset GetFeatureDataset(IWorkspaceName workspaceName, string featureDatasetName)
         {
             try
             {
                 IDatasetName pFeatureDatasetName = new FeatureDatasetNameClass
                 {
-                    Name = FeatureDatasetName,
+                    Name = featureDatasetName,
                     WorkspaceName = workspaceName
                 };
-
                 //Open the FeatureDataset
                 IName name = (IName)pFeatureDatasetName;
                 return (IFeatureDataset)name.Open();
             }
             catch (Exception ex)
             {
-                LOG.Error(ex);
+                LOG.Error($"打开数据集[{featureDatasetName}]失败", ex);
             }
             return null;
         }
 
-        public static IFeatureDataset GetCoverageDataset(IWorkspaceName workspaceName, string CoverageDatasetName)
+        public static IFeatureDataset GetCoverageDataset(IWorkspaceName workspaceName, string coverageDatasetName)
         {
             try
             {
                 IDatasetName pCoverageDatasetName = new CoverageNameClass
                 {
-                    Name = CoverageDatasetName,
+                    Name = coverageDatasetName,
                     WorkspaceName = workspaceName
                 };
 
@@ -579,28 +559,33 @@ namespace Dist.Dme.SRCE.Esri.Utils
             return pFeatureClassName;
 
         }
-
-        public static IFeatureClass GetFeatureClass(IWorkspace workspace, string strFeaDataset, string strFeaclass)
+        /// <summary>
+        /// 获取数据集下的要素类
+        /// </summary>
+        /// <param name="workspace">工作空间</param>
+        /// <param name="featureDatasetName">数据集名称</param>
+        /// <param name="featureClassName">要素类名称</param>
+        /// <returns></returns>
+        public static IFeatureClass GetFeatureClass(IWorkspace workspace, string featureDatasetName, string featureClassName)
         {
             IDataset dataset = (IDataset)workspace;
             IEnumDataset enumDataset = dataset.Subsets;
             enumDataset.Reset();
             //get the datasets from enumerator     
-            IDataset dataset2 = enumDataset.Next();
+            IDataset datasetNext = enumDataset.Next();
             //loop through the datasets    
 
-            while (dataset2 != null)
+            while (datasetNext != null)
             {
-
-                if (dataset2.Name == strFeaDataset)
+                if (datasetNext.Name == featureDatasetName)
                 {
-                    IEnumDataset enumDataset2 = dataset2.Subsets;
+                    IEnumDataset enumDataset2 = datasetNext.Subsets;
                     enumDataset2.Reset();
                     IDataset dataset3 = enumDataset2.Next();
                     while (dataset3 != null)
                     {
 
-                        if (dataset3.Name == strFeaclass)
+                        if (dataset3.Name == featureClassName)
                         {
                             return (IFeatureClass)dataset3;
                         }
@@ -608,11 +593,9 @@ namespace Dist.Dme.SRCE.Esri.Utils
                     }
                 }
 
-                dataset2 = enumDataset.Next();
+                datasetNext = enumDataset.Next();
             }
             return null;
-
-
         }
         public static IAnnotationLayer GetAnnotationLayer(IFeatureWorkspace featWrk, IFeatureDataset featDS, string annolayerName)
         {
@@ -630,12 +613,17 @@ namespace Dist.Dme.SRCE.Esri.Utils
 
             return annoLayer;
         }
-        public static IFeatureClass GetFeatureClass(IWorkspace pWorkspace, string FeaClsName)
+        /// <summary>
+        /// 获取要素类
+        /// </summary>
+        /// <param name="pWorkspace">工作空间</param>
+        /// <param name="featureClsName">要素类名称</param>
+        /// <returns></returns>
+        public static IFeatureClass GetFeatureClass(IWorkspace pWorkspace, string featureClsName)
         {
-
             IFeatureWorkspace featureWorkspace = (IFeatureWorkspace)pWorkspace;
             //open the featureclass
-            return featureWorkspace.OpenFeatureClass(FeaClsName);
+            return featureWorkspace.OpenFeatureClass(featureClsName);
 
         }
 
@@ -810,7 +798,7 @@ namespace Dist.Dme.SRCE.Esri.Utils
             return null;
         }
 
-        public static IDataset GetFeatureDataset(IWorkspace pWorkspace, string FeatureDSName)
+        public static IDataset GetFeatureDataset(IWorkspace pWorkspace, string featureDSName)
         {
             IDataset pDataset = null;
             IEnumDataset pEnumDataset;
@@ -821,38 +809,34 @@ namespace Dist.Dme.SRCE.Esri.Utils
                 pDataset = pEnumDataset.Next();
                 while (pDataset != null)
                 {
-                    if (pDataset.Name == FeatureDSName)
+                    if (pDataset.Name == featureDSName)
                     {
                         return pDataset;
                     }
                     pDataset = pEnumDataset.Next();
                 }
-
-
             }
             catch
             {
 
             }
             return null;
-
         }
 
-        public static IFeatureClassName GetFeatureClassName(IFeatureDatasetName pFeatureDatasetName, string FeatureClassName)
+        public static IFeatureClassName GetFeatureClassName(IFeatureDatasetName pFeatureDatasetName, string featureClassName)
         {
             IDatasetName pContainDSName;
             pContainDSName = (IDatasetName)pFeatureDatasetName;
-            IEnumDatasetName pEnumDsName4FC;
-            pEnumDsName4FC = (IEnumDatasetName)pFeatureDatasetName.FeatureClassNames;
-            IFeatureClassName pfeaClsName;
-            pfeaClsName = (IFeatureClassName)pEnumDsName4FC.Next();
+            IEnumDatasetName pEnumDsName4FC = (IEnumDatasetName)pFeatureDatasetName.FeatureClassNames;
+            IFeatureClassName pfeaClsName = (IFeatureClassName)pEnumDsName4FC.Next();
+
             IDatasetName pFC_DSName;
             try
             {
                 while (pfeaClsName != null)
                 {
                     pFC_DSName = (IDatasetName)pfeaClsName;
-                    if (pFC_DSName.Name == FeatureClassName)
+                    if (pFC_DSName.Name == featureClassName)
                     {
                         return pfeaClsName;
                     }
@@ -862,7 +846,6 @@ namespace Dist.Dme.SRCE.Esri.Utils
             }
             catch
             {
-
             }
             return null;
         }
@@ -913,18 +896,12 @@ namespace Dist.Dme.SRCE.Esri.Utils
                    
                     IFeatureClass featureClass = (pWorkspace as IFeatureWorkspace).OpenFeatureClass(pLayerName);
                     IWorkspace pOutWorkspace = WorkspaceUtil.OpenWorkspace(targetDatabase);
-
-                    ExportUtil exportUtil = new ExportUtil
-                    {
-                        InputFeatureClass = featureClass,
-                        OutWorkspace = pOutWorkspace
-                    };
-                    exportUtil.Excute();
+                    FeatureClassUtil.ExportToWorkspace(featureClass, pOutWorkspace);
                 }
                 catch (Exception ex)
                 {
                     LOG.Error("拷贝图层失败，详情：" + ex.Message);
-                    return false;
+                    continue;
                 }
             }
             LOG.Info("完成拷贝图层");
@@ -975,6 +952,17 @@ namespace Dist.Dme.SRCE.Esri.Utils
             {
                 LOG.Error("释放对象出错", ex);
             }
+        }
+        /// <summary>
+        /// 获取要素类的工作空间
+        /// </summary>
+        /// <param name="featureClass"></param>
+        /// <returns></returns>
+        public static IWorkspace GetWorkspace(IFeatureClass featureClass)
+        {
+            IDataset dataset = featureClass as IDataset;
+            if (dataset == null) return null;
+            return dataset.Workspace;
         }
     }
 }

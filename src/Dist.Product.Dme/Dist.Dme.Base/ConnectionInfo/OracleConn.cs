@@ -7,7 +7,7 @@ namespace Dist.Dme.Base.ConnectionInfo
     /// <summary>
     /// oracle连接信息
     /// </summary>
-    public class Oracle
+    public class OracleConn
     {
         /// <summary>
         /// 自定义名称

@@ -19,3 +19,8 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\bin\x86\Debug\netcoreapp2.0\
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\bin\x86\Debug\netcoreapp2.0\Dist.Dme.DisFS.pdb
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\bin\x86\Debug\netcoreapp2.0\Dist.Dme.SRCE.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\bin\x86\Debug\netcoreapp2.0\Dist.Dme.SRCE.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\bin\x86\Debug\netcoreapp2.0\Dist.Dme.Algorithms.Overlay.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\bin\x86\Debug\netcoreapp2.0\Dist.Dme.Algorithms.Overlay.pdb
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.Service.deps.json
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.Service.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.Service.pdb

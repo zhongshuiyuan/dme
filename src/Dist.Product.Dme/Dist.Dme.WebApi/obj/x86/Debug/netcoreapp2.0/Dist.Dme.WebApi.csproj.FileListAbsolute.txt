@@ -28,3 +28,10 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\D
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.SRCE.pdb
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.Algorithms.Overlay.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\x86\Debug\netcoreapp2.0\Dist.Dme.Algorithms.Overlay.pdb
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.WebApi.xml
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.WebApi.deps.json
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.WebApi.runtimeconfig.json
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.WebApi.runtimeconfig.dev.json
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.WebApi.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.WebApi.pdb
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\register.json

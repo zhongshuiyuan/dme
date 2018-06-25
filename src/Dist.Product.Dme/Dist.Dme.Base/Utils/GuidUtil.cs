@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace Dist.Dme.Base.Utils
 {
-    public class GuidUtil
+    public sealed class GuidUtil
     {
         /// <summary>
         /// 创建一个GUID

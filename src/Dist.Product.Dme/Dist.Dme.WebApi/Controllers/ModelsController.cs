@@ -1,10 +1,12 @@
-﻿using Dist.Dme.Base.Framework;
+﻿using Dist.Dme.Algorithms.LandConflictDetection.DTO;
+using Dist.Dme.Algorithms.Overlay.DTO;
+using Dist.Dme.Base.Framework;
 using Dist.Dme.Model.DTO;
-using Dist.Dme.Plugins.LandConflictDetection.DTO;
 using Dist.Dme.Service.Impls;
 using Dist.Dme.Service.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -51,26 +53,7 @@ namespace Dist.Dme.WebApi.Controllers
             }
             return base.Success(ModelService.GetModelMetadata(code, 1 == detail));
         }
-        /// <summary>
-        /// 获取用地冲突分析输入参数
-        /// </summary>
-        /// <returns></returns>
-        //[HttpGet]
-        //[Route("landconflict/v1/inputparas")]
-        //public Result GetLandConflictInputParameters()
-        //{
-        //    return base.Success(ModelService.GetLandConflictInputParameters());
-        //}
-        /// <summary>
-        /// 获取用地冲突分析输出参数
-        /// </summary>
-        /// <returns></returns>
-        //[HttpGet]
-        //[Route("landconflict/v1/outputparas")]
-        //public Result GetLandConflictOutputParameters()
-        //{
-        //    return base.Success(ModelService.GetLandConflictOutputParameters());
-        //}
+       
         /// <summary>
         /// 获取用地冲突分析元数据信息
         /// </summary>
@@ -95,7 +78,60 @@ namespace Dist.Dme.WebApi.Controllers
             dto.Parameters.Add("Yddm_Second", "YDDM");
             dto.Parameters.Add("Yddm_First", "YDDM");
             
-            return base.Success(ModelService.LandConflictExecute(dto.Parameters));
+            return (Result)ModelService.LandConflictExecute(dto.Parameters);
+        }
+        /// <summary>
+        /// 压盖分析计算
+        /// </summary>
+        /// <param name="dto">参数输入</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("overlay/v1/execute")]
+        public Result OverlayExecute([FromBody][Required]OverlayReqDTO dto)
+        {
+            if (null == dto)
+            {
+                dto = new OverlayReqDTO();
+            }
+            JObject obj = new JObject
+            {
+                { "Name", "TZFAFW" }
+            };
+            JObject sourceObj = new JObject();
+            obj.Add("Source", sourceObj);
+            sourceObj.Add("SysCode", "30143df1123449a896429854899f37f3");
+            sourceObj.Add("IsLocal", 1);
+            sourceObj.Add("Type", "PERSONAL_GEODATABASE");
+            sourceObj.Add("Connection", "{\"Path\":\"D:/work/dist/x_项目管理/f_福建省/x_厦门/02数据/控规调整样例.mdb\"}");
+            dto.Parameters.Add("SourceFeatureClass", obj.ToString());
+            // dto.Parameters.Add("SourceFeatureClass", "{\"Name\":\"TZFAFW\",\"Source\":{\"SysCode\":\"30143df1123449a896429854899f37f3\",\"IsLocal\":1,\"Type\":\"PERSONAL_GEODATABASE\",\"Connection\":\"{\"Path\":\"D:\\work\\dist\\x_项目管理\f_福建省\\x_厦门\\02数据\\控规调整样例.mdb\"}\"}}");
+
+            obj = new JObject
+            {
+                { "Name", "STKZXFW_YDFW" }
+            };
+            sourceObj = new JObject();
+            obj.Add("Source", sourceObj);
+            sourceObj.Add("SysCode", "791b05180d8c4e2186f7684ecf557457");
+            sourceObj.Add("IsLocal", 0);
+            sourceObj.Add("Type", "ENTERPRISE_GEODATABASE");
+            JObject connObj = new JObject
+            {
+                { "name", "厦门空间库" },
+                { "server", "192.168.200.38" },
+                { "database", "orcl" },
+                { "port", 1521},
+                { "username", "xmgis"},
+                { "encrypted", 0},
+                { "password", "xmghj2014"}
+            };
+            sourceObj.Add("Connection", connObj.ToString());
+
+            //sourceObj.Add("Connection", "{\"path\":\"D:\\work\\dist\\x_项目管理\\f_福建省\\x_厦门\\02数据\\控规调整样例.mdb\"}");
+            dto.Parameters.Add("TargetFeatureClass", obj.ToString());
+            // dto.Parameters.Add("TargetFeatureClass", "{\"Name\":\"STKZXFW_YDFW\", \"Source\":{\"SysCode\":\"30143df1123449a896429854899f37f3\",\"IsLocal\":1,\"Type\":\"PERSONAL_GEODATABASE\",\"Connection\":\"{\"name\":\"厦门空间库\",\"server\":\"192.168.200.38\",\"database\":\"orcl\",\"port\":1521,\"username\":\"xmgis\",\"encrypted\":0,\"password\":\"xmghj2014\"}\"}}");
+     
+            return (Result)ModelService.OverlayExecute(dto.Parameters);
         }
         /// <summary>
         /// 注册模型

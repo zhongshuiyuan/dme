@@ -1,13 +1,11 @@
-﻿using ESRI.ArcGIS.Geodatabase;
-using log4net;
+﻿using log4net;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Dist.Dme.SRCE.Esri.Utils
+namespace Dist.Dme.Base.Utils
 {
     /// <summary>
     /// 网络辅助类
@@ -97,13 +95,13 @@ namespace Dist.Dme.SRCE.Esri.Utils
         }
 
         /// <summary>
-        /// 检查SDE服务器连接是否正常
+        /// 检查服务器和端口是否正常
         /// </summary>
         /// <param name="host"></param>
         /// <param name="port"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public static bool CheckSDEConnecTion(string host, int port, out string message)
+        public static bool Telnet(string host, int port, out string message)
         {
             message = string.Empty;
             try

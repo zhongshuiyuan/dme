@@ -8,7 +8,7 @@ namespace Dist.Dme.Base.Utils
     /// <summary>
     /// 目录帮助类
     /// </summary>
-    public class DirectFileUtil
+    public sealed class DirectFileUtil
     {
         /// <summary>
         /// 拷贝文件夹

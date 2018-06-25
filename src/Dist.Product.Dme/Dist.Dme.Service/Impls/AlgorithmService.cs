@@ -9,10 +9,13 @@ using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Interfaces;
 using log4net;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Dist.Dme.Service.Impls
@@ -121,30 +124,63 @@ namespace Dist.Dme.Service.Impls
             return result.Data;
         }
 
+        public static IEnumerable<Type> GetType(Type interfaceType)
+        {
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (var type in assembly.GetTypes())
+                {
+                    foreach (var t in type.GetInterfaces())
+                    {
+                        if (t == interfaceType)
+                        {
+                            yield return type;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         public object ListAlgorithmMetadatasLocal()
         {
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                   .SelectMany(a => a.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IAlgorithm))))
-                   .ToArray();
-            if (null == types || 0 == types.Count())
+            String baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            String registerFile = Path.Combine(new string[] { baseDir, "register.json" });
+            if (!File.Exists(registerFile))
+            {
+                throw new BusinessException(SystemStatusCode.DME_ERROR, $"注册文件[{registerFile}]不存在");
+            }
+            String jsonText = File.ReadAllText(registerFile);
+            JObject jObject = JObject.Parse(jsonText);
+           JToken[] jTokens = jObject["Algorithms"].ToArray<JToken>();
+            if (null == jTokens || 0 == jTokens.Length)
             {
                 return new List<IAlgorithm>();
             }
+            IAlgorithm temp = null;
             // 元数据集合
             IList<object> localAlgorithmMetadatas = new List<object>();
-            IAlgorithm temp = null;
-            foreach (var type in types)
+            foreach (var item in jTokens)
             {
-                if (type.IsAbstract)
-                {
-                    // 抽象类排除
-                    continue;
-                }
                 try
                 {
-                    temp = (IAlgorithm)type.Assembly.CreateInstance(type.FullName, true);
+                    string assemblyPath = Path.Combine(baseDir, item["Assembly"].Value<string>());
+                    Assembly assembly = Assembly.LoadFile(assemblyPath);
+                    if (null == assembly)
+                    {
+                        LOG.Warn($"程序集文件[{assemblyPath}]不存在");
+                        continue;
+                    }
+                    string fullName = item["FullName"].Value<string>();
+                    if (string.IsNullOrEmpty(fullName))
+                    {
+                        LOG.Warn($"接口名称缺失[FullName]");
+                        continue;
+                    }
+                    temp = (IAlgorithm)assembly.CreateInstance(fullName, true);
                     if (null == temp)
                     {
+                        LOG.Warn($"接口[{fullName}]创建实例为空");
                         continue;
                     }
                     localAlgorithmMetadatas.Add(temp.MetadataJSON);
@@ -155,6 +191,7 @@ namespace Dist.Dme.Service.Impls
                     continue;
                 }
             }
+          
             return localAlgorithmMetadatas;
         }
 

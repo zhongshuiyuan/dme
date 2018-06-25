@@ -83,7 +83,7 @@ namespace Dist.Dme.DAL.Context
         {
             var db = new SqlSugarClient(new ConnectionConfig()
             {
-                ConnectionString = SysConfig.DBConnectionString,
+                ConnectionString = GlobalSystemConfig.DBConnectionString,
                 DbType = dbType,
                 InitKeyType = InitKeyType.Attribute,
                 IsAutoCloseConnection = isAutoCloseConnection

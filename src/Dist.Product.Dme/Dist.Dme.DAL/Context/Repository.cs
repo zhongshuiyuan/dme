@@ -17,7 +17,7 @@ namespace Dist.Dme.DAL.Context
         /// <summary>
         /// oracle 类型
         /// </summary>
-        public Repository() : base(DbType.Oracle, SysConfig.DBConnectionString, true)
+        public Repository() : base(DbType.Oracle, GlobalSystemConfig.DBConnectionString, true)
         {
           
         }

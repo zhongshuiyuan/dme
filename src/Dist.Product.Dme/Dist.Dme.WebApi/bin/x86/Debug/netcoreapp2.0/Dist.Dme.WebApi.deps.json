@@ -4819,6 +4819,20 @@
           "Dist.Dme.Algorithms.LandConflictDetection.dll": {}
         }
       },
+      "Dist.Dme.Algorithms.Overlay/1.0.0": {
+        "dependencies": {
+          "Dist.Dme.Base": "1.0.0",
+          "Dist.Dme.SRCE": "1.0.0",
+          "ESRI.ArcGIS.Version": "10.1.0.3035",
+          "log4net": "2.0.8"
+        },
+        "runtime": {
+          "Dist.Dme.Algorithms.Overlay.dll": {}
+        },
+        "compile": {
+          "Dist.Dme.Algorithms.Overlay.dll": {}
+        }
+      },
       "Dist.Dme.Base/1.0.0": {
         "dependencies": {
           "Microsoft.AspNet.WebApi.Core": "5.2.6",
@@ -4890,6 +4904,7 @@
       "Dist.Dme.Service/1.0.0": {
         "dependencies": {
           "Dist.Dme.Algorithms.LandConflictDetection": "1.0.0",
+          "Dist.Dme.Algorithms.Overlay": "1.0.0",
           "Dist.Dme.DAL": "1.0.0",
           "Dist.Dme.DisFS": "1.0.0",
           "Dist.Dme.Model": "1.0.0"
@@ -7576,6 +7591,11 @@
       "hashPath": "windowsazure.storage.8.1.4.nupkg.sha512"
     },
     "Dist.Dme.Algorithms.LandConflictDetection/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Dist.Dme.Algorithms.Overlay/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

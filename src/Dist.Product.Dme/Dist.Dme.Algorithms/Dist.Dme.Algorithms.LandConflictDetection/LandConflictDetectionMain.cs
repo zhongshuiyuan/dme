@@ -1,4 +1,5 @@
 ﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Conf;
 using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.AlgorithmTypes;
 using Dist.Dme.Base.Framework.Interfaces;
@@ -12,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Dist.Dme.Plugins.LandConflictDetection
+namespace Dist.Dme.Algorithms.LandConflictDetection
 {
     /// <summary>
     /// 用地冲突分析
@@ -108,7 +109,7 @@ namespace Dist.Dme.Plugins.LandConflictDetection
                     DirectoryInfo dirInfo = Directory.CreateDirectory(this.ResultGDBPath);
                 }
                 resultGDBPath = Path.Combine(this.ResultGDBPath, string.Format("result_{0}.gdb", DateUtil.CurrentTimeMillis));
-                string pTempletMDBFile = AppDomain.CurrentDomain.BaseDirectory + "template/result.gdb";
+                string pTempletMDBFile = AppDomain.CurrentDomain.BaseDirectory + GlobalSystemConfig.PATH_TEMPLATE_FGDB;// "template/fgdb.gdb";
                 long beginMillisecond = DateUtil.CurrentTimeMillis;
                 // 创建一份gdb
                 DirectFileUtil.CopyDirectInfo(pTempletMDBFile, resultGDBPath);

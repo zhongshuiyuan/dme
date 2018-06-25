@@ -13,3 +13,6 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Algorithms\Dist.Dme.Algorithms.LandC
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Algorithms\Dist.Dme.Algorithms.LandConflictDetection\obj\x86\Debug\netcoreapp2.0\Dist.Dme.Algorithms.LandConflictDetection.pdb
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Algorithms\Dist.Dme.Algorithms.LandConflictDetection\bin\x86\Debug\netcoreapp2.0\Dist.Dme.SRCE.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Algorithms\Dist.Dme.Algorithms.LandConflictDetection\bin\x86\Debug\netcoreapp2.0\Dist.Dme.SRCE.pdb
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.Algorithms.LandConflictDetection.deps.json
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.Algorithms.LandConflictDetection.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.Algorithms.LandConflictDetection.pdb

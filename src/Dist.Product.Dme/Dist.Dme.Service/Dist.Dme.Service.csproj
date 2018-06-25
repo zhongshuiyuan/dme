@@ -11,10 +11,16 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>D:\gitrep\dme\src\Dist.Product.Dme\Bin\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Dist.Dme.Algorithms\Dist.Dme.Algorithms.LandConflictDetection\Dist.Dme.Algorithms.LandConflictDetection.csproj" />
+    <ProjectReference Include="..\Dist.Dme.Algorithms\Dist.Dme.Algorithms.Overlay\Dist.Dme.Algorithms.Overlay.csproj" />
     <ProjectReference Include="..\Dist.Dme.DAL\Dist.Dme.DAL.csproj" />
     <ProjectReference Include="..\Dist.Dme.DisFS\Dist.Dme.DisFS.csproj" />
     <ProjectReference Include="..\Dist.Dme.Model\Dist.Dme.Model.csproj" />

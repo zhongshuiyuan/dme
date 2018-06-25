@@ -75,7 +75,7 @@ namespace Dist.Dme.SRCE.Esri.AnalysisTools.Overlay
             }
             catch (Exception e)
             {
-                LOG.Error(e);
+                LOG.Error($"{nameof(GetTopounionGeometryByQuery)}抛异常", e);
             }
         }
         /// <summary>
@@ -129,12 +129,12 @@ namespace Dist.Dme.SRCE.Esri.AnalysisTools.Overlay
                     {
                         Geometry = feature.Shape,
                         OID = feature.OID,
-                        GeometryCoord = GeometryUtil.ConvertGeometryToJson(intersectGeometry, out string message),
+                        CoordJson = GeometryUtil.ConvertGeometryToJson(intersectGeometry, out string message),
                         Area = GeometryUtil.GetArea(intersectGeometry),
                         QueryGeometry = queryGeometry,
                         IntersectGeometry = intersectGeometry
                     };
-
+                    intersectFeatureDTOs.Add(intersectFeatureDTOTemp);
                     IArea area = intersectGeometry as IArea;
                     double intersectArea = area.Area;
                     sumIntersectArea += intersectArea;
@@ -196,6 +196,68 @@ namespace Dist.Dme.SRCE.Esri.AnalysisTools.Overlay
                 LOG.Error(ex);
             }
             return false;
+        }
+        /// <summary>
+        /// 获取一个面相对于另一个面差异的部分，实现擦除分析功能（Erase）
+        /// </summary>
+        /// <param name="polygon1">是个面对象</param>
+        /// <param name="polygon2">是个面对象</param>
+        /// <returns>获取polygon1中去掉polygon1和polygon2重合部分的部分</returns>
+        public static IGeometry GetDifference(IPolygon polygon1, IPolygon polygon2)
+        {
+            try
+            {
+                ITopologicalOperator topo = polygon1 as ITopologicalOperator;
+                IGeometry differGeom = topo.Difference(polygon2);
+
+                return differGeom;
+            }
+            catch (Exception ex)
+            {
+                LOG.Error(ex);
+            }
+            return null;
+        }
+        /// <summary>
+        /// 两个要素类进行擦除操作
+        /// </summary>
+        /// <param name="sourceFeatureClass">源要素类</param>
+        /// <param name="eraseFeatureClass">用于擦除的要素类，必须是个面要素类</param>
+        public static void Erase(IFeatureClass sourceFeatureClass, IFeatureClass eraseFeatureClass)
+        {
+            if (eraseFeatureClass.ShapeType != esriGeometryType.esriGeometryPolygon)
+            {
+                throw new Exception("EraseFeatureClass不是个面要素类");
+            }
+            if (esriGeometryType.esriGeometryPoint == sourceFeatureClass.ShapeType)
+            {
+                throw new Exception("SourceFeatureClass不能是个点要素类");
+            }
+            // 先要临时复制一个要素类
+
+            // 遍历用于擦除的要素
+            IFeatureCursor eraseFeatureCursor = eraseFeatureClass.Search(null, false);
+            IFeature eraseFeature = null;
+            while ((eraseFeature = eraseFeatureCursor.NextFeature()) != null)
+            {
+                ISpatialFilter spatialFilter = new SpatialFilterClass
+                {
+                    Geometry = eraseFeature.Shape,
+                    SpatialRel = esriSpatialRelEnum.esriSpatialRelIntersects
+                };
+                IFeatureCursor sourceFeatureCursor = sourceFeatureClass.Update(spatialFilter, false);
+                IFeature sourceFeature = null;
+                while ((sourceFeature = sourceFeatureCursor.NextFeature()) != null)
+                {
+                    IGeometry geometry = sourceFeature.ShapeCopy;
+                    ITopologicalOperator topoOper = geometry as ITopologicalOperator;
+                    IGeometry geoDifference = topoOper.Difference(eraseFeature.Shape);
+                    sourceFeature.Shape = geoDifference;
+                    sourceFeatureCursor.UpdateFeature(sourceFeature);
+                }
+                // 释放游标
+                WorkspaceUtil.ReleaseComObject(sourceFeatureCursor);
+            }
         }
     }
 }

@@ -2679,6 +2679,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.0",
         "dependencies": {
+          "Dist.Dme.Base": "1.0.0",
+          "Dist.Dme.Model": "1.0.0",
           "ESRI.ArcGIS.AnalysisTools": "10.1.0.3035",
           "ESRI.ArcGIS.Carto": "10.1.0.3035",
           "ESRI.ArcGIS.DataManagementTools": "10.1.0.3035",

@@ -180,7 +180,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.LandConflictExecute(Dist.Dme.Plugins.LandConflictDetection.DTO.LandConflictReqDTO)">
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.LandConflictExecute(Dist.Dme.Algorithms.LandConflictDetection.DTO.LandConflictReqDTO)">
             <summary>
             用地冲突分析计算
             </summary>

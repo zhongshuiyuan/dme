@@ -1,0 +1,236 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Dist.Dme.WebApi</name>
+    </assembly>
+    <members>
+        <member name="T:Dist.Dme.WebApi.Controllers.AlgorithmController">
+            <summary>
+            算法服务
+            </summary>
+        </member>
+        <member name="P:Dist.Dme.WebApi.Controllers.AlgorithmController.AlgorithmService">
+            <summary>
+            算法服务
+            </summary>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.ListAlgorithm(System.Int32)">
+            <summary>
+            获取所有算法。
+            </summary>
+            <param name="needMeta">是否获取算法的参数信息。0：表示否；1：表示是</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.ListAlgorithmMetadatasLocal">
+            <summary>
+            获取本地DLL算法元数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.RegistryAlgorithm(Dist.Dme.Model.DTO.AlgorithmAddReqDTO)">
+            <summary>
+            注册算法
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.RegistryAlgorithmFromLocal(System.String)">
+            <summary>
+            注册本地算法（从本地DLL获取）
+            </summary>
+            <param name="algCode">算法唯一编码。输入为空，说明是遍历全部</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.ListAlgorithmType">
+            <summary>
+            算法开发平台类型
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.AlgorithmController.ExecuteAlgorithm(System.String,Dist.Dme.Model.DTO.BaseRequestDTO)">
+            <summary>
+            算法的执行器，需要注入算法的参数
+            </summary>
+            <param name="algCode">算法唯一编码</param>
+            <param name="dto">参数信息值，键值对格式</param>
+            <returns></returns>
+        </member>
+        <member name="T:Dist.Dme.WebApi.Controllers.Base.BaseController">
+            <summary>
+            WebApiExceptionFilterAttribute：统一处理异常信息
+            </summary>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.GetHeaderValue(System.String,Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            获得Header
+            </summary>
+            <param name="key">Header的键</param>
+            <returns>获得的值, 获取失败返回null</returns>
+            <param name="request">Request对象, 在Requst还没有初始化的时候需要手动传入, 相反则无需传, 如在过滤器里面, 需要传此参数, 否则只会永远返回null, 传了此参数, 会优先使用此参数</param>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.QueryString(System.String,Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            获得Get请求参数
+            </summary>
+            <param name="key">参数名称</param>
+            <param name="request">Request对象, 在Requst还没有初始化的时候需要手动传入, 相反则无需传, 如在过滤器里面, 需要传此参数, 否则只会永远返回null, 传了此参数, 会优先使用此参数</param>
+            <returns>获得的值, 获取失败返回null</returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.Form(System.String,Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            获得Post请求参数
+            </summary>
+            <param name="key">参数名称</param>
+            <param name="request">Request对象, 在Requst还没有初始化的时候需要手动传入, 相反则无需传, 如在过滤器里面, 需要传此参数, 否则只会永远返回null, 传了此参数, 会优先使用此参数</param>
+            <returns>获得的值, 获取失败返回null</returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.Success(System.Object)">
+            <summary>
+            成功
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.Fail(System.Object)">
+            <summary>
+            失败
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.Error(System.Object)">
+            <summary>
+            错误
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Dist.Dme.WebApi.Controllers.CacheController">
+            <summary>
+            数据源服务
+            </summary>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.CacheController.#ctor(Dist.Dme.DisCache.Interfaces.ICacheService)">
+            <summary>
+            自动注入（DI）
+            </summary>
+            <param name="cacheService"></param>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.CacheController.AddCache(System.Object)">
+            <summary>
+            添加缓存
+            </summary>
+            <param name="keyValuePair">使用动态类型dynamic，传过来是个json字符串，键值对</param>
+            <returns></returns>
+            需要使用FromBody
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.CacheController.GetCache(System.String)">
+            <summary>
+            获取缓存
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Dist.Dme.WebApi.Controllers.DataSourcesController">
+            <summary>
+            数据源服务
+            </summary>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes">
+            <summary>
+            获取所有数据库类型
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.DataSourcesController.GetDatabaseType(System.Int32)">
+            <summary>
+            获取具体某个数据库类型
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Dist.Dme.WebApi.Controllers.ModelsController">
+            <summary>
+            模型服务
+            </summary>
+        </member>
+        <member name="P:Dist.Dme.WebApi.Controllers.ModelsController.ModelService">
+            <summary>
+            模型服务
+            </summary>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.ListModels(System.Int32)">
+            <summary>
+            获取所有模型
+            </summary>
+            <param name="detail">是否获取详情信息，0：否；1：是</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.GetModel(System.String,System.Int32)">
+            <summary>
+            根据模型唯一编码获取模型
+            </summary>
+            <param name="code">模型唯一编码</param>
+            <param name="detail">是否获取详情</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.GetLandConflictMetadata">
+            <summary>
+            获取用地冲突分析元数据信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.LandConflictExecute(Dist.Dme.Algorithms.LandConflictDetection.DTO.LandConflictReqDTO)">
+            <summary>
+            用地冲突分析计算
+            </summary>
+            <param name="dto">参数输入</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.OverlayExecute(Dist.Dme.Algorithms.Overlay.DTO.OverlayReqDTO)">
+            <summary>
+            压盖分析计算
+            </summary>
+            <param name="dto">参数输入</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.NewModel(Dist.Dme.Model.DTO.ModelAddReqDTO)">
+            <summary>
+            注册模型
+            </summary>
+            <param name="dto">参数模型，当SysCode为空时，系统会自动附上一个唯一编码</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.CopyFromModelVersion(System.String)">
+            <summary>
+            根据模型版本进行复制
+            </summary>
+            <param name="modelVersionCode">模型版本唯一编码</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.SaveRuleStepInfos(Dist.Dme.Model.DTO.ModelRuleStepInfoDTO)">
+            <summary>
+            保存整个模型的规则步骤信息
+            </summary>
+            <param name="info">步骤信息</param>
+            <returns></returns>
+        </member>
+        <member name="T:Dist.Dme.WebApi.Controllers.UsersController">
+            <summary>
+            用户服务
+            </summary>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.UsersController.#ctor(Dist.Dme.Service.Interfaces.IUserService)">
+            <summary>
+            自动注入（DI）
+            </summary>
+            <param name="userService"></param>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.UsersController.ListUsers">
+            <summary>
+            获取用户列表
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

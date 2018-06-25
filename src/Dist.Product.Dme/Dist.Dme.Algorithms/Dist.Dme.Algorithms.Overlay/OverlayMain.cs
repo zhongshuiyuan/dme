@@ -1,15 +1,43 @@
-﻿using Dist.Dme.Base.Framework;
+﻿using Dist.Dme.Algorithms.Overlay.DTO;
+using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Conf;
+using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.AlgorithmTypes;
+using Dist.Dme.Base.Framework.Exception;
 using Dist.Dme.Base.Framework.Interfaces;
+using Dist.Dme.Base.Utils;
+using Dist.Dme.Model.DTO;
+using Dist.Dme.SRCE.Core;
+using Dist.Dme.SRCE.Esri;
+using Dist.Dme.SRCE.Esri.AnalysisTools.Overlay;
+using Dist.Dme.SRCE.Esri.DTO;
 using Dist.Dme.SRCE.Esri.Utils;
 using ESRI.ArcGIS;
+using ESRI.ArcGIS.Geodatabase;
+using ESRI.ArcGIS.Geometry;
 using log4net;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
+using System.IO;
 
 namespace Dist.Dme.Algorithms.Overlay
 {
+    /// <summary>
+    /// 分析类型
+    /// </summary>
+    public enum AnalysisType
+    {
+        [Description("压盖分析")]
+        COVER = 0,
+        [Description("超出分析")]
+        OVERTOP = 1
+    }
+    /// <summary>
+    /// 叠加分析
+    /// </summary>
     public class OverlayMain : BaseAlgorithm, IAlgorithm
     {
         private static ILog LOG = LogManager.GetLogger(typeof(OverlayMain));
@@ -18,13 +46,27 @@ namespace Dist.Dme.Algorithms.Overlay
 
         public override string Name => "OverlayAnalysis";
 
-        public override string Alias => "两个要素类进行压盖分析";
+        public override string Alias => "两个要素类进行叠加分析";
 
         public override string Version => "1.0.0";
 
-        public override string Remark => "两个要素类进行压盖分析";
+        public override string Remark => "两个要素类进行叠加分析";
 
         public override IAlgorithmDevType AlgorithmType => new AlgorithmDevTypeDLL();
+        /// <summary>
+        /// 源要素类
+        /// </summary>
+        private IFeatureClass SourceFeatureClass;
+        private InputFeatureClassDTO sourceFeatureClassDTO;
+        /// <summary>
+        /// 目标要素类
+        /// </summary>
+        private IFeatureClass TargetFeatureClass;
+        private InputFeatureClassDTO targetFeatureClassDTO;
+        /// <summary>
+        /// 分析类型
+        /// </summary>
+        private AnalysisType AnalysisType;
 
         public OverlayMain()
         {
@@ -35,15 +77,135 @@ namespace Dist.Dme.Algorithms.Overlay
             }
             LicenseUtil.CheckOutLicenseAdvanced();
 
+            // 初始化输入参数
+            base.InputParameters.Add(nameof(this.SourceFeatureClass),
+                new Property(nameof(this.SourceFeatureClass), "源要素类，叠加的图层", ValueTypeEnum.TYPE_FEATURECLASS, new InputFeatureClassDTO(), null, "", null));
+            base.InputParameters.Add(nameof(this.TargetFeatureClass),
+                         new Property(nameof(this.TargetFeatureClass), "目标要素类，被叠加的图层", ValueTypeEnum.TYPE_FEATURECLASS, new InputFeatureClassDTO(), null, "", null));
+            base.InputParameters.Add(nameof(this.AnalysisType),
+                        new Property(nameof(this.AnalysisType), "分析类型", ValueTypeEnum.TYPE_INTEGER, null, (int)AnalysisType.COVER, "分析类型选择",
+                        new object[] {
+                            new Property(nameof(AnalysisType.COVER), EnumUtil.GetEnumDescription(AnalysisType.COVER), ValueTypeEnum.TYPE_INTEGER, (int)AnalysisType.COVER, null, EnumUtil.GetEnumDescription(AnalysisType.COVER)),
+                            new Property(nameof(AnalysisType.OVERTOP), EnumUtil.GetEnumDescription(AnalysisType.OVERTOP), ValueTypeEnum.TYPE_INTEGER, (int)AnalysisType.OVERTOP, null, EnumUtil.GetEnumDescription(AnalysisType.OVERTOP))}));
+            // 指定输出参数类型
+            base.OutputParameters.Add();
+
         }
         public override Result Execute()
         {
-            throw new NotImplementedException();
+            if (!base.InitComplete)
+            {
+                throw new BusinessException(SystemStatusCode.DME_FAIL_INIT, "初始化工作未完成");
+            }
+            DMEWorkspaceBridge<IWorkspace, IFeatureClass> dmeWorkspaceBridge = new DMEWorkspaceBridge<IWorkspace, IFeatureClass>();
+            dmeWorkspaceBridge.SetWorkspace(new EsriWorkspace());
+            // 目前先以ORACLE和MDB为数据源类型
+            // 获取source feature class
+            this.SourceFeatureClass = dmeWorkspaceBridge.GetFeatureClass(this.sourceFeatureClassDTO);
+            // 获取target feature class
+            this.TargetFeatureClass = dmeWorkspaceBridge.GetFeatureClass(this.targetFeatureClassDTO);
+
+            if (AnalysisType.COVER == this.AnalysisType)
+            {
+                OverlayCommonTool.GetTopounionGeometryByQuery(this.SourceFeatureClass, null, null, esriSpatialRelEnum.esriSpatialRelUndefined,
+               out IGeometry sourceGeom, out IList<string> oidList);
+                //找出touch的要素oid，排除掉touch的图形
+                OverlayCommonTool.GetTopounionGeometryByQuery(this.TargetFeatureClass, null, sourceGeom, esriSpatialRelEnum.esriSpatialRelTouches, out IGeometry touchGeom, out IList<string> touchOIDList);
+                //通过intersect查找压盖部分的要素
+                string queryClause = null;
+                if (touchOIDList != null && touchOIDList.Count > 0)
+                {
+                    queryClause = $"OBJECTID  NOT in ({string.Join(",", ((List<string>)touchOIDList).ToArray())})";
+                }
+                // 求取空间相交的部分
+                OverlayCommonTool.GetIntersectFeaturesByQuery(this.TargetFeatureClass, queryClause, sourceGeom,
+                    out IList<IntersectFeatureDTO> intersectFeatureDTOs, out double sumIntersectArea);
+
+                if (intersectFeatureDTOs?.Count > 0)
+                {
+                    OverlayRespDTO overlayRespDTO = new OverlayRespDTO
+                    {
+                        SumIntersectArea = sumIntersectArea
+                    };
+                    foreach (var item in intersectFeatureDTOs)
+                    {
+                        IntersectFeatureRespDTO intersectFeatureRespDTO = new IntersectFeatureRespDTO
+                        {
+                            OID = item.OID,
+                            Area = item.Area,
+                            CoordJson = item.CoordJson
+                        };
+                        overlayRespDTO.IntersectFeatures.Add(intersectFeatureRespDTO);
+                    }
+                    return new Result(STATUS.SUCCESS, "运行完成", SystemStatusCode.DME_SUCCESS, overlayRespDTO);
+                }
+            }
+            else if (AnalysisType.OVERTOP == this.AnalysisType)
+            {
+                // 先拷贝一份mdb模板
+                string sTemplate = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory , GlobalSystemConfig.PATH_TEMPLATE_PGDB);// @"\template\pgdb.mdb";
+                string sPath = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory , GlobalSystemConfig.DIR_TEMP , GuidUtil.NewGuid() + ".mdb");
+                File.Copy(sTemplate, sPath);
+                IWorkspace mdbWorkspace = WorkspaceUtil.OpenMdbWorspace(sPath);
+                if (FeatureClassUtil.ExportToWorkspace(this.SourceFeatureClass, mdbWorkspace))
+                {
+                    // 获取导出的临时要素类信息
+                    IFeatureClass tempExpFeatureClass = WorkspaceUtil.GetFeatureClass(mdbWorkspace, this.sourceFeatureClassDTO.Name);
+                    // 进行擦除操作
+                    OverlayCommonTool.Erase(tempExpFeatureClass, this.TargetFeatureClass);
+                    // 计算完保存结果，如何保存？
+
+                }
+            }
+            else
+            {
+                throw new BusinessException(SystemStatusCode.DME_FAIL, "分析类型不匹配");
+            }
+           
+            return new Result(STATUS.SUCCESS, "运行完成，但没有运算结果", SystemStatusCode.DME_SUCCESS, null);
         }
 
         public override void Init(IDictionary<string, object> parameters)
         {
-            throw new NotImplementedException();
+            if (!parameters.ContainsKey(nameof(this.SourceFeatureClass)))
+            {
+                LOG.Error($"缺失参数[{nameof(this.SourceFeatureClass)}]");
+                throw new BusinessException(SystemStatusCode.DME_ERROR, $"缺失参数[{nameof(this.SourceFeatureClass)}]");
+            }
+            if (!parameters.ContainsKey(nameof(this.TargetFeatureClass)))
+            {
+                LOG.Error($"缺失参数[{nameof(this.SourceFeatureClass)}]");
+                throw new BusinessException(SystemStatusCode.DME_ERROR, $"缺失参数[{nameof(this.TargetFeatureClass)}]");
+            }
+            if (!parameters.ContainsKey(nameof(this.AnalysisType)))
+            {
+                LOG.Error($"缺失参数[{nameof(this.AnalysisType)}]");
+                throw new BusinessException(SystemStatusCode.DME_ERROR, $"缺失参数[{nameof(this.AnalysisType)}]");
+            }
+            this.sourceFeatureClassDTO = JsonConvert.DeserializeObject<InputFeatureClassDTO>(parameters[nameof(this.SourceFeatureClass)].ToString());
+            this.targetFeatureClassDTO = JsonConvert.DeserializeObject<InputFeatureClassDTO>(parameters[nameof(this.TargetFeatureClass)].ToString());
+            this.AnalysisType = EnumUtil.GetEnumObjByValue<AnalysisType>((int)parameters[nameof(this.AnalysisType)]);
+
+            base.InitComplete = true;
+        }
+        public override object MetadataJSON
+        {
+            get
+            {
+                IDictionary<string, object> dictionary = new Dictionary<string, object>
+                {
+                    [nameof(this.SysCode)] = this.SysCode,
+                    [nameof(this.Name)] = this.Name,
+                    [nameof(this.Alias)] = this.Alias,
+                    [nameof(this.Version)] = this.Version,
+                    [nameof(this.Remark)] = this.Remark,
+                    [nameof(this.InputParameters)] = this.InputParameters,
+                    [nameof(this.OutputParameters)] = this.OutputParameters,
+                    [nameof(this.FeatureParameters)] = this.FeatureParameters,
+                    [nameof(AlgorithmType)] = this.AlgorithmType
+                };
+                return dictionary;
+            }
         }
     }
 }

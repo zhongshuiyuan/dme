@@ -19,9 +19,9 @@ namespace Dist.Dme.SRCE.Esri.DTO
         /// </summary>
         public double Area { get; set; }
         /// <summary>
-        /// 相交那一部分的图形坐标串
+        /// 相交那一部分的图形坐标串，JSON格式
         /// </summary>
-        public string GeometryCoord { get; set; }
+        public string CoordJson { get; set; }
         /// <summary>
         /// 查询图形范围
         /// </summary>

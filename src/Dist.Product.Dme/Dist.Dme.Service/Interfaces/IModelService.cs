@@ -48,6 +48,12 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="parameters"></param>
         /// <returns></returns>
         object LandConflictExecute(IDictionary<String, Object> parameters);
+        /// <summary>
+        /// 压盖分析
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        object OverlayExecute(IDictionary<String, Object> parameters);
 
         /// <summary>
         /// 复制模型的一个版本

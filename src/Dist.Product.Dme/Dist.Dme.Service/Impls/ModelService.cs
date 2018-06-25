@@ -1,4 +1,6 @@
-﻿using Dist.Dme.Base.Common;
+﻿using Dist.Dme.Algorithms.LandConflictDetection;
+using Dist.Dme.Algorithms.Overlay;
+using Dist.Dme.Base.Common;
 using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.Exception;
 using Dist.Dme.Base.Framework.Interfaces;
@@ -6,7 +8,6 @@ using Dist.Dme.Base.Utils;
 using Dist.Dme.DAL.Context;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
-using Dist.Dme.Plugins.LandConflictDetection;
 using Dist.Dme.Service.Interfaces;
 using log4net;
 using SqlSugar;
@@ -25,6 +26,7 @@ namespace Dist.Dme.Service.Impls
         /// 用地差异分析
         /// </summary>
         private IAlgorithm landConflictDetectionAlgorithm = new LandConflictDetectionMain();
+        private IAlgorithm OverlayAlg = new OverlayMain();
         /// <summary>
         /// 自动注入参数
         /// </summary>
@@ -123,7 +125,11 @@ namespace Dist.Dme.Service.Impls
                 return models;
             } 
         }
-
+        public object OverlayExecute(IDictionary<String, Object> parameters)
+        {
+            this.OverlayAlg.Init(parameters);
+            return this.OverlayAlg.Execute();
+        }
         public object AddModel(ModelAddReqDTO dto)
         {
             if (string.IsNullOrEmpty(dto.SysCode))

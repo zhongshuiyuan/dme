@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dist.Dme.Plugins.LandConflictDetection.DTO
+namespace Dist.Dme.Algorithms.LandConflictDetection.DTO
 {
     public class LandConflictReqDTO : BaseRequestDTO
     {

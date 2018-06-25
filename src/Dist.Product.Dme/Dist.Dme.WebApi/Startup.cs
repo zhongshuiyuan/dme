@@ -44,7 +44,7 @@ namespace Dist.Dme.WebApi
         {
             services.AddMvc();
             // 设置数据源，读取appsettings.json配置文件
-            SysConfig.DBConnectionString = this.Configuration.GetConnectionString("DataSource");
+            GlobalSystemConfig.DBConnectionString = this.Configuration.GetConnectionString("DataSource");
             // 注册缓存对象
             services.AddMemoryCache();
            IConfigurationSection cacheProviderSection = this.Configuration.GetSection("ConnectionStrings").GetSection("CacheProvider");
