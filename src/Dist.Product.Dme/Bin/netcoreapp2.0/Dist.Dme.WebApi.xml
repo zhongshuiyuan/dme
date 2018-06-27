@@ -189,9 +189,17 @@
         </member>
         <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.OverlayExecute(Dist.Dme.Algorithms.Overlay.DTO.OverlayReqDTO)">
             <summary>
-            压盖分析计算
+            叠加分析计算
             </summary>
             <param name="dto">参数输入</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.Execute(System.String,System.String)">
+            <summary>
+            执行模型计算
+            </summary>
+            <param name="modelCode">模型唯一编码</param>
+            <param name="versionCode">模型版本唯一编码</param>
             <returns></returns>
         </member>
         <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.NewModel(Dist.Dme.Model.DTO.ModelAddReqDTO)">

@@ -84,19 +84,19 @@ namespace Dist.Dme.Algorithms.LandConflictDetection
             LicenseUtil.CheckOutLicenseAdvanced();
 
             // 初始化输入参数
-            base.InputParameters.Add(nameof(this.FeatureClass_Source_First),
-                new Property(nameof(this.FeatureClass_Source_First), "总规用地的图层信息", ValueTypeEnum.TYPE_MDB_FEATURECLASS, "", "", "总规用地的图层信息，格式：mdb路径" + SEPARATOR_FEATURE_PATH + "要素类名称", null));
-            base.InputParameters.Add(nameof(this.FeatureClass_Source_Second),
-                new Property(nameof(this.FeatureClass_Source_Second), "控规用地的图层信息", ValueTypeEnum.TYPE_MDB_FEATURECLASS, "", "", "控规用地的图层路径信息，格式：mdb路径" + SEPARATOR_FEATURE_PATH + "要素类名称", null));
-            base.InputParameters.Add(nameof(this.Yddm_First),
-                new Property(nameof(this.Yddm_First), "总规用地代码属性", ValueTypeEnum.TYPE_STRING, "", "", "总规用地代码属性", null));
-            base.InputParameters.Add(nameof(this.Yddm_Second),
-                new Property(nameof(this.Yddm_Second), "控规用地代码属性", ValueTypeEnum.TYPE_STRING, "", "", "控规用地代码属性", null));
+            base.InputParametersMeta.Add(nameof(this.FeatureClass_Source_First),
+                new Property(nameof(this.FeatureClass_Source_First), "总规用地的图层信息", Base.Common.ValueMetaType.TYPE_MDB_FEATURECLASS, "", "", "总规用地的图层信息，格式：mdb路径" + SEPARATOR_FEATURE_PATH + "要素类名称", null));
+            base.InputParametersMeta.Add(nameof(this.FeatureClass_Source_Second),
+                new Property(nameof(this.FeatureClass_Source_Second), "控规用地的图层信息", Base.Common.ValueMetaType.TYPE_MDB_FEATURECLASS, "", "", "控规用地的图层路径信息，格式：mdb路径" + SEPARATOR_FEATURE_PATH + "要素类名称", null));
+            base.InputParametersMeta.Add(nameof(this.Yddm_First),
+                new Property(nameof(this.Yddm_First), "总规用地代码属性", Base.Common.ValueMetaType.TYPE_STRING, "", "", "总规用地代码属性", null));
+            base.InputParametersMeta.Add(nameof(this.Yddm_Second),
+                new Property(nameof(this.Yddm_Second), "控规用地代码属性", Base.Common.ValueMetaType.TYPE_STRING, "", "", "控规用地代码属性", null));
 
             // 初始化输出参数
             string resultGDBDir = System.AppDomain.CurrentDomain.BaseDirectory + "/result/";
-            base.OutputParameters.Add(nameof(this.ResultGDBPath), new Property(nameof(this.ResultGDBPath), "输出结果", ValueTypeEnum.TYPE_GDB_PATH, resultGDBDir, resultGDBDir, "分析结果为gdb文件", null));
-            base.OutputParameters.Add(nameof(this.ReulstLayerName), new Property(nameof(this.ReulstLayerName), "图层名称", ValueTypeEnum.TYPE_STRING, this.ReulstLayerName, this.ReulstLayerName, "分析结果为gdb文件", null));
+            base.OutputParametersMeta.Add(nameof(this.ResultGDBPath), new Property(nameof(this.ResultGDBPath), "输出结果", Base.Common.ValueMetaType.TYPE_GDB_PATH, resultGDBDir, resultGDBDir, "分析结果为gdb文件", null));
+            base.OutputParametersMeta.Add(nameof(this.ReulstLayerName), new Property(nameof(this.ReulstLayerName), "图层名称", Base.Common.ValueMetaType.TYPE_STRING, this.ReulstLayerName, this.ReulstLayerName, "分析结果为gdb文件", null));
         }
 
         public override Result Execute()
@@ -132,15 +132,15 @@ namespace Dist.Dme.Algorithms.LandConflictDetection
                 object result = unionTool.Excute();
                 if (null == result)
                 {
-                    return new Result(STATUS.ERROR, "图层联合分析失败", SystemStatusCode.DME_ERROR, false);
+                    return new Result(SystemStatusCode.DME_ERROR, "图层联合分析失败", (int)SystemStatusCode.DME_ERROR, false);
                 }
                 // 对输出图层进行规则计算
                 // TODO
-                return new Result(STATUS.SUCCESS, "差异分析完成", SystemStatusCode.DME_SUCCESS, true);
+                return new Result(SystemStatusCode.DME_SUCCESS, "差异分析完成", (int)SystemStatusCode.DME_SUCCESS, true);
             } catch (Exception ex)
             {
                 LOG.Error("差异分析失败，详情：" + ex.Message);
-                return new Result(STATUS.ERROR, "差异分析失败，详情：" + ex.Message, SystemStatusCode.DME_ERROR, false);
+                return new Result(SystemStatusCode.DME_ERROR, "差异分析失败，详情：" + ex.Message, (int)SystemStatusCode.DME_ERROR, false);
             }
         }
 
@@ -165,7 +165,7 @@ namespace Dist.Dme.Algorithms.LandConflictDetection
             if (!parameters.ContainsKey(nameof(this.ResultGDBPath)))
             {
                 LOG.Info("没有指定新的输出路径，现在使用默认路径");
-                this.ResultGDBPath = base.OutputParameters[nameof(this.ResultGDBPath)].DefaultValue.ToString();
+                this.ResultGDBPath = base.OutputParametersMeta[nameof(this.ResultGDBPath)].DefaultValue.ToString();
             }
             else
             {
@@ -209,9 +209,9 @@ namespace Dist.Dme.Algorithms.LandConflictDetection
                     [nameof(this.Alias)] = this.Alias,
                     [nameof(this.Version)] = this.Version,
                     [nameof(this.Remark)] = this.Remark,
-                    [nameof(this.InputParameters)] = this.InputParameters,
-                    [nameof(this.OutputParameters)] = this.OutputParameters,
-                    [nameof(this.FeatureParameters)] = this.FeatureParameters,
+                    [nameof(this.InputParametersMeta)] = this.InputParametersMeta,
+                    [nameof(this.OutputParametersMeta)] = this.OutputParametersMeta,
+                    [nameof(this.FeatureParametersMeta)] = this.FeatureParametersMeta,
                     [nameof(AlgorithmType)] = this.AlgorithmType
                 };
                 return dictionary;// JsonConvert.SerializeObject(dictionary);

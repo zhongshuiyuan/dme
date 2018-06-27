@@ -9,14 +9,14 @@ namespace Dist.Dme.Algorithms.Overlay.DTO
         /// <summary>
         /// 相交的总面积
         /// </summary>
-        public double SumIntersectArea { get; set; }
+        public double SumArea { get; set; }
         /// <summary>
         /// 相交实体集合
         /// </summary>
-        public IList<IntersectFeatureRespDTO> IntersectFeatures { get; set; } = new List<IntersectFeatureRespDTO>();
+        public IList<FeatureRespDTO> Features { get; set; } = new List<FeatureRespDTO>();
 
     }
-    public class IntersectFeatureRespDTO
+    public class FeatureRespDTO
     {
         /// <summary>
         /// 目标要素OID

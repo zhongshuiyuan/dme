@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dist.Dme.Base.Utils;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -21,6 +22,10 @@ namespace Dist.Dme.Base.Common
         /// 数据类型
         /// </summary>
         public int DataType { get; set; }
+        /// <summary>
+        /// 数据类型描述
+        /// </summary>
+        public string DataTypeDesc { get; set; }
         /// <summary>
         /// 属性值
         /// </summary>
@@ -62,11 +67,12 @@ namespace Dist.Dme.Base.Common
         /// <param name="valueSet">值的可选集</param>
         /// <param name="isVisible">是否可见</param>
         /// <param name="readOnly">是否只读</param>
-        public Property(string name, string alias, ValueTypeEnum dataType, object value, object defaultValue = null, string remark = "", object[] valueSet = null, int isVisible = 1, int readOnly = 0, int required = 1)
+        public Property(string name, string alias, ValueMetaType dataType, object value = null, object defaultValue = null, string remark = "", object[] valueSet = null, int isVisible = 1, int readOnly = 0, int required = 1)
         {
             this.Name = name;
             this.Alias = alias;
             this.DataType = (int)dataType;
+            this.DataTypeDesc = EnumUtil.GetEnumDescription(dataType);
             this.Value = value;
             this.DefaultValue = defaultValue;
             this.ValueSet = valueSet;

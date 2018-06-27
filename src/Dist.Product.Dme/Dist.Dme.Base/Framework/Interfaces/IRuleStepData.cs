@@ -9,5 +9,10 @@ namespace Dist.Dme.Base.Framework.Interfaces
     /// </summary>
     public interface IRuleStepData
     {
+        /// <summary>
+        /// 步骤运行
+        /// </summary>
+        /// <returns></returns>
+        Result Run();
     }
 }

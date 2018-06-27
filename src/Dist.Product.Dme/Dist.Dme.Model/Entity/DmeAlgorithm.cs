@@ -17,6 +17,6 @@ namespace Dist.Dme.Model.Entity
         public long CreateTime { get; set; }
         public String Remark { get; set; }
         public String Type { get; set; }
-        public String Extension { get; set; }
+        public object Extension { get; set; }
     }
 }

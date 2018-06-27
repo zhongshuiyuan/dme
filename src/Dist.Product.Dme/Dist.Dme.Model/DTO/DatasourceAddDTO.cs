@@ -10,7 +10,7 @@ namespace Dist.Dme.Model.DTO
     public class DatasourceAddDTO
     {
         public String Name { get; set; }
-        public int IsLocal { get; set; }
+        // public int IsLocal { get; set; }
         public String Type { get; set; }
         public String Connection { get; set; }
         public int CreateTime { get; set; }

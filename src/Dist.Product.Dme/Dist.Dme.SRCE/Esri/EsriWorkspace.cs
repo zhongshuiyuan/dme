@@ -1,4 +1,4 @@
-﻿using Dist.Dme.Base.ConnectionInfo;
+﻿using Dist.Dme.Base.DataSourceDefine;
 using Dist.Dme.SRCE.Core;
 using Dist.Dme.SRCE.Esri.Utils;
 using ESRI.ArcGIS.Geodatabase;

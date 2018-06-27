@@ -8,6 +8,7 @@ using Dist.Dme.Base.Utils;
 using Dist.Dme.DAL.Context;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
+using Dist.Dme.RuleSteps.AlgorithmInput;
 using Dist.Dme.Service.Interfaces;
 using log4net;
 using SqlSugar;
@@ -128,7 +129,13 @@ namespace Dist.Dme.Service.Impls
         public object OverlayExecute(IDictionary<String, Object> parameters)
         {
             this.OverlayAlg.Init(parameters);
-            return this.OverlayAlg.Execute();
+            Result result = this.OverlayAlg.Execute();
+            if (result.Status == EnumUtil.GetEnumDisplayName(SystemStatusCode.DME_SUCCESS))
+            {
+                IDictionary<string, Property> outParameters = this.OverlayAlg.OutParams;
+                return outParameters;
+            }
+            return null;
         }
         public object AddModel(ModelAddReqDTO dto)
         {
@@ -168,16 +175,85 @@ namespace Dist.Dme.Service.Impls
             return dbResult.Data;
         }
 
-        public object ExecuteModel(string code, string versionCode)
+        public object ExecuteModel(string modelCode, string versionCode)
         {
-            // Single方法，如果查询数据库没有数据，抛出异常
-            DmeModel model = base.Repository.GetDbContext().Queryable<DmeModel>().Single(m => m.SysCode == code);
+            // Single方法，如果查询数据库多条数据，会抛出异常
+            DmeModel model = base.Repository.GetDbContext().Queryable<DmeModel>().Single(m => m.SysCode == modelCode);
+            if (null == model)
+            {
+                throw new BusinessException((int)SystemStatusCode.DME_ERROR, $"模型[{modelCode}]不存在");
+            }
             // 查询模型版本
             DmeModelVersion modelVersion = base.Repository.GetDbContext().Queryable<DmeModelVersion>().Single(mv => mv.SysCode == versionCode);
+            if (null == modelVersion)
+            {
+                throw new BusinessException((int)SystemStatusCode.DME_ERROR, $"模型[{modelCode}]的版本[{versionCode}]不存在");
+            }
             // 查找关联的算法信息
-            IList<DmeRuleStep> ruleSteps = base.Repository.GetDbContext().Queryable<DmeRuleStep>().Where(rs => rs.ModelId == model.Id).Where(rs => rs.VersionId == modelVersion.Id).ToList();
-
-            throw new NotImplementedException();
+            IList<DmeRuleStep> ruleSteps = base.Repository.GetDbContext().Queryable<DmeRuleStep>().Where(rs => rs.ModelId == model.Id && rs.VersionId == modelVersion.Id).ToList();
+            if (0 == ruleSteps?.Count)
+            {
+                LOG.Warn($"模型[{modelCode}]的版本[{versionCode}]下没有可执行步骤，停止运行");
+                return null;
+            }
+            // 查询步骤前后依赖关系
+            // TODO 暂时不处理
+            IList<DmeRuleStepHop> hops = base.Repository.GetDbContext().Queryable<DmeRuleStepHop>().Where(rsh => rsh.ModelId == model.Id && rsh.VersionId == modelVersion.Id).OrderBy("STEP_FROM_ID").ToList();
+            base.Repository.GetDbContext().Ado.UseTran<object>(() => 
+            {
+                // 每执行一次模型，生成一次任务
+                DmeTask task = new DmeTask
+                {
+                    SysCode = GuidUtil.NewGuid(),
+                    CreateTime = DateUtil.CurrentTimeMillis,
+                    Status = EnumUtil.GetEnumDisplayName(SystemStatusCode.DME_RUNNING),
+                    ModelId = model.Id,
+                    VersionId = modelVersion.Id
+                };
+                try
+                {
+                    task.Name = "task-" + task.CreateTime;
+                    task.LastTime = task.CreateTime;
+                    task = base.Repository.GetDbContext().Insertable<DmeTask>(task).ExecuteReturnEntity();
+                    IRuleStepData ruleStepData = null;
+                    Result stepResult = null;
+                    foreach (var subRuleStep in ruleSteps)
+                    {
+                        // 注入每一个步骤的参数值
+                        if (1 == subRuleStep.StepTypeId)
+                        {
+                            // 算法输入
+                            ruleStepData = new AlgorithmInputStepData(this.Repository, task.Id, model.Id, modelVersion.Id, subRuleStep.Id);
+                        }
+                        stepResult = ruleStepData.Run();
+                        if (stepResult.Code != (int)SystemStatusCode.DME_SUCCESS)
+                        {
+                            throw new BusinessException(stepResult.Code, stepResult.Message);
+                        }
+                    }
+                    task.Status = EnumUtil.GetEnumDisplayName(SystemStatusCode.DME_SUCCESS);
+                    task.LastTime = DateUtil.CurrentTimeMillis;
+                    base.Repository.GetDbContext().Updateable<DmeTask>(task).ExecuteCommand();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    // 更改任务执行的状态
+                    if (ex is BusinessException)
+                    {
+                        task.Status = EnumUtil.GetEnumDisplayName(EnumUtil.GetEnumObjByValue<SystemStatusCode>(((BusinessException)ex).Code));
+                    }
+                    else
+                    {
+                        task.Status = EnumUtil.GetEnumDisplayName(SystemStatusCode.DME_ERROR);
+                    }
+                    task.LastTime = DateUtil.CurrentTimeMillis;
+                    base.Repository.GetDbContext().Updateable<DmeTask>(task).ExecuteCommand();
+                    throw ex;
+                }
+            });
+          
+            return true;
         }
 
         public object CopyModelVersion(string versionCode)
@@ -185,7 +261,7 @@ namespace Dist.Dme.Service.Impls
             DmeModelVersion modelVersion = base.Repository.GetDbContext().Queryable<DmeModelVersion>().Where(mv => mv.SysCode == versionCode).Single();
             if (null == modelVersion)
             {
-                throw new BusinessException(SystemStatusCode.DME_FAIL, $"模型版本[{versionCode}]不存在，或模型版本编码无效");
+                throw new BusinessException((int)SystemStatusCode.DME_FAIL, $"模型版本[{versionCode}]不存在，或模型版本编码无效");
             }
 
             throw new NotImplementedException();

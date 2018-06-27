@@ -46,9 +46,9 @@ namespace Dist.Dme.Service.Impls
                 foreach (var alg in algs)
                 {
                     algorithmDTO = ClassValueCopier<AlgorithmRespDTO>.Copy(alg);
-                    if(!string.IsNullOrEmpty(alg.Extension))
+                    if(alg.Extension != null && !string.IsNullOrEmpty(alg.Extension.ToString()))
                     {
-                        algorithmDTO.Extension = JsonConvert.DeserializeObject(alg.Extension);
+                        algorithmDTO.Extension = alg.Extension;// JsonConvert.DeserializeObject(.ToString());
                     }
                     algDTOs.Add(algorithmDTO);
                     metas = base.Repository.GetDbContext().Queryable<DmeAlgorithmMeta>().Where(meta => meta.AlgorithmId == alg.Id).ToList();
@@ -97,7 +97,7 @@ namespace Dist.Dme.Service.Impls
                     alg.Extension = JsonConvert.SerializeObject(dto.Extension);
                     if (!base.Repository.GetDbContext().Updateable<DmeAlgorithm>().ExecuteCommandHasChange())
                     {
-                        throw new BusinessException(SystemStatusCode.DME_ERROR, "更新算法信息失败，无详情信息。");
+                        throw new BusinessException((int)SystemStatusCode.DME_ERROR, "更新算法信息失败，无详情信息。");
                     }
                     if (dto.Metas != null && dto.Metas.Count > 0)
                     {
@@ -148,7 +148,7 @@ namespace Dist.Dme.Service.Impls
             String registerFile = Path.Combine(new string[] { baseDir, "register.json" });
             if (!File.Exists(registerFile))
             {
-                throw new BusinessException(SystemStatusCode.DME_ERROR, $"注册文件[{registerFile}]不存在");
+                throw new BusinessException((int)SystemStatusCode.DME_ERROR, $"注册文件[{registerFile}]不存在");
             }
             String jsonText = File.ReadAllText(registerFile);
             JObject jObject = JObject.Parse(jsonText);
@@ -171,10 +171,10 @@ namespace Dist.Dme.Service.Impls
                         LOG.Warn($"程序集文件[{assemblyPath}]不存在");
                         continue;
                     }
-                    string fullName = item["FullName"].Value<string>();
+                    string fullName = item["MainClass"].Value<string>();
                     if (string.IsNullOrEmpty(fullName))
                     {
-                        LOG.Warn($"接口名称缺失[FullName]");
+                        LOG.Warn($"接口名称缺失[MainClass]");
                         continue;
                     }
                     temp = (IAlgorithm)assembly.CreateInstance(fullName, true);
@@ -197,27 +197,42 @@ namespace Dist.Dme.Service.Impls
 
         public object RegistryAlgorithmFromLocal(string algCode)
         {
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                  .SelectMany(a => a.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IAlgorithm))))
-                  .ToArray();
-            if (null == types || 0 == types.Count())
+            String baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            String registerFile = Path.Combine(new string[] { baseDir, "register.json" });
+            if (!File.Exists(registerFile))
             {
-                LOG.Warn($"没有找到算法接口[{nameof(IAlgorithm)}]的相关实现体");
+                throw new BusinessException((int)SystemStatusCode.DME_ERROR, $"注册文件[{registerFile}]不存在");
+            }
+            String jsonText = File.ReadAllText(registerFile);
+            JObject jObject = JObject.Parse(jsonText);
+            JToken[] jTokens = jObject["Algorithms"].ToArray<JToken>();
+            if (null == jTokens || 0 == jTokens.Length)
+            {
+                LOG.Warn("在注册文件中没有找到节点[Algorithms]的内容");
                 return false;
             }
             IAlgorithm tempAlgorithm = null;
-            foreach (var type in types)
+            foreach (var item in jTokens)
             {
-                if (type.IsAbstract)
-                {
-                    // 抽象类排除
-                    continue;
-                }
                 try
                 {
-                    tempAlgorithm = (IAlgorithm)type.Assembly.CreateInstance(type.FullName, true);
+                    string assemblyPath = Path.Combine(baseDir, item["Assembly"].Value<string>());
+                    Assembly assembly = Assembly.LoadFile(assemblyPath);
+                    if (null == assembly)
+                    {
+                        LOG.Warn($"程序集文件[{assemblyPath}]不存在");
+                        continue;
+                    }
+                    string fullName = item["MainClass"].Value<string>();
+                    if (string.IsNullOrEmpty(fullName))
+                    {
+                        LOG.Warn($"接口名称缺失[MainClass]");
+                        continue;
+                    }
+                    tempAlgorithm = (IAlgorithm)assembly.CreateInstance(fullName, true);
                     if (null == tempAlgorithm)
                     {
+                        LOG.Warn($"接口[{fullName}]创建实例为空");
                         continue;
                     }
                     if (string.IsNullOrEmpty(algCode) || algCode.Equals(tempAlgorithm.SysCode))
@@ -255,11 +270,74 @@ namespace Dist.Dme.Service.Impls
                 }
                 catch (Exception ex)
                 {
-                    LOG.Error("从本地注册算法对象失败", ex);
+                    LOG.Error("注册本地算法失败", ex);
                     continue;
                 }
             }
             return true;
+            //var types = AppDomain.CurrentDomain.GetAssemblies()
+            //      .SelectMany(a => a.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IAlgorithm))))
+            //      .ToArray();
+            //if (null == types || 0 == types.Count())
+            //{
+            //    LOG.Warn($"没有找到算法接口[{nameof(IAlgorithm)}]的相关实现体");
+            //    return false;
+            //}
+            //IAlgorithm tempAlgorithm = null;
+            //foreach (var type in types)
+            //{
+            //    if (type.IsAbstract)
+            //    {
+            //        // 抽象类排除
+            //        continue;
+            //    }
+            //    try
+            //    {
+            //        tempAlgorithm = (IAlgorithm)type.Assembly.CreateInstance(type.FullName, true);
+            //        if (null == tempAlgorithm)
+            //        {
+            //            continue;
+            //        }
+            //        if (string.IsNullOrEmpty(algCode) || algCode.Equals(tempAlgorithm.SysCode))
+            //        {
+            //            AlgorithmAddReqDTO algorithmAddReqDTO = new AlgorithmAddReqDTO
+            //            {
+            //                SysCode = tempAlgorithm.SysCode,
+            //                Name = tempAlgorithm.Name,
+            //                Alias = tempAlgorithm.Alias,
+            //                Version = tempAlgorithm.Version,
+            //                Remark = tempAlgorithm.Remark,
+            //                Type = tempAlgorithm.AlgorithmType.Code,
+            //                Extension = JsonConvert.SerializeObject(tempAlgorithm.AlgorithmType.Metadata)
+            //            };
+            //            algorithmAddReqDTO.Metas = new List<AlgorithmMetaReqDTO>();
+            //            // 输入参数
+            //            this.GetAlgParameters((IDictionary<String, Property>)tempAlgorithm.InParams, ParameterType.IN, algorithmAddReqDTO);
+            //            // 输出参数
+            //            this.GetAlgParameters((IDictionary<String, Property>)tempAlgorithm.OutParams, ParameterType.OUT, algorithmAddReqDTO);
+            //            // 特征参数
+            //            this.GetAlgParameters((IDictionary<String, Property>)tempAlgorithm.FeatureParams, ParameterType.IN_F, algorithmAddReqDTO);
+            //            // 持久化数据
+            //            this.AddAlgorithm(algorithmAddReqDTO);
+            //            if (string.IsNullOrEmpty(algCode))
+            //            {
+            //                // 表示所有，继续遍历其它算法
+            //                continue;
+            //            }
+            //            else
+            //            {
+            //                // 表示指定算法
+            //                break;
+            //            }
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        LOG.Error("从本地注册算法对象失败", ex);
+            //        continue;
+            //    }
+            //}
+            //return true;
         }
 
         private void GetAlgParameters(IDictionary<String, Property> parameters, string parameterType, AlgorithmAddReqDTO algorithmAddReqDTO)

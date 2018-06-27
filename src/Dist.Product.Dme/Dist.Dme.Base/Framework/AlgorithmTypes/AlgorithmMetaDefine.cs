@@ -10,26 +10,21 @@ namespace Dist.Dme.Base.Framework.AlgorithmTypes
     public class AlgorithmMetaDefine
     {
         /// <summary>
-        /// 键
+        /// 程序集，DLL或JAR
         /// </summary>
-        public string Key { get; set; }
+        public string Assembly { get; set; }
         /// <summary>
-        /// 值
+        /// 主类
         /// </summary>
-        public string Value { get; set; }
+        public string MainClass { get; set; }
         /// <summary>
-        /// 描述
+        /// 主方法
         /// </summary>
-        public string Desc { get; set; }
-
-        public AlgorithmMetaDefine()
-        {
-        }
-        public AlgorithmMetaDefine(string key, string value, string desc)
-        {
-            this.Key = key;
-            this.Value = value;
-            this.Desc = desc;
-        }
+        public string MainMethod { get; set; }
+        /// <summary>
+        /// 路径
+        /// </summary>
+        public string Path { get; set; }
+      
     }
 }

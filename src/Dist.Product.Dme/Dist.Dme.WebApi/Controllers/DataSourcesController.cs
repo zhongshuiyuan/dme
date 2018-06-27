@@ -51,5 +51,6 @@ namespace Dist.Dme.WebApi.Controllers
             ObjectId objectId = MongodbHelper<object>.UploadFileFromPath(this.MongodbHost, @"D:\work\dist\c_产品管理\g_规划协查\飞灵姐提供的重庆分析工具\demo数据\论坛版测试数据.mdb");
             System.Console.WriteLine(objectId);
         }
+  
     }
 }

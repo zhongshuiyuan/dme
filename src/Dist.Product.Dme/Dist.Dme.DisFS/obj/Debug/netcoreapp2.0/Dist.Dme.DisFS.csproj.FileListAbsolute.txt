@@ -9,4 +9,3 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisFS\obj\Debug\netcoreapp2.0\Dist.D
 D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.DisFS.deps.json
 D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.DisFS.dll
 D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.DisFS.pdb
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisFS\obj\Debug\netcoreapp2.0\Dist.Dme.DisFS.csprojResolveAssemblyReference.cache

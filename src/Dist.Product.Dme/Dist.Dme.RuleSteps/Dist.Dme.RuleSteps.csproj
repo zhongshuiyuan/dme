@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Dist.Dme.Base\Dist.Dme.Base.csproj" />
     <ProjectReference Include="..\Dist.Dme.DAL\Dist.Dme.DAL.csproj" />
   </ItemGroup>

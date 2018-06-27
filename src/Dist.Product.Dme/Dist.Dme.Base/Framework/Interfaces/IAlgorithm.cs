@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dist.Dme.Base.Common;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -34,16 +35,16 @@ namespace Dist.Dme.Base.Framework.Interfaces
         /// 获取输入参数元数据
         /// </summary>
         /// <returns></returns>
-        Object InParams { get; }
+        IDictionary<string, Property> InParams { get; }
         /// <summary>
         /// 获取输出参数元数据
         /// </summary>
         /// <returns></returns>
-        Object OutParams { get; }
+        IDictionary<string, Property> OutParams { get; }
         /// <summary>
         /// 特征参数，例如容差值、权重等等
         /// </summary>
-        Object FeatureParams { get; }
+        IDictionary<string, Property> FeatureParams { get; }
         /// <summary>
         /// 初始化工作，设置参数
         /// </summary>

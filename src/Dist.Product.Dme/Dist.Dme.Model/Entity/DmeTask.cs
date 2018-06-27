@@ -20,7 +20,7 @@ namespace Dist.Dme.Model.Entity
         public int ModelId { get; set; }
         [SugarColumn(ColumnName = "VERSION_ID")]
         public int VersionId { get; set; }
-        public int CreateTime { get; set; }
-        public int LastTime { get; set; }
+        public long CreateTime { get; set; }
+        public long LastTime { get; set; }
     }
 }

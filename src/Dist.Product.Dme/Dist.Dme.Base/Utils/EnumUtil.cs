@@ -20,6 +20,27 @@ namespace Dist.Dme.Base.Utils
             return arrDesc[0].Description;
         }
         /// <summary>
+        /// 获取枚举显示名称
+        /// </summary>
+        /// <param name="enum"></param>
+        /// <returns></returns>
+        public static string GetEnumDisplayName(Enum @enum)
+        {
+            FieldInfo fi = @enum.GetType().GetField(@enum.ToString());
+            DisplayNameAttribute[] arr = (DisplayNameAttribute[])fi.GetCustomAttributes(typeof(DisplayNameAttribute), false);
+            return arr[0].DisplayName;
+        }
+        /// <summary>
+        /// 根据值，获取枚举的名称
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string GetEnumName<T>(int value)
+        {
+            return Enum.GetName(typeof(T), value);
+        }
+        /// <summary>
         /// 根据名称获取枚举对象
         /// </summary>
         /// <typeparam name="T"></typeparam>

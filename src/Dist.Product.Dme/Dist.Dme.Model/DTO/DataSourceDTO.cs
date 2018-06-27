@@ -16,7 +16,7 @@ namespace Dist.Dme.Model.DTO
         /// <summary>
         /// 是否本地
         /// </summary>
-        public int IsLocal { get; set; }
+        //public int IsLocal { get; set; }
         /// <summary>
         /// 数据源类型，ENTERPRISE_GEODATABASE，PERSONAL_GEODATABASE
         /// </summary>

@@ -283,7 +283,8 @@ comment on column DME_DataSource_Type.remark
   is '±¸×¢';
 
 alter table DME_DataSource_Type add primary key(ID);
-
+alter table DME_DATASOURCE_TYPE
+  add constraint UK_DME_DATASOURCE_TYPE unique (CODE);
 
 CREATE TABLE DME_Algorithm
 (
@@ -469,7 +470,7 @@ start with 1
 increment by 1
 cache 20;
 
-create sequence SEQ_DME_ALGORITHM_METADATA
+create sequence SEQ_DME_ALGORITHM_META
 minvalue 1
 maxvalue 9999999999999999999999999
 start with 1
@@ -619,8 +620,73 @@ values(SEQ_DME_RULESTEP_TYPE.NEXTVAL, 'AlgorithmInput', 'Ëã·¨ÊäÈë', 'Ñ¡ÔñÒÑ×¢²áµ
 --Èç¹ûSTEP_TYPE_ID=1£¬¼´£ºAlgorithmInput£¬ÔòËã·¨µÄidĞèÒªÔÚDME_RULESTEP_ATTRIBUTE´æ´¢£¬ÒÔcode=algorithm_id±êÊ¶
 alter table DME_RULESTEP drop column algorithm_id;
 
+-- Create table
+create table DME_Task_Result
+(
+  id          number(8) not null,
+  task_ID   number(8),
+  rulestep_id number(8),
+  r_code      varchar2(100),
+  r_type      varchar2(50),
+  r_value     clob
+)
+;
+-- Add comments to the table 
+comment on table DME_Task_Result
+  is 'ÈÎÎñ¼ÆËã½á¹û´æ´¢';
+-- Add comments to the columns 
+comment on column DME_Task_Result.id
+  is 'Ö÷¼üID';
+comment on column DME_Task_Result.task_ID
+  is 'ÈÎÎñID';
+comment on column DME_Task_Result.rulestep_id
+  is '²½ÖèID';
+comment on column DME_Task_Result.r_code
+  is '½á¹û±àÂë';
+comment on column DME_Task_Result.r_type
+  is '½á¹ûÀàĞÍ£¬¸úValueTypeµÄÃû³ÆÒ»ÖÂ';
+comment on column DME_Task_Result.r_value
+  is '½á¹ûÊä³öÖµ£¬¸ù¾İR_TYPEµÄ²»Í¬£¬Êä³öÖµÒ²²»Í¬';
+  
+  alter table dme_task_result add primary key(id);
 
+-- Create sequence 
+create sequence SEQ_DME_Task_Result
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
 
+-- Create table
+create table DME_DataSource_attribute
+(
+  id              number(8),
+  datasource_id   number(8),
+  attribute_code  varchar2(50),
+  attribute_value clob
+)
+;
+-- Add comments to the table 
+comment on table DME_DataSource_attribute
+  is 'Êı¾İÔ´À©Õ¹ÊôĞÔ';
+-- Add comments to the columns 
+comment on column DME_DataSource_attribute.id
+  is 'Ö÷¼üID';
+comment on column DME_DataSource_attribute.datasource_id
+  is 'Êı¾İÔ´ID';
+comment on column DME_DataSource_attribute.attribute_code
+  is 'ÊôĞÔ±àÂë';
+comment on column DME_DataSource_attribute.attribute_value
+  is 'ÊôĞÔÖµ';
+  
+  alter table DME_DataSource_attribute add primary key(id);
+create sequence SEQ_DME_DataSource_attribute
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
 
 
 

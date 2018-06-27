@@ -81,7 +81,7 @@ namespace Dist.Dme.WebApi.Controllers
             return (Result)ModelService.LandConflictExecute(dto.Parameters);
         }
         /// <summary>
-        /// 压盖分析计算
+        /// 叠加分析计算
         /// </summary>
         /// <param name="dto">参数输入</param>
         /// <returns></returns>
@@ -118,7 +118,7 @@ namespace Dist.Dme.WebApi.Controllers
             JObject connObj = new JObject
             {
                 { "name", "厦门空间库" },
-                { "server", "192.168.200.38" },
+                { "server", "192.168.1.166" },
                 { "database", "orcl" },
                 { "port", 1521},
                 { "username", "xmgis"},
@@ -130,8 +130,22 @@ namespace Dist.Dme.WebApi.Controllers
             //sourceObj.Add("Connection", "{\"path\":\"D:\\work\\dist\\x_项目管理\\f_福建省\\x_厦门\\02数据\\控规调整样例.mdb\"}");
             dto.Parameters.Add("TargetFeatureClass", obj.ToString());
             // dto.Parameters.Add("TargetFeatureClass", "{\"Name\":\"STKZXFW_YDFW\", \"Source\":{\"SysCode\":\"30143df1123449a896429854899f37f3\",\"IsLocal\":1,\"Type\":\"PERSONAL_GEODATABASE\",\"Connection\":\"{\"name\":\"厦门空间库\",\"server\":\"192.168.200.38\",\"database\":\"orcl\",\"port\":1521,\"username\":\"xmgis\",\"encrypted\":0,\"password\":\"xmghj2014\"}\"}}");
-     
-            return (Result)ModelService.OverlayExecute(dto.Parameters);
+
+            dto.Parameters.Add("AnalysisType", 0);
+            dto.Parameters.Add("IsClearTemp", true);
+            return base.Success(ModelService.OverlayExecute(dto.Parameters));
+        }
+        /// <summary>
+        /// 执行模型计算
+        /// </summary>
+        /// <param name="modelCode">模型唯一编码</param>
+        /// <param name="versionCode">模型版本唯一编码</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("v1/execute/{modelCode}/{versionCode}")]
+        public Result Execute(string modelCode, string versionCode)
+        {
+            return base.Success(this.ModelService.ExecuteModel(modelCode, versionCode));
         }
         /// <summary>
         /// 注册模型

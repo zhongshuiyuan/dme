@@ -18,12 +18,13 @@ namespace Dist.Dme.Base.Framework.AlgorithmTypes
         {
             get
             {
-                IList<AlgorithmMetaDefine> metadata = new List<AlgorithmMetaDefine>
+                AlgorithmMetaDefine md = new AlgorithmMetaDefine();
+                IDictionary<string, string> metadata = new Dictionary<string, string>
                 {
-                    new AlgorithmMetaDefine("assembly", "", "JAR名称"),
-                    new AlgorithmMetaDefine("mainClass", "", "主类名称"),
-                    new AlgorithmMetaDefine("mainMethod", "", "主方法"),
-                    new AlgorithmMetaDefine("path", "", "DLL路径")
+                    { nameof(md.Assembly), "JAR包名称" },
+                    { nameof(md.MainClass), "主类名称"},
+                    { nameof(md.MainMethod), "主方法"},
+                    { nameof(md.Path), "JAR包路径"}
                 };
 
                 return metadata;

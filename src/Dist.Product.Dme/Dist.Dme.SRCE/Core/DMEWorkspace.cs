@@ -1,4 +1,4 @@
-﻿using Dist.Dme.Base.ConnectionInfo;
+﻿using Dist.Dme.Base.DataSourceDefine;
 using System;
 using System.Collections.Generic;
 using System.Text;

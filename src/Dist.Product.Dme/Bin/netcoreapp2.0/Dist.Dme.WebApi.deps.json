@@ -4901,6 +4901,19 @@
           "Dist.Dme.Model.dll": {}
         }
       },
+      "Dist.Dme.RuleSteps/1.0.0": {
+        "dependencies": {
+          "Dist.Dme.Base": "1.0.0",
+          "Dist.Dme.DAL": "1.0.0",
+          "Newtonsoft.Json": "11.0.2"
+        },
+        "runtime": {
+          "Dist.Dme.RuleSteps.dll": {}
+        },
+        "compile": {
+          "Dist.Dme.RuleSteps.dll": {}
+        }
+      },
       "Dist.Dme.Service/1.0.0": {
         "dependencies": {
           "Dist.Dme.Algorithms.LandConflictDetection": "1.0.0",
@@ -4908,6 +4921,7 @@
           "Dist.Dme.DAL": "1.0.0",
           "Dist.Dme.DisFS": "1.0.0",
           "Dist.Dme.Model": "1.0.0",
+          "Dist.Dme.RuleSteps": "1.0.0",
           "Newtonsoft.Json": "11.0.2"
         },
         "runtime": {
@@ -7624,6 +7638,11 @@
       "sha512": ""
     },
     "Dist.Dme.Model/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Dist.Dme.RuleSteps/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

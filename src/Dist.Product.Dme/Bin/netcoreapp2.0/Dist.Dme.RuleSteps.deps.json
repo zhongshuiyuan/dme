@@ -9,7 +9,8 @@
       "Dist.Dme.RuleSteps/1.0.0": {
         "dependencies": {
           "Dist.Dme.Base": "1.0.0",
-          "Dist.Dme.DAL": "1.0.0"
+          "Dist.Dme.DAL": "1.0.0",
+          "Newtonsoft.Json": "11.0.2"
         },
         "runtime": {
           "Dist.Dme.RuleSteps.dll": {}

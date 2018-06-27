@@ -26,10 +26,10 @@ namespace Dist.Dme.Service.Interfaces
         /// <summary>
         /// 执行模型（背后依赖的是算法）
         /// </summary>
-        /// <param name="code">模型唯一编码</param>
+        /// <param name="modelCode">模型唯一编码</param>
         /// <param name="versionCode">版本唯一编码</param>
         /// <returns></returns>
-        object ExecuteModel(string code, string versionCode);
+        object ExecuteModel(string modelCode, string versionCode);
         /// <summary>
         /// 根据模型唯一编码，获取模型的元数据信息
         /// </summary>

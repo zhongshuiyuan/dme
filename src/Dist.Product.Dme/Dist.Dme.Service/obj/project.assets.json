@@ -2933,6 +2933,21 @@
           "bin/placeholder/Dist.Dme.Model.dll": {}
         }
       },
+      "Dist.Dme.RuleSteps/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.0",
+        "dependencies": {
+          "Dist.Dme.Base": "1.0.0",
+          "Dist.Dme.DAL": "1.0.0",
+          "Newtonsoft.Json": "11.0.2"
+        },
+        "compile": {
+          "bin/placeholder/Dist.Dme.RuleSteps.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Dist.Dme.RuleSteps.dll": {}
+        }
+      },
       "Dist.Dme.SRCE/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.0",
@@ -8792,6 +8807,11 @@
       "path": "../Dist.Dme.Model/Dist.Dme.Model.csproj",
       "msbuildProject": "../Dist.Dme.Model/Dist.Dme.Model.csproj"
     },
+    "Dist.Dme.RuleSteps/1.0.0": {
+      "type": "project",
+      "path": "../Dist.Dme.RuleSteps/Dist.Dme.RuleSteps.csproj",
+      "msbuildProject": "../Dist.Dme.RuleSteps/Dist.Dme.RuleSteps.csproj"
+    },
     "Dist.Dme.SRCE/1.0.0": {
       "type": "project",
       "path": "../Dist.Dme.SRCE/Dist.Dme.SRCE.csproj",
@@ -8805,6 +8825,7 @@
       "Dist.Dme.DAL >= 1.0.0",
       "Dist.Dme.DisFS >= 1.0.0",
       "Dist.Dme.Model >= 1.0.0",
+      "Dist.Dme.RuleSteps >= 1.0.0",
       "Microsoft.NETCore.App >= 2.0.0",
       "Newtonsoft.Json >= 11.0.2"
     ]
@@ -8855,6 +8876,9 @@
             },
             "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DisFS\\Dist.Dme.DisFS.csproj": {
               "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DisFS\\Dist.Dme.DisFS.csproj"
+            },
+            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.RuleSteps\\Dist.Dme.RuleSteps.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.RuleSteps\\Dist.Dme.RuleSteps.csproj"
             },
             "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj": {
               "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj"

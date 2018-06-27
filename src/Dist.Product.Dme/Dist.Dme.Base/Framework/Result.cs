@@ -1,25 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace Dist.Dme.Base.Framework
 {
-    public enum STATUS
-    {
-        // 成功
-        SUCCESS = 0,
-        // 错误
-        ERROR = 1,
-        // 因为业务逻辑错误导致操作失败，如邮箱已存在，年龄不满足条件等。
-        FAIL = 2
-    }
     public class Result
     {
-        /// <summary>
-        /// 状态枚举对应的字符说明
-        /// </summary>
-        private String[] statusDesc = new String[] { "success", "error", "fail" };
         /// <summary>
         /// 状态
         /// </summary>
@@ -37,11 +27,18 @@ namespace Dist.Dme.Base.Framework
         /// </summary>
         public Object Data { get; set; }
 
-        public Result(STATUS status, String message, int code, Object data)
+        public Result(SystemStatusCode status, String message, int code, Object data)
         {
-            this.Status = this.statusDesc[(int)status];
+            this.Status = EnumUtil.GetEnumDisplayName(status);
             this.Message = message;
             this.Code = code;
+            this.Data = data;
+        }
+        public Result(SystemStatusCode status, String message, Object data)
+        {
+            this.Status = EnumUtil.GetEnumDisplayName(status);
+            this.Message = message;
+            this.Code = (int)status;
             this.Data = data;
         }
         /// <summary>

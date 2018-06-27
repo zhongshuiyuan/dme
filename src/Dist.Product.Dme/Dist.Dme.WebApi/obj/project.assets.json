@@ -5987,6 +5987,21 @@
           "bin/placeholder/Dist.Dme.Model.dll": {}
         }
       },
+      "Dist.Dme.RuleSteps/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.0",
+        "dependencies": {
+          "Dist.Dme.Base": "1.0.0",
+          "Dist.Dme.DAL": "1.0.0",
+          "Newtonsoft.Json": "11.0.2"
+        },
+        "compile": {
+          "bin/placeholder/Dist.Dme.RuleSteps.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Dist.Dme.RuleSteps.dll": {}
+        }
+      },
       "Dist.Dme.Service/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.0",
@@ -5996,6 +6011,7 @@
           "Dist.Dme.DAL": "1.0.0",
           "Dist.Dme.DisFS": "1.0.0",
           "Dist.Dme.Model": "1.0.0",
+          "Dist.Dme.RuleSteps": "1.0.0",
           "Newtonsoft.Json": "11.0.2"
         },
         "compile": {
@@ -15423,6 +15439,11 @@
       "type": "project",
       "path": "../Dist.Dme.Model/Dist.Dme.Model.csproj",
       "msbuildProject": "../Dist.Dme.Model/Dist.Dme.Model.csproj"
+    },
+    "Dist.Dme.RuleSteps/1.0.0": {
+      "type": "project",
+      "path": "../Dist.Dme.RuleSteps/Dist.Dme.RuleSteps.csproj",
+      "msbuildProject": "../Dist.Dme.RuleSteps/Dist.Dme.RuleSteps.csproj"
     },
     "Dist.Dme.Service/1.0.0": {
       "type": "project",

@@ -16,25 +16,25 @@ namespace Dist.Dme.Base.Framework
         public abstract string Remark { get; }
 
         public abstract Result Execute();
-        public object InParams
+        public IDictionary<string, Property> InParams
         {
             get
             {
-                return this.InputParameters;
+                return this.InputParametersMeta;
             }
         }
-        public object OutParams
+        public IDictionary<string, Property> OutParams
         {
             get
             {
-                return this.OutputParameters;
+                return this.OutputParametersMeta;
             }
         }
-        public object FeatureParams
+        public IDictionary<string, Property> FeatureParams
         {
             get
             {
-                return this.FeatureParameters;
+                return this.FeatureParametersMeta;
             }
         }
         /// <summary>
@@ -50,24 +50,24 @@ namespace Dist.Dme.Base.Framework
             {
                 IDictionary<string, IDictionary<String, Property>> dictionary = new Dictionary<string, IDictionary<String, Property>>
                 {
-                    ["InputParameters"] = InputParameters,
-                    ["OutputParameters"] = OutputParameters
+                    ["InputParameters"] = InputParametersMeta,
+                    ["OutputParameters"] = OutputParametersMeta
                 };
                 return dictionary;
             }
         }
 
         /// <summary>
-        /// 输入参数
+        /// 输入参数元数据
         /// </summary>
-        protected IDictionary<String, Property> InputParameters = new Dictionary<String, Property>();
+        protected IDictionary<String, Property> InputParametersMeta = new Dictionary<String, Property>();
         /// <summary>
-        /// 输出参数
+        /// 输出参数元数据
         /// </summary>
-        protected IDictionary<String, Property> OutputParameters = new Dictionary<String, Property>();
+        protected IDictionary<String, Property> OutputParametersMeta = new Dictionary<String, Property>();
         /// <summary>
-        /// 特征参数
+        /// 特征参数元数据
         /// </summary>
-        protected IDictionary<String, Property> FeatureParameters = new Dictionary<String, Property>();
+        protected IDictionary<String, Property> FeatureParametersMeta = new Dictionary<String, Property>();
     }
 }

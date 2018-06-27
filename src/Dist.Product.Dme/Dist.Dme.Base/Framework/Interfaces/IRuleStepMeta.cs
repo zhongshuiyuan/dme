@@ -24,7 +24,7 @@ namespace Dist.Dme.Base.Framework.Interfaces
         /// <param name="guiLocationY">界面布局y坐标</param>
         /// <param name="stepName">步骤名称</param>
         /// <returns>返回保存的步骤标识id</returns>
-        int SaveMeta(IRepository repository, int modelId, int modelVersionId, int stepId, double guiLocationX, double guiLocationY, string stepName);
+        int SaveMeta(double guiLocationX, double guiLocationY, string stepName);
         /// <summary>
         /// 保存步骤属性数据
         /// </summary>
@@ -32,14 +32,14 @@ namespace Dist.Dme.Base.Framework.Interfaces
         /// <param name="modelVersionId">版本id</param>
         /// <param name="stepId">步骤id</param>
         /// <param name="attributes">属性值，键值对</param>
-        Boolean SaveAttributes(IRepository repository, int modelId, int modelVersionId, int stepId, IDictionary<string, object> attributes);
+        Boolean SaveAttributes(IDictionary<string, object> attributes);
         /// <summary>
         /// 读取步骤属性
         /// </summary>
         /// <param name="repository"></param>
         /// <param name="stepId">步骤id</param>
         /// <returns></returns>
-        object ReadAttributes(IRepository repository, int stepId);
+        IDictionary<string, object> ReadAttributes();
         /// <summary>
         /// 获取规则步骤输入参数
         /// </summary>

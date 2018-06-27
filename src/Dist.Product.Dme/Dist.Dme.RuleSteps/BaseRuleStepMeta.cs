@@ -21,15 +21,26 @@ namespace Dist.Dme.RuleSteps
         public abstract string RuleStepName { get; set; }
         public abstract IRuleStepType RuleStepType { get; }
         public abstract object InParams { get; }
+        protected IRepository repository;
+        protected int modelId;
+        protected int versionId;
+        protected int ruleStepId;
 
+        public BaseRuleStepMeta(IRepository repository, int modelId, int versionId, int ruleStepId)
+        {
+            this.repository = repository;
+            this.modelId = modelId;
+            this.versionId = versionId;
+            this.ruleStepId = ruleStepId;
+        }
         /// <summary>
         /// 步骤需要的输入参数
         /// </summary>
         protected IDictionary<String, Property> InputParameters { get; set; } = new Dictionary<String, Property>();
 
-        public object ReadAttributes(IRepository repository, int stepId)
+        public IDictionary<string, object> ReadAttributes()
         {
-            IList<DmeRuleStepAttribute> attributes = repository.GetDbContext().Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == stepId).ToList();
+            IList<DmeRuleStepAttribute> attributes = repository.GetDbContext().Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == this.ruleStepId).ToList();
             if (attributes?.Count > 0)
             {
                 IDictionary<string, object> dictionary = new Dictionary<string, object>();
@@ -41,9 +52,7 @@ namespace Dist.Dme.RuleSteps
             }
             return null;
         }
-        public bool SaveAttributes(IRepository repository,
-            int modelId, int modelVersionId, int stepId,
-            IDictionary<string, object> attributes)
+        public bool SaveAttributes(IDictionary<string, object> attributes)
         {
             if (attributes?.Count == 0)
             {
@@ -54,13 +63,13 @@ namespace Dist.Dme.RuleSteps
             return repository.GetDbContext().Ado.UseTran<Boolean>(() => 
             {
                 // 删除的影响条目
-                int deleteCount = repository.GetDbContext().Deleteable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == stepId).ExecuteCommand();
-                LOG.Info($"删除规则[{stepId}]下的{deleteCount} 条属性记录");
+                int deleteCount = repository.GetDbContext().Deleteable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == this.ruleStepId).ExecuteCommand();
+                LOG.Info($"删除规则[{this.ruleStepId}]下的{deleteCount} 条属性记录");
                 // 保存步骤属性
-                DmeRuleStep dmeRuleStep = repository.GetDbContext().Queryable<DmeRuleStep>().Single(rs => rs.Id == stepId);
+                DmeRuleStep dmeRuleStep = repository.GetDbContext().Queryable<DmeRuleStep>().Single(rs => rs.Id == this.ruleStepId);
                 if (null ==  dmeRuleStep)
                 {
-                    throw new BusinessException(SystemStatusCode.DME_FAIL, $"规则[{stepId}]没有找到数据库记录");
+                    throw new BusinessException((int)SystemStatusCode.DME_FAIL, $"规则[{this.ruleStepId}]没有找到数据库记录");
                 }
                 // 不使用接口IList，Insertable<>批量插入存在问题
                 List<DmeRuleStepAttribute> attributeEntities = new List<DmeRuleStepAttribute>();
@@ -68,7 +77,7 @@ namespace Dist.Dme.RuleSteps
                 {
                     DmeRuleStepAttribute dmeRuleStepAttribute = new DmeRuleStepAttribute
                     {
-                        RuleStepId = stepId,
+                        RuleStepId = this.ruleStepId,
                         ModelId = dmeRuleStep.ModelId,
                         VersionId = dmeRuleStep.VersionId,
                         AttributeCode = item.Key,
@@ -80,9 +89,7 @@ namespace Dist.Dme.RuleSteps
                 return true;
             }).Data;
         }
-        public int SaveMeta(IRepository repository,
-            int modelId, int modelVersionId, int stepId,
-            double guiLocationX, double guiLocationY,
+        public int SaveMeta(double guiLocationX, double guiLocationY,
             string stepName)
         {
             // 步骤名如果为空，则使用当前步骤类型默认的名称
@@ -94,20 +101,20 @@ namespace Dist.Dme.RuleSteps
             SqlSugarClient db = repository.GetDbContext();
             return db.Ado.UseTran<int>(() => 
             {
-                if (-1 == stepId)
+                if (-1 == this.ruleStepId)
                 {
-                    LOG.Info($"步骤id为{stepId}，为新创建步骤");
+                    LOG.Info($"步骤id为{this.ruleStepId}，为新创建步骤");
                     // 查找当前步骤类型
                     DmeRuleStepType dmeRuleStepType = db.Queryable<DmeRuleStepType>().Single(rst => rst.Code == this.RuleStepType.Code);
                     if (null == dmeRuleStepType)
                     {
-                        throw new BusinessException(SystemStatusCode.DME_FAIL, $"步骤编码{this.RuleStepType.Code}不存在，请核实数据。");
+                        throw new BusinessException((int)SystemStatusCode.DME_FAIL, $"步骤编码{this.RuleStepType.Code}不存在，请核实数据。");
                     }
                     DmeRuleStep dmeRuleStep = new DmeRuleStep
                     {
                         SysCode = GuidUtil.NewGuid(),
                         ModelId = modelId,
-                        VersionId = modelVersionId,
+                        VersionId = this.versionId,
                         StepName = stepName,
                         GuiLocationX = guiLocationX,
                         GuiLocationY = guiLocationY,
@@ -117,11 +124,11 @@ namespace Dist.Dme.RuleSteps
                 }
                 else
                 {
-                    LOG.Info($"步骤id为{stepId}，更新步骤信息");
-                    DmeRuleStep dmeRuleStep = db.Queryable<DmeRuleStep>().InSingle(stepId);
+                    LOG.Info($"步骤id为{this.ruleStepId}，更新步骤信息");
+                    DmeRuleStep dmeRuleStep = db.Queryable<DmeRuleStep>().InSingle(this.ruleStepId);
                     if(null == dmeRuleStep)
                     {
-                        throw new BusinessException(SystemStatusCode.DME_FAIL, $"步骤id[{stepId}]不存在，请核实数据。");
+                        throw new BusinessException((int)SystemStatusCode.DME_FAIL, $"步骤id[{this.ruleStepId}]不存在，请核实数据。");
                     }
                     if (!string.IsNullOrEmpty(stepName))
                     {

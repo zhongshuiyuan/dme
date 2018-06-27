@@ -7997,7 +7997,8 @@
     ".NETCoreApp,Version=v2.0": [
       "Dist.Dme.Base >= 1.0.0",
       "Dist.Dme.DAL >= 1.0.0",
-      "Microsoft.NETCore.App >= 2.0.0"
+      "Microsoft.NETCore.App >= 2.0.0",
+      "Newtonsoft.Json >= 11.0.2"
     ]
   },
   "packageFolders": {
@@ -8061,6 +8062,10 @@
             "target": "Package",
             "version": "[2.0.0, )",
             "autoReferenced": true
+          },
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[11.0.2, )"
           }
         },
         "imports": [

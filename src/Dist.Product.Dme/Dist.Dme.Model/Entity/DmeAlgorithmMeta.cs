@@ -11,7 +11,7 @@ namespace Dist.Dme.Model.Entity
         [SugarColumn(IsPrimaryKey = true, ColumnName = "ID", OracleSequenceName = "SEQ_DME_ALGORITHM_METADATA")]
         public int Id { get; set; }
         public String Name { get; set; }
-        public int DataType { get; set; }
+        public String DataType { get; set; }
         public String Inout { get; set; }
         [SugarColumn(ColumnName = "ALGORITHM_ID")]
         public int AlgorithmId { get; set; }

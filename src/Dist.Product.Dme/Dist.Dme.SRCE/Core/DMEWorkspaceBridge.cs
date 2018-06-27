@@ -1,5 +1,5 @@
 ﻿using Dist.Dme.Base.Common;
-using Dist.Dme.Base.ConnectionInfo;
+using Dist.Dme.Base.DataSourceDefine;
 using Dist.Dme.Base.Framework.Exception;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.Model.DTO;
@@ -94,12 +94,12 @@ namespace Dist.Dme.SRCE.Core
             }
             if (null == workspace)
             {
-                throw new BusinessException(SystemStatusCode.DME_ERROR, "获取源要素类工作空间失败");
+                throw new BusinessException((int)SystemStatusCode.DME_ERROR, "获取源要素类工作空间失败");
             }
             TFeatureClass featureClass = this.GetFeatureClass(workspace, dto.Name);
             if (null == featureClass)
             {
-                throw new BusinessException(SystemStatusCode.DME_ERROR, "获取源要素类对象失败");
+                throw new BusinessException((int)SystemStatusCode.DME_ERROR, "获取源要素类对象失败");
             }
             return featureClass;
         }
