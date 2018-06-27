@@ -1,5 +1,6 @@
 ﻿using Dist.Dme.Base.Framework;
 using Dist.Dme.DisFS.Adapters.Mongo;
+using Dist.Dme.Model.DTO;
 using Dist.Dme.Service.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
@@ -44,13 +45,33 @@ namespace Dist.Dme.WebApi.Controllers
         {
             return base.Success(DataSourceService.GetDatabaseType(id));
         }
+        //[HttpGet]
+        //[Route("v1/data")]
+        //public void UploadDataset()
+        //{
+        //    ObjectId objectId = MongodbHelper<object>.UploadFileFromPath(this.MongodbHost, @"D:\work\dist\c_产品管理\g_规划协查\飞灵姐提供的重庆分析工具\demo数据\论坛版测试数据.mdb");
+        //    System.Console.WriteLine(objectId);
+        //}
+        /// <summary>
+        /// 获取注册的数据源
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        [Route("v1/data")]
-        public void UploadDataset()
+        [Route("v1/")]
+        public Result ListRegisteredDataSources()
         {
-            ObjectId objectId = MongodbHelper<object>.UploadFileFromPath(this.MongodbHost, @"D:\work\dist\c_产品管理\g_规划协查\飞灵姐提供的重庆分析工具\demo数据\论坛版测试数据.mdb");
-            System.Console.WriteLine(objectId);
+            return base.Success(this.DataSourceService.ListRegisteredDataSources());
         }
-  
+        /// <summary>
+        /// 注册数据源
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("v1/registry")]
+        public Result RegistryDataSource([FromBody]DatasourceAddDTO dto)
+        {
+            return base.Success(this.DataSourceService.AddDataSource(dto));
+        }
     }
 }

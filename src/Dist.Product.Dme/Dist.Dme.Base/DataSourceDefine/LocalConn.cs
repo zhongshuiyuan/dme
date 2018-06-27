@@ -14,7 +14,7 @@ namespace Dist.Dme.Base.DataSourceDefine
         /// <summary>
         /// 类型
         /// </summary>
-        public GeoDatasourceType Type { get; set; }
+        public DataSourceTypes Type { get; set; }
         /// <summary>
         /// 路径，可以是文件路径，或者文件夹路径
         /// </summary>

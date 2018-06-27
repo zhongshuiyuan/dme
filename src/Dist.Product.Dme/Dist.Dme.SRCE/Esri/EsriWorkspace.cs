@@ -24,22 +24,22 @@ namespace Dist.Dme.SRCE.Esri
             IWorkspace workspace = null;
             switch (conn.Type)
             {
-                case Base.Common.GeoDatasourceType.SHAPEFILE:
+                case Base.Common.DataSourceTypes.SHAPEFILE:
                     workspace = WorkspaceUtil.OpenShapeFileWorkspace(conn.Path);
                     break;
-                case Base.Common.GeoDatasourceType.COVERAGE:
+                case Base.Common.DataSourceTypes.COVERAGE:
                     workspace = WorkspaceUtil.OpenCoverageWorkspace(conn.Path);
                     break;
-                case Base.Common.GeoDatasourceType.PERSONAL_GEODATABASE:
+                case Base.Common.DataSourceTypes.PERSONAL_GEODATABASE:
                     workspace = WorkspaceUtil.OpenMdbWorspace(conn.Path);
                     break;
-                case Base.Common.GeoDatasourceType.FILE_GEODATABASE:
+                case Base.Common.DataSourceTypes.FILE_GEODATABASE:
                     workspace = WorkspaceUtil.OpenFileGdbWorkspace(conn.Path);
                     break;
-                case Base.Common.GeoDatasourceType.TIN:
+                case Base.Common.DataSourceTypes.TIN:
                     workspace = WorkspaceUtil.OpenTinWorkspace(conn.Path);
                     break;
-                case Base.Common.GeoDatasourceType.CAD:
+                case Base.Common.DataSourceTypes.CAD:
                     workspace = WorkspaceUtil.OpenCadWorkspace(conn.Path);
                     break;
                 default:

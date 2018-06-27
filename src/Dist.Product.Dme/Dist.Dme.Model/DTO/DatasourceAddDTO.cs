@@ -13,7 +13,7 @@ namespace Dist.Dme.Model.DTO
         // public int IsLocal { get; set; }
         public String Type { get; set; }
         public String Connection { get; set; }
-        public int CreateTime { get; set; }
+        public long CreateTime { get; set; }
         public String Remark { get; set; }
     }
 }

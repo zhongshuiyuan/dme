@@ -80,7 +80,7 @@ namespace Dist.Dme.SRCE.Core
         public virtual TFeatureClass GetFeatureClass(InputFeatureClassDTO dto)
         {
             TWorkspace workspace;
-            if (GeoDatasourceType.ENTERPRISE_GEODATABASE == EnumUtil.GetEnumObjByName<GeoDatasourceType>(dto.Source.Type))
+            if (DataSourceTypes.ENTERPRISE_GEODATABASE == EnumUtil.GetEnumObjByName<DataSourceTypes>(dto.Source.Type))
             {
                 // 企业级数据库连接
                 OracleConn conn = JsonConvert.DeserializeObject<OracleConn>(dto.Source.Connection);
@@ -89,7 +89,7 @@ namespace Dist.Dme.SRCE.Core
             else
             {
                 LocalConn conn = JsonConvert.DeserializeObject<LocalConn>(dto.Source.Connection);
-                conn.Type = EnumUtil.GetEnumObjByName<GeoDatasourceType>(dto.Source.Type);
+                conn.Type = EnumUtil.GetEnumObjByName<DataSourceTypes>(dto.Source.Type);
                 workspace = this.OpenWorkspace(conn);
             }
             if (null == workspace)

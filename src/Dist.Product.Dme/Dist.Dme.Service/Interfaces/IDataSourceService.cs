@@ -29,5 +29,10 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="datasourceAddDTO">数据源信息</param>
         /// <returns></returns>
         object AddDataSource(DatasourceAddDTO datasourceAddDTO);
+        /// <summary>
+        /// 获取已注册的数据源
+        /// </summary>
+        /// <returns></returns>
+        object ListRegisteredDataSources();
     }
 }

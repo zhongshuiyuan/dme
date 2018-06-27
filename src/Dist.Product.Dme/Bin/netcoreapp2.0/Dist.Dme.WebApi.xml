@@ -149,6 +149,12 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.DataSourcesController.ListRegistryDataSources">
+            <summary>
+            获取注册的数据源
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Dist.Dme.WebApi.Controllers.ModelsController">
             <summary>
             模型服务
