@@ -50,22 +50,30 @@ namespace Dist.Dme.WebApi
            IConfigurationSection cacheProviderSection = this.Configuration.GetSection("ConnectionStrings").GetSection("CacheProvider");
             if (cacheProviderSection != null)
             {
-                string type = cacheProviderSection.GetValue<string>("type");
-                if ("redis".Equals(type, StringComparison.OrdinalIgnoreCase))
+                try
                 {
-                    // redis 分布式缓存
-                    RedisCacheProvider provider = cacheProviderSection.GetSection("provider").Get<RedisCacheProvider>();
-                    services.AddSingleton(typeof(ICacheService), new RedisCacheService(new RedisCacheOptions
+                    string type = cacheProviderSection.GetValue<string>("type");
+                    if ("redis".Equals(type, StringComparison.OrdinalIgnoreCase))
                     {
-                        Configuration = provider.HostName + ":" + provider.Port,
-                        InstanceName = provider.InstanceName
-                    }, provider.Database));
-                } else if ("redis.r.w".Equals(type, StringComparison.OrdinalIgnoreCase))
+                        // redis 分布式缓存
+                        RedisCacheProvider provider = cacheProviderSection.GetSection("provider").Get<RedisCacheProvider>();
+                        services.AddSingleton(typeof(ICacheService), new RedisCacheService(new RedisCacheOptions
+                        {
+                            Configuration = provider.HostName + ":" + provider.Port,
+                            InstanceName = provider.InstanceName
+                        }, provider.Database));
+                    }
+                    else if ("redis.r.w".Equals(type, StringComparison.OrdinalIgnoreCase))
+                    {
+                        // redis读写分裂
+                        RedisRWConfigInfo provider = cacheProviderSection.GetSection("provider").Get<RedisRWConfigInfo>();
+                        RedisManager redisManager = new RedisManager(provider);
+                        services.AddSingleton(typeof(ICacheService), new RedisRWCacheService(redisManager.GetClient()));
+                    }
+                }
+                catch (Exception ex)
                 {
-                    // redis读写分裂
-                    RedisRWConfigInfo provider = cacheProviderSection.GetSection("provider").Get<RedisRWConfigInfo>();
-                    RedisManager redisManager = new RedisManager(provider);
-                    services.AddSingleton(typeof(ICacheService), new RedisRWCacheService(redisManager.GetClient()));
+                    LOG.Error("redis连接失败", ex);
                 }
             }
             else
@@ -82,14 +90,21 @@ namespace Dist.Dme.WebApi
             IConfigurationSection mongoSection = this.Configuration.GetSection("ConnectionStrings").GetSection("Mongo");
             if (mongoSection != null)
             {
-                // 注册mongo连接信息
-                MongodbHost mongohost = mongoSection.Get<MongodbHost>();
-                services.AddSingleton(typeof(MongodbHost), mongohost);
-                // IMongoClient mongoClient = new MongoClient(mongohost.Connection);
-                IMongoClient mongoClient = MongodbManager<object>.GetMongodbClient(mongohost.Connection);
-                services.AddSingleton(typeof(IMongoClient), mongoClient);
-                IMongoDatabase mongoDatabase = mongoClient.GetDatabase(mongohost.DataBase);
-                services.AddSingleton(typeof(IMongoDatabase), mongoDatabase);
+                try
+                {
+                    // 注册mongo连接信息
+                    MongodbHost mongohost = mongoSection.Get<MongodbHost>();
+                    services.AddSingleton(typeof(MongodbHost), mongohost);
+                    // IMongoClient mongoClient = new MongoClient(mongohost.Connection);
+                    IMongoClient mongoClient = MongodbManager<object>.GetMongodbClient(mongohost.Connection);
+                    services.AddSingleton(typeof(IMongoClient), mongoClient);
+                    IMongoDatabase mongoDatabase = mongoClient.GetDatabase(mongohost.DataBase);
+                    services.AddSingleton(typeof(IMongoDatabase), mongoDatabase);
+                }
+                catch (Exception ex)
+                {
+                    LOG.Error("mongo连接失败", ex);
+                }
             }
             // 注册知识库
             services.AddSingleton<IRepository, Repository>();
@@ -119,7 +134,6 @@ namespace Dist.Dme.WebApi
 
                 //  c.OperationFilter<HttpHeaderOperation>(); // 添加httpHeader参数
             });
-          
         }
        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

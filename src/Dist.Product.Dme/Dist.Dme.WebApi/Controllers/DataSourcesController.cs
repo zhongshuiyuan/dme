@@ -25,22 +25,22 @@ namespace Dist.Dme.WebApi.Controllers
             this.MongodbHost = mongodbHost;
         }
         /// <summary>
-        /// 获取所有数据库类型
+        /// 获取所有数据源类型
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("v1/databasetypes")]
+        [Route("v1/types")]
         public Result ListDatabaseTypes()
         {
-            return base.Success(DataSourceService.ListDatabaseTypes());
+            return base.Success(DataSourceService.ListDataSourceTypes());
         }
         /// <summary>
-        /// 获取具体某个数据库类型
+        /// 获取具体某个数据源类型
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("v1/databasetypes/{id}")]
+        [Route("v1/types/{id}")]
         public Result GetDatabaseType(int id)
         {
             return base.Success(DataSourceService.GetDatabaseType(id));
@@ -53,25 +53,51 @@ namespace Dist.Dme.WebApi.Controllers
         //    System.Console.WriteLine(objectId);
         //}
         /// <summary>
-        /// 获取注册的数据源
+        /// 获取已注册的数据源
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("v1/")]
+        [Route("v1")]
         public Result ListRegisteredDataSources()
         {
             return base.Success(this.DataSourceService.ListRegisteredDataSources());
         }
         /// <summary>
+        /// 获取数据源连接的元数据信息
+        /// </summary>
+        /// <param name="typeCode">数据源类型编码</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("conn/meta/v1/{typeCode}")]
+        public Result GetDatasourceConnMeta(string typeCode)
+        {
+            return base.Success(this.DataSourceService.GetDatasourceConnMeta(typeCode));
+        }
+        /// <summary>
         /// 注册数据源
         /// </summary>
-        /// <param name="dto"></param>
+        /// <param name="dto">数据源元数据信息</param>
         /// <returns></returns>
         [HttpPost]
-        [Route("v1/registry")]
+        [Route("register/v1")]
         public Result RegistryDataSource([FromBody]DatasourceAddDTO dto)
         {
             return base.Success(this.DataSourceService.AddDataSource(dto));
+        }
+        /// <summary>
+        /// 验证连接是否有效
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns>true/false</returns>
+        [HttpPost]
+        [Route("conn/valid/v1")]
+        public Result CheckConnectionValid([FromBody]DataSourceConnDTO dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return base.Error(ModelState, "验证失败");
+            }
+            return base.Success(this.DataSourceService.CheckConnectionValid(dto), "验证通过");
         }
     }
 }

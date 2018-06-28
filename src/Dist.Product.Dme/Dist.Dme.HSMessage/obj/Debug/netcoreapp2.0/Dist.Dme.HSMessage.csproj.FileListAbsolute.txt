@@ -9,3 +9,4 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.HSMessage\obj\Debug\netcoreapp2.0\Di
 D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.HSMessage.deps.json
 D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.HSMessage.dll
 D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.HSMessage.pdb
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.HSMessage\obj\Debug\netcoreapp2.0\Dist.Dme.HSMessage.csprojAssemblyReference.cache

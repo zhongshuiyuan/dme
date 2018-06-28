@@ -4,7 +4,6 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.WebApi.runtimeconfig.dev.json
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.WebApi.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.WebApi.pdb
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.AECommon.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.Base.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.DAL.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.Model.dll
@@ -12,9 +11,7 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.Base.pdb
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.Service.pdb
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.Model.pdb
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.AECommon.pdb
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.DAL.pdb
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.0\Dist.Dme.WebApi.csprojResolveAssemblyReference.cache
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.0\Dist.Dme.WebApi.csproj.CoreCompileInputs.cache
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.0\Dist.Dme.WebApi.AssemblyInfoInputs.cache
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.0\Dist.Dme.WebApi.AssemblyInfo.cs
@@ -23,3 +20,15 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.0\Dist.
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.0\Dist.Dme.WebApi.csproj.CopyComplete
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.Algorithms.LandConflictDetection.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.Algorithms.LandConflictDetection.pdb
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\register.json
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.Algorithms.Overlay.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.DisCache.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.DisFS.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.RuleSteps.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.SRCE.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.DisCache.pdb
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.DisFS.pdb
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.SRCE.pdb
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.Algorithms.Overlay.pdb
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.0\Dist.Dme.RuleSteps.pdb
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.0\Dist.Dme.WebApi.csprojAssemblyReference.cache

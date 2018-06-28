@@ -1,16 +1,16 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "08f6801e82b35a874934b9377e1d01e7467d58e0"
+    "signature": "ba5bffea2e138fd5df16942ce28d5ec4b890414d"
   },
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.0": {
       "Dist.Dme.Algorithms.LandConflictDetection/1.0.0": {
         "dependencies": {
-          "Dist.Dme.AECommon": "1.0.0",
           "Dist.Dme.Base": "1.0.0",
           "Dist.Dme.Model": "1.0.0",
+          "Dist.Dme.SRCE": "1.0.0",
           "ESRI.ArcGIS.Geodatabase": "10.1.0.3035",
           "ESRI.ArcGIS.Version": "10.1.0.3035",
           "log4net": "2.0.8"
@@ -21,82 +21,122 @@
       },
       "ESRI.ArcGIS.AnalysisTools/10.1.0.3035": {
         "runtime": {
-          "lib/ESRI.ArcGIS.AnalysisTools.dll": {}
+          "lib/ESRI.ArcGIS.AnalysisTools.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.3035"
+          }
         }
       },
       "ESRI.ArcGIS.Carto/10.1.0.3035": {
         "runtime": {
-          "lib/ESRI.ArcGIS.Carto.dll": {}
+          "lib/ESRI.ArcGIS.Carto.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.3035"
+          }
         }
       },
       "ESRI.ArcGIS.DataManagementTools/10.1.0.3035": {
         "runtime": {
-          "lib/ESRI.ArcGIS.DataManagementTools.dll": {}
+          "lib/ESRI.ArcGIS.DataManagementTools.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.3035"
+          }
         }
       },
       "ESRI.ArcGIS.DataSourcesFile/10.1.0.3035": {
         "runtime": {
-          "lib/ESRI.ArcGIS.DataSourcesFile.dll": {}
+          "lib/ESRI.ArcGIS.DataSourcesFile.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.3035"
+          }
         }
       },
       "ESRI.ArcGIS.DataSourcesGDB/10.1.0.3035": {
         "runtime": {
-          "lib/ESRI.ArcGIS.DataSourcesGDB.dll": {}
+          "lib/ESRI.ArcGIS.DataSourcesGDB.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.3035"
+          }
         }
       },
       "ESRI.ArcGIS.DataSourcesOleDB/10.1.0.3035": {
         "runtime": {
-          "lib/ESRI.ArcGIS.DataSourcesOleDB.dll": {}
+          "lib/ESRI.ArcGIS.DataSourcesOleDB.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.3035"
+          }
         }
       },
       "ESRI.ArcGIS.DataSourcesRaster/10.1.0.3035": {
         "runtime": {
-          "lib/ESRI.ArcGIS.DataSourcesRaster.dll": {}
+          "lib/ESRI.ArcGIS.DataSourcesRaster.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.3035"
+          }
         }
       },
       "ESRI.ArcGIS.Display/10.1.0.3035": {
         "runtime": {
-          "lib/ESRI.ArcGIS.Display.dll": {}
+          "lib/ESRI.ArcGIS.Display.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.3035"
+          }
         }
       },
       "ESRI.ArcGIS.Geodatabase/10.1.0.3035": {
         "runtime": {
-          "lib/ESRI.ArcGIS.Geodatabase.dll": {}
+          "lib/ESRI.ArcGIS.Geodatabase.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.3035"
+          }
         }
       },
       "ESRI.ArcGIS.Geometry/10.1.0.3035": {
         "runtime": {
-          "lib/ESRI.ArcGIS.Geometry.dll": {}
+          "lib/ESRI.ArcGIS.Geometry.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.3035"
+          }
         }
       },
       "ESRI.ArcGIS.Geoprocessing/10.1.0.3035": {
         "runtime": {
-          "lib/ESRI.ArcGIS.Geoprocessing.dll": {}
+          "lib/ESRI.ArcGIS.Geoprocessing.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.3035"
+          }
         }
       },
       "ESRI.ArcGIS.Geoprocessor/10.1.0.3035": {
         "runtime": {
-          "lib/ESRI.ArcGIS.Geoprocessor.dll": {}
+          "lib/ESRI.ArcGIS.Geoprocessor.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.3035"
+          }
         }
       },
       "ESRI.ArcGIS.Server/10.1.0.3035": {
         "runtime": {
-          "lib/ESRI.ArcGIS.Server.dll": {}
+          "lib/ESRI.ArcGIS.Server.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.3035"
+          }
         }
       },
       "ESRI.ArcGIS.System/10.1.0.3035": {
         "runtime": {
-          "lib/ESRI.ArcGIS.System.dll": {}
+          "lib/ESRI.ArcGIS.System.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.3035"
+          }
         }
       },
       "ESRI.ArcGIS.Version/10.1.0.3035": {
         "runtime": {
-          "lib/ESRI.ArcGIS.Version.dll": {}
-        }
-      },
-      "LessJie.System.Web.Http/1.0.0": {
-        "runtime": {
-          "lib/System.Web.Http.dll": {}
+          "lib/ESRI.ArcGIS.Version.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.3035"
+          }
         }
       },
       "log4net/2.0.8": {
@@ -129,7 +169,33 @@
           "System.Xml.XmlDocument": "4.0.1"
         },
         "runtime": {
-          "lib/netstandard1.3/log4net.dll": {}
+          "lib/netstandard1.3/log4net.dll": {
+            "assemblyVersion": "2.0.8.0",
+            "fileVersion": "2.0.8.0"
+          }
+        }
+      },
+      "Microsoft.AspNet.WebApi.Client/5.2.6": {
+        "dependencies": {
+          "Newtonsoft.Json": "11.0.2",
+          "Newtonsoft.Json.Bson": "1.0.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Net.Http.Formatting.dll": {
+            "assemblyVersion": "5.2.6.0",
+            "fileVersion": "5.2.60510.0"
+          }
+        }
+      },
+      "Microsoft.AspNet.WebApi.Core/5.2.6": {
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Client": "5.2.6"
+        },
+        "runtime": {
+          "lib/net45/System.Web.Http.dll": {
+            "assemblyVersion": "5.2.6.0",
+            "fileVersion": "5.2.60510.0"
+          }
         }
       },
       "Microsoft.Data.Sqlite/2.0.0": {
@@ -143,7 +209,10 @@
           "SQLitePCLRaw.core": "1.1.7"
         },
         "runtime": {
-          "lib/netstandard2.0/Microsoft.Data.Sqlite.dll": {}
+          "lib/netstandard2.0/Microsoft.Data.Sqlite.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.0.17205"
+          }
         }
       },
       "Microsoft.Extensions.Configuration/1.1.2": {
@@ -151,7 +220,10 @@
           "Microsoft.Extensions.Configuration.Abstractions": "1.1.2"
         },
         "runtime": {
-          "lib/netstandard1.1/Microsoft.Extensions.Configuration.dll": {}
+          "lib/netstandard1.1/Microsoft.Extensions.Configuration.dll": {
+            "assemblyVersion": "1.1.2.0",
+            "fileVersion": "1.1.2.30427"
+          }
         }
       },
       "Microsoft.Extensions.Configuration.Abstractions/1.1.2": {
@@ -159,7 +231,10 @@
           "Microsoft.Extensions.Primitives": "1.1.1"
         },
         "runtime": {
-          "lib/netstandard1.0/Microsoft.Extensions.Configuration.Abstractions.dll": {}
+          "lib/netstandard1.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
+            "assemblyVersion": "1.1.2.0",
+            "fileVersion": "1.1.2.30427"
+          }
         }
       },
       "Microsoft.Extensions.Configuration.FileExtensions/1.1.2": {
@@ -169,7 +244,10 @@
           "System.Threading.Thread": "4.3.0"
         },
         "runtime": {
-          "lib/netstandard1.3/Microsoft.Extensions.Configuration.FileExtensions.dll": {}
+          "lib/netstandard1.3/Microsoft.Extensions.Configuration.FileExtensions.dll": {
+            "assemblyVersion": "1.1.2.0",
+            "fileVersion": "1.1.2.30427"
+          }
         }
       },
       "Microsoft.Extensions.Configuration.Json/1.1.2": {
@@ -181,7 +259,10 @@
           "System.Runtime.Serialization.Primitives": "4.3.0"
         },
         "runtime": {
-          "lib/netstandard1.3/Microsoft.Extensions.Configuration.Json.dll": {}
+          "lib/netstandard1.3/Microsoft.Extensions.Configuration.Json.dll": {
+            "assemblyVersion": "1.1.2.0",
+            "fileVersion": "1.1.2.30427"
+          }
         }
       },
       "Microsoft.Extensions.FileProviders.Abstractions/1.1.1": {
@@ -189,7 +270,10 @@
           "Microsoft.Extensions.Primitives": "1.1.1"
         },
         "runtime": {
-          "lib/netstandard1.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {}
+          "lib/netstandard1.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {
+            "assemblyVersion": "1.1.1.0",
+            "fileVersion": "1.1.1.30427"
+          }
         }
       },
       "Microsoft.Extensions.FileProviders.Physical/1.1.1": {
@@ -199,12 +283,18 @@
           "System.IO.FileSystem.Watcher": "4.3.0"
         },
         "runtime": {
-          "lib/netstandard1.3/Microsoft.Extensions.FileProviders.Physical.dll": {}
+          "lib/netstandard1.3/Microsoft.Extensions.FileProviders.Physical.dll": {
+            "assemblyVersion": "1.1.1.0",
+            "fileVersion": "1.1.1.30427"
+          }
         }
       },
       "Microsoft.Extensions.FileSystemGlobbing/1.1.1": {
         "runtime": {
-          "lib/netstandard1.3/Microsoft.Extensions.FileSystemGlobbing.dll": {}
+          "lib/netstandard1.3/Microsoft.Extensions.FileSystemGlobbing.dll": {
+            "assemblyVersion": "1.1.1.0",
+            "fileVersion": "1.1.1.30427"
+          }
         }
       },
       "Microsoft.Extensions.Primitives/1.1.1": {
@@ -212,7 +302,10 @@
           "System.Runtime.CompilerServices.Unsafe": "4.3.0"
         },
         "runtime": {
-          "lib/netstandard1.0/Microsoft.Extensions.Primitives.dll": {}
+          "lib/netstandard1.0/Microsoft.Extensions.Primitives.dll": {
+            "assemblyVersion": "1.1.1.0",
+            "fileVersion": "1.1.1.30427"
+          }
         }
       },
       "Microsoft.NETCore.Targets/1.1.0": {},
@@ -270,12 +363,29 @@
           "System.Threading.Timer": "4.3.0"
         },
         "runtime": {
-          "lib/netstandard1.3/MySql.Data.dll": {}
+          "lib/netstandard1.3/MySql.Data.dll": {
+            "assemblyVersion": "6.10.4.0",
+            "fileVersion": "6.10.4.0"
+          }
         }
       },
       "Newtonsoft.Json/11.0.2": {
         "runtime": {
-          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "11.0.0.0",
+            "fileVersion": "11.0.2.21924"
+          }
+        }
+      },
+      "Newtonsoft.Json.Bson/1.0.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "11.0.2"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.1.20722"
+          }
         }
       },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
@@ -421,7 +531,8 @@
         "runtimeTargets": {
           "runtimes/win-arm64/native/sni.dll": {
             "rid": "win-arm64",
-            "assetType": "native"
+            "assetType": "native",
+            "fileVersion": "4.6.25512.1"
           }
         }
       },
@@ -429,7 +540,8 @@
         "runtimeTargets": {
           "runtimes/win-x64/native/sni.dll": {
             "rid": "win-x64",
-            "assetType": "native"
+            "assetType": "native",
+            "fileVersion": "4.6.25512.1"
           }
         }
       },
@@ -437,7 +549,8 @@
         "runtimeTargets": {
           "runtimes/win-x86/native/sni.dll": {
             "rid": "win-x86",
-            "assetType": "native"
+            "assetType": "native",
+            "fileVersion": "4.6.25512.1"
           }
         }
       },
@@ -450,24 +563,35 @@
           "SQLitePCLRaw.provider.e_sqlite3.netstandard11": "1.1.7"
         },
         "runtime": {
-          "lib/netcoreapp/SQLitePCLRaw.batteries_green.dll": {},
-          "lib/netcoreapp/SQLitePCLRaw.batteries_v2.dll": {}
+          "lib/netcoreapp/SQLitePCLRaw.batteries_green.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          },
+          "lib/netcoreapp/SQLitePCLRaw.batteries_v2.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "SQLitePCLRaw.core/1.1.7": {
         "runtime": {
-          "lib/netstandard1.1/SQLitePCLRaw.core.dll": {}
+          "lib/netstandard1.1/SQLitePCLRaw.core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "SQLitePCLRaw.lib.e_sqlite3.linux/1.1.7": {
         "runtimeTargets": {
           "runtimes/linux-x64/native/libe_sqlite3.so": {
             "rid": "linux-x64",
-            "assetType": "native"
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
           },
           "runtimes/linux-x86/native/libe_sqlite3.so": {
             "rid": "linux-x86",
-            "assetType": "native"
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
           }
         }
       },
@@ -475,7 +599,8 @@
         "runtimeTargets": {
           "runtimes/osx-x64/native/libe_sqlite3.dylib": {
             "rid": "osx-x64",
-            "assetType": "native"
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
           }
         }
       },
@@ -483,11 +608,13 @@
         "runtimeTargets": {
           "runtimes/win7-x64/native/e_sqlite3.dll": {
             "rid": "win7-x64",
-            "assetType": "native"
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
           },
           "runtimes/win7-x86/native/e_sqlite3.dll": {
             "rid": "win7-x86",
-            "assetType": "native"
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
           }
         }
       },
@@ -496,10 +623,13 @@
           "SQLitePCLRaw.core": "1.1.7"
         },
         "runtime": {
-          "lib/netstandard1.1/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+          "lib/netstandard1.1/SQLitePCLRaw.provider.e_sqlite3.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
-      "sqlSugarCore/4.6.4.7": {
+      "sqlSugarCore/4.6.4.9": {
         "dependencies": {
           "Microsoft.Data.Sqlite": "2.0.0",
           "MySql.Data": "6.10.4",
@@ -509,7 +639,10 @@
           "System.Reflection.Emit.Lightweight": "4.3.0"
         },
         "runtime": {
-          "lib/netstandard2.0/SqlSugar.dll": {}
+          "lib/netstandard2.0/SqlSugar.dll": {
+            "assemblyVersion": "4.6.4.9",
+            "fileVersion": "4.6.4.9"
+          }
         }
       },
       "System.AppContext/4.1.0": {
@@ -653,16 +786,23 @@
           "runtime.native.System.Data.SqlClient.sni": "4.4.0"
         },
         "runtime": {
-          "lib/netstandard2.0/System.Data.SqlClient.dll": {}
+          "lib/netstandard2.0/System.Data.SqlClient.dll": {
+            "assemblyVersion": "4.2.0.0",
+            "fileVersion": "4.6.25519.3"
+          }
         },
         "runtimeTargets": {
           "runtimes/unix/lib/netstandard2.0/System.Data.SqlClient.dll": {
             "rid": "unix",
-            "assetType": "runtime"
+            "assetType": "runtime",
+            "assemblyVersion": "4.2.0.0",
+            "fileVersion": "4.6.25519.3"
           },
           "runtimes/win/lib/netstandard2.0/System.Data.SqlClient.dll": {
             "rid": "win",
-            "assetType": "runtime"
+            "assetType": "runtime",
+            "assemblyVersion": "4.2.0.0",
+            "fileVersion": "4.6.25519.3"
           }
         }
       },
@@ -1257,7 +1397,10 @@
           "System.Runtime": "4.3.0"
         },
         "runtime": {
-          "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+          "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll": {
+            "assemblyVersion": "4.0.2.0",
+            "fileVersion": "0.0.0.0"
+          }
         }
       },
       "System.Runtime.Extensions/4.3.0": {
@@ -1554,12 +1697,17 @@
       },
       "System.Text.Encoding.CodePages/4.4.0": {
         "runtime": {
-          "lib/netstandard2.0/System.Text.Encoding.CodePages.dll": {}
+          "lib/netstandard2.0/System.Text.Encoding.CodePages.dll": {
+            "assemblyVersion": "4.1.0.0",
+            "fileVersion": "4.6.25519.3"
+          }
         },
         "runtimeTargets": {
           "runtimes/win/lib/netcoreapp2.0/System.Text.Encoding.CodePages.dll": {
             "rid": "win",
-            "assetType": "runtime"
+            "assetType": "runtime",
+            "assemblyVersion": "4.1.0.0",
+            "fileVersion": "4.6.25519.3"
           }
         }
       },
@@ -1661,8 +1809,29 @@
           "System.Xml.ReaderWriter": "4.0.11"
         }
       },
-      "Dist.Dme.AECommon/1.0.0": {
+      "Dist.Dme.Base/1.0.0": {
         "dependencies": {
+          "Microsoft.AspNet.WebApi.Core": "5.2.6",
+          "Newtonsoft.Json": "11.0.2",
+          "log4net": "2.0.8",
+          "sqlSugarCore": "4.6.4.9"
+        },
+        "runtime": {
+          "Dist.Dme.Base.dll": {}
+        }
+      },
+      "Dist.Dme.Model/1.0.0": {
+        "dependencies": {
+          "sqlSugarCore": "4.6.4.9"
+        },
+        "runtime": {
+          "Dist.Dme.Model.dll": {}
+        }
+      },
+      "Dist.Dme.SRCE/1.0.0": {
+        "dependencies": {
+          "Dist.Dme.Base": "1.0.0",
+          "Dist.Dme.Model": "1.0.0",
           "ESRI.ArcGIS.AnalysisTools": "10.1.0.3035",
           "ESRI.ArcGIS.Carto": "10.1.0.3035",
           "ESRI.ArcGIS.DataManagementTools": "10.1.0.3035",
@@ -1681,25 +1850,7 @@
           "log4net": "2.0.8"
         },
         "runtime": {
-          "Dist.Dme.AECommon.dll": {}
-        }
-      },
-      "Dist.Dme.Base/1.0.0": {
-        "dependencies": {
-          "LessJie.System.Web.Http": "1.0.0",
-          "Newtonsoft.Json": "11.0.2",
-          "log4net": "2.0.8"
-        },
-        "runtime": {
-          "Dist.Dme.Base.dll": {}
-        }
-      },
-      "Dist.Dme.Model/1.0.0": {
-        "dependencies": {
-          "sqlSugarCore": "4.6.4.7"
-        },
-        "runtime": {
-          "Dist.Dme.Model.dll": {}
+          "Dist.Dme.SRCE.dll": {}
         }
       }
     }
@@ -1815,19 +1966,26 @@
       "path": "esri.arcgis.version/10.1.0.3035",
       "hashPath": "esri.arcgis.version.10.1.0.3035.nupkg.sha512"
     },
-    "LessJie.System.Web.Http/1.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-6OFq2UNxTuZ95fC1vTtdwyT68MmxG4VBVGYmEAR0+e7x3hBmZb9yWF9NMAhYbtHNWWNY2jZBEvOL5qNfv3WDJw==",
-      "path": "lessjie.system.web.http/1.0.0",
-      "hashPath": "lessjie.system.web.http.1.0.0.nupkg.sha512"
-    },
     "log4net/2.0.8": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-N41MQGHZImiCfn0cUuSBjZxrcNfIQCuCgQP0rpgB3J/NWponEh3lc1LxJEuIsPAR9Oc1jVvfkNNFCY1C5hf9LA==",
       "path": "log4net/2.0.8",
       "hashPath": "log4net.2.0.8.nupkg.sha512"
+    },
+    "Microsoft.AspNet.WebApi.Client/5.2.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rMDlyePoxggkmN/qgha1+BR2Uy+dOr38xKCQOPfVNKGY07R2nYJGMTKJFE1XFgwD70RYUNazf2fqutjJF18XgQ==",
+      "path": "microsoft.aspnet.webapi.client/5.2.6",
+      "hashPath": "microsoft.aspnet.webapi.client.5.2.6.nupkg.sha512"
+    },
+    "Microsoft.AspNet.WebApi.Core/5.2.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QMFixs/MvKZXjfUbV0gXxF85LKi+keu/zJKv13upg/JlcxJ+wdLSYzyHO/sgPPUuFVstgndK6Zt3VduWeqFmHQ==",
+      "path": "microsoft.aspnet.webapi.core/5.2.6",
+      "hashPath": "microsoft.aspnet.webapi.core.5.2.6.nupkg.sha512"
     },
     "Microsoft.Data.Sqlite/2.0.0": {
       "type": "package",
@@ -1933,6 +2091,13 @@
       "sha512": "sha512-IvJe1pj7JHEsP8B8J8DwlMEx8UInrs/x+9oVY+oCD13jpLu4JbJU2WCIsMRn5C4yW9+DgkaO8uiVE5VHKjpmdQ==",
       "path": "newtonsoft.json/11.0.2",
       "hashPath": "newtonsoft.json.11.0.2.nupkg.sha512"
+    },
+    "Newtonsoft.Json.Bson/1.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5PYT/IqQ+UK31AmZiSS102R6EsTo+LGTSI8bp7WAUqDKaF4wHXD8U9u4WxTI1vc64tYi++8p3dk3WWNqPFgldw==",
+      "path": "newtonsoft.json.bson/1.0.1",
+      "hashPath": "newtonsoft.json.bson.1.0.1.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
       "type": "package",
@@ -2130,12 +2295,12 @@
       "path": "sqlitepclraw.provider.e_sqlite3.netstandard11/1.1.7",
       "hashPath": "sqlitepclraw.provider.e_sqlite3.netstandard11.1.1.7.nupkg.sha512"
     },
-    "sqlSugarCore/4.6.4.7": {
+    "sqlSugarCore/4.6.4.9": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-AcqKRZumwyizkl7EdT8tSDoyC6M9wp9lJeExct3Ewrgrw/5ph7rXoDqNhn0rjhUrMJYuckTX1zDBfQwbqE7I2A==",
-      "path": "sqlsugarcore/4.6.4.7",
-      "hashPath": "sqlsugarcore.4.6.4.7.nupkg.sha512"
+      "sha512": "sha512-BIY0s68mJE/sjdoRSTr8otMTqRq+EHH1KxlifaKevj/DSv93iB4dhVQKfO/3u9eedtrA4GYJdnh/vhTiIbXddQ==",
+      "path": "sqlsugarcore/4.6.4.9",
+      "hashPath": "sqlsugarcore.4.6.4.9.nupkg.sha512"
     },
     "System.AppContext/4.1.0": {
       "type": "package",
@@ -2732,17 +2897,17 @@
       "path": "system.xml.xmldocument/4.0.1",
       "hashPath": "system.xml.xmldocument.4.0.1.nupkg.sha512"
     },
-    "Dist.Dme.AECommon/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
     "Dist.Dme.Base/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
     "Dist.Dme.Model/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Dist.Dme.SRCE/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

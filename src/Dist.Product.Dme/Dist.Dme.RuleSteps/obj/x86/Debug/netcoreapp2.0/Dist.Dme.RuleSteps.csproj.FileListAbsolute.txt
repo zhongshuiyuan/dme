@@ -1,0 +1,9 @@
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.RuleSteps.deps.json
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.RuleSteps.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.RuleSteps.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\obj\x86\Debug\netcoreapp2.0\Dist.Dme.RuleSteps.csprojResolveAssemblyReference.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\obj\x86\Debug\netcoreapp2.0\Dist.Dme.RuleSteps.csproj.CoreCompileInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\obj\x86\Debug\netcoreapp2.0\Dist.Dme.RuleSteps.AssemblyInfoInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\obj\x86\Debug\netcoreapp2.0\Dist.Dme.RuleSteps.AssemblyInfo.cs
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\obj\x86\Debug\netcoreapp2.0\Dist.Dme.RuleSteps.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\obj\x86\Debug\netcoreapp2.0\Dist.Dme.RuleSteps.pdb

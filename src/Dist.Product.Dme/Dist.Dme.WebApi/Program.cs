@@ -22,7 +22,7 @@ namespace Dist.Dme.WebApi
                 //.UseKestrel()
                 //.UseContentRoot(Directory.GetCurrentDirectory())
                 //.UseUrls("http://*:7321")
-                //.UseIISIntegration()
+                .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
     }

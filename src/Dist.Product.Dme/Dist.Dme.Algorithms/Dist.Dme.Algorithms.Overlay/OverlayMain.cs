@@ -83,17 +83,17 @@ namespace Dist.Dme.Algorithms.Overlay
 
             // 初始化输入参数
             base.InputParametersMeta.Add(nameof(this.SourceFeatureClass),
-                new Property(nameof(this.SourceFeatureClass), "源要素类，叠加的图层", Base.Common.ValueMetaType.TYPE_FEATURECLASS, new InputFeatureClassDTO(), new InputFeatureClassDTO(), "", null));
+                new Property(nameof(this.SourceFeatureClass), "源要素类，叠加的图层", ValueMetaType.TYPE_FEATURECLASS, new InputFeatureClassDTO(), new InputFeatureClassDTO(), "", null));
             base.InputParametersMeta.Add(nameof(this.TargetFeatureClass),
-                         new Property(nameof(this.TargetFeatureClass), "目标要素类，被叠加的图层", Base.Common.ValueMetaType.TYPE_FEATURECLASS, new InputFeatureClassDTO(), new InputFeatureClassDTO(), "", null));
+                         new Property(nameof(this.TargetFeatureClass), "目标要素类，被叠加的图层", ValueMetaType.TYPE_FEATURECLASS, new InputFeatureClassDTO(), new InputFeatureClassDTO(), "", null));
             base.InputParametersMeta.Add(nameof(this.AnalysisType),
-                        new Property(nameof(this.AnalysisType), "分析类型", Base.Common.ValueMetaType.TYPE_INTEGER, null, (int)AnalysisType.COVER, "分析类型选择",
+                        new Property(nameof(this.AnalysisType), "分析类型", ValueMetaType.TYPE_INTEGER, null, (int)AnalysisType.COVER, "分析类型选择",
                         new object[] {
-                            new Property(nameof(AnalysisType.COVER), EnumUtil.GetEnumDescription(AnalysisType.COVER), Base.Common.ValueMetaType.TYPE_INTEGER, (int)AnalysisType.COVER, null, EnumUtil.GetEnumDescription(AnalysisType.COVER)),
-                            new Property(nameof(AnalysisType.OVERTOP), EnumUtil.GetEnumDescription(AnalysisType.OVERTOP), Base.Common.ValueMetaType.TYPE_INTEGER, (int)AnalysisType.OVERTOP, null, EnumUtil.GetEnumDescription(AnalysisType.OVERTOP))}));
-            base.InputParametersMeta.Add(nameof(IsClearTemp), new Property(nameof(IsClearTemp), nameof(IsClearTemp), Base.Common.ValueMetaType.TYPE_BOOLEAN, false, false, "是否清理临时目录或文件", new object[] { true, false}));
+                            new Property(nameof(AnalysisType.COVER), EnumUtil.GetEnumDescription(AnalysisType.COVER), ValueMetaType.TYPE_INTEGER, (int)AnalysisType.COVER, null, EnumUtil.GetEnumDescription(AnalysisType.COVER)),
+                            new Property(nameof(AnalysisType.OVERTOP), EnumUtil.GetEnumDescription(AnalysisType.OVERTOP), ValueMetaType.TYPE_INTEGER, (int)AnalysisType.OVERTOP, null, EnumUtil.GetEnumDescription(AnalysisType.OVERTOP))}));
+            base.InputParametersMeta.Add(nameof(IsClearTemp), new Property(nameof(IsClearTemp), nameof(IsClearTemp), ValueMetaType.TYPE_BOOLEAN, false, false, "是否清理临时目录或文件", new object[] { true, false}));
             // 指定输出参数类型
-            base.OutputParametersMeta.Add(nameof(Result), new Property(nameof(Result), "输出结果", Base.Common.ValueMetaType.TYPE_JSON));
+            base.OutputParametersMeta.Add(nameof(Result), new Property(nameof(Result), "输出结果", ValueMetaType.TYPE_JSON));
         }
         public override Result Execute()
         {

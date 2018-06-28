@@ -350,7 +350,7 @@ namespace Dist.Dme.Service.Impls
                     tempAlgMeta = new AlgorithmMetaReqDTO
                     {
                         Name = item.Value.Name,
-                        DataType = item.Value.DataType,
+                        DataType = EnumUtil.GetEnumName<ValueMetaType>(item.Value.DataType),
                         Inout = parameterType,
                         IsVisible = item.Value.IsVisible,
                         Remark = item.Value.Remark,

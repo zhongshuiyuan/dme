@@ -16,7 +16,7 @@ namespace Dist.Dme.Model.DTO
         /// 数据类型
         /// </summary>
         [Required]
-        public int DataType { get; set; }
+        public string DataType { get; set; }
         /// <summary>
         /// 输入和输出值，值：in、out和
         /// </summary>

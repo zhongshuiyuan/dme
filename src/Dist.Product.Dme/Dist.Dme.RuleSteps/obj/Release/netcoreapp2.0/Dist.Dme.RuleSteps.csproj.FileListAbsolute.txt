@@ -1,0 +1,15 @@
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\bin\Release\netcoreapp2.0\Dist.Dme.RuleSteps.deps.json
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\bin\Release\netcoreapp2.0\Dist.Dme.RuleSteps.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\bin\Release\netcoreapp2.0\Dist.Dme.RuleSteps.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\bin\Release\netcoreapp2.0\Dist.Dme.Base.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\bin\Release\netcoreapp2.0\Dist.Dme.DAL.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\bin\Release\netcoreapp2.0\Dist.Dme.Model.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\bin\Release\netcoreapp2.0\Dist.Dme.Base.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\bin\Release\netcoreapp2.0\Dist.Dme.DAL.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\bin\Release\netcoreapp2.0\Dist.Dme.Model.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\obj\Release\netcoreapp2.0\Dist.Dme.RuleSteps.csprojResolveAssemblyReference.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\obj\Release\netcoreapp2.0\Dist.Dme.RuleSteps.csproj.CoreCompileInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\obj\Release\netcoreapp2.0\Dist.Dme.RuleSteps.AssemblyInfoInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\obj\Release\netcoreapp2.0\Dist.Dme.RuleSteps.AssemblyInfo.cs
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\obj\Release\netcoreapp2.0\Dist.Dme.RuleSteps.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.RuleSteps\obj\Release\netcoreapp2.0\Dist.Dme.RuleSteps.pdb

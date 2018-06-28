@@ -25,7 +25,12 @@ namespace Dist.Dme.DAL.Context
                 DbType = dbType,
                 IsAutoCloseConnection = IsAutoCloseConnection,
                 //设为true，表示相同线程是同一个SqlSugarClient
-                IsShardSameThread = true 
+                IsShardSameThread = true
+                // 可以使用自定义的缓存，可以把查询的结果作为缓存
+                //ConfigureExternalServices = new ConfigureExternalServices()
+                //{
+                //    DataInfoCacheService = new RedisCache() //RedisCache是继承ICacheService自已实现的一个类
+                //}
             });
             Db.Ado.IsEnableLogEvent = true;
             Db.Ado.LogEventStarting = (sql, pars) =>
@@ -34,19 +39,19 @@ namespace Dist.Dme.DAL.Context
                 Console.WriteLine();
             };
             // AOP LOG
-            Db.Aop.OnLogExecuting = (sql, pars) => //SQL executing event (pre-execution)
+            Db.Aop.OnLogExecuting = (sql, pars) => //SQL执行前事件
             {
             
             };
-            Db.Aop.OnLogExecuted = (sql, pars) => //SQL executed event
+            Db.Aop.OnLogExecuted = (sql, pars) => //SQL执行完事件
             {
              
             };
-            Db.Aop.OnError = (exp) =>//SQL execution error event
+            Db.Aop.OnError = (exp) =>//执行SQL错误事件
             {
               
             };
-            Db.Aop.OnExecutingChangeSql = (sql, pars) => //SQL executing event (pre-execution,SQL script can be modified)
+            Db.Aop.OnExecutingChangeSql = (sql, pars) => //SQL执行前可以修改SQL
             {
                 return new KeyValuePair<string, SugarParameter[]>(sql, pars);
             };
@@ -88,6 +93,7 @@ namespace Dist.Dme.DAL.Context
                 InitKeyType = InitKeyType.Attribute,
                 IsAutoCloseConnection = isAutoCloseConnection
             });
+            
             db.Ado.CommandTimeOut = commandTimeOut;
             return db;
         }

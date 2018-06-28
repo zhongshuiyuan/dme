@@ -22,6 +22,10 @@
     <OutputPath>D:\gitrep\dme\src\Dist.Product.Dme\Bin\</OutputPath>
   </PropertyGroup>
 
+   <PropertyGroup>
+        <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+    </PropertyGroup>
+	
   <ItemGroup>
     <Folder Include="Controllers\Base\" />
     <Folder Include="wwwroot\" />

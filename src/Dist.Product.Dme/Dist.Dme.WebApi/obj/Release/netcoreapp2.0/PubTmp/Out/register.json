@@ -1,0 +1,12 @@
+﻿{
+  "Algorithms": [
+    {
+      "Assembly": "Dist.Dme.Algorithms.LandConflictDetection.dll",
+      "MainClass": "Dist.Dme.Algorithms.LandConflictDetection.LandConflictDetectionMain"
+    },
+    {
+      "Assembly": "Dist.Dme.Algorithms.Overlay.dll",
+      "MainClass": "Dist.Dme.Algorithms.Overlay.OverlayMain"
+    }
+  ]
+}

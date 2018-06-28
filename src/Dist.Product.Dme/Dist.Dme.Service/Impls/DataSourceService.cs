@@ -1,4 +1,6 @@
 ﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.DataSource;
+using Dist.Dme.Base.DataSource.Oracle;
 using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
@@ -25,7 +27,7 @@ namespace Dist.Dme.Service.Impls
             base.Repository = repository;
             this.mongoHost = host;
         }
-        public List<DmeDataSourceType> ListDatabaseTypes()
+        public List<DmeDataSourceType> ListDataSourceTypes()
         {
             return base.Repository.GetDbContext().Queryable<DmeDataSourceType>().ToList();
         }
@@ -69,6 +71,61 @@ namespace Dist.Dme.Service.Impls
                 tempDatasourceDTO.Sources.Add(item);
             }
             return dictionary;
+        }
+        public object GetDatasourceConnMeta(string typeCode)
+        {
+            typeCode = typeCode.ToUpper();
+            DataSourceTypes @enum = EnumUtil.GetEnumObjByName<DataSourceTypes>(typeCode);
+            IDMEDataSourceFactory factory = null;
+            IDMEDataSource dataSource = null;
+            string meta = "";
+            switch (@enum)
+            {
+                case DataSourceTypes.ORACLE:
+                    factory = new DMEOracleFactory();
+                    dataSource = factory.Open(null, false);
+                    meta = dataSource.ConnectionMeta;
+                    break;
+                default:
+                    meta = "";
+                    break;
+            }
+            return meta;
+        }
+        public object CheckConnectionValid(DataSourceConnDTO dto)
+        {
+            dto.TypeCode = dto.TypeCode.ToUpper();
+            DataSourceTypes @enum = EnumUtil.GetEnumObjByName<DataSourceTypes>(dto.TypeCode);
+            IDMEDataSourceFactory factory = null;
+            IDMEDataSource dataSource = null;
+            bool valid = false;
+            switch (@enum)
+            {
+                case DataSourceTypes.UNKNOWN:
+                    break;
+                case DataSourceTypes.SHAPEFILE:
+                    break;
+                case DataSourceTypes.COVERAGE:
+                    break;
+                case DataSourceTypes.PERSONAL_GEODATABASE:
+                    break;
+                case DataSourceTypes.FILE_GEODATABASE:
+                    break;
+                case DataSourceTypes.ENTERPRISE_GEODATABASE:
+                    break;
+                case DataSourceTypes.TIN:
+                    break;
+                case DataSourceTypes.CAD:
+                    break;
+                case DataSourceTypes.ORACLE:
+                    factory = new DMEOracleFactory();
+                    dataSource = factory.OpenFromConnectionStr(dto.Connection, true);
+                    valid = dataSource.ValidConnection();
+                    break;
+                default:
+                    break;
+            }
+            return valid;
         }
     }
 }

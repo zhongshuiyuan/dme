@@ -1,0 +1,9 @@
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.HSMessage.deps.json
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.HSMessage.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.HSMessage.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.HSMessage\obj\x86\Debug\netcoreapp2.0\Dist.Dme.HSMessage.csproj.CoreCompileInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.HSMessage\obj\x86\Debug\netcoreapp2.0\Dist.Dme.HSMessage.AssemblyInfoInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.HSMessage\obj\x86\Debug\netcoreapp2.0\Dist.Dme.HSMessage.AssemblyInfo.cs
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.HSMessage\obj\x86\Debug\netcoreapp2.0\Dist.Dme.HSMessage.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.HSMessage\obj\x86\Debug\netcoreapp2.0\Dist.Dme.HSMessage.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.HSMessage\obj\x86\Debug\netcoreapp2.0\Dist.Dme.HSMessage.csprojResolveAssemblyReference.cache

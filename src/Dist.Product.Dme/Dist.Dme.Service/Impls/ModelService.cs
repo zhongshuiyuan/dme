@@ -175,7 +175,7 @@ namespace Dist.Dme.Service.Impls
             return dbResult.Data;
         }
 
-        public object ExecuteModel(string modelCode, string versionCode)
+        public object RunModel(string modelCode, string versionCode)
         {
             // Single方法，如果查询数据库多条数据，会抛出异常
             DmeModel model = base.Repository.GetDbContext().Queryable<DmeModel>().Single(m => m.SysCode == modelCode);
@@ -380,6 +380,57 @@ namespace Dist.Dme.Service.Impls
                 }
                 return true;
             }).Data;
+        }
+        public object ListTask()
+        {
+            SqlSugarClient db = base.Repository.GetDbContext();
+            IList<DmeTask> tasks = db.Queryable<DmeTask>().OrderBy("CreateTime").ToList();
+            if (0 == tasks?.Count)
+            {
+                return 0;
+            }
+            IList<TaskRespDTO> taskRespDTOs = new List<TaskRespDTO>();
+            foreach (var item in tasks)
+            {
+                TaskRespDTO dto = new TaskRespDTO
+                {
+                    Task = item,
+                    Model = db.Queryable<DmeModel>().Single(m => m.Id == item.ModelId),
+                    ModelVersion = db.Queryable<DmeModelVersion>().Single(mv => mv.Id == item.VersionId)
+                };
+                taskRespDTOs.Add(dto);
+            }
+            return taskRespDTOs;
+        }
+        public object GetTaskResult(string taskCode)
+        {
+            SqlSugarClient db = base.Repository.GetDbContext();
+            DmeTask task = db.Queryable<DmeTask>().Single(t => t.SysCode == taskCode);
+            if (null == task)
+            {
+                throw new BusinessException((int)SystemStatusCode.DME_FAIL, $"任务不存在[{taskCode}]");
+            }
+            // 查询任务的结果输出
+            IList<DmeTaskResult> taskResults = db.Queryable<DmeTaskResult>().Where(tr => tr.TaskId == task.Id).ToList();
+            if (null == taskResults || 0 == taskResults.Count)
+            {
+                return null;
+            }
+            IList<TaskResultRespDTO> taskResultRespDTOs = new List<TaskResultRespDTO>();
+            TaskResultRespDTO temp = null;
+            foreach (var item in taskResults)
+            {
+                temp = new TaskResultRespDTO
+                {
+                    RuleStepId = item.RuleStepId,
+                    Code = item.ResultCode,
+                    Type = item.ResultType,
+                    Value = item.ResultValue
+                };
+
+                taskResultRespDTOs.Add(temp);
+            }
+            return taskResultRespDTOs;
         }
     }
 }

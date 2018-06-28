@@ -1,0 +1,13 @@
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\bin\Release\netcoreapp2.0\Dist.Dme.SRCE.deps.json
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\bin\Release\netcoreapp2.0\Dist.Dme.SRCE.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\bin\Release\netcoreapp2.0\Dist.Dme.SRCE.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\bin\Release\netcoreapp2.0\Dist.Dme.Base.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\bin\Release\netcoreapp2.0\Dist.Dme.Model.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\bin\Release\netcoreapp2.0\Dist.Dme.Base.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\bin\Release\netcoreapp2.0\Dist.Dme.Model.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\obj\Release\netcoreapp2.0\Dist.Dme.SRCE.csprojResolveAssemblyReference.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\obj\Release\netcoreapp2.0\Dist.Dme.SRCE.csproj.CoreCompileInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\obj\Release\netcoreapp2.0\Dist.Dme.SRCE.AssemblyInfoInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\obj\Release\netcoreapp2.0\Dist.Dme.SRCE.AssemblyInfo.cs
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\obj\Release\netcoreapp2.0\Dist.Dme.SRCE.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\obj\Release\netcoreapp2.0\Dist.Dme.SRCE.pdb

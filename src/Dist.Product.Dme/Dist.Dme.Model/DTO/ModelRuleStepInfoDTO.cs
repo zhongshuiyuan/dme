@@ -58,6 +58,9 @@ namespace Dist.Dme.Model.DTO
         /// </summary>
         public IList<KeyValuePair<string, object>> Attributes { get; set; }
     }
+    /// <summary>
+    /// 步骤的向量信息
+    /// </summary>
     public class RuleStepHopDTO
     {
         /// <summary>

@@ -30,7 +30,7 @@ namespace Dist.Dme.WebApi.Controllers
         /// <param name="needMeta">是否获取算法的参数信息。0：表示否；1：表示是</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("v1/")]
+        [Route("metadata/v1")]
         public Result ListAlgorithm([FromQuery(Name = "needmeta")] int needMeta = 0)
         {
             return base.Success(AlgorithmService.ListAlgorithms(1 == needMeta));
@@ -51,10 +51,15 @@ namespace Dist.Dme.WebApi.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("register/v1/")]
+        [Route("register/v1")]
         public Result RegistryAlgorithm([FromBody] AlgorithmAddReqDTO dto)
         {
-            return base.Success(AlgorithmService.AddAlgorithm(dto));
+            if (ModelState.IsValid)
+            {
+                return base.Success(AlgorithmService.AddAlgorithm(dto));
+            }
+            // 参数验证失败
+            return base.Error(ModelState);
         }
         /// <summary>
         /// 注册本地算法（从本地DLL获取）

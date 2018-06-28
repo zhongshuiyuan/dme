@@ -1,0 +1,9 @@
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Model\bin\Release\netcoreapp2.0\Dist.Dme.Model.deps.json
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Model\bin\Release\netcoreapp2.0\Dist.Dme.Model.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Model\bin\Release\netcoreapp2.0\Dist.Dme.Model.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Model\obj\Release\netcoreapp2.0\Dist.Dme.Model.csprojResolveAssemblyReference.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Model\obj\Release\netcoreapp2.0\Dist.Dme.Model.csproj.CoreCompileInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Model\obj\Release\netcoreapp2.0\Dist.Dme.Model.AssemblyInfoInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Model\obj\Release\netcoreapp2.0\Dist.Dme.Model.AssemblyInfo.cs
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Model\obj\Release\netcoreapp2.0\Dist.Dme.Model.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Model\obj\Release\netcoreapp2.0\Dist.Dme.Model.pdb

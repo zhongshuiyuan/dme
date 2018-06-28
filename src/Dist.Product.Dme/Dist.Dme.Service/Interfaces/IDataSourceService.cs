@@ -16,7 +16,7 @@ namespace Dist.Dme.Service.Interfaces
         /// 获取所有数据库类型
         /// </summary>
         /// <returns></returns>
-        List<DmeDataSourceType> ListDatabaseTypes();
+        List<DmeDataSourceType> ListDataSourceTypes();
         /// <summary>
         /// 获取单个数据库类型
         /// </summary>
@@ -34,5 +34,17 @@ namespace Dist.Dme.Service.Interfaces
         /// </summary>
         /// <returns></returns>
         object ListRegisteredDataSources();
+        /// <summary>
+        /// 获取数据源连接元数据
+        /// </summary>
+        /// <param name="typeCode">数据源类型唯一编码</param>
+        /// <returns></returns>
+        object GetDatasourceConnMeta(string typeCode);
+        /// <summary>
+        /// 检查连接的有效性
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        object CheckConnectionValid(DataSourceConnDTO dto);
     }
 }

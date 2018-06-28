@@ -91,6 +91,14 @@
             <param name="data"></param>
             <returns></returns>
         </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.Success(System.Object,System.String)">
+            <summary>
+            成功
+            </summary>
+            <param name="data"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
         <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.Fail(System.Object)">
             <summary>
             失败
@@ -98,11 +106,27 @@
             <param name="data"></param>
             <returns></returns>
         </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.Fail(System.Object,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
         <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.Error(System.Object)">
             <summary>
             错误
             </summary>
             <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.Base.BaseController.Error(System.Object,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+            <param name="message"></param>
             <returns></returns>
         </member>
         <member name="T:Dist.Dme.WebApi.Controllers.CacheController">
@@ -138,22 +162,43 @@
         </member>
         <member name="M:Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes">
             <summary>
-            获取所有数据库类型
+            获取所有数据源类型
             </summary>
             <returns></returns>
         </member>
         <member name="M:Dist.Dme.WebApi.Controllers.DataSourcesController.GetDatabaseType(System.Int32)">
             <summary>
-            获取具体某个数据库类型
+            获取具体某个数据源类型
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Dist.Dme.WebApi.Controllers.DataSourcesController.ListRegistryDataSources">
+        <member name="M:Dist.Dme.WebApi.Controllers.DataSourcesController.ListRegisteredDataSources">
             <summary>
-            获取注册的数据源
+            获取已注册的数据源
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.DataSourcesController.GetDatasourceConnMeta(System.String)">
+            <summary>
+            获取数据源连接的元数据信息
+            </summary>
+            <param name="typeCode">数据源类型编码</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.DataSourcesController.RegistryDataSource(Dist.Dme.Model.DTO.DatasourceAddDTO)">
+            <summary>
+            注册数据源
+            </summary>
+            <param name="dto">数据源元数据信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.DataSourcesController.CheckConnectionValid(Dist.Dme.Model.DTO.DataSourceConnDTO)">
+            <summary>
+            验证连接是否有效
+            </summary>
+            <param name="dto"></param>
+            <returns>true/false</returns>
         </member>
         <member name="T:Dist.Dme.WebApi.Controllers.ModelsController">
             <summary>
@@ -200,9 +245,9 @@
             <param name="dto">参数输入</param>
             <returns></returns>
         </member>
-        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.Execute(System.String,System.String)">
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.Run(System.String,System.String)">
             <summary>
-            执行模型计算
+            运行模型计算
             </summary>
             <param name="modelCode">模型唯一编码</param>
             <param name="versionCode">模型版本唯一编码</param>
@@ -227,6 +272,19 @@
             保存整个模型的规则步骤信息
             </summary>
             <param name="info">步骤信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.ListTask">
+            <summary>
+            获取任务清单
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.GetTaskOutput(System.String)">
+            <summary>
+            获取任务的计算结果
+            </summary>
+            <param name="taskCode">任务唯一编码</param>
             <returns></returns>
         </member>
         <member name="T:Dist.Dme.WebApi.Controllers.UsersController">

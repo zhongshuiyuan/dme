@@ -24,12 +24,12 @@ namespace Dist.Dme.Service.Interfaces
         /// <returns></returns>
         object AddModel(ModelAddReqDTO dto);
         /// <summary>
-        /// 执行模型（背后依赖的是算法）
+        /// 运行模型（背后依赖的是算法）
         /// </summary>
         /// <param name="modelCode">模型唯一编码</param>
         /// <param name="versionCode">版本唯一编码</param>
         /// <returns></returns>
-        object ExecuteModel(string modelCode, string versionCode);
+        object RunModel(string modelCode, string versionCode);
         /// <summary>
         /// 根据模型唯一编码，获取模型的元数据信息
         /// </summary>
@@ -73,5 +73,16 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="modelVersionCode"></param>
         /// <returns></returns>
         object CopyFromModelVersion(string modelVersionCode);
+        /// <summary>
+        /// 获取任务清单
+        /// </summary>
+        /// <returns></returns>
+        object ListTask();
+        /// <summary>
+        /// 获取任务执行结果
+        /// </summary>
+        /// <param name="taskCode"></param>
+        /// <returns></returns>
+        object GetTaskResult(string taskCode);
     }
 }

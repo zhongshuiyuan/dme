@@ -32,7 +32,7 @@ namespace Dist.Dme.WebApi.Controllers
         /// <param name="detail">是否获取详情信息，0：否；1：是</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("v1/")]
+        [Route("v1")]
         public Result ListModels([FromQuery(Name = "detail")] int detail = 0)
         {
             return base.Success(ModelService.ListModels(1 == detail));
@@ -102,7 +102,7 @@ namespace Dist.Dme.WebApi.Controllers
             sourceObj.Add("SysCode", "30143df1123449a896429854899f37f3");
             sourceObj.Add("IsLocal", 1);
             sourceObj.Add("Type", "PERSONAL_GEODATABASE");
-            sourceObj.Add("Connection", "{\"Path\":\"D:/work/dist/x_项目管理/f_福建省/x_厦门/02数据/控规调整样例.mdb\"}");
+            sourceObj.Add("Connection", @"{""Path"":""D:/work/dist/x_项目管理/f_福建省/x_厦门/02数据/控规调整样例.mdb""}");
             dto.Parameters.Add("SourceFeatureClass", obj.ToString());
             // dto.Parameters.Add("SourceFeatureClass", "{\"Name\":\"TZFAFW\",\"Source\":{\"SysCode\":\"30143df1123449a896429854899f37f3\",\"IsLocal\":1,\"Type\":\"PERSONAL_GEODATABASE\",\"Connection\":\"{\"Path\":\"D:\\work\\dist\\x_项目管理\f_福建省\\x_厦门\\02数据\\控规调整样例.mdb\"}\"}}");
 
@@ -136,16 +136,16 @@ namespace Dist.Dme.WebApi.Controllers
             return base.Success(ModelService.OverlayExecute(dto.Parameters));
         }
         /// <summary>
-        /// 执行模型计算
+        /// 运行模型计算
         /// </summary>
         /// <param name="modelCode">模型唯一编码</param>
         /// <param name="versionCode">模型版本唯一编码</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("v1/execute/{modelCode}/{versionCode}")]
-        public Result Execute(string modelCode, string versionCode)
+        [Route("v1/run/{modelCode}/{versionCode}")]
+        public Result Run(string modelCode, string versionCode)
         {
-            return base.Success(this.ModelService.ExecuteModel(modelCode, versionCode));
+            return base.Success(this.ModelService.RunModel(modelCode, versionCode));
         }
         /// <summary>
         /// 注册模型
@@ -153,7 +153,7 @@ namespace Dist.Dme.WebApi.Controllers
         /// <param name="dto">参数模型，当SysCode为空时，系统会自动附上一个唯一编码</param>
         /// <returns></returns>
         [HttpPost]
-        [Route("v1/")]
+        [Route("register/v1")]
         public Result NewModel([FromBody]ModelAddReqDTO dto)
         {
             if (!this.ModelService.IsBizGuid(dto.SysCode))
@@ -193,6 +193,26 @@ namespace Dist.Dme.WebApi.Controllers
             }
             return base.Success(this.ModelService.SaveRuleStepInfos(info));
         }
-        
+        /// <summary>
+        /// 获取任务清单
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("tasks/v1")]
+        public Result ListTask()
+        {
+            return base.Success(this.ModelService.ListTask());
+        }
+        /// <summary>
+        /// 获取任务的计算结果
+        /// </summary>
+        /// <param name="taskCode">任务唯一编码</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("tasks/result/v1/{taskCode}")]
+        public Result GetTaskOutput(string taskCode)
+        {
+            return base.Success(this.ModelService.GetTaskResult(taskCode));
+        }
     }
 }
