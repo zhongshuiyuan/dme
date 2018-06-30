@@ -219,7 +219,7 @@ namespace Dist.Dme.WebApi.Controllers
         /// 获取任务指定步骤的计算结果
         /// </summary>
         /// <param name="taskCode">任务编码</param>
-        /// <param name="ruleStepId">步骤id</param>
+        /// <param name="ruleStepId">步骤id，若传入-1，表示获取所有步骤的计算结果</param>
         /// <returns></returns>
         [HttpGet]
         [Route("tasks/result/v1/{taskCode}/{ruleStepId}")]

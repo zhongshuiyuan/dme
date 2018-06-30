@@ -297,8 +297,71 @@ namespace Dist.Dme.Service.Impls
             {
                 throw new BusinessException((int)SystemStatusCode.DME_FAIL, $"模型版本[{versionCode}]不存在，或模型版本编码无效");
             }
-
-            throw new NotImplementedException();
+            var db = base.Repository.GetDbContext();
+            return db.Ado.UseTran<DmeModelVersion>(()=>
+            {
+                // 复制为新版本
+                DmeModelVersion newVersion = new DmeModelVersion
+                {
+                    SysCode = GuidUtil.NewGuid(),
+                    ModelId = modelVersion.ModelId,
+                    CreateTime = DateUtil.CurrentTimeMillis
+                };
+                newVersion.Name = $"版本-{DateUtil.CurrentTimeMillis}";
+                newVersion = db.Insertable<DmeModelVersion>(newVersion).ExecuteReturnEntity();
+                // 复制步骤信息
+                IList<DmeRuleStep> steps = db.Queryable<DmeRuleStep>().Where(rs => rs.ModelId == modelVersion.ModelId && rs.VersionId == modelVersion.Id).ToList();
+                if (steps?.Count > 0)
+                {
+                    // List<DmeRuleStep> copiedSteps = new List<DmeRuleStep>();
+                    DmeRuleStep newTempStep = null;
+                    DmeRuleStepAttribute newTempStepAttr = null;
+                    foreach (var subStep in steps)
+                    {
+                        newTempStep = ClassValueCopier<DmeRuleStep>.Copy(subStep, new String[] { "Id", "SysCode", "VersionId"});
+                        newTempStep.SysCode = GuidUtil.NewGuid();
+                        newTempStep.VersionId = newVersion.Id;
+                        newTempStep = db.Insertable<DmeRuleStep>(newTempStep).ExecuteReturnEntity();
+                        // copiedSteps.Add(copiedTempStep);
+                        // 复制步骤的参数属性信息
+                       IList<DmeRuleStepAttribute> oldAttributes = db.Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == subStep.Id && rsa.VersionId == modelVersion.Id).ToList();
+                        if (oldAttributes?.Count > 0)
+                        {
+                            List<DmeRuleStepAttribute> newStepAttrs = new List<DmeRuleStepAttribute>();
+                            foreach (var subAttr in oldAttributes)
+                            {
+                                newTempStepAttr = ClassValueCopier<DmeRuleStepAttribute>.Copy(subAttr, 
+                                    new string[] { "Id", "RuleStepId", "VersionId"});
+                                newTempStepAttr.RuleStepId = newTempStep.Id;
+                                newTempStepAttr.VersionId = newVersion.Id;
+                                newStepAttrs.Add(newTempStepAttr);
+                            }
+                            int insertCount = db.Insertable<DmeRuleStepAttribute>(newStepAttrs).ExecuteCommand();
+                            LOG.Info($"成功复制[{insertCount}]个步骤[{subStep.Id}]的参数信息");
+                        }
+                        // 复制步骤关联的数据源引用信息
+                        IList<DmeRuleStepDataSource> rsDataSources = db.Queryable<DmeRuleStepDataSource>().
+                           Where(rsds => rsds.RuleStepId == subStep.Id && rsds.ModelId == modelVersion.ModelId && rsds.VersionId == modelVersion.Id).ToList();
+                        if (rsDataSources?.Count > 0)
+                        {
+                            List<DmeRuleStepDataSource> newRuleStepDataSources = new List<DmeRuleStepDataSource>();
+                            foreach (var subDs in rsDataSources)
+                            {
+                                newRuleStepDataSources.Add(new DmeRuleStepDataSource()
+                                {
+                                    RuleStepId = newTempStep.Id,
+                                    ModelId = subDs.ModelId,
+                                    VersionId = newVersion.Id,
+                                    DataSourceId = subDs.DataSourceId
+                                });
+                            }
+                            db.Insertable<DmeRuleStepDataSource>(newRuleStepDataSources).ExecuteCommand();
+                        }
+                    }
+                }
+              
+                return newVersion;
+            });
         }
 
         public object SaveRuleStepInfos(ModelRuleStepInfoDTO info)
@@ -471,6 +534,9 @@ namespace Dist.Dme.Service.Impls
                     Code = item.ResultCode,
                     Type = item.ResultType
                 };
+                // 解析步骤类型
+                DmeRuleStep ruleStep = db.Queryable<DmeRuleStep>().Single(rs => rs.Id == item.RuleStepId);
+
                 //   Value = item.ResultValue
                 ValueMetaType @enum = EnumUtil.GetEnumObjByName<ValueMetaType>(temp.Type);
                 switch (@enum)
