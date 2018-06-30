@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Dist.Dme.Base.Framework.Interfaces
+﻿namespace Dist.Dme.Base.Framework.Interfaces
 {
     /// <summary>
     /// 规则步骤数据
@@ -10,7 +6,7 @@ namespace Dist.Dme.Base.Framework.Interfaces
     public interface IRuleStepData
     {
         /// <summary>
-        /// 步骤运行
+        /// 步骤异步运行
         /// </summary>
         /// <returns></returns>
         Result Run();

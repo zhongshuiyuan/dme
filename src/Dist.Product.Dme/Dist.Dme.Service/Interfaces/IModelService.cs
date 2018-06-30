@@ -1,8 +1,10 @@
 ﻿using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Model.DTO;
+using Dist.Dme.Model.Entity;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Dist.Dme.Service.Interfaces
 {
@@ -24,12 +26,11 @@ namespace Dist.Dme.Service.Interfaces
         /// <returns></returns>
         object AddModel(ModelAddReqDTO dto);
         /// <summary>
-        /// 运行模型（背后依赖的是算法）
+        /// 异步运行模型（背后依赖的是算法）
         /// </summary>
-        /// <param name="modelCode">模型唯一编码</param>
-        /// <param name="versionCode">版本唯一编码</param>
+        /// <param name="versionCode">模型版本唯一编码</param>
         /// <returns></returns>
-        object RunModel(string modelCode, string versionCode);
+        DmeTask RunModelAsync(string versionCode);
         /// <summary>
         /// 根据模型唯一编码，获取模型的元数据信息
         /// </summary>
@@ -54,7 +55,6 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="parameters"></param>
         /// <returns></returns>
         object OverlayExecute(IDictionary<String, Object> parameters);
-
         /// <summary>
         /// 复制模型的一个版本
         /// </summary>
@@ -74,15 +74,16 @@ namespace Dist.Dme.Service.Interfaces
         /// <returns></returns>
         object CopyFromModelVersion(string modelVersionCode);
         /// <summary>
-        /// 获取任务清单
+        /// 获取任务清单，以创建时间倒序
         /// </summary>
         /// <returns></returns>
         object ListTask();
         /// <summary>
-        /// 获取任务执行结果
+        /// 获取任务步骤的执行结果
         /// </summary>
         /// <param name="taskCode"></param>
+        /// <param name="ruleStepId"></param>
         /// <returns></returns>
-        object GetTaskResult(string taskCode);
+        object GetTaskResult(string taskCode, int ruleStepId);
     }
 }

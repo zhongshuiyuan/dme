@@ -6,14 +6,19 @@ using Dist.Dme.Base.Framework.Exception;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.DAL.Context;
+using Dist.Dme.DisFS.Adapters.Mongo;
+using Dist.Dme.DisFS.Collection;
+using Dist.Dme.Extensions;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.RuleSteps.AlgorithmInput;
 using Dist.Dme.Service.Interfaces;
 using log4net;
+using MongoDB.Driver;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Dist.Dme.Service.Impls
 {
@@ -175,34 +180,39 @@ namespace Dist.Dme.Service.Impls
             return dbResult.Data;
         }
 
-        public object RunModel(string modelCode, string versionCode)
+        public DmeTask RunModelAsync(string versionCode)
         {
-            // Single方法，如果查询数据库多条数据，会抛出异常
-            DmeModel model = base.Repository.GetDbContext().Queryable<DmeModel>().Single(m => m.SysCode == modelCode);
-            if (null == model)
-            {
-                throw new BusinessException((int)SystemStatusCode.DME_ERROR, $"模型[{modelCode}]不存在");
-            }
+            // 尽管使用了async关键字，如果不使用await，则还是同步操作
+            //return await Task.Run<DmeTask>(() =>
+            // {
+
+            // });
+            // 验证数据库是否存在指定模型版本信息
+            SqlSugarClient db = base.Repository.GetDbContext();
             // 查询模型版本
-            DmeModelVersion modelVersion = base.Repository.GetDbContext().Queryable<DmeModelVersion>().Single(mv => mv.SysCode == versionCode);
+            DmeModelVersion modelVersion = db.Queryable<DmeModelVersion>().Single(mv => mv.SysCode == versionCode);
             if (null == modelVersion)
             {
-                throw new BusinessException((int)SystemStatusCode.DME_ERROR, $"模型[{modelCode}]的版本[{versionCode}]不存在");
+                throw new BusinessException((int)SystemStatusCode.DME_ERROR, $"模型的版本[{versionCode}]不存在");
+            }
+            // Single方法，如果查询数据库多条数据，会抛出异常
+            DmeModel model = db.Queryable<DmeModel>().Single(m => m.Id == modelVersion.ModelId);
+            if (null == model)
+            {
+                throw new BusinessException((int)SystemStatusCode.DME_ERROR, $"模型[{modelVersion.ModelId}]不存在");
             }
             // 查找关联的算法信息
-            IList<DmeRuleStep> ruleSteps = base.Repository.GetDbContext().Queryable<DmeRuleStep>().Where(rs => rs.ModelId == model.Id && rs.VersionId == modelVersion.Id).ToList();
+            IList<DmeRuleStep> ruleSteps = db.Queryable<DmeRuleStep>().Where(rs => rs.ModelId == model.Id && rs.VersionId == modelVersion.Id).ToList();
             if (0 == ruleSteps?.Count)
             {
-                LOG.Warn($"模型[{modelCode}]的版本[{versionCode}]下没有可执行步骤，停止运行");
+                LOG.Warn($"模型[{model.SysCode}]的版本[{versionCode}]下没有可执行步骤，停止运行");
                 return null;
             }
-            // 查询步骤前后依赖关系
-            // TODO 暂时不处理
-            IList<DmeRuleStepHop> hops = base.Repository.GetDbContext().Queryable<DmeRuleStepHop>().Where(rsh => rsh.ModelId == model.Id && rsh.VersionId == modelVersion.Id).OrderBy("STEP_FROM_ID").ToList();
-            base.Repository.GetDbContext().Ado.UseTran<object>(() => 
+            DmeTask newTask = null;
+            db.Ado.UseTran<DmeTask>(() =>
             {
                 // 每执行一次模型，生成一次任务
-                DmeTask task = new DmeTask
+                newTask = new DmeTask
                 {
                     SysCode = GuidUtil.NewGuid(),
                     CreateTime = DateUtil.CurrentTimeMillis,
@@ -210,50 +220,74 @@ namespace Dist.Dme.Service.Impls
                     ModelId = model.Id,
                     VersionId = modelVersion.Id
                 };
-                try
-                {
-                    task.Name = "task-" + task.CreateTime;
-                    task.LastTime = task.CreateTime;
-                    task = base.Repository.GetDbContext().Insertable<DmeTask>(task).ExecuteReturnEntity();
-                    IRuleStepData ruleStepData = null;
-                    Result stepResult = null;
-                    foreach (var subRuleStep in ruleSteps)
-                    {
-                        // 注入每一个步骤的参数值
-                        if (1 == subRuleStep.StepTypeId)
-                        {
-                            // 算法输入
-                            ruleStepData = new AlgorithmInputStepData(this.Repository, task.Id, model.Id, modelVersion.Id, subRuleStep.Id);
-                        }
-                        stepResult = ruleStepData.Run();
-                        if (stepResult.Code != (int)SystemStatusCode.DME_SUCCESS)
-                        {
-                            throw new BusinessException(stepResult.Code, stepResult.Message);
-                        }
-                    }
-                    task.Status = EnumUtil.GetEnumDisplayName(SystemStatusCode.DME_SUCCESS);
-                    task.LastTime = DateUtil.CurrentTimeMillis;
-                    base.Repository.GetDbContext().Updateable<DmeTask>(task).ExecuteCommand();
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    // 更改任务执行的状态
-                    if (ex is BusinessException)
-                    {
-                        task.Status = EnumUtil.GetEnumDisplayName(EnumUtil.GetEnumObjByValue<SystemStatusCode>(((BusinessException)ex).Code));
-                    }
-                    else
-                    {
-                        task.Status = EnumUtil.GetEnumDisplayName(SystemStatusCode.DME_ERROR);
-                    }
-                    task.LastTime = DateUtil.CurrentTimeMillis;
-                    base.Repository.GetDbContext().Updateable<DmeTask>(task).ExecuteCommand();
-                    throw ex;
-                }
+                newTask.Name = "task-" + newTask.CreateTime;
+                newTask.LastTime = newTask.CreateTime;
+                newTask = db.Insertable<DmeTask>(newTask).ExecuteReturnEntity();
+                return newTask;
             });
-          
-            return true;
+            // 此时不阻塞
+            RunModelAsync(db, newTask, modelVersion, model, ruleSteps);
+            return newTask;
+        }
+        /// <summary>
+        /// 异步处理模型后面的步骤运算
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="task">任务实体</param>
+        /// <param name="modelVersion"></param>
+        /// <param name="model"></param>
+        /// <param name="ruleSteps"></param>
+        private async void RunModelAsync(SqlSugarClient db, DmeTask task, DmeModelVersion modelVersion, DmeModel model, IList<DmeRuleStep> ruleSteps)
+        {
+            await Task.Run<DmeTask>(() =>
+            {
+                // 查询步骤前后依赖关系
+                // TODO 暂时不处理
+                IList<DmeRuleStepHop> hops = db.Queryable<DmeRuleStepHop>().Where(rsh => rsh.ModelId == model.Id && rsh.VersionId == modelVersion.Id).OrderBy("STEP_FROM_ID").ToList();
+
+                return db.Ado.UseTran<DmeTask>(() =>
+               {
+                   try
+                   {
+                       IRuleStepData ruleStepData = null;
+                       Result stepResult = null;
+                       foreach (var subRuleStep in ruleSteps)
+                       {
+                           // 注入每一个步骤的参数值
+                           if (1 == subRuleStep.StepTypeId)
+                           {
+                               // 算法输入
+                               ruleStepData = new AlgorithmInputStepData(this.Repository, task.Id, model.Id, modelVersion.Id, subRuleStep.Id);
+                           }
+                           // 执行计算
+                           stepResult = ruleStepData.Run();
+                           if (stepResult.Code != (int)SystemStatusCode.DME_SUCCESS)
+                           {
+                               throw new BusinessException(stepResult.Code, stepResult.Message);
+                           }
+                       }
+                       task.Status = EnumUtil.GetEnumDisplayName(SystemStatusCode.DME_SUCCESS);
+                       task.LastTime = DateUtil.CurrentTimeMillis;
+                       db.Updateable<DmeTask>(task).ExecuteCommand();
+                       return task;
+                   }
+                   catch (Exception ex)
+                   {
+                       // 更改任务执行的状态
+                       if (ex is BusinessException)
+                       {
+                           task.Status = EnumUtil.GetEnumDisplayName(EnumUtil.GetEnumObjByValue<SystemStatusCode>(((BusinessException)ex).Code));
+                       }
+                       else
+                       {
+                           task.Status = EnumUtil.GetEnumDisplayName(SystemStatusCode.DME_ERROR);
+                       }
+                       task.LastTime = DateUtil.CurrentTimeMillis;
+                       db.Updateable<DmeTask>(task).ExecuteCommand();
+                       throw ex;
+                   }
+               }).Data;
+            });
         }
 
         public object CopyModelVersion(string versionCode)
@@ -384,7 +418,7 @@ namespace Dist.Dme.Service.Impls
         public object ListTask()
         {
             SqlSugarClient db = base.Repository.GetDbContext();
-            IList<DmeTask> tasks = db.Queryable<DmeTask>().OrderBy("CreateTime").ToList();
+            IList<DmeTask> tasks = db.Queryable<DmeTask>().OrderBy(t => t.CreateTime, OrderByType.Desc).ToList();
             if (0 == tasks?.Count)
             {
                 return 0;
@@ -402,7 +436,8 @@ namespace Dist.Dme.Service.Impls
             }
             return taskRespDTOs;
         }
-        public object GetTaskResult(string taskCode)
+        
+        public object GetTaskResult(string taskCode, int ruleStepId)
         {
             SqlSugarClient db = base.Repository.GetDbContext();
             DmeTask task = db.Queryable<DmeTask>().Single(t => t.SysCode == taskCode);
@@ -411,7 +446,17 @@ namespace Dist.Dme.Service.Impls
                 throw new BusinessException((int)SystemStatusCode.DME_FAIL, $"任务不存在[{taskCode}]");
             }
             // 查询任务的结果输出
-            IList<DmeTaskResult> taskResults = db.Queryable<DmeTaskResult>().Where(tr => tr.TaskId == task.Id).ToList();
+            IList<DmeTaskResult> taskResults = null;
+            if (-1 == ruleStepId)
+            {
+                // 全部步骤
+                taskResults = db.Queryable<DmeTaskResult>().Where(tr => tr.TaskId == task.Id).ToList();
+            }
+            else
+            {
+                // 指定步骤
+                taskResults = db.Queryable<DmeTaskResult>().Where(tr => tr.TaskId == task.Id && tr.RuleStepId == ruleStepId).ToList();
+            }
             if (null == taskResults || 0 == taskResults.Count)
             {
                 return null;
@@ -424,9 +469,63 @@ namespace Dist.Dme.Service.Impls
                 {
                     RuleStepId = item.RuleStepId,
                     Code = item.ResultCode,
-                    Type = item.ResultType,
-                    Value = item.ResultValue
+                    Type = item.ResultType
                 };
+                //   Value = item.ResultValue
+                ValueMetaType @enum = EnumUtil.GetEnumObjByName<ValueMetaType>(temp.Type);
+                switch (@enum)
+                {
+                    case ValueMetaType.TYPE_UNKNOWN:
+                        break;
+                    case ValueMetaType.TYPE_NUMBER:
+                        break;
+                    case ValueMetaType.TYPE_STRING:
+                        break;
+                    case ValueMetaType.TYPE_DATE:
+                        break;
+                    case ValueMetaType.TYPE_BOOLEAN:
+                        break;
+                    case ValueMetaType.TYPE_INTEGER:
+                        break;
+                    case ValueMetaType.TYPE_BIGNUMBER:
+                        break;
+                    case ValueMetaType.TYPE_SERIALIZABLE:
+                        break;
+                    case ValueMetaType.TYPE_BINARY:
+                        break;
+                    case ValueMetaType.TYPE_TIMESTAMP:
+                        break;
+                    case ValueMetaType.TYPE_INET:
+                        break;
+                    case ValueMetaType.TYPE_LOCAL_FILE:
+                        break;
+                    case ValueMetaType.TYPE_MDB_FEATURECLASS:
+                        break;
+                    case ValueMetaType.TYPE_GDB_PATH:
+                        break;
+                    case ValueMetaType.TYPE_FOLDER:
+                        break;
+                    case ValueMetaType.TYPE_STRING_LIST:
+                        break;
+                    case ValueMetaType.TYPE_SDE_FEATURECLASS:
+                        break;
+                    case ValueMetaType.TYPE_FEATURECLASS:
+                        break;
+                    case ValueMetaType.TYPE_JSON:
+                        // 从mongo中获取
+                        var filter = Builders<TaskResultColl>.Filter.And(
+                            Builders<TaskResultColl>.Filter.Eq("TaskId", item.TaskId),
+                            Builders<TaskResultColl>.Filter.Eq("RuleStepId", item.RuleStepId),
+                            Builders<TaskResultColl>.Filter.Eq("Code", item.ResultCode));
+                        IList<TaskResultColl> colls = MongodbHelper<TaskResultColl>.FindList(ServiceFactory.MongoHost, filter);
+                        if (colls != null && colls.Count > 0)
+                        {
+                            temp.Value = colls[0].Value;
+                        }
+                        break;
+                    default:
+                        break;
+                }
 
                 taskResultRespDTOs.Add(temp);
             }

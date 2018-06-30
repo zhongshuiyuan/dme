@@ -11,6 +11,7 @@ using Dist.Dme.DisCache.Impls;
 using Dist.Dme.DisCache.Interfaces;
 using Dist.Dme.DisCache.Redis;
 using Dist.Dme.DisFS.Adapters.Mongo;
+using Dist.Dme.Extensions;
 using Dist.Dme.Service.Impls;
 using Dist.Dme.Service.Interfaces;
 using log4net;
@@ -65,7 +66,7 @@ namespace Dist.Dme.WebApi
                     }
                     else if ("redis.r.w".Equals(type, StringComparison.OrdinalIgnoreCase))
                     {
-                        // redis读写分裂
+                        // redis读写分离
                         RedisRWConfigInfo provider = cacheProviderSection.GetSection("provider").Get<RedisRWConfigInfo>();
                         RedisManager redisManager = new RedisManager(provider);
                         services.AddSingleton(typeof(ICacheService), new RedisRWCacheService(redisManager.GetClient()));
@@ -116,7 +117,13 @@ namespace Dist.Dme.WebApi
             services.AddSingleton<IDataSourceService, DataSourceService>();
             // 注册算法服务
             services.AddSingleton<IAlgorithmService, AlgorithmService>();
-         
+            // 设置全局
+            IServiceProvider serviceProvider = services.BuildServiceProvider();
+            ServiceFactory.CacheService = serviceProvider.GetService<ICacheService>();
+            ServiceFactory.MongoHost = serviceProvider.GetService<MongodbHost>();
+            ServiceFactory.MongoClient = serviceProvider.GetService<IMongoClient>();
+            ServiceFactory.MongoDatabase = serviceProvider.GetService<IMongoDatabase>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info
@@ -131,9 +138,10 @@ namespace Dist.Dme.WebApi
                 var basePath = PlatformServices.Default.Application.ApplicationBasePath;
                 var xmlPath = Path.Combine(basePath, "Dist.Dme.WebApi.xml");
                 c.IncludeXmlComments(xmlPath);
-
                 //  c.OperationFilter<HttpHeaderOperation>(); // 添加httpHeader参数
             });
+            // 配置日志服务
+            services.AddLogging();
         }
        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

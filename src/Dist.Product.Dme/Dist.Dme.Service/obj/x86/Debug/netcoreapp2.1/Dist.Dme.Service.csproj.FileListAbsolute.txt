@@ -1,0 +1,9 @@
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.1\Dist.Dme.Service.deps.json
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.1\Dist.Dme.Service.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.1\Dist.Dme.Service.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\obj\x86\Debug\netcoreapp2.1\Dist.Dme.Service.csprojResolveAssemblyReference.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\obj\x86\Debug\netcoreapp2.1\Dist.Dme.Service.csproj.CoreCompileInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\obj\x86\Debug\netcoreapp2.1\Dist.Dme.Service.AssemblyInfoInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\obj\x86\Debug\netcoreapp2.1\Dist.Dme.Service.AssemblyInfo.cs
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\obj\x86\Debug\netcoreapp2.1\Dist.Dme.Service.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Service\obj\x86\Debug\netcoreapp2.1\Dist.Dme.Service.pdb

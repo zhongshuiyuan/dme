@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Dist.Dme.DisCache\Dist.Dme.DisCache.csproj" />
+    <ProjectReference Include="..\Dist.Dme.DisFS\Dist.Dme.DisFS.csproj" />
+  </ItemGroup>
+
+</Project>

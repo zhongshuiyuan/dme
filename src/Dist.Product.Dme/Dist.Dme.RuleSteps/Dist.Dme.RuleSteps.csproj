@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
@@ -20,6 +20,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Dist.Dme.Base\Dist.Dme.Base.csproj" />
     <ProjectReference Include="..\Dist.Dme.DAL\Dist.Dme.DAL.csproj" />
+    <ProjectReference Include="..\Dist.Dme.DisFS\Dist.Dme.DisFS.csproj" />
+    <ProjectReference Include="..\Dist.Dme.Extensions\Dist.Dme.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,9 @@
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.1\Dist.Dme.DisFS.deps.json
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.1\Dist.Dme.DisFS.dll
+D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.1\Dist.Dme.DisFS.pdb
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisFS\obj\x86\Debug\netcoreapp2.1\Dist.Dme.DisFS.csprojResolveAssemblyReference.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisFS\obj\x86\Debug\netcoreapp2.1\Dist.Dme.DisFS.csproj.CoreCompileInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisFS\obj\x86\Debug\netcoreapp2.1\Dist.Dme.DisFS.AssemblyInfoInputs.cache
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisFS\obj\x86\Debug\netcoreapp2.1\Dist.Dme.DisFS.AssemblyInfo.cs
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisFS\obj\x86\Debug\netcoreapp2.1\Dist.Dme.DisFS.dll
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DisFS\obj\x86\Debug\netcoreapp2.1\Dist.Dme.DisFS.pdb

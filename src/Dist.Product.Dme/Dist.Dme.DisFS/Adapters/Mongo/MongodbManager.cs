@@ -98,7 +98,7 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
         {
             IMongoClient client = GetMongodbClient((host.Connection));
             var mongoDataBase = client.GetDatabase(host.DataBase);
-            return mongoDataBase.GetCollection<T>(nameof(T));
+            return mongoDataBase.GetCollection<T>(typeof(T).Name);
         }
         /// <summary>
         /// 获取mongo集合类
@@ -123,7 +123,7 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
         {
             IMongoClient client = GetMongodbClient((connectionString));
             var mongoDataBase = client.GetDatabase(dataBase);
-            return mongoDataBase.GetCollection<T>(nameof(T));
+            return mongoDataBase.GetCollection<T>(typeof(T).FullName);
         }
     }
     /// <summary>

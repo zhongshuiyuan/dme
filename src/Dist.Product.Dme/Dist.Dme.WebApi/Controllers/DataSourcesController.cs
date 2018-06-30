@@ -1,4 +1,6 @@
-﻿using Dist.Dme.Base.Framework;
+﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Framework;
+using Dist.Dme.Base.Utils;
 using Dist.Dme.DisFS.Adapters.Mongo;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Service.Interfaces;
@@ -82,6 +84,15 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("register/v1")]
         public Result RegistryDataSource([FromBody]DatasourceAddDTO dto)
         {
+            try
+            {
+                // 验证数据源类型的合法性
+                EnumUtil.GetEnumObjByName<DataSourceTypes>(dto.Type);
+            }
+            catch (System.Exception)
+            {
+                return base.Error($"数据源类型不合法[{dto.Type}]");
+            }
             return base.Success(this.DataSourceService.AddDataSource(dto));
         }
         /// <summary>

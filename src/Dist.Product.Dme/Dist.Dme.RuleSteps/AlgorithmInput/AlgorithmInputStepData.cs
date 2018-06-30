@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Dist.Dme.RuleSteps.AlgorithmInput
 {
@@ -85,7 +86,7 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
                     paraValues[item.AttributeCode] = item.AttributeValue;
                 }
             }
-         
+
             algorithm.Init(paraValues);
             Result result = algorithm.Execute();
             // 保存输出

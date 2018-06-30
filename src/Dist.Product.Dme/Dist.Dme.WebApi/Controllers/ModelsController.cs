@@ -2,6 +2,7 @@
 using Dist.Dme.Algorithms.Overlay.DTO;
 using Dist.Dme.Base.Framework;
 using Dist.Dme.Model.DTO;
+using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Impls;
 using Dist.Dme.Service.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace Dist.Dme.WebApi.Controllers
 {
@@ -138,14 +140,13 @@ namespace Dist.Dme.WebApi.Controllers
         /// <summary>
         /// 运行模型计算
         /// </summary>
-        /// <param name="modelCode">模型唯一编码</param>
-        /// <param name="versionCode">模型版本唯一编码</param>
+        /// <param name="modelVersionCode">模型版本唯一编码</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("v1/run/{modelCode}/{versionCode}")]
-        public Result Run(string modelCode, string versionCode)
+        [Route("v1/run/{modelVersionCode}")]
+        public Result Run(string modelVersionCode)
         {
-            return base.Success(this.ModelService.RunModel(modelCode, versionCode));
+            return base.Success(this.ModelService.RunModelAsync(modelVersionCode), "已开始模型的云计算......");
         }
         /// <summary>
         /// 注册模型
@@ -194,7 +195,7 @@ namespace Dist.Dme.WebApi.Controllers
             return base.Success(this.ModelService.SaveRuleStepInfos(info));
         }
         /// <summary>
-        /// 获取任务清单
+        /// 获取任务清单，以创建时间倒序
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -204,7 +205,7 @@ namespace Dist.Dme.WebApi.Controllers
             return base.Success(this.ModelService.ListTask());
         }
         /// <summary>
-        /// 获取任务的计算结果
+        /// 获取任务的所有步骤计算结果
         /// </summary>
         /// <param name="taskCode">任务唯一编码</param>
         /// <returns></returns>
@@ -212,7 +213,19 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("tasks/result/v1/{taskCode}")]
         public Result GetTaskOutput(string taskCode)
         {
-            return base.Success(this.ModelService.GetTaskResult(taskCode));
+            return base.Success(this.ModelService.GetTaskResult(taskCode, -1));
+        }
+        /// <summary>
+        /// 获取任务指定步骤的计算结果
+        /// </summary>
+        /// <param name="taskCode">任务编码</param>
+        /// <param name="ruleStepId">步骤id</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("tasks/result/v1/{taskCode}/{ruleStepId}")]
+        public Result GetTaskOutput(string taskCode, int ruleStepId)
+        {
+            return base.Success(this.ModelService.GetTaskResult(taskCode, ruleStepId));
         }
     }
 }
