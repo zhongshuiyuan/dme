@@ -94,12 +94,12 @@ namespace Dist.Dme.SRCE.Core
             }
             if (null == workspace)
             {
-                throw new BusinessException((int)SystemStatusCode.DME_ERROR, "获取源要素类工作空间失败");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, "获取源要素类工作空间失败");
             }
             TFeatureClass featureClass = this.GetFeatureClass(workspace, dto.Name);
             if (null == featureClass)
             {
-                throw new BusinessException((int)SystemStatusCode.DME_ERROR, "获取源要素类对象失败");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, "获取源要素类对象失败");
             }
             return featureClass;
         }

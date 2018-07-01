@@ -39,7 +39,7 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
             if (0 == stepAttributes?.Count)
             {
                 LOG.Warn("没有找到步骤关联的参数设置，停止执行");
-                return new Result(SystemStatusCode.DME_FAIL, "没有找到步骤关联的参数设置，停止执行", null);
+                return new Result(EnumSystemStatusCode.DME_FAIL, "没有找到步骤关联的参数设置，停止执行", null);
             }
             String baseDir = AppDomain.CurrentDomain.BaseDirectory;
             String assemblyPath = Path.Combine(baseDir, dto.MetaDefine.Assembly);
@@ -47,13 +47,13 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
             if (null == assembly)
             {
                 LOG.Warn($"程序集文件[{assemblyPath}]不存在");
-                return new Result(SystemStatusCode.DME_ERROR, $"程序集文件[{assemblyPath}]不存在", null);
+                return new Result(EnumSystemStatusCode.DME_ERROR, $"程序集文件[{assemblyPath}]不存在", null);
             }
             IAlgorithm algorithm = (IAlgorithm)assembly.CreateInstance(dto.MetaDefine.MainClass, true);
             if (null == algorithm)
             {
                 LOG.Warn($"接口[{dto.MetaDefine.MainClass}]创建实例为空");
-                return new Result(SystemStatusCode.DME_ERROR, $"程序集文件[{assemblyPath}]不存在", null);
+                return new Result(EnumSystemStatusCode.DME_ERROR, $"程序集文件[{assemblyPath}]不存在", null);
             }
             IDictionary<string, Property> inputParams = algorithm.InParams;
             // 载入参数值
@@ -65,7 +65,7 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
                     continue;
                 }
                 Property inputParaProperty = inputParams[item.AttributeCode];
-                if (inputParaProperty.DataType == (int)ValueMetaType.TYPE_FEATURECLASS)
+                if (inputParaProperty.DataType == (int)EnumValueMetaType.TYPE_FEATURECLASS)
                 {
                     // 这种类型，要注意解析数据源
                     JObject featureClassJson = JObject.Parse(item.AttributeValue.ToString());
@@ -90,12 +90,17 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
             algorithm.Init(paraValues);
             Result result = algorithm.Execute();
             // 保存输出
-            if (result != null && EnumUtil.GetEnumDisplayName(SystemStatusCode.DME_SUCCESS) == result.Status)
+            if (result != null && EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_SUCCESS) == result.Status)
             {
                 base.SaveOutput(algorithm.OutParams);
-                return new Result(SystemStatusCode.DME_SUCCESS, "执行完毕", true);
+                return new Result(EnumSystemStatusCode.DME_SUCCESS, "执行完毕", true);
             }
-            return new Result(SystemStatusCode.DME_FAIL, "执行失败，无异常信息", false);
+            return new Result(EnumSystemStatusCode.DME_FAIL, "执行失败，无异常信息", false);
+        }
+
+        public bool SaveAttributes(IDictionary<string, object> attributes)
+        {
+            return this.ruleStepMeta.SaveAttributes(attributes);
         }
     }
 }

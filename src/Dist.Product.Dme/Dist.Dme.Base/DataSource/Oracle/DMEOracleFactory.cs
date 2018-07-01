@@ -5,7 +5,7 @@ using Dist.Dme.Base.Framework.Interfaces;
 
 namespace Dist.Dme.Base.DataSource.Oracle
 {
-    public class DMEOracleFactory : DMEDataSourceFactory, IDMEDataSourceFactory
+    public class DMEOracleFactory : BaseDMEDataSourceFactory, IDMEDataSourceFactory
     {
         public override IDMEDataSource Open(IPropertySetter properties, Boolean checkMetaValid = false)
         {

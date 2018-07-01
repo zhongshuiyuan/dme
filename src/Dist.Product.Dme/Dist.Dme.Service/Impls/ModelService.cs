@@ -406,19 +406,21 @@ namespace Dist.Dme.Service.Impls
                         // 处理步骤属性
                         if (step.Attributes?.Count > 0)
                         {
-                            IList<DmeRuleStepAttribute> attributeEntities = new List<DmeRuleStepAttribute>();
-                            foreach (var att in step.Attributes)
-                            {
-                                attributeEntities.Add(new DmeRuleStepAttribute
-                                {
-                                    RuleStepId = stepEntity.Id,
-                                    ModelId = stepEntity.ModelId,
-                                    VersionId = stepEntity.VersionId,
-                                    AttributeCode = att.Key,
-                                    AttributeValue = att.Value
-                                });
-                            }
-                            db.Insertable<DmeRuleStepAttribute>(attributeEntities).ExecuteCommand();
+                            IRuleStepData ruleStepData = RuleStepFactory.GetRuleStepData(step.TypeCode, base.Repository, -1, stepEntity);
+                            ruleStepData.SaveAttributes(step.Attributes);
+                            //IList<DmeRuleStepAttribute> attributeEntities = new List<DmeRuleStepAttribute>();
+                            //foreach (var att in step.Attributes)
+                            //{
+                            //    attributeEntities.Add(new DmeRuleStepAttribute
+                            //    {
+                            //        RuleStepId = stepEntity.Id,
+                            //        ModelId = stepEntity.ModelId,
+                            //        VersionId = stepEntity.VersionId,
+                            //        AttributeCode = att.Key,
+                            //        AttributeValue = att.Value
+                            //    });
+                            //}
+                            //db.Insertable<DmeRuleStepAttribute>(attributeEntities).ExecuteCommand();
                         }
                     }
                     // 处理步骤的向量关系
@@ -555,36 +557,32 @@ namespace Dist.Dme.Service.Impls
                 switch (@enum)
                 {
                     case EnumValueMetaType.TYPE_UNKNOWN:
-                        break;
                     case EnumValueMetaType.TYPE_NUMBER:
-                        break;
                     case EnumValueMetaType.TYPE_STRING:
+                    case EnumValueMetaType.TYPE_INTEGER:
+                    case EnumValueMetaType.TYPE_BIGNUMBER:
+                    case EnumValueMetaType.TYPE_TIMESTAMP:
+                    case EnumValueMetaType.TYPE_INET:
+                    case EnumValueMetaType.TYPE_LOCAL_FILE:
+                    case EnumValueMetaType.TYPE_GDB_PATH:
+                    case EnumValueMetaType.TYPE_FOLDER:
+                        temp.Value = item.ResultValue;
                         break;
                     case EnumValueMetaType.TYPE_DATE:
+                        // 要求格式：yyyy-MM-dd hh:mm:ss 
+                        temp.Value = Convert.ToDateTime(item.ResultValue?.ToString());
                         break;
                     case EnumValueMetaType.TYPE_BOOLEAN:
-                        break;
-                    case EnumValueMetaType.TYPE_INTEGER:
-                        break;
-                    case EnumValueMetaType.TYPE_BIGNUMBER:
+                        temp.Value = Boolean.Parse(item.ResultValue?.ToString());
                         break;
                     case EnumValueMetaType.TYPE_SERIALIZABLE:
                         break;
                     case EnumValueMetaType.TYPE_BINARY:
                         break;
-                    case EnumValueMetaType.TYPE_TIMESTAMP:
-                        break;
-                    case EnumValueMetaType.TYPE_INET:
-                        break;
-                    case EnumValueMetaType.TYPE_LOCAL_FILE:
-                        break;
                     case EnumValueMetaType.TYPE_MDB_FEATURECLASS:
                         break;
-                    case EnumValueMetaType.TYPE_GDB_PATH:
-                        break;
-                    case EnumValueMetaType.TYPE_FOLDER:
-                        break;
                     case EnumValueMetaType.TYPE_STRING_LIST:
+                        temp.Value = item.ResultValue?.ToString().Split(";");
                         break;
                     case EnumValueMetaType.TYPE_SDE_FEATURECLASS:
                         break;

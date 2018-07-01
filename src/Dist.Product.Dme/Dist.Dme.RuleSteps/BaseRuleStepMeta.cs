@@ -72,7 +72,7 @@ namespace Dist.Dme.RuleSteps
                 DmeRuleStep dmeRuleStep = db.Queryable<DmeRuleStep>().Single(rs => rs.Id == this.step.Id);
                 if (null ==  dmeRuleStep)
                 {
-                    throw new BusinessException((int)SystemStatusCode.DME_FAIL, $"规则[{this.step.Id}]没有找到数据库记录");
+                    throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"规则[{this.step.Id}]没有找到数据库记录");
                 }
                 // 不使用接口IList，Insertable<>批量插入存在问题
                 List<DmeRuleStepAttribute> attributeEntities = new List<DmeRuleStepAttribute>();
@@ -111,7 +111,7 @@ namespace Dist.Dme.RuleSteps
                     DmeRuleStepType dmeRuleStepType = db.Queryable<DmeRuleStepType>().Single(rst => rst.Code == this.RuleStepType.Code);
                     if (null == dmeRuleStepType)
                     {
-                        throw new BusinessException((int)SystemStatusCode.DME_FAIL, $"步骤编码{this.RuleStepType.Code}不存在，请核实数据。");
+                        throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"步骤编码{this.RuleStepType.Code}不存在，请核实数据。");
                     }
                     DmeRuleStep dmeRuleStep = new DmeRuleStep
                     {
@@ -131,7 +131,7 @@ namespace Dist.Dme.RuleSteps
                     DmeRuleStep dmeRuleStep = db.Queryable<DmeRuleStep>().InSingle(this.step.Id);
                     if(null == dmeRuleStep)
                     {
-                        throw new BusinessException((int)SystemStatusCode.DME_FAIL, $"步骤id[{this.step.Id}]不存在，请核实数据。");
+                        throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"步骤id[{this.step.Id}]不存在，请核实数据。");
                     }
                     if (!string.IsNullOrEmpty(stepName))
                     {

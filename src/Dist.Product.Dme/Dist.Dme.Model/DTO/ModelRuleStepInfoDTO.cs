@@ -56,7 +56,7 @@ namespace Dist.Dme.Model.DTO
         /// <summary>
         /// 步骤属性值清单，键值对
         /// </summary>
-        public IList<KeyValuePair<string, object>> Attributes { get; set; }
+        public IDictionary<string, object> Attributes { get; set; }
     }
     /// <summary>
     /// 步骤的向量信息

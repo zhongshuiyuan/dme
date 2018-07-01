@@ -97,7 +97,7 @@ namespace Dist.Dme.Service.Impls
                     alg.Extension = JsonConvert.SerializeObject(dto.Extension);
                     if (!base.Repository.GetDbContext().Updateable<DmeAlgorithm>().ExecuteCommandHasChange())
                     {
-                        throw new BusinessException((int)SystemStatusCode.DME_ERROR, "更新算法信息失败，无详情信息。");
+                        throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, "更新算法信息失败，无详情信息。");
                     }
                     if (dto.Metas != null && dto.Metas.Count > 0)
                     {
@@ -148,7 +148,7 @@ namespace Dist.Dme.Service.Impls
             String registerFile = Path.Combine(new string[] { baseDir, "register.json" });
             if (!File.Exists(registerFile))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_ERROR, $"注册文件[{registerFile}]不存在");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"注册文件[{registerFile}]不存在");
             }
             String jsonText = File.ReadAllText(registerFile);
             JObject jObject = JObject.Parse(jsonText);
@@ -201,7 +201,7 @@ namespace Dist.Dme.Service.Impls
             String registerFile = Path.Combine(new string[] { baseDir, "register.json" });
             if (!File.Exists(registerFile))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_ERROR, $"注册文件[{registerFile}]不存在");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"注册文件[{registerFile}]不存在");
             }
             String jsonText = File.ReadAllText(registerFile);
             JObject jObject = JObject.Parse(jsonText);
@@ -350,7 +350,7 @@ namespace Dist.Dme.Service.Impls
                     tempAlgMeta = new AlgorithmMetaReqDTO
                     {
                         Name = item.Value.Name,
-                        DataType = EnumUtil.GetEnumName<ValueMetaType>(item.Value.DataType),
+                        DataType = EnumUtil.GetEnumName<EnumValueMetaType>(item.Value.DataType),
                         Inout = parameterType,
                         IsVisible = item.Value.IsVisible,
                         Remark = item.Value.Remark,

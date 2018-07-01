@@ -5,7 +5,7 @@ namespace Dist.Dme.Base.Common
     /// <summary>
     /// 系统状态码
     /// </summary>
-    public enum SystemStatusCode
+    public enum EnumSystemStatusCode
     {
         [Description("运行中")]
         [DisplayName("running")]

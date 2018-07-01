@@ -37,7 +37,7 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
             {
                 // new Property(nameof(this.FeatureClass_Source_First), "总规用地的图层信息", ValueTypeMeta.TYPE_MDB_FEATURECLASS, "", "", 1, "总规用地的图层信息，格式：mdb路径"+ SEPARATOR_FEATURE_PATH + "要素类"))
                 return base.InputParameters[nameof(AlgorithmInputStepMeta.AlgorithmCode)] = 
-                    new Property(nameof(AlgorithmInputStepMeta.AlgorithmCode), "算法唯一标识符", Common.ValueMetaType.TYPE_STRING, "","", "算法唯一标识符，需要选择一个算法。");
+                    new Property(nameof(AlgorithmInputStepMeta.AlgorithmCode), "算法唯一标识符", Common.EnumValueMetaType.TYPE_STRING, "","", "算法唯一标识符，需要选择一个算法。");
             }
         }
         /// <summary>
@@ -49,7 +49,7 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
             DmeRuleStepAttribute dmeRuleStepAttribute = base.repository.GetDbContext().Queryable<DmeRuleStepAttribute>().Single(rsa => rsa.RuleStepId == this.step.Id && rsa.AttributeCode == nameof(this.AlgorithmCode));
             if (null == dmeRuleStepAttribute)
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL, "没有找到步骤关联的算法");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, "没有找到步骤关联的算法");
             }
             
             AlgorithmDTO algorithmDTO = new AlgorithmDTO();

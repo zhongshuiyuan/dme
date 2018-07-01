@@ -7,7 +7,7 @@ namespace Dist.Dme.Base.Common
     /// <summary>
     /// 算法类型
     /// </summary>
-    public class AlgorithmType
+    public class EnumAlgorithmType
     {
         /// <summary>
         /// 动态库DLL，DOTNET平台

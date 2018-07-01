@@ -83,23 +83,23 @@ namespace Dist.Dme.Algorithms.Overlay
 
             // 初始化输入参数
             base.InputParametersMeta.Add(nameof(this.SourceFeatureClass),
-                new Property(nameof(this.SourceFeatureClass), "源要素类，叠加的图层", ValueMetaType.TYPE_FEATURECLASS, new InputFeatureClassDTO(), new InputFeatureClassDTO(), "", null));
+                new Property(nameof(this.SourceFeatureClass), "源要素类，叠加的图层", EnumValueMetaType.TYPE_FEATURECLASS, new InputFeatureClassDTO(), new InputFeatureClassDTO(), "", null));
             base.InputParametersMeta.Add(nameof(this.TargetFeatureClass),
-                         new Property(nameof(this.TargetFeatureClass), "目标要素类，被叠加的图层", ValueMetaType.TYPE_FEATURECLASS, new InputFeatureClassDTO(), new InputFeatureClassDTO(), "", null));
+                         new Property(nameof(this.TargetFeatureClass), "目标要素类，被叠加的图层", EnumValueMetaType.TYPE_FEATURECLASS, new InputFeatureClassDTO(), new InputFeatureClassDTO(), "", null));
             base.InputParametersMeta.Add(nameof(this.AnalysisType),
-                        new Property(nameof(this.AnalysisType), "分析类型", ValueMetaType.TYPE_INTEGER, null, (int)AnalysisType.COVER, "分析类型选择",
+                        new Property(nameof(this.AnalysisType), "分析类型", EnumValueMetaType.TYPE_INTEGER, null, (int)AnalysisType.COVER, "分析类型选择",
                         new object[] {
-                            new Property(nameof(AnalysisType.COVER), EnumUtil.GetEnumDescription(AnalysisType.COVER), ValueMetaType.TYPE_INTEGER, (int)AnalysisType.COVER, null, EnumUtil.GetEnumDescription(AnalysisType.COVER)),
-                            new Property(nameof(AnalysisType.OVERTOP), EnumUtil.GetEnumDescription(AnalysisType.OVERTOP), ValueMetaType.TYPE_INTEGER, (int)AnalysisType.OVERTOP, null, EnumUtil.GetEnumDescription(AnalysisType.OVERTOP))}));
-            base.InputParametersMeta.Add(nameof(IsClearTemp), new Property(nameof(IsClearTemp), nameof(IsClearTemp), ValueMetaType.TYPE_BOOLEAN, false, false, "是否清理临时目录或文件", new object[] { true, false}));
+                            new Property(nameof(AnalysisType.COVER), EnumUtil.GetEnumDescription(AnalysisType.COVER), EnumValueMetaType.TYPE_INTEGER, (int)AnalysisType.COVER, null, EnumUtil.GetEnumDescription(AnalysisType.COVER)),
+                            new Property(nameof(AnalysisType.OVERTOP), EnumUtil.GetEnumDescription(AnalysisType.OVERTOP), EnumValueMetaType.TYPE_INTEGER, (int)AnalysisType.OVERTOP, null, EnumUtil.GetEnumDescription(AnalysisType.OVERTOP))}));
+            base.InputParametersMeta.Add(nameof(IsClearTemp), new Property(nameof(IsClearTemp), nameof(IsClearTemp), EnumValueMetaType.TYPE_BOOLEAN, false, false, "是否清理临时目录或文件", new object[] { true, false}));
             // 指定输出参数类型
-            base.OutputParametersMeta.Add(nameof(Result), new Property(nameof(Result), "输出结果", ValueMetaType.TYPE_JSON));
+            base.OutputParametersMeta.Add(nameof(Result), new Property(nameof(Result), "输出结果", EnumValueMetaType.TYPE_JSON));
         }
         public override Result Execute()
         {
             if (!base.InitComplete)
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, "初始化工作未完成");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, "初始化工作未完成");
             }
             DMEWorkspaceBridge<IWorkspace, IFeatureClass> dmeWorkspaceBridge = new DMEWorkspaceBridge<IWorkspace, IFeatureClass>();
             dmeWorkspaceBridge.SetWorkspace(new EsriWorkspace());
@@ -143,7 +143,7 @@ namespace Dist.Dme.Algorithms.Overlay
                     }
                     Property resultProp = base.OutputParametersMeta[nameof(Result)];
                     resultProp.Value = overlayRespDTO;
-                    return new Result(SystemStatusCode.DME_SUCCESS, "运行完成", (int)SystemStatusCode.DME_SUCCESS, null);
+                    return new Result(EnumSystemStatusCode.DME_SUCCESS, "运行完成", (int)EnumSystemStatusCode.DME_SUCCESS, null);
                 }
             }
             else if (AnalysisType.OVERTOP == this.AnalysisType)
@@ -186,7 +186,7 @@ namespace Dist.Dme.Algorithms.Overlay
                         overlayRespDTO.SumArea = sumArea;
                         Property resultProp = base.OutputParametersMeta[nameof(Result)];
                         resultProp.Value = overlayRespDTO;
-                        return new Result(SystemStatusCode.DME_SUCCESS, "运行完成", (int)SystemStatusCode.DME_SUCCESS, null);
+                        return new Result(EnumSystemStatusCode.DME_SUCCESS, "运行完成", (int)EnumSystemStatusCode.DME_SUCCESS, null);
                     }
                 }
                 // 删除临时文件
@@ -197,10 +197,10 @@ namespace Dist.Dme.Algorithms.Overlay
             }
             else
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL, "分析类型不匹配");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, "分析类型不匹配");
             }
            
-            return new Result(SystemStatusCode.DME_SUCCESS, "运行完成，但没有运算结果", (int)SystemStatusCode.DME_SUCCESS, null);
+            return new Result(EnumSystemStatusCode.DME_SUCCESS, "运行完成，但没有运算结果", (int)EnumSystemStatusCode.DME_SUCCESS, null);
         }
 
         public override void Init(IDictionary<string, object> parameters)
@@ -208,27 +208,27 @@ namespace Dist.Dme.Algorithms.Overlay
             if (0 == base.InParams?.Count)
             {
                 LOG.Error("未设置输入参数");
-                throw new BusinessException((int)SystemStatusCode.DME_ERROR, "未设置输入参数");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, "未设置输入参数");
             }
             if (0 == base.OutParams?.Count)
             {
                 LOG.Error("未设置输出参数");
-                throw new BusinessException((int)SystemStatusCode.DME_ERROR, "未设置输出参数");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, "未设置输出参数");
             }
             if (!parameters.ContainsKey(nameof(this.SourceFeatureClass)))
             {
                 LOG.Error($"缺失参数[{nameof(this.SourceFeatureClass)}]");
-                throw new BusinessException((int)SystemStatusCode.DME_ERROR, $"缺失参数[{nameof(this.SourceFeatureClass)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"缺失参数[{nameof(this.SourceFeatureClass)}]");
             }
             if (!parameters.ContainsKey(nameof(this.TargetFeatureClass)))
             {
                 LOG.Error($"缺失参数[{nameof(this.SourceFeatureClass)}]");
-                throw new BusinessException((int)SystemStatusCode.DME_ERROR, $"缺失参数[{nameof(this.TargetFeatureClass)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"缺失参数[{nameof(this.TargetFeatureClass)}]");
             }
             if (!parameters.ContainsKey(nameof(this.AnalysisType)))
             {
                 LOG.Error($"缺失参数[{nameof(this.AnalysisType)}]");
-                throw new BusinessException((int)SystemStatusCode.DME_ERROR, $"缺失参数[{nameof(this.AnalysisType)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"缺失参数[{nameof(this.AnalysisType)}]");
             }
             if (parameters.ContainsKey(nameof(IsClearTemp)))
             {

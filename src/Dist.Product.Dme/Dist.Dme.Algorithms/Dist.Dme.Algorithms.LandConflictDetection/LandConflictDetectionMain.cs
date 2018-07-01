@@ -85,18 +85,18 @@ namespace Dist.Dme.Algorithms.LandConflictDetection
 
             // 初始化输入参数
             base.InputParametersMeta.Add(nameof(this.FeatureClass_Source_First),
-                new Property(nameof(this.FeatureClass_Source_First), "总规用地的图层信息", Base.Common.ValueMetaType.TYPE_MDB_FEATURECLASS, "", "", "总规用地的图层信息，格式：mdb路径" + SEPARATOR_FEATURE_PATH + "要素类名称", null));
+                new Property(nameof(this.FeatureClass_Source_First), "总规用地的图层信息", Base.Common.EnumValueMetaType.TYPE_MDB_FEATURECLASS, "", "", "总规用地的图层信息，格式：mdb路径" + SEPARATOR_FEATURE_PATH + "要素类名称", null));
             base.InputParametersMeta.Add(nameof(this.FeatureClass_Source_Second),
-                new Property(nameof(this.FeatureClass_Source_Second), "控规用地的图层信息", Base.Common.ValueMetaType.TYPE_MDB_FEATURECLASS, "", "", "控规用地的图层路径信息，格式：mdb路径" + SEPARATOR_FEATURE_PATH + "要素类名称", null));
+                new Property(nameof(this.FeatureClass_Source_Second), "控规用地的图层信息", Base.Common.EnumValueMetaType.TYPE_MDB_FEATURECLASS, "", "", "控规用地的图层路径信息，格式：mdb路径" + SEPARATOR_FEATURE_PATH + "要素类名称", null));
             base.InputParametersMeta.Add(nameof(this.Yddm_First),
-                new Property(nameof(this.Yddm_First), "总规用地代码属性", Base.Common.ValueMetaType.TYPE_STRING, "", "", "总规用地代码属性", null));
+                new Property(nameof(this.Yddm_First), "总规用地代码属性", Base.Common.EnumValueMetaType.TYPE_STRING, "", "", "总规用地代码属性", null));
             base.InputParametersMeta.Add(nameof(this.Yddm_Second),
-                new Property(nameof(this.Yddm_Second), "控规用地代码属性", Base.Common.ValueMetaType.TYPE_STRING, "", "", "控规用地代码属性", null));
+                new Property(nameof(this.Yddm_Second), "控规用地代码属性", Base.Common.EnumValueMetaType.TYPE_STRING, "", "", "控规用地代码属性", null));
 
             // 初始化输出参数
             string resultGDBDir = System.AppDomain.CurrentDomain.BaseDirectory + "/result/";
-            base.OutputParametersMeta.Add(nameof(this.ResultGDBPath), new Property(nameof(this.ResultGDBPath), "输出结果", Base.Common.ValueMetaType.TYPE_GDB_PATH, resultGDBDir, resultGDBDir, "分析结果为gdb文件", null));
-            base.OutputParametersMeta.Add(nameof(this.ReulstLayerName), new Property(nameof(this.ReulstLayerName), "图层名称", Base.Common.ValueMetaType.TYPE_STRING, this.ReulstLayerName, this.ReulstLayerName, "分析结果为gdb文件", null));
+            base.OutputParametersMeta.Add(nameof(this.ResultGDBPath), new Property(nameof(this.ResultGDBPath), "输出结果", Base.Common.EnumValueMetaType.TYPE_GDB_PATH, resultGDBDir, resultGDBDir, "分析结果为gdb文件", null));
+            base.OutputParametersMeta.Add(nameof(this.ReulstLayerName), new Property(nameof(this.ReulstLayerName), "图层名称", Base.Common.EnumValueMetaType.TYPE_STRING, this.ReulstLayerName, this.ReulstLayerName, "分析结果为gdb文件", null));
         }
 
         public override Result Execute()

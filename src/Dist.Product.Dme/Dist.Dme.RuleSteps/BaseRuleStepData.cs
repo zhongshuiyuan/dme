@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace Dist.Dme.RuleSteps
 {
     /// <summary>
-    /// 步骤数据产生者基类
+    /// 步骤数据产生和保存基类
     /// </summary>
     public abstract class BaseRuleStepData
     {
@@ -52,22 +52,22 @@ namespace Dist.Dme.RuleSteps
                     TaskId = this.taskId,
                     RuleStepId = this.step.Id,
                     ResultCode = item.Key,
-                    ResultType = EnumUtil.GetEnumName<ValueMetaType>(item.Value.DataType)
+                    ResultType = EnumUtil.GetEnumName<EnumValueMetaType>(item.Value.DataType)
                 };
                 switch (item.Value.DataType)
                 {
-                    case (int)ValueMetaType.TYPE_BIGNUMBER:
-                    case (int)ValueMetaType.TYPE_BINARY:
-                    case (int)ValueMetaType.TYPE_BOOLEAN:
-                    case (int)ValueMetaType.TYPE_INTEGER:
-                    case (int)ValueMetaType.TYPE_NUMBER:
-                    case (int)ValueMetaType.TYPE_SERIALIZABLE:
-                    case (int)ValueMetaType.TYPE_STRING:
-                    case (int)ValueMetaType.TYPE_TIMESTAMP:
-                    case (int)ValueMetaType.TYPE_MDB_FEATURECLASS:
+                    case (int)EnumValueMetaType.TYPE_BIGNUMBER:
+                    case (int)EnumValueMetaType.TYPE_BINARY:
+                    case (int)EnumValueMetaType.TYPE_BOOLEAN:
+                    case (int)EnumValueMetaType.TYPE_INTEGER:
+                    case (int)EnumValueMetaType.TYPE_NUMBER:
+                    case (int)EnumValueMetaType.TYPE_SERIALIZABLE:
+                    case (int)EnumValueMetaType.TYPE_STRING:
+                    case (int)EnumValueMetaType.TYPE_TIMESTAMP:
+                    case (int)EnumValueMetaType.TYPE_MDB_FEATURECLASS:
                         taskResult.ResultValue = item.Value.Value;
                         break;
-                    case (int)ValueMetaType.TYPE_JSON:
+                    case (int)EnumValueMetaType.TYPE_JSON:
                         // 存储到mongodb
                         TaskResultColl taskResultColl = new TaskResultColl
                         {
@@ -79,7 +79,7 @@ namespace Dist.Dme.RuleSteps
                         MongodbHelper<TaskResultColl>.Add(ServiceFactory.MongoHost, taskResultColl);
                         //taskResult.ResultValue = JsonConvert.SerializeObject(item.Value.Value);
                         break;
-                    case (int)ValueMetaType.TYPE_DATE:
+                    case (int)EnumValueMetaType.TYPE_DATE:
                         // 日期类型，转换成毫秒存储
                         taskResult.ResultValue = ((DateTime)item.Value.Value).Millisecond;
                         break;
