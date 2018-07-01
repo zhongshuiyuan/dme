@@ -67,7 +67,7 @@ namespace Dist.Dme.Base.Common
         /// <param name="valueSet">值的可选集</param>
         /// <param name="isVisible">是否可见</param>
         /// <param name="readOnly">是否只读</param>
-        public Property(string name, string alias, ValueMetaType dataType, object value = null, object defaultValue = null, string remark = "", object[] valueSet = null, int isVisible = 1, int readOnly = 0, int required = 1)
+        public Property(string name, string alias, EnumValueMetaType dataType, object value = null, object defaultValue = null, string remark = "", object[] valueSet = null, int isVisible = 1, int readOnly = 0, int required = 1)
         {
             this.Name = name;
             this.Alias = alias;

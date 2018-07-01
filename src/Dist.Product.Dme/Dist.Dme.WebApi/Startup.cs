@@ -117,6 +117,8 @@ namespace Dist.Dme.WebApi
             services.AddSingleton<IDataSourceService, DataSourceService>();
             // 注册算法服务
             services.AddSingleton<IAlgorithmService, AlgorithmService>();
+            // 注册业务日志服务
+            services.AddSingleton<ILogService, LogService>();
             // 设置全局
             IServiceProvider serviceProvider = services.BuildServiceProvider();
             ServiceFactory.CacheService = serviceProvider.GetService<ICacheService>();

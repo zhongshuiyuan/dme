@@ -27,7 +27,8 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
 
         public override string RuleStepName { get; set; } = "算法输入";
 
-        public AlgorithmInputStepMeta(IRepository repository, int modelId, int versionId, int ruleStepId) : base(repository, modelId, versionId, ruleStepId)
+        public AlgorithmInputStepMeta(IRepository repository, DmeRuleStep step) 
+            : base(repository, step)
         {
         }
         public override object InParams
@@ -45,7 +46,7 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
         /// <returns></returns>
         public AlgorithmDTO GetAlgorithm()
         {
-            DmeRuleStepAttribute dmeRuleStepAttribute = base.repository.GetDbContext().Queryable<DmeRuleStepAttribute>().Single(rsa => rsa.RuleStepId == this.ruleStepId && rsa.AttributeCode == nameof(this.AlgorithmCode));
+            DmeRuleStepAttribute dmeRuleStepAttribute = base.repository.GetDbContext().Queryable<DmeRuleStepAttribute>().Single(rsa => rsa.RuleStepId == this.step.Id && rsa.AttributeCode == nameof(this.AlgorithmCode));
             if (null == dmeRuleStepAttribute)
             {
                 throw new BusinessException((int)SystemStatusCode.DME_FAIL, "没有找到步骤关联的算法");

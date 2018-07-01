@@ -1,4 +1,5 @@
 ﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.DisFS.Adapters.Mongo;
@@ -14,23 +15,29 @@ using System.Threading.Tasks;
 
 namespace Dist.Dme.RuleSteps
 {
+    /// <summary>
+    /// 步骤数据产生者基类
+    /// </summary>
     public abstract class BaseRuleStepData
     {
         protected IRepository repository;
         protected int taskId;
-        protected int modelId;
-        protected int versionId;
-        protected int ruleStepId;
+        protected DmeRuleStep step;
+        //protected int modelId;
+        //protected int versionId;
+        //protected int ruleStepId;
 
-        public BaseRuleStepData(IRepository repository, int taskId, int modelId, int versionId, int ruleStepId)
+        public BaseRuleStepData(IRepository repository, int taskId, DmeRuleStep step)
         {
             this.repository = repository;
             this.taskId = taskId;
-            this.modelId = modelId;
-            this.versionId = versionId;
-            this.ruleStepId = ruleStepId;
+            this.step = step;
+            //this.modelId = modelId;
+            //this.versionId = versionId;
+            //this.ruleStepId = ruleStepId;
          
         }
+
         /// <summary>
         /// 异步保存输出
         /// </summary>
@@ -43,7 +50,7 @@ namespace Dist.Dme.RuleSteps
                 DmeTaskResult taskResult = new DmeTaskResult
                 {
                     TaskId = this.taskId,
-                    RuleStepId = this.ruleStepId,
+                    RuleStepId = this.step.Id,
                     ResultCode = item.Key,
                     ResultType = EnumUtil.GetEnumName<ValueMetaType>(item.Value.DataType)
                 };
@@ -65,7 +72,7 @@ namespace Dist.Dme.RuleSteps
                         TaskResultColl taskResultColl = new TaskResultColl
                         {
                             TaskId = this.taskId,
-                            RuleStepId = this.ruleStepId,
+                            RuleStepId = this.step.Id,
                             Code = item.Key,
                             Value = JsonConvert.SerializeObject(item.Value.Value)
                         };

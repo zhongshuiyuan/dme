@@ -223,10 +223,10 @@ create table DME_LOG
   usercode   VARCHAR2(38),
   createtime number(20),
   address    VARCHAR2(38),
-  remark     VARCHAR2(255),
+  remark     clob,
   apps       VARCHAR2(255),
   ObjectType VARCHAR2(30),
-  ObjectValue VARCHAR2(50)
+  ObjectId VARCHAR2(50)
 )
 tablespace DME
   pctfree 10
@@ -258,7 +258,7 @@ comment on column DME_LOG.apps
   is '应用';
 comment on column DME_LOG.ObjectType
   is '日志对象类型，如：算法、模型等等';
-comment on column DME_LOG.ObjectValue
+comment on column DME_LOG.ObjectId
   is '对象值，记录具体的对象标识值';  
   
   alter table DME_LOG add primary key(ID);
@@ -541,6 +541,13 @@ increment by 1
 cache 20;
 
 create sequence SEQ_DME_USER
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
+create sequence SEQ_DME_LOG
 minvalue 1
 maxvalue 9999999999999999999999999
 start with 1

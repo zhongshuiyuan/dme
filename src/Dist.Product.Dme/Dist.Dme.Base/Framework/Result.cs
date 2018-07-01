@@ -27,14 +27,14 @@ namespace Dist.Dme.Base.Framework
         /// </summary>
         public Object Data { get; set; }
 
-        public Result(SystemStatusCode status, String message, int code, Object data)
+        public Result(EnumSystemStatusCode status, String message, int code, Object data)
         {
             this.Status = EnumUtil.GetEnumDisplayName(status);
             this.Message = message;
             this.Code = code;
             this.Data = data;
         }
-        public Result(SystemStatusCode status, String message, Object data)
+        public Result(EnumSystemStatusCode status, String message, Object data)
         {
             this.Status = EnumUtil.GetEnumDisplayName(status);
             this.Message = message;

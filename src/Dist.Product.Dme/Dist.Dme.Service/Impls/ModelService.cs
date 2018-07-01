@@ -11,6 +11,7 @@ using Dist.Dme.DisFS.Collection;
 using Dist.Dme.Extensions;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
+using Dist.Dme.RuleSteps;
 using Dist.Dme.RuleSteps.AlgorithmInput;
 using Dist.Dme.Service.Interfaces;
 using log4net;
@@ -37,8 +38,10 @@ namespace Dist.Dme.Service.Impls
         /// 自动注入参数
         /// </summary>
         /// <param name="repository"></param>
-        public ModelService(IRepository repository) {
+        /// <param name="logService"></param>
+        public ModelService(IRepository repository, ILogService logService) {
             base.Repository = repository;
+            base.LogService = logService;
         }
         public object GetLandConflictMetadata()
         {
@@ -135,7 +138,7 @@ namespace Dist.Dme.Service.Impls
         {
             this.OverlayAlg.Init(parameters);
             Result result = this.OverlayAlg.Execute();
-            if (result.Status == EnumUtil.GetEnumDisplayName(SystemStatusCode.DME_SUCCESS))
+            if (result.Status == EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_SUCCESS))
             {
                 IDictionary<string, Property> outParameters = this.OverlayAlg.OutParams;
                 return outParameters;
@@ -193,13 +196,13 @@ namespace Dist.Dme.Service.Impls
             DmeModelVersion modelVersion = db.Queryable<DmeModelVersion>().Single(mv => mv.SysCode == versionCode);
             if (null == modelVersion)
             {
-                throw new BusinessException((int)SystemStatusCode.DME_ERROR, $"模型的版本[{versionCode}]不存在");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"模型的版本[{versionCode}]不存在");
             }
             // Single方法，如果查询数据库多条数据，会抛出异常
             DmeModel model = db.Queryable<DmeModel>().Single(m => m.Id == modelVersion.ModelId);
             if (null == model)
             {
-                throw new BusinessException((int)SystemStatusCode.DME_ERROR, $"模型[{modelVersion.ModelId}]不存在");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"模型[{modelVersion.ModelId}]不存在");
             }
             // 查找关联的算法信息
             IList<DmeRuleStep> ruleSteps = db.Queryable<DmeRuleStep>().Where(rs => rs.ModelId == model.Id && rs.VersionId == modelVersion.Id).ToList();
@@ -216,7 +219,7 @@ namespace Dist.Dme.Service.Impls
                 {
                     SysCode = GuidUtil.NewGuid(),
                     CreateTime = DateUtil.CurrentTimeMillis,
-                    Status = EnumUtil.GetEnumDisplayName(SystemStatusCode.DME_RUNNING),
+                    Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_RUNNING),
                     ModelId = model.Id,
                     VersionId = modelVersion.Id
                 };
@@ -251,22 +254,29 @@ namespace Dist.Dme.Service.Impls
                    {
                        IRuleStepData ruleStepData = null;
                        Result stepResult = null;
+                       DmeRuleStepType ruleStepTypeTemp = null;
                        foreach (var subRuleStep in ruleSteps)
                        {
-                           // 注入每一个步骤的参数值
-                           if (1 == subRuleStep.StepTypeId)
+                           ruleStepTypeTemp = db.Queryable<DmeRuleStepType>().Single(rst => rst.Id == subRuleStep.StepTypeId);
+                           ruleStepData = RuleStepFactory.GetRuleStepData(ruleStepTypeTemp.Code, this.Repository, task.Id, subRuleStep);
+                           if (null == ruleStepData)
                            {
-                               // 算法输入
-                               ruleStepData = new AlgorithmInputStepData(this.Repository, task.Id, model.Id, modelVersion.Id, subRuleStep.Id);
+                               throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"步骤工厂无法创建编码为[{ruleStepTypeTemp.Code}]的流程实例节点");
                            }
-                           // 执行计算
-                           stepResult = ruleStepData.Run();
-                           if (stepResult.Code != (int)SystemStatusCode.DME_SUCCESS)
+                           ruleStepData.Run();
+                           //if (1 == subRuleStep.StepTypeId)
+                           //{
+                           //    // 算法输入
+                           //    ruleStepData = new AlgorithmInputStepData(this.Repository, task.Id, subRuleStep);
+                           //    // 执行计算
+                           //    stepResult = ruleStepData.Run();
+                           //}
+                           if (stepResult.Code != (int)EnumSystemStatusCode.DME_SUCCESS)
                            {
                                throw new BusinessException(stepResult.Code, stepResult.Message);
                            }
                        }
-                       task.Status = EnumUtil.GetEnumDisplayName(SystemStatusCode.DME_SUCCESS);
+                       task.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_SUCCESS);
                        task.LastTime = DateUtil.CurrentTimeMillis;
                        db.Updateable<DmeTask>(task).ExecuteCommand();
                        return task;
@@ -276,14 +286,16 @@ namespace Dist.Dme.Service.Impls
                        // 更改任务执行的状态
                        if (ex is BusinessException)
                        {
-                           task.Status = EnumUtil.GetEnumDisplayName(EnumUtil.GetEnumObjByValue<SystemStatusCode>(((BusinessException)ex).Code));
+                           task.Status = EnumUtil.GetEnumDisplayName(EnumUtil.GetEnumObjByValue<EnumSystemStatusCode>(((BusinessException)ex).Code));
                        }
                        else
                        {
-                           task.Status = EnumUtil.GetEnumDisplayName(SystemStatusCode.DME_ERROR);
+                           task.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_ERROR);
                        }
                        task.LastTime = DateUtil.CurrentTimeMillis;
                        db.Updateable<DmeTask>(task).ExecuteCommand();
+                       // 添加日志
+                       this.LogService.AddLogAsync(Base.Common.Log.EnumLogType.ENTITY, Base.Common.Log.EnumLogLevel.ERROR, nameof(DmeTask), task.SysCode, "", ex);
                        throw ex;
                    }
                }).Data;
@@ -295,7 +307,7 @@ namespace Dist.Dme.Service.Impls
             DmeModelVersion modelVersion = base.Repository.GetDbContext().Queryable<DmeModelVersion>().Where(mv => mv.SysCode == versionCode).Single();
             if (null == modelVersion)
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL, $"模型版本[{versionCode}]不存在，或模型版本编码无效");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"模型版本[{versionCode}]不存在，或模型版本编码无效");
             }
             var db = base.Repository.GetDbContext();
             return db.Ado.UseTran<DmeModelVersion>(()=>
@@ -366,15 +378,16 @@ namespace Dist.Dme.Service.Impls
 
         public object SaveRuleStepInfos(ModelRuleStepInfoDTO info)
         {
+            var db = base.Repository.GetDbContext();
             // 开始事务
-            return base.Repository.GetDbContext().Ado.UseTran<object>(()=>
+            return db.Ado.UseTran<object>(()=>
             {
                 // 根据模型版本号，获取模型版本信息
                 DmeModelVersion modelVersion = base.Repository.GetDbContext().Queryable<DmeModelVersion>().Single(mv => mv.SysCode == info.ModelVersionCode);
                 // 清除模型的步骤信息
-                base.Repository.GetDbContext().Deleteable<DmeRuleStep>(rs => rs.ModelId == modelVersion.ModelId && rs.VersionId == modelVersion.Id).ExecuteCommand();
+                db.Deleteable<DmeRuleStep>(rs => rs.ModelId == modelVersion.ModelId && rs.VersionId == modelVersion.Id).ExecuteCommand();
                 // 清除步骤属性信息
-                base.Repository.GetDbContext().Deleteable<DmeRuleStepAttribute>(rsa => rsa.ModelId == modelVersion.ModelId && rsa.VersionId == modelVersion.Id).ExecuteCommand();
+                db.Deleteable<DmeRuleStepAttribute>(rsa => rsa.ModelId == modelVersion.ModelId && rsa.VersionId == modelVersion.Id).ExecuteCommand();
                 // 根据key建立起关系
                 if (info.RuleSteps?.Count > 0)
                 {
@@ -388,7 +401,7 @@ namespace Dist.Dme.Service.Impls
                             ModelId = modelVersion.ModelId,
                             VersionId = modelVersion.Id
                         };
-                        stepEntity.Id = base.Repository.GetDbContext().Insertable<DmeRuleStep>(stepEntity).ExecuteReturnIdentity();
+                        stepEntity.Id = db.Insertable<DmeRuleStep>(stepEntity).ExecuteReturnIdentity();
                         key2BizId[step.Key] = stepEntity.Id;
                         // 处理步骤属性
                         if (step.Attributes?.Count > 0)
@@ -405,7 +418,7 @@ namespace Dist.Dme.Service.Impls
                                     AttributeValue = att.Value
                                 });
                             }
-                            base.Repository.GetDbContext().Insertable<DmeRuleStepAttribute>(attributeEntities).ExecuteCommand();
+                            db.Insertable<DmeRuleStepAttribute>(attributeEntities).ExecuteCommand();
                         }
                     }
                     // 处理步骤的向量关系
@@ -428,7 +441,7 @@ namespace Dist.Dme.Service.Impls
                                 Enabled = vector.Enabled
                             });
                         }
-                        base.Repository.GetDbContext().Insertable<DmeRuleStepHop>(ruleStepHops).ExecuteCommandAsync();
+                        db.Insertable<DmeRuleStepHop>(ruleStepHops).ExecuteCommandAsync();
                     }
                 }
                 return true;
@@ -437,7 +450,7 @@ namespace Dist.Dme.Service.Impls
         public object CopyFromModelVersion(string modelVersionCode)
         {
             // 开始事务
-            return base.Repository.GetDbContext().Ado.UseTran<object>(() =>
+            return base.Repository.GetDbContext().Ado.UseTran<DmeModelVersion>(() =>
             {
                 // 根据模型版本号，获取模型版本信息
                 DmeModelVersion modelVersion = base.Repository.GetDbContext().Queryable<DmeModelVersion>().Single(mv => mv.SysCode == modelVersionCode);
@@ -475,7 +488,7 @@ namespace Dist.Dme.Service.Impls
                         }
                     }
                 }
-                return true;
+                return newVersion;
             }).Data;
         }
         public object ListTask()
@@ -506,7 +519,7 @@ namespace Dist.Dme.Service.Impls
             DmeTask task = db.Queryable<DmeTask>().Single(t => t.SysCode == taskCode);
             if (null == task)
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL, $"任务不存在[{taskCode}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"任务不存在[{taskCode}]");
             }
             // 查询任务的结果输出
             IList<DmeTaskResult> taskResults = null;
@@ -538,46 +551,46 @@ namespace Dist.Dme.Service.Impls
                 DmeRuleStep ruleStep = db.Queryable<DmeRuleStep>().Single(rs => rs.Id == item.RuleStepId);
 
                 //   Value = item.ResultValue
-                ValueMetaType @enum = EnumUtil.GetEnumObjByName<ValueMetaType>(temp.Type);
+                EnumValueMetaType @enum = EnumUtil.GetEnumObjByName<EnumValueMetaType>(temp.Type);
                 switch (@enum)
                 {
-                    case ValueMetaType.TYPE_UNKNOWN:
+                    case EnumValueMetaType.TYPE_UNKNOWN:
                         break;
-                    case ValueMetaType.TYPE_NUMBER:
+                    case EnumValueMetaType.TYPE_NUMBER:
                         break;
-                    case ValueMetaType.TYPE_STRING:
+                    case EnumValueMetaType.TYPE_STRING:
                         break;
-                    case ValueMetaType.TYPE_DATE:
+                    case EnumValueMetaType.TYPE_DATE:
                         break;
-                    case ValueMetaType.TYPE_BOOLEAN:
+                    case EnumValueMetaType.TYPE_BOOLEAN:
                         break;
-                    case ValueMetaType.TYPE_INTEGER:
+                    case EnumValueMetaType.TYPE_INTEGER:
                         break;
-                    case ValueMetaType.TYPE_BIGNUMBER:
+                    case EnumValueMetaType.TYPE_BIGNUMBER:
                         break;
-                    case ValueMetaType.TYPE_SERIALIZABLE:
+                    case EnumValueMetaType.TYPE_SERIALIZABLE:
                         break;
-                    case ValueMetaType.TYPE_BINARY:
+                    case EnumValueMetaType.TYPE_BINARY:
                         break;
-                    case ValueMetaType.TYPE_TIMESTAMP:
+                    case EnumValueMetaType.TYPE_TIMESTAMP:
                         break;
-                    case ValueMetaType.TYPE_INET:
+                    case EnumValueMetaType.TYPE_INET:
                         break;
-                    case ValueMetaType.TYPE_LOCAL_FILE:
+                    case EnumValueMetaType.TYPE_LOCAL_FILE:
                         break;
-                    case ValueMetaType.TYPE_MDB_FEATURECLASS:
+                    case EnumValueMetaType.TYPE_MDB_FEATURECLASS:
                         break;
-                    case ValueMetaType.TYPE_GDB_PATH:
+                    case EnumValueMetaType.TYPE_GDB_PATH:
                         break;
-                    case ValueMetaType.TYPE_FOLDER:
+                    case EnumValueMetaType.TYPE_FOLDER:
                         break;
-                    case ValueMetaType.TYPE_STRING_LIST:
+                    case EnumValueMetaType.TYPE_STRING_LIST:
                         break;
-                    case ValueMetaType.TYPE_SDE_FEATURECLASS:
+                    case EnumValueMetaType.TYPE_SDE_FEATURECLASS:
                         break;
-                    case ValueMetaType.TYPE_FEATURECLASS:
+                    case EnumValueMetaType.TYPE_FEATURECLASS:
                         break;
-                    case ValueMetaType.TYPE_JSON:
+                    case EnumValueMetaType.TYPE_JSON:
                         // 从mongo中获取
                         var filter = Builders<TaskResultColl>.Filter.And(
                             Builders<TaskResultColl>.Filter.Eq("TaskId", item.TaskId),

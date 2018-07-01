@@ -64,7 +64,7 @@ namespace Dist.Dme.Service.Impls
                     tempDatasourceDTO = new DataSourceRespDTO
                     {
                         Name = item.Type,
-                        Desc = EnumUtil.GetEnumDescription(EnumUtil.GetEnumObjByName<DataSourceTypes>(item.Type))
+                        Desc = EnumUtil.GetEnumDescription(EnumUtil.GetEnumObjByName<EnumDataSourceType>(item.Type))
                     };
                     dictionary[item.Type] = tempDatasourceDTO;
                 }
@@ -75,13 +75,13 @@ namespace Dist.Dme.Service.Impls
         public object GetDatasourceConnMeta(string typeCode)
         {
             typeCode = typeCode.ToUpper();
-            DataSourceTypes @enum = EnumUtil.GetEnumObjByName<DataSourceTypes>(typeCode);
+            EnumDataSourceType @enum = EnumUtil.GetEnumObjByName<EnumDataSourceType>(typeCode);
             IDMEDataSourceFactory factory = null;
             IDMEDataSource dataSource = null;
             string meta = "";
             switch (@enum)
             {
-                case DataSourceTypes.ORACLE:
+                case EnumDataSourceType.ORACLE:
                     factory = new DMEOracleFactory();
                     dataSource = factory.Open(null, false);
                     meta = dataSource.ConnectionMeta;
@@ -95,29 +95,29 @@ namespace Dist.Dme.Service.Impls
         public object CheckConnectionValid(DataSourceConnDTO dto)
         {
             dto.TypeCode = dto.TypeCode.ToUpper();
-            DataSourceTypes @enum = EnumUtil.GetEnumObjByName<DataSourceTypes>(dto.TypeCode);
+            EnumDataSourceType @enum = EnumUtil.GetEnumObjByName<EnumDataSourceType>(dto.TypeCode);
             IDMEDataSourceFactory factory = null;
             IDMEDataSource dataSource = null;
             bool valid = false;
             switch (@enum)
             {
-                case DataSourceTypes.UNKNOWN:
+                case EnumDataSourceType.UNKNOWN:
                     break;
-                case DataSourceTypes.SHAPEFILE:
+                case EnumDataSourceType.SHAPEFILE:
                     break;
-                case DataSourceTypes.COVERAGE:
+                case EnumDataSourceType.COVERAGE:
                     break;
-                case DataSourceTypes.PERSONAL_GEODATABASE:
+                case EnumDataSourceType.PERSONAL_GEODATABASE:
                     break;
-                case DataSourceTypes.FILE_GEODATABASE:
+                case EnumDataSourceType.FILE_GEODATABASE:
                     break;
-                case DataSourceTypes.ENTERPRISE_GEODATABASE:
+                case EnumDataSourceType.ENTERPRISE_GEODATABASE:
                     break;
-                case DataSourceTypes.TIN:
+                case EnumDataSourceType.TIN:
                     break;
-                case DataSourceTypes.CAD:
+                case EnumDataSourceType.CAD:
                     break;
-                case DataSourceTypes.ORACLE:
+                case EnumDataSourceType.ORACLE:
                     factory = new DMEOracleFactory();
                     dataSource = factory.OpenFromConnectionStr(dto.Connection, true);
                     valid = dataSource.ValidConnection();

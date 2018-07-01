@@ -13,7 +13,7 @@ namespace Dist.Dme.Base.DataSource.Oracle
     /// <summary>
     /// 对oracle资源具体操作的方法
     /// </summary>
-    public class DMEOracleDS : DMEDataSource, IDMEOracleDS
+    public class DMEOracleDS : BaseDMEDataSource, IDMEOracleDS
     {
         private string name = string.Empty;
         private string server = "127.0.0.1";
@@ -88,7 +88,7 @@ namespace Dist.Dme.Base.DataSource.Oracle
             }
             catch (Exception ex)
             {
-                throw new BusinessException((int)SystemStatusCode.DME_ERROR, "数据库验证失败，详情："+ex.Message);
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, "数据库验证失败，详情："+ex.Message);
             }
         }
 
@@ -97,42 +97,42 @@ namespace Dist.Dme.Base.DataSource.Oracle
             // 检测数据源需要的参数
             if (null == base._propertySetter)
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, "连接属性为空");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, "连接属性为空");
             }
             this.name = (string)_propertySetter.GetProperty(nameof(this.name));
             if (string.IsNullOrEmpty(this.name))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.name)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.name)}]");
             }
             this.server = (string)_propertySetter.GetProperty(nameof(this.server));
             if (string.IsNullOrEmpty(this.server))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.server)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.server)}]");
             }
             this.database = (string)_propertySetter.GetProperty(nameof(this.database));
             if (string.IsNullOrEmpty(this.database))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.database)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.database)}]");
             }
             if (!_propertySetter.IsExist(nameof(this.port)))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.port)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.port)}]");
             }
             this.port = (int)_propertySetter.GetProperty(nameof(this.port));
             this.username = (string)_propertySetter.GetProperty(nameof(this.username));
             if (string.IsNullOrEmpty(this.username))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.username)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.username)}]");
             }
             if (!_propertySetter.IsExist(nameof(this.encrypted)))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.encrypted)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.encrypted)}]");
             }
             this.encrypted = (int)_propertySetter.GetProperty(nameof(this.encrypted));
             this.password = (string)_propertySetter.GetProperty(nameof(this.password));
             if (string.IsNullOrEmpty(this.password))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.password)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.password)}]");
             }
             return true;
         }
@@ -141,43 +141,43 @@ namespace Dist.Dme.Base.DataSource.Oracle
             // 检测数据源需要的参数
             if (string.IsNullOrEmpty(connectionStr))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, "连接属性为空");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, "连接属性为空");
             }
             JObject json = JObject.Parse(connectionStr);
             this.name = json[nameof(this.name)].Value<string>();
             if (string.IsNullOrEmpty(this.name))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.name)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.name)}]");
             }
             this.server = json[nameof(this.server)].Value<string>();
             if (string.IsNullOrEmpty(this.server))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.server)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.server)}]");
             }
             this.database = json[nameof(this.database)].Value<string>();
             if (string.IsNullOrEmpty(this.database))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.database)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.database)}]");
             }
             if (!json.ContainsKey(nameof(this.port)))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.port)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.port)}]");
             }
             this.port = json[nameof(this.port)].Value<int>();
             this.username = json[nameof(this.username)].Value<string>();
             if (string.IsNullOrEmpty(this.username))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.username)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.username)}]");
             }
             if (!json.ContainsKey(nameof(this.encrypted)))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.encrypted)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.encrypted)}]");
             }
             this.encrypted = json[nameof(this.encrypted)].Value<int>();
             this.password = json[nameof(this.password)].Value<string>();
             if (string.IsNullOrEmpty(this.password))
             {
-                throw new BusinessException((int)SystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.password)}]");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL_INIT, $"缺失连接属性[{nameof(this.password)}]");
             }
             return true;
         }

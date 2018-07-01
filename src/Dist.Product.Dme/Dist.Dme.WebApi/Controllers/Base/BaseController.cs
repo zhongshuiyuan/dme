@@ -108,7 +108,7 @@ namespace Dist.Dme.WebApi.Controllers.Base
         /// <returns></returns>
         protected Result Success(Object data)
         {
-            return new Result(SystemStatusCode.DME_SUCCESS, "操作成功", data);
+            return new Result(EnumSystemStatusCode.DME_SUCCESS, "操作成功", data);
         }
         /// <summary>
         /// 成功
@@ -118,7 +118,7 @@ namespace Dist.Dme.WebApi.Controllers.Base
         /// <returns></returns>
         protected Result Success(Object data, string message)
         {
-            return new Result(SystemStatusCode.DME_SUCCESS, message, data);
+            return new Result(EnumSystemStatusCode.DME_SUCCESS, message, data);
         }
         /// <summary>
         /// 失败
@@ -127,7 +127,7 @@ namespace Dist.Dme.WebApi.Controllers.Base
         /// <returns></returns>
         protected Result Fail(Object data)
         {
-            return new Result(SystemStatusCode.DME_FAIL, "操作失败", data);
+            return new Result(EnumSystemStatusCode.DME_FAIL, "操作失败", data);
         }
         /// <summary>
         /// 
@@ -137,7 +137,7 @@ namespace Dist.Dme.WebApi.Controllers.Base
         /// <returns></returns>
         protected Result Fail(Object data, string message)
         {
-            return new Result(SystemStatusCode.DME_FAIL, message, data);
+            return new Result(EnumSystemStatusCode.DME_FAIL, message, data);
         }
         /// <summary>
         /// 错误
@@ -146,7 +146,7 @@ namespace Dist.Dme.WebApi.Controllers.Base
         /// <returns></returns>
         protected Result Error(Object data)
         {
-            return new Result(SystemStatusCode.DME_ERROR, "操作错误", data);
+            return new Result(EnumSystemStatusCode.DME_ERROR, "操作错误", data);
         }
         /// <summary>
         /// 
@@ -156,7 +156,7 @@ namespace Dist.Dme.WebApi.Controllers.Base
         /// <returns></returns>
         protected Result Error(Object data, string message)
         {
-            return new Result(SystemStatusCode.DME_ERROR, message, data);
+            return new Result(EnumSystemStatusCode.DME_ERROR, message, data);
         }
     }
 }

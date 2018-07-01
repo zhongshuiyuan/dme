@@ -87,7 +87,7 @@ namespace Dist.Dme.WebApi.Controllers
             try
             {
                 // 验证数据源类型的合法性
-                EnumUtil.GetEnumObjByName<DataSourceTypes>(dto.Type);
+                EnumUtil.GetEnumObjByName<EnumDataSourceType>(dto.Type);
             }
             catch (System.Exception)
             {

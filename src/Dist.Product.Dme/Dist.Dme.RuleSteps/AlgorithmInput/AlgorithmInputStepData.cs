@@ -24,10 +24,10 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
 
         private AlgorithmInputStepMeta ruleStepMeta;
 
-        public AlgorithmInputStepData(IRepository repository, int taskId, int modelId, int versionId, int ruleStepId) 
-            : base(repository, taskId, modelId, versionId, ruleStepId)
+        public AlgorithmInputStepData(IRepository repository, int taskId, DmeRuleStep step) 
+            : base(repository, taskId, step)
         {
-            ruleStepMeta = new AlgorithmInputStepMeta(repository, modelId, versionId, ruleStepId);
+            ruleStepMeta = new AlgorithmInputStepMeta(repository, step);
         }
 
         public Result Run()
@@ -35,7 +35,7 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
             // 找到算法输入依赖的算法实体
             AlgorithmDTO dto = this.ruleStepMeta.GetAlgorithm();
             // 找到这个步骤注入的参数值
-            List<DmeRuleStepAttribute> stepAttributes = base.repository.GetDbContext().Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == this.ruleStepId).ToList();
+            List<DmeRuleStepAttribute> stepAttributes = base.repository.GetDbContext().Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == this.step.Id).ToList();
             if (0 == stepAttributes?.Count)
             {
                 LOG.Warn("没有找到步骤关联的参数设置，停止执行");
