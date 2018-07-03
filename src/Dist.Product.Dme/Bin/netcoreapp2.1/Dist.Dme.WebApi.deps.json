@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "152d3cf9509b6d68effd52b7e8ab092cb0831157"
+    "signature": "ea9ab6674f44ef3d2b3b50c5ca706ceb10ed71e8"
   },
   "compilationOptions": {
     "defines": [
@@ -28,6 +28,7 @@
           "Dist.Dme.DisCache": "1.0.0",
           "Dist.Dme.DisFS": "1.0.0",
           "Dist.Dme.Extensions": "1.0.0",
+          "Dist.Dme.HSMessage": "1.0.0",
           "Dist.Dme.Service": "1.0.0",
           "Microsoft.AspNetCore.All": "2.0.8",
           "Microsoft.AspNetCore.Mvc.Versioning": "2.2.0",
@@ -41,6 +42,27 @@
         },
         "compile": {
           "Dist.Dme.WebApi.dll": {}
+        }
+      },
+      "Confluent.Kafka/0.11.4": {
+        "dependencies": {
+          "NETStandard.Library": "2.0.3",
+          "System.Console": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.4.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Threading": "4.3.0",
+          "librdkafka.redist": "0.11.4"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Confluent.Kafka.dll": {
+            "assemblyVersion": "0.11.4.0",
+            "fileVersion": "0.11.4.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard1.3/Confluent.Kafka.dll": {}
         }
       },
       "DnsClient/1.0.7": {
@@ -235,6 +257,65 @@
         },
         "compile": {
           "lib/ESRI.ArcGIS.Version.dll": {}
+        }
+      },
+      "librdkafka.redist/0.11.4": {
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/debian9-librdkafka.so": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-x64/native/librdkafka.so": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-x64/native/librdkafka.dylib": {
+            "rid": "osx-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win7-x64/native/librdkafka.dll": {
+            "rid": "win7-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win7-x64/native/librdkafkacpp.dll": {
+            "rid": "win7-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win7-x64/native/msvcr120.dll": {
+            "rid": "win7-x64",
+            "assetType": "native",
+            "fileVersion": "12.0.21005.1"
+          },
+          "runtimes/win7-x64/native/zlib.dll": {
+            "rid": "win7-x64",
+            "assetType": "native",
+            "fileVersion": "1.2.8.0"
+          },
+          "runtimes/win7-x86/native/librdkafka.dll": {
+            "rid": "win7-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win7-x86/native/librdkafkacpp.dll": {
+            "rid": "win7-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win7-x86/native/msvcr120.dll": {
+            "rid": "win7-x86",
+            "assetType": "native",
+            "fileVersion": "12.0.21005.1"
+          },
+          "runtimes/win7-x86/native/zlib.dll": {
+            "rid": "win7-x86",
+            "assetType": "native",
+            "fileVersion": "1.2.8.0"
+          }
         }
       },
       "Libuv/1.10.0": {
@@ -5585,6 +5666,17 @@
           "Dist.Dme.Extensions.dll": {}
         }
       },
+      "Dist.Dme.HSMessage/1.0.0": {
+        "dependencies": {
+          "Confluent.Kafka": "0.11.4"
+        },
+        "runtime": {
+          "Dist.Dme.HSMessage.dll": {}
+        },
+        "compile": {
+          "Dist.Dme.HSMessage.dll": {}
+        }
+      },
       "Dist.Dme.Model/1.0.0": {
         "dependencies": {
           "sqlSugarCore": "4.6.4.9"
@@ -5845,6 +5937,13 @@
       "serviceable": false,
       "sha512": ""
     },
+    "Confluent.Kafka/0.11.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+SOy+WoPa02rB+wn1XTJJaIpnCLBtNLtEqy3c3efpjmgWVJn10N/PEI7Y82wzec4N4LSrG01FACT5AOOaWGsdw==",
+      "path": "confluent.kafka/0.11.4",
+      "hashPath": "confluent.kafka.0.11.4.nupkg.sha512"
+    },
     "DnsClient/1.0.7": {
       "type": "package",
       "serviceable": true,
@@ -5956,6 +6055,13 @@
       "sha512": "sha512-HBgr6TqkAAkoBAvvY36nU7tcGWovZ9KPmFvRd5R6MLKEf5c9TB3DQhlOi1RxArp0LvcvLiJ9LfIwe1rpdK3JQg==",
       "path": "esri.arcgis.version/10.1.0.3035",
       "hashPath": "esri.arcgis.version.10.1.0.3035.nupkg.sha512"
+    },
+    "librdkafka.redist/0.11.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7/tR5bBcwlNAnYpbcXh0gfsn492l8it0vrBY7qXCvZZ5SvJ8u3mF9jQVrYBoJeoKuue9UBqT/YjcEwkfOrkzZw==",
+      "path": "librdkafka.redist/0.11.4",
+      "hashPath": "librdkafka.redist.0.11.4.nupkg.sha512"
     },
     "Libuv/1.10.0": {
       "type": "package",
@@ -8333,6 +8439,11 @@
       "sha512": ""
     },
     "Dist.Dme.Extensions/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Dist.Dme.HSMessage/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -627,9 +627,9 @@ comment on column DME_RULESTEP_TYPE.groupbox
   is '分组';
   
   insert into DME_RULESTEP_TYPE 
-values(SEQ_DME_RULESTEP_TYPE.NEXTVAL, 'AlgorithmInput', '算法输入', '选择已注册的算法，配置算法参数');
+values(SEQ_DME_RULESTEP_TYPE.NEXTVAL, 'AlgorithmInput', '算法输入', '选择已注册的算法，配置算法参数', '输入');
   insert into DME_RULESTEP_TYPE 
-values(SEQ_DME_RULESTEP_TYPE.NEXTVAL, 'DataSourceInput', '数据源输入', '数据源输入');
+values(SEQ_DME_RULESTEP_TYPE.NEXTVAL, 'DataSourceInput', '数据源输入', '数据源输入', '输入');
 
 -- 删除规则步骤模型的算法id属性
 --如果STEP_TYPE_ID=1，即：AlgorithmInput，则算法的id需要在DME_RULESTEP_ATTRIBUTE存储，以code=algorithm_id标识

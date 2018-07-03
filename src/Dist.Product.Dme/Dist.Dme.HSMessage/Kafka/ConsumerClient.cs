@@ -10,7 +10,7 @@ namespace Dist.Dme.HSMessage.Kafka
 {
     public class ConsumerClient
     {
-        private static bool _isListening = false;
+        private static IDictionary<string, bool> _topicListenMap = new Dictionary<string, bool>();
         private static Consumer<Null, string> _consumer;
         static ConsumerClient()
         {
@@ -29,23 +29,31 @@ namespace Dist.Dme.HSMessage.Kafka
         /// <param name="topic">主题</param>
         public static async void Start(string topic)
         {
-            _isListening = true;
             await Task.Run(()=> 
             {
-                while (_isListening)
+                _topicListenMap[topic] = true;
+                while (_topicListenMap[topic])
                 {
                     _consumer.OnMessage += (_, msg)
-                  => Console.WriteLine($"Read '{msg.Value}' from: {msg.TopicPartitionOffset}");
+                  => {
+                          Console.WriteLine($"Read '{msg.Value}' from: {msg.TopicPartitionOffset}");
+                      };
 
                     _consumer.OnError += (_, error)
-                      => Console.WriteLine($"Error: {error}");
+                      =>
+                    {
+                        Console.WriteLine($"Error: {error}");
+                    };
 
                     _consumer.OnConsumeError += (_, msg)
-                      => Console.WriteLine($"Consume error ({msg.TopicPartitionOffset}): {msg.Error}");
+                      =>
+                    {
+                        Console.WriteLine($"Consume error ({msg.TopicPartitionOffset}): {msg.Error}");
+                    };
 
                     _consumer.Subscribe(topic);
 
-                    while (true)
+                    while (_topicListenMap[topic])
                     {
                         _consumer.Poll(TimeSpan.FromMilliseconds(100));
                     }
@@ -55,9 +63,9 @@ namespace Dist.Dme.HSMessage.Kafka
         /// <summary>
         /// 停止消费
         /// </summary>
-        public static void Stop()
+        public static void Stop(string topic)
         {
-            _isListening = false;
+            _topicListenMap[topic] = false;
         }
         public static void Main()
         {
