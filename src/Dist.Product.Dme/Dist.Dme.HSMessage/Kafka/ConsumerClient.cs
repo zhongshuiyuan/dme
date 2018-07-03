@@ -1,6 +1,6 @@
 ﻿using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
-using Dist.Dme.HSMessage.Conf;
+using Dist.Dme.HSMessage.Kafka.Conf;
 using System;
 using System.Collections.Generic;
 using System.Text;

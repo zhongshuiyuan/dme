@@ -195,7 +195,7 @@ comment on column DME_VERSION.UPGRADE_TIME
   "VERSION_ID" NUMBER(8),
 	"STEP_FROM_ID" NUMBER(8),
 	"SETP_TO_ID" NUMBER(8),
-	"ENABLED" NUMBER(8)
+	"ENABLED" NUMBER(8) default 1
 );
 comment on table DME_RULESTEP_HOP
   is '规则步骤流程信息';
@@ -620,8 +620,16 @@ comment on column DME_RULESTEP_TYPE.remark
   increment by 1
   cache 20;
   
+  -- Add/modify columns 
+alter table DME_RULESTEP_TYPE add groupbox varchar2(50);
+-- Add comments to the columns 
+comment on column DME_RULESTEP_TYPE.groupbox
+  is '分组';
+  
   insert into DME_RULESTEP_TYPE 
 values(SEQ_DME_RULESTEP_TYPE.NEXTVAL, 'AlgorithmInput', '算法输入', '选择已注册的算法，配置算法参数');
+  insert into DME_RULESTEP_TYPE 
+values(SEQ_DME_RULESTEP_TYPE.NEXTVAL, 'DataSourceInput', '数据源输入', '数据源输入');
 
 -- 删除规则步骤模型的算法id属性
 --如果STEP_TYPE_ID=1，即：AlgorithmInput，则算法的id需要在DME_RULESTEP_ATTRIBUTE存储，以code=algorithm_id标识
@@ -695,6 +703,18 @@ start with 1
 increment by 1
 cache 20;
 
+
+-- Add/modify columns 
+alter table DME_MODEL add ispublish inteGER default 0;
+-- Add comments to the columns 
+comment on column DME_MODEL.ispublish
+  is '是否发布。0：未发布；1：发布';
+
+-- Add/modify columns 
+alter table DME_MODEL add publishtime number(20);
+-- Add comments to the columns 
+comment on column DME_MODEL.publishtime
+  is '发布时间';
 
 
 

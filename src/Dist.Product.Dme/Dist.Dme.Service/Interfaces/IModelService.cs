@@ -17,8 +17,9 @@ namespace Dist.Dme.Service.Interfaces
         /// 获取模型集合
         /// </summary>
         /// <param name="detail">是否获取模型的详情信息</param>
+        /// <param name="isPublish">是否被发布，1：已发布；0：未发布；-1：全部</param>
         /// <returns></returns>
-        object ListModels(Boolean detail);
+        object ListModels(Boolean detail, int isPublish);
         /// <summary>
         /// 添加模型
         /// </summary>
@@ -62,6 +63,12 @@ namespace Dist.Dme.Service.Interfaces
         /// <returns></returns>
         object CopyModelVersion(string versionCode);
         /// <summary>
+        /// 获取所有的规则步骤类型
+        /// </summary>
+        /// <returns></returns>
+        object ListRuleStepTypes();
+
+        /// <summary>
         /// 保存模型的规则步骤信息
         /// </summary>
         /// <param name="info">信息</param>
@@ -85,5 +92,12 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="ruleStepId"></param>
         /// <returns></returns>
         object GetTaskResult(string taskCode, int ruleStepId);
+        /// <summary>
+        /// 发布模型
+        /// </summary>
+        /// <param name="modelCode">模型唯一编码</param>
+        /// <param name="isPublish">是否发布，1：发布；0：取消发布</param>
+        /// <returns></returns>
+        object PublishModel(string modelCode, int isPublish);
     }
 }

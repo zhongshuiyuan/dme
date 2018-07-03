@@ -32,12 +32,13 @@ namespace Dist.Dme.WebApi.Controllers
         /// 获取所有模型
         /// </summary>
         /// <param name="detail">是否获取详情信息，0：否；1：是</param>
+        /// <param name="isPublish">是否被发布的模型，1：已发布；0：未发布；-1：全部</param>
         /// <returns></returns>
         [HttpGet]
         [Route("v1")]
-        public Result ListModels([FromQuery(Name = "detail")] int detail = 0)
+        public Result ListModels([FromQuery(Name = "detail")] int detail = 0, [FromQuery(Name = "ispublish")] int isPublish = 0)
         {
-            return base.Success(ModelService.ListModels(1 == detail));
+            return base.Success(ModelService.ListModels(1 == detail, isPublish));
         }
         /// <summary>
         /// 根据模型唯一编码获取模型
@@ -55,7 +56,16 @@ namespace Dist.Dme.WebApi.Controllers
             }
             return base.Success(ModelService.GetModelMetadata(code, 1 == detail));
         }
-       
+        /// <summary>
+        /// 获取所有的规则步骤类型
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("rulesteptypes/v1")]
+        public Result ListRuleStepTypes()
+        {
+            return base.Success(this.ModelService.ListRuleStepTypes());
+        }
         /// <summary>
         /// 获取用地冲突分析元数据信息
         /// </summary>
@@ -226,6 +236,18 @@ namespace Dist.Dme.WebApi.Controllers
         public Result GetTaskOutput(string taskCode, int ruleStepId)
         {
             return base.Success(this.ModelService.GetTaskResult(taskCode, ruleStepId));
+        }
+        /// <summary>
+        /// 发布模型和取消模型
+        /// </summary>
+        /// <param name="modelCode">模型唯一编码</param>
+        /// <param name="isPublish">是否发布，1：发布：0：取消发布</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("publish/v1/{modelCode}/{isPublish}")]
+        public Result PublishModel(string modelCode, int isPublish)
+        {
+            return base.Success(this.ModelService.PublishModel(modelCode, isPublish));
         }
     }
 }

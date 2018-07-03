@@ -111,10 +111,20 @@ namespace Dist.Dme.Service.Impls
             this.landConflictDetectionAlgorithm.Init(parameters);
             return this.landConflictDetectionAlgorithm.Execute();
         }
-        public object ListModels(Boolean detail)
+        public object ListModels(Boolean detail, int isPublish)
         {
+            List<DmeModel> models = null;
             // 倒序
-            List<DmeModel> models = base.Repository.GetDbContext().Queryable<DmeModel>().OrderBy(m => m.CreateTime, OrderByType.Desc).ToList();
+            if (-1 == isPublish)
+            {
+                models = base.Repository.GetDbContext().Queryable<DmeModel>().OrderBy(m => m.CreateTime, OrderByType.Desc).ToList();
+            }
+            else
+            {
+                // 是否发布
+                models = base.Repository.GetDbContext().Queryable<DmeModel>().Where(m => m.IsPublish == isPublish).OrderBy(m => m.CreateTime, OrderByType.Desc).ToList();
+            }
+
             if (null == models || 0 == models.Count)
             {
                 return models;
@@ -376,6 +386,10 @@ namespace Dist.Dme.Service.Impls
             });
         }
 
+        public object ListRuleStepTypes()
+        {
+            return base.Repository.GetDbContext().Queryable<DmeRuleStepType>().OrderBy(rst =>rst.Code, OrderByType.Asc).ToList();
+        }
         public object SaveRuleStepInfos(ModelRuleStepInfoDTO info)
         {
             var db = base.Repository.GetDbContext();
@@ -607,6 +621,14 @@ namespace Dist.Dme.Service.Impls
                 taskResultRespDTOs.Add(temp);
             }
             return taskResultRespDTOs;
+        }
+        public object PublishModel(string modelCode, int enabled)
+        {
+            // 只更新列：IsPublish和PublishTime
+            return
+                base.Repository.GetDbContext().Updateable<DmeModel>().
+                      UpdateColumns(m => new DmeModel() { IsPublish = enabled, PublishTime = DateUtil.CurrentTimeMillis }).
+                      Where(m => m.SysCode == modelCode).ExecuteCommandHasChange();
         }
     }
 }
