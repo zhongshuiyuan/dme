@@ -1,4 +1,5 @@
-﻿using SqlSugar;
+﻿using Newtonsoft.Json;
+using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +9,7 @@ namespace Dist.Dme.Model.Entity
     [SugarTable("DME_RULESTEP_HOP")]
     public class DmeRuleStepHop
     {
+        [JsonIgnore]
         [SugarColumn(IsPrimaryKey = true, ColumnName = "ID", OracleSequenceName = "SEQ_DME_RULESTEP_HOP")]
         public int Id { get; set; }
         [SugarColumn(ColumnName = "MODEL_ID")]
