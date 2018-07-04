@@ -19,5 +19,6 @@ namespace Dist.Dme.Model.Entity
         [SugarColumn(ColumnName = "STEP_TO_ID")]
         public int StepToId { get; set; }
         public int Enabled { get; set; }
+        public string Name { get; set; }
     }
 }

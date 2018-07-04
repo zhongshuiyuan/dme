@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dist.Dme.Model.Entity;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -20,5 +21,9 @@ namespace Dist.Dme.Model.DTO
         /// 关联的数据源唯一编码
         /// </summary>
         public IList<string> DataSources { get; set; } = new List<string>();
+        /// <summary>
+        /// 节点与节点连接信息
+        /// </summary>
+        public IList<DmeRuleStepHop> Hops { get; set; } = new List<DmeRuleStepHop>();
     }
 }

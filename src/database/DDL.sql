@@ -732,6 +732,12 @@ alter table DME_ALGORITHM_META add required inteGER default 1;
 -- Add comments to the columns 
 comment on column DME_ALGORITHM_META.required
   is '是否必须，1：必须；0：可选';
+  
+  -- Add/modify columns 
+alter table DME_RULESTEP_HOP add name varchar2(50);
+-- Add comments to the columns 
+comment on column DME_RULESTEP_HOP.name
+  is '连接线的名称';
 
 
 

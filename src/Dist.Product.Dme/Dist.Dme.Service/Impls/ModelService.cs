@@ -85,14 +85,14 @@ namespace Dist.Dme.Service.Impls
                     continue;
                 }
                 RuleStepDTO ruleStepDTO = null;
-                foreach (var rule in ruleStepEntities)
+                foreach (var ruleStep in ruleStepEntities)
                 {
-                    ruleStepDTO = ClassValueCopier<RuleStepDTO>.Copy(rule);
+                    ruleStepDTO = ClassValueCopier<RuleStepDTO>.Copy(ruleStep);
                     versionDTO.Steps.Add(ruleStepDTO);
                     // 获取步骤类型实体
-                    ruleStepDTO.StepType = db.Queryable<DmeRuleStepType>().Where(rst => rst.Id == rule.StepTypeId).Single();
+                    ruleStepDTO.StepType = db.Queryable<DmeRuleStepType>().Where(rst => rst.Id == ruleStep.StepTypeId).Single();
                     // 检索步骤的属性值信息
-                    IList<DmeRuleStepAttribute> attributes = db.Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == rule.Id).ToList();
+                    IList<DmeRuleStepAttribute> attributes = db.Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == ruleStep.Id).ToList();
                     if (null == attributes || 0 == attributes.Count)
                     {
                         continue;
@@ -102,10 +102,14 @@ namespace Dist.Dme.Service.Impls
                         ruleStepDTO.Attributes.Add(new KeyValuePair<string, object>(att.AttributeCode, att.AttributeValue));
                     }
                 }
-                // 每个模型版本下的数据源
-                // List<DmeRuleStepDataSource> refDs = db.Queryable<DmeRuleStepDataSource>().Where(rsds => rsds.ModelId == model.Id && rsds.VersionId == v.Id).ToList();
+                // 每个模型版本下的数据源（多表关联查询）
                 versionDTO.DataSources = (IList<string>)db.Queryable<DmeDataSource, DmeRuleStepDataSource>((ds, rsds) => new object[] {
                 JoinType.Inner,ds.Id==rsds.DataSourceId}).Select<string>(ds => ds.SysCode).ToList();
+                // 每个模型版本下的节点向量信息
+                versionDTO.Hops = db.Queryable<DmeRuleStepHop>()
+                     .Where(rsh => rsh.ModelId == model.Id && rsh.VersionId == v.Id)
+                     .OrderBy(rsh => rsh.StepFromId)
+                     .ToList();
             }
            
             return modelDTO;
