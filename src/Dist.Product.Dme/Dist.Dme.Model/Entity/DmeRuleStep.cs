@@ -16,9 +16,9 @@ namespace Dist.Dme.Model.Entity
         [SugarColumn(ColumnName = "VERSION_ID")]
         public int VersionId { get; set; }
         [SugarColumn(ColumnName = "GUI_LOCATION_X")]
-        public double GuiLocationX { get; set; }
+        public double X { get; set; }
         [SugarColumn(ColumnName = "GUI_LOCATION_Y")]
-        public double GuiLocationY { get; set; }
+        public double Y { get; set; }
         [SugarColumn(ColumnName = "STEP_TYPE_ID")]
         public int StepTypeId { get; set; }
         [SugarColumn(ColumnName = "STEP_NAME")]

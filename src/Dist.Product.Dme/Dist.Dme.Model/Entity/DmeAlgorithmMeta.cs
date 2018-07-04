@@ -22,5 +22,9 @@ namespace Dist.Dme.Model.Entity
         /// 是否只读。1：只读；0：可编辑
         /// </summary>
         public int ReadOnly { get; set; }
+        /// <summary>
+        /// 是否必须。1：必需；0：可选
+        /// </summary>
+        public int Required { get; set; }
     }
 }

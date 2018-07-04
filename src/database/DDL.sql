@@ -579,8 +579,14 @@ comment on column DME_ALGORITHM_META.alias
 -- Add/modify columns 
 alter table DME_ALGORITHM_META add readonly1 integer default 0;
 -- Add comments to the columns 
-comment on column DME_ALGORITHM_META.readonly1
+comment on column DME_ALGORITHM_META.readonly
   is '是否只读，1：只读；0：可编辑';
+  
+  -- Add/modify columns 
+alter table DME_ALGORITHM_META add REQUIRED integer default 1;
+-- Add comments to the columns 
+comment on column DME_ALGORITHM_META.REQUIRED
+  is '是否必须，1：必须；0：可选';
   
   -- Add/modify columns 
 alter table DME_RULESTEP add step_name varchar2(50);
@@ -715,6 +721,17 @@ alter table DME_MODEL add publishtime number(20);
 -- Add comments to the columns 
 comment on column DME_MODEL.publishtime
   is '发布时间';
+  
+  --添加键
+  -- Create/Recreate primary, unique and foreign key constraints 
+alter table DME_ALGORITHM
+  add constraint UK_DME_ALGORITHM unique (SYSCODE);
+  
+  -- Add/modify columns 
+alter table DME_ALGORITHM_META add required inteGER default 1;
+-- Add comments to the columns 
+comment on column DME_ALGORITHM_META.required
+  is '是否必须，1：必须；0：可选';
 
 
 

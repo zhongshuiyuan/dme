@@ -16,5 +16,9 @@ namespace Dist.Dme.Model.DTO
         /// 模型版本关联的步骤
         /// </summary>
         public IList<RuleStepDTO> Steps { get; set; } = new List<RuleStepDTO>();
+        /// <summary>
+        /// 关联的数据源唯一编码
+        /// </summary>
+        public IList<string> DataSources { get; set; } = new List<string>();
     }
 }

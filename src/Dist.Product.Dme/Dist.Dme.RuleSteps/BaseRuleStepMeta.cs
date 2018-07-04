@@ -4,6 +4,7 @@ using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.Model.Entity;
 using log4net;
+using Newtonsoft.Json.Linq;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,18 @@ namespace Dist.Dme.RuleSteps
         private static ILog LOG = LogManager.GetLogger(typeof(BaseRuleStepMeta));
 
         public abstract string RuleStepName { get; set; }
-        public abstract IRuleStepType RuleStepType { get; }
+        // public abstract IRuleStepType RuleStepType { get; }
+        protected abstract EnumRuleStepTypes MyRuleStepType { get; }
         public abstract object InParams { get; }
         protected IRepository repository;
         protected DmeRuleStep step;
         //protected int modelId;
         //protected int versionId;
         //protected int ruleStepId;
+        /// <summary>
+        /// 数据源id集合
+        /// </summary>
+        protected IList<string> DatasourceIds { get; set; }
 
         public BaseRuleStepMeta(IRepository repository, DmeRuleStep step)
         {
@@ -38,7 +44,9 @@ namespace Dist.Dme.RuleSteps
         /// <summary>
         /// 步骤需要的输入参数
         /// </summary>
-        protected IDictionary<String, Property> InputParameters { get; set; } = new Dictionary<String, Property>();
+        protected IDictionary<String, Property> InputParameters { get; set; } = new Dictionary<String, Property>() {
+            [nameof(DatasourceIds)] = new Property(nameof(DatasourceIds), "数据源ID集合", EnumValueMetaType.TYPE_JSON_ARRAY, "", "[\"datasourceId1\", \"datasourceId2\"]", "数据源ID集合")
+        };
 
         public IDictionary<string, object> ReadAttributes()
         {
@@ -62,6 +70,44 @@ namespace Dist.Dme.RuleSteps
                 return true;
             }
             var db = repository.GetDbContext();
+            if (attributes.ContainsKey(nameof(DatasourceIds)))
+            {
+                // 解析步骤关联的数据源
+                JArray array = JArray.Parse(attributes[nameof(DatasourceIds)]?.ToString());
+                // 同步删除已解析的参数
+                attributes.Remove(nameof(DatasourceIds));
+                this.DatasourceIds = array.ToObject<List<string>>();
+                if (this.DatasourceIds?.Count > 0)
+                {
+                    db.Ado.UseTran(() =>
+                    {
+                        // 删除这个步骤原来关联的数据源
+                        db.Deleteable<DmeRuleStepDataSource>().Where(rsds => rsds.RuleStepId == step.Id).ExecuteCommand();
+                        List<DmeRuleStepDataSource> newRefDatasources = new List<DmeRuleStepDataSource>();
+                        DmeDataSource tempDatasource = null;
+                        // 为了去重之用
+                        IList<string> repeatItem = new List<string>();
+                        foreach (var item in this.DatasourceIds)
+                        {
+                            tempDatasource = db.Queryable<DmeDataSource>().Single(ds => ds.SysCode == item);
+                            if (null == tempDatasource || repeatItem.Contains(item))
+                            {
+                                continue;
+                            }
+                            DmeRuleStepDataSource dmeRuleStepDataSource = new DmeRuleStepDataSource
+                            {
+                                DataSourceId = tempDatasource.Id,
+                                ModelId = this.step.ModelId,
+                                VersionId = this.step.VersionId,
+                                RuleStepId = this.step.Id
+                            };
+                            newRefDatasources.Add(dmeRuleStepDataSource);
+                        }
+                        db.Insertable<DmeRuleStepDataSource>(newRefDatasources);
+                    });
+                }
+            }
+            
             // 先删除这个步骤的属性，再重新添加
             return db.Ado.UseTran<Boolean>(() => 
             {
@@ -92,13 +138,13 @@ namespace Dist.Dme.RuleSteps
                 return true;
             }).Data;
         }
-        public int SaveMeta(double guiLocationX, double guiLocationY,
+        public int SaveMeta(double x, double y,
             string stepName)
         {
             // 步骤名如果为空，则使用当前步骤类型默认的名称
             if (string.IsNullOrEmpty(stepName))
             {
-                stepName = this.RuleStepType.Name;
+                stepName = EnumUtil.GetEnumDisplayName(this.MyRuleStepType);// this.RuleStepType.Name;
             }
             int identity = -1;
             SqlSugarClient db = repository.GetDbContext();
@@ -108,10 +154,10 @@ namespace Dist.Dme.RuleSteps
                 {
                     LOG.Info($"步骤id为{this.step.Id}，为新创建步骤");
                     // 查找当前步骤类型
-                    DmeRuleStepType dmeRuleStepType = db.Queryable<DmeRuleStepType>().Single(rst => rst.Code == this.RuleStepType.Code);
+                    DmeRuleStepType dmeRuleStepType = db.Queryable<DmeRuleStepType>().Single(rst => rst.Code == nameof(this.MyRuleStepType));
                     if (null == dmeRuleStepType)
                     {
-                        throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"步骤编码{this.RuleStepType.Code}不存在，请核实数据。");
+                        throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"步骤编码{nameof(this.MyRuleStepType)}不存在，请核实数据。");
                     }
                     DmeRuleStep dmeRuleStep = new DmeRuleStep
                     {
@@ -119,8 +165,8 @@ namespace Dist.Dme.RuleSteps
                         ModelId = this.step.ModelId,
                         VersionId = this.step.VersionId,
                         StepName = stepName,
-                        GuiLocationX = guiLocationX,
-                        GuiLocationY = guiLocationY,
+                        X = x,
+                        Y = y,
                         StepTypeId = dmeRuleStepType.Id
                     };
                     identity = db.Insertable<DmeRuleStep>(dmeRuleStep).ExecuteReturnIdentity();
@@ -138,8 +184,8 @@ namespace Dist.Dme.RuleSteps
                         // 如果名称不为空，才更新原来的名称
                         dmeRuleStep.StepName = stepName;
                     }
-                    dmeRuleStep.GuiLocationX = guiLocationX;
-                    dmeRuleStep.GuiLocationY = guiLocationY;
+                    dmeRuleStep.X = x;
+                    dmeRuleStep.Y = y;
                     db.Updateable<DmeRuleStep>(dmeRuleStep).ExecuteCommandHasChange();
                     identity = dmeRuleStep.Id;
                 }

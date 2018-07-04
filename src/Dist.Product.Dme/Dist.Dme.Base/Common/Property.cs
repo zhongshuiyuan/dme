@@ -27,6 +27,10 @@ namespace Dist.Dme.Base.Common
         /// </summary>
         public string DataTypeDesc { get; set; }
         /// <summary>
+        /// 数据类型编码
+        /// </summary>
+        public string DataTypeCode { get; set; }
+        /// <summary>
         /// 属性值
         /// </summary>
         public object Value { get; set; }
@@ -73,6 +77,7 @@ namespace Dist.Dme.Base.Common
             this.Alias = alias;
             this.DataType = (int)dataType;
             this.DataTypeDesc = EnumUtil.GetEnumDescription(dataType);
+            this.DataTypeCode = EnumUtil.GetEnumName<EnumValueMetaType>(this.DataType);
             this.Value = value;
             this.DefaultValue = defaultValue;
             this.ValueSet = valueSet;

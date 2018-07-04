@@ -14,8 +14,8 @@ namespace Dist.Dme.Model.DTO
         public String SysCode { get; set; }
         // public int ModelId { get; set; }
         // public int VersionId { get; set; }
-        public double GuiLocationX { get; set; }
-        public double GuiLocationY { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
         public DmeRuleStepType StepType { get; set; }
         // public int StepTypeId { get; set; }
 

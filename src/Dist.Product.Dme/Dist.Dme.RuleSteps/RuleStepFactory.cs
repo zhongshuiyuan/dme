@@ -24,11 +24,13 @@ namespace Dist.Dme.RuleSteps
         public static IRuleStepData GetRuleStepData(string stepTypeCode, IRepository repository, int taskId, DmeRuleStep step)
         {
             IRuleStepData ruleStepData = null;
-            RuleStepTypes @enum = EnumUtil.GetEnumObjByName<RuleStepTypes>(stepTypeCode);
+            EnumRuleStepTypes @enum = EnumUtil.GetEnumObjByName<EnumRuleStepTypes>(stepTypeCode);
             switch (@enum)
             {
-                case RuleStepTypes.AlgorithmInput:
+                case EnumRuleStepTypes.AlgorithmInput:
                     ruleStepData = new AlgorithmInputStepData(repository, taskId, step);
+                    break;
+                case EnumRuleStepTypes.DataSourceInput:
                     break;
                 default:
                     break;

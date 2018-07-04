@@ -13,7 +13,7 @@ namespace Dist.Dme.Base.Framework.Interfaces
         /// <summary>
         /// 规则步骤类型
         /// </summary>
-        IRuleStepType RuleStepType { get; }
+        object RuleStepType { get; }
         /// <summary>
         /// 保存步骤元数据信息
         /// </summary>

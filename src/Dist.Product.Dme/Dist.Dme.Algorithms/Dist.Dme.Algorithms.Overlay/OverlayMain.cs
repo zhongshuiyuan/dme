@@ -83,9 +83,9 @@ namespace Dist.Dme.Algorithms.Overlay
 
             // 初始化输入参数
             base.InputParametersMeta.Add(nameof(this.SourceFeatureClass),
-                new Property(nameof(this.SourceFeatureClass), "源要素类，叠加的图层", EnumValueMetaType.TYPE_FEATURECLASS, new InputFeatureClassDTO(), new InputFeatureClassDTO(), "", null));
+                new Property(nameof(this.SourceFeatureClass), "源要素类，叠加的图层", EnumValueMetaType.TYPE_FEATURECLASS, new InputFeatureClassDTO(), new InputFeatureClassDTO(), "源要素类，叠加的图层", null));
             base.InputParametersMeta.Add(nameof(this.TargetFeatureClass),
-                         new Property(nameof(this.TargetFeatureClass), "目标要素类，被叠加的图层", EnumValueMetaType.TYPE_FEATURECLASS, new InputFeatureClassDTO(), new InputFeatureClassDTO(), "", null));
+                         new Property(nameof(this.TargetFeatureClass), "目标要素类，被叠加的图层", EnumValueMetaType.TYPE_FEATURECLASS, new InputFeatureClassDTO(), new InputFeatureClassDTO(), "目标要素类，被叠加的图层", null));
             base.InputParametersMeta.Add(nameof(this.AnalysisType),
                         new Property(nameof(this.AnalysisType), "分析类型", EnumValueMetaType.TYPE_INTEGER, null, (int)AnalysisType.COVER, "分析类型选择",
                         new object[] {
@@ -234,6 +234,7 @@ namespace Dist.Dme.Algorithms.Overlay
             {
                 this.IsClearTemp = Boolean.Parse(parameters[nameof(IsClearTemp)].ToString());
             }
+            // 从步骤层传过来的数据已经被格式化成对象了（JSON->实体对象）
             this.sourceFeatureClassDTO = (InputFeatureClassDTO)parameters[nameof(this.SourceFeatureClass)];//JsonConvert.DeserializeObject<InputFeatureClassDTO>(parameters[nameof(this.SourceFeatureClass)].ToString());
             this.targetFeatureClassDTO = (InputFeatureClassDTO)parameters[nameof(this.TargetFeatureClass)];//JsonConvert.DeserializeObject<InputFeatureClassDTO>(parameters[nameof(this.TargetFeatureClass)].ToString());
             this.AnalysisType = EnumUtil.GetEnumObjByValue<AnalysisType>(int.Parse(parameters[nameof(this.AnalysisType)].ToString()));

@@ -65,7 +65,10 @@ namespace Dist.Dme.HSMessage.Kafka
         /// </summary>
         public static void Stop(string topic)
         {
-            _topicListenMap[topic] = false;
+            _topicListenMap.Remove(topic);
+            // 重新订阅
+            _consumer.Unsubscribe();
+            _consumer.Subscribe(_topicListenMap.Keys);
         }
         public static void Main()
         {

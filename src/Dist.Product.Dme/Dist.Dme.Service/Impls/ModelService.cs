@@ -67,8 +67,9 @@ namespace Dist.Dme.Service.Impls
             {
                 return modelDTO;
             }
+            var db = base.Repository.GetDbContext();
             // 获取模型版本
-            IList<DmeModelVersion> versions = base.Repository.GetDbContext().Queryable<DmeModelVersion>().Where(mv => mv.ModelId == model.Id).ToList();
+            IList<DmeModelVersion> versions = db.Queryable<DmeModelVersion>().Where(mv => mv.ModelId == model.Id).ToList();
             if (null == versions || 0 == versions.Count)
             {
                 return modelDTO;
@@ -78,7 +79,7 @@ namespace Dist.Dme.Service.Impls
             {
                 ModelVersionDTO versionDTO = ClassValueCopier<ModelVersionDTO>.Copy(v);
                 modelDTO.Versions.Add(versionDTO);
-                IList<DmeRuleStep> ruleStepEntities = base.Repository.GetDbContext().Queryable<DmeRuleStep>().Where(rs => rs.ModelId == model.Id && rs.VersionId == v.Id).ToList();
+                IList<DmeRuleStep> ruleStepEntities = db.Queryable<DmeRuleStep>().Where(rs => rs.ModelId == model.Id && rs.VersionId == v.Id).ToList();
                 if (null == ruleStepEntities || 0 == ruleStepEntities.Count)
                 {
                     continue;
@@ -89,9 +90,9 @@ namespace Dist.Dme.Service.Impls
                     ruleStepDTO = ClassValueCopier<RuleStepDTO>.Copy(rule);
                     versionDTO.Steps.Add(ruleStepDTO);
                     // 获取步骤类型实体
-                    ruleStepDTO.StepType = base.Repository.GetDbContext().Queryable<DmeRuleStepType>().Where(rst => rst.Id == rule.StepTypeId).Single();
+                    ruleStepDTO.StepType = db.Queryable<DmeRuleStepType>().Where(rst => rst.Id == rule.StepTypeId).Single();
                     // 检索步骤的属性值信息
-                    IList<DmeRuleStepAttribute> attributes = base.Repository.GetDbContext().Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == rule.Id).ToList();
+                    IList<DmeRuleStepAttribute> attributes = db.Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == rule.Id).ToList();
                     if (null == attributes || 0 == attributes.Count)
                     {
                         continue;
@@ -101,6 +102,10 @@ namespace Dist.Dme.Service.Impls
                         ruleStepDTO.Attributes.Add(new KeyValuePair<string, object>(att.AttributeCode, att.AttributeValue));
                     }
                 }
+                // 每个模型版本下的数据源
+                // List<DmeRuleStepDataSource> refDs = db.Queryable<DmeRuleStepDataSource>().Where(rsds => rsds.ModelId == model.Id && rsds.VersionId == v.Id).ToList();
+                versionDTO.DataSources = (IList<string>)db.Queryable<DmeDataSource, DmeRuleStepDataSource>((ds, rsds) => new object[] {
+                JoinType.Inner,ds.Id==rsds.DataSourceId}).Select<string>(ds => ds.SysCode).ToList();
             }
            
             return modelDTO;

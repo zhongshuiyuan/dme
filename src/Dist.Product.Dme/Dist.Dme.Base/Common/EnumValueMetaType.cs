@@ -103,8 +103,13 @@ namespace Dist.Dme.Base.Common
         /// <summary>
         /// JSON对象
         /// </summary>
-        [Description("JSON对象")]
-        TYPE_JSON = 18
+        [Description("简单JSON对象")]
+        TYPE_JSON = 18,
+        /// <summary>
+        /// JSON数组对象
+        /// </summary>
+        [Description("JSON数组对象")]
+        TYPE_JSON_ARRAY = 19
 
     }
 }
