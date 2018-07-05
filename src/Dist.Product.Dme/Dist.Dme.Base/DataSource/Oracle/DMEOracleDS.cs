@@ -52,11 +52,11 @@ namespace Dist.Dme.Base.DataSource.Oracle
                 Check(connectionStr);
             }
         }
-        public override string ConnectionMeta
+        public override object ConnectionMeta
         {
             get
             {
-                JObject json = new JObject
+                IDictionary<string, object> dic = new Dictionary<string, object>
                 {
                     { nameof(this.name), name },
                     { nameof(this.server), server },
@@ -66,7 +66,7 @@ namespace Dist.Dme.Base.DataSource.Oracle
                     { nameof(this.encrypted), encrypted },
                     { nameof(this.password), password }
                 };
-                return json.ToString();
+                return dic;
             }
         }
 

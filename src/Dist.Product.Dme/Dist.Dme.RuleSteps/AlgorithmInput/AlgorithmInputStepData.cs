@@ -29,6 +29,10 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
         {
             ruleStepMeta = new AlgorithmInputStepMeta(repository, step);
         }
+        /// <summary>
+        /// 对外访问
+        /// </summary>
+        public IRuleStepMeta RuleStepMeta => ruleStepMeta;
 
         public Result Run()
         {
@@ -41,21 +45,21 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
                 LOG.Warn("没有找到步骤关联的参数设置，停止执行");
                 return new Result(EnumSystemStatusCode.DME_FAIL, "没有找到步骤关联的参数设置，停止执行", null);
             }
-            String baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            String assemblyPath = Path.Combine(baseDir, dto.MetaDefine.Assembly);
-            Assembly assembly = Assembly.LoadFile(assemblyPath);
-            if (null == assembly)
-            {
-                LOG.Warn($"程序集文件[{assemblyPath}]不存在");
-                return new Result(EnumSystemStatusCode.DME_ERROR, $"程序集文件[{assemblyPath}]不存在", null);
-            }
-            IAlgorithm algorithm = (IAlgorithm)assembly.CreateInstance(dto.MetaDefine.MainClass, true);
-            if (null == algorithm)
-            {
-                LOG.Warn($"接口[{dto.MetaDefine.MainClass}]创建实例为空");
-                return new Result(EnumSystemStatusCode.DME_ERROR, $"程序集文件[{assemblyPath}]不存在", null);
-            }
-            IDictionary<string, Property> inputParams = algorithm.InParams;
+            //String baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            //String assemblyPath = Path.Combine(baseDir, dto.MetaDefine.Assembly);
+            //Assembly assembly = Assembly.LoadFile(assemblyPath);
+            //if (null == assembly)
+            //{
+            //    LOG.Warn($"程序集文件[{assemblyPath}]不存在");
+            //    return new Result(EnumSystemStatusCode.DME_ERROR, $"程序集文件[{assemblyPath}]不存在", null);
+            //}
+            //IAlgorithm algorithm = (IAlgorithm)assembly.CreateInstance(dto.MetaDefine.MainClass, true);
+            //if (null == algorithm)
+            //{
+            //    LOG.Warn($"接口[{dto.MetaDefine.MainClass}]创建实例为空");
+            //    return new Result(EnumSystemStatusCode.DME_ERROR, $"程序集文件[{assemblyPath}]不存在", null);
+            //}
+            IDictionary<string, Property> inputParams = dto.AlgorithmInstance.InParams;
             // 载入参数值
             IDictionary<string, object> paraValues = new Dictionary<string, object>();
             foreach (var item in stepAttributes)
@@ -87,12 +91,12 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
                 }
             }
 
-            algorithm.Init(paraValues);
-            Result result = algorithm.Execute();
+            dto.AlgorithmInstance.Init(paraValues);
+            Result result = dto.AlgorithmInstance.Execute();
             // 保存输出
             if (result != null && EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_SUCCESS) == result.Status)
             {
-                base.SaveOutput(algorithm.OutParams);
+                base.SaveOutput(dto.AlgorithmInstance.OutParams);
                 return new Result(EnumSystemStatusCode.DME_SUCCESS, "执行完毕", true);
             }
             return new Result(EnumSystemStatusCode.DME_FAIL, "执行失败，无异常信息", false);

@@ -67,7 +67,7 @@ namespace Dist.Dme.WebApi.Controllers
         /// <summary>
         /// 获取数据源连接的元数据信息
         /// </summary>
-        /// <param name="typeCode">数据源类型编码</param>
+        /// <param name="typeCode">数据源类型编码，如：oracle</param>
         /// <returns></returns>
         [HttpGet]
         [Route("conn/meta/v1/{typeCode}")]

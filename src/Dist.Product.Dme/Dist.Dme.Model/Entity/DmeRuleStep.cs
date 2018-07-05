@@ -22,6 +22,6 @@ namespace Dist.Dme.Model.Entity
         [SugarColumn(ColumnName = "STEP_TYPE_ID")]
         public int StepTypeId { get; set; }
         [SugarColumn(ColumnName = "STEP_NAME")]
-        public string StepName { get; set; }
+        public string Name { get; set; }
     }
 }

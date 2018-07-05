@@ -65,6 +65,26 @@
             ]
         }
     ],
+   "dataSources": {
+            "30143df1123449a896429854899f37f3": {
+              "id": 2,
+              "sysCode": "30143df1123449a896429854899f37f3",
+              "name": "控规调整样例",
+              "type": "PERSONAL_GEODATABASE",
+              "connection": "{\"path\":\"D:/work/dist/x_项目管理/f_福建省/x_厦门/02数据/控规调整样例.mdb\"}",
+              "createTime": 1528634377000,
+              "remark": "本地mdb测试"
+            },
+            "791b05180d8c4e2186f7684ecf557457": {
+              "id": 1,
+              "sysCode": "791b05180d8c4e2186f7684ecf557457",
+              "name": "厦门空间库",
+              "type": "ENTERPRISE_GEODATABASE",
+              "connection": "{\"name\":\"厦门空间库\",\"server\":\"192.168.1.166\",\"database\":\"orcl\",\"port\":1521,\"username\":\"xmgis\",\"encrypted\":0,\"password\":\"xmghj2014\"}",
+              "createTime": 1528631755000,
+              "remark": "空间库测试"
+            }
+    },
     "hops":[
         {
             "modelId":21,

@@ -6,7 +6,7 @@ using System.Text;
 namespace Dist.Dme.RuleSteps
 {
     /// <summary>
-    /// 步骤类型
+    /// 步骤类型，与数据库的字典[DME_DATASOURCE_TYPE]相匹配
     /// </summary>
     public enum EnumRuleStepTypes
     {

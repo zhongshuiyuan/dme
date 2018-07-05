@@ -33,7 +33,8 @@ namespace Dist.Dme.Service.Impls
 
         public object ListAlgorithms(bool needMeta)
         {
-            List<DmeAlgorithm> algs = base.Repository.GetDbContext().Queryable<DmeAlgorithm>().OrderBy(alg => alg.CreateTime, OrderByType.Desc).ToList();
+            var db = base.Repository.GetDbContext();
+            List<DmeAlgorithm> algs = db.Queryable<DmeAlgorithm>().OrderBy(alg => alg.CreateTime, OrderByType.Desc).ToList();
             if (null == algs || 0 == algs.Count)
             {
                 return algs;
@@ -43,6 +44,7 @@ namespace Dist.Dme.Service.Impls
                 IList<AlgorithmRespDTO> algDTOs = new List<AlgorithmRespDTO>();
                 AlgorithmRespDTO algorithmDTO = null;
                 IList<DmeAlgorithmMeta> metas = null;
+                IList<AlgorithmMetaDTO> metasDTO = null;
                 foreach (var alg in algs)
                 {
                     algorithmDTO = ClassValueCopier<AlgorithmRespDTO>.Copy(alg);
@@ -51,12 +53,31 @@ namespace Dist.Dme.Service.Impls
                         algorithmDTO.Extension = alg.Extension;// JsonConvert.DeserializeObject(.ToString());
                     }
                     algDTOs.Add(algorithmDTO);
-                    metas = base.Repository.GetDbContext().Queryable<DmeAlgorithmMeta>().Where(meta => meta.AlgorithmId == alg.Id).ToList();
+                    metas = db.Queryable<DmeAlgorithmMeta>().Where(meta => meta.AlgorithmId == alg.Id).ToList();
                     if (null == metas || 0 == metas.Count)
                     {
                         continue;
                     }
-                    algorithmDTO.Metas = metas;
+                    metasDTO = new List<AlgorithmMetaDTO>();
+                    foreach (var item in metas)
+                    {
+                        EnumValueMetaType enumValueMetaType = EnumUtil.GetEnumObjByName<EnumValueMetaType>(item.DataType);
+                        metasDTO.Add(new AlgorithmMetaDTO()
+                        {
+                            Name = item.Name,
+                            DataType = (int)enumValueMetaType,
+                            DataTypeCode = item.DataType,
+                            DataTypeDesc = EnumUtil.GetEnumDescription(enumValueMetaType),
+                            Inout = item.Inout,
+                            AlgorithmId = item.AlgorithmId,
+                            IsVisible = item.IsVisible,
+                            Remark = item.Remark,
+                            Alias = item.Alias,
+                            ReadOnly = item.ReadOnly,
+                            Required = item.Required
+                        });
+                    }
+                    algorithmDTO.Metas = metasDTO;
                 }
                 return algDTOs;
             }
@@ -68,9 +89,26 @@ namespace Dist.Dme.Service.Impls
             DmeAlgorithm alg = base.Repository.GetDbContext().Queryable<DmeAlgorithm>().Single(a => a.SysCode == code);
             AlgorithmRespDTO algorithmDTO = ClassValueCopier<AlgorithmRespDTO>.Copy(alg);
             IList<DmeAlgorithmMeta>  metas = base.Repository.GetDbContext().Queryable<DmeAlgorithmMeta>().Where(meta => meta.AlgorithmId == alg.Id).ToList();
-            if (metas !=null  && metas.Count >0)
+            if (metas?.Count >0)
             {
-                algorithmDTO.Metas = metas;
+                foreach (var item in metas)
+                {
+                    EnumValueMetaType enumValueMetaType = EnumUtil.GetEnumObjByName<EnumValueMetaType>(item.DataType);
+                    algorithmDTO.Metas.Add(new AlgorithmMetaDTO()
+                    {
+                        Name = item.Name,
+                        DataType = (int)enumValueMetaType,
+                        DataTypeCode = item.DataType,
+                        DataTypeDesc = EnumUtil.GetEnumDescription(enumValueMetaType),
+                        Inout = item.Inout,
+                        AlgorithmId = item.AlgorithmId,
+                        IsVisible = item.IsVisible,
+                        Remark = item.Remark,
+                        Alias = item.Alias,
+                        ReadOnly = item.ReadOnly,
+                        Required = item.Required
+                    });
+                }
             }
             return algorithmDTO;
         }
@@ -109,14 +147,28 @@ namespace Dist.Dme.Service.Impls
                 AlgorithmRespDTO algorithmRespDTO = ClassValueCopier<AlgorithmRespDTO>.Copy(alg);
                 if (dto.Metas != null && dto.Metas.Count > 0)
                 {
-                    algorithmRespDTO.Metas = new List<DmeAlgorithmMeta>();
+                    algorithmRespDTO.Metas = new List<AlgorithmMetaDTO>();
                     DmeAlgorithmMeta meta = null;
                     foreach (var item in dto.Metas)
                     {
                         meta = ClassValueCopier<DmeAlgorithmMeta>.Copy(item);
                         meta.AlgorithmId = alg.Id;
                         meta.Id = base.Repository.GetDbContext().Insertable<DmeAlgorithmMeta>(meta).ExecuteReturnIdentity();
-                        algorithmRespDTO.Metas.Add(meta);
+                        EnumValueMetaType enumValueMetaType = EnumUtil.GetEnumObjByName<EnumValueMetaType>(item.DataType);
+                        algorithmRespDTO.Metas.Add(new AlgorithmMetaDTO()
+                        {
+                            Name = item.Name,
+                            DataType = (int)enumValueMetaType,
+                            DataTypeCode = item.DataType,
+                            DataTypeDesc = EnumUtil.GetEnumDescription(enumValueMetaType),
+                            Inout = item.Inout,
+                            AlgorithmId = alg.Id,
+                            IsVisible = item.IsVisible,
+                            Remark = item.Remark,
+                            Alias = item.Alias,
+                            ReadOnly = item.ReadOnly,
+                            Required = item.Required
+                        });
                     }
                 }
                 return algorithmRespDTO;

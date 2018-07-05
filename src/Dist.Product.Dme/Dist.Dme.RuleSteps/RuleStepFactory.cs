@@ -2,6 +2,7 @@
 using Dist.Dme.Base.Utils;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.RuleSteps.AlgorithmInput;
+using Dist.Dme.RuleSteps.DataSourceInput;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,6 +32,7 @@ namespace Dist.Dme.RuleSteps
                     ruleStepData = new AlgorithmInputStepData(repository, taskId, step);
                     break;
                 case EnumRuleStepTypes.DataSourceInput:
+                    ruleStepData = new DataSourceInputStepData(repository, taskId, step);
                     break;
                 default:
                     break;

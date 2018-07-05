@@ -19,7 +19,6 @@ namespace Dist.Dme.RuleSteps
     {
         private static ILog LOG = LogManager.GetLogger(typeof(BaseRuleStepMeta));
 
-        public abstract string RuleStepName { get; set; }
         // public abstract IRuleStepType RuleStepType { get; }
         protected abstract EnumRuleStepTypes MyRuleStepType { get; }
         public abstract object InParams { get; }
@@ -37,31 +36,43 @@ namespace Dist.Dme.RuleSteps
         {
             this.repository = repository;
             this.step = step;
-            //this.modelId = modelId;
-            //this.versionId = versionId;
-            //this.ruleStepId = ruleStepId;
         }
         /// <summary>
         /// 步骤需要的输入参数
         /// </summary>
         protected IDictionary<String, Property> InputParameters { get; set; } = new Dictionary<String, Property>() {
-            [nameof(DatasourceIds)] = new Property(nameof(DatasourceIds), "数据源ID集合", EnumValueMetaType.TYPE_JSON_ARRAY, "", "[\"datasourceId1\", \"datasourceId2\"]", "数据源ID集合")
+            [nameof(DatasourceIds)] = new Property(nameof(DatasourceIds), "数据源唯一Code集合", EnumValueMetaType.TYPE_JSON_ARRAY, "", "[\"datasourceCode1\", \"datasourceCode2\"]", "数据源唯一Code集合")
         };
-
-        public IDictionary<string, object> ReadAttributes()
+        /// <summary>
+        /// 获取步骤类型元数据
+        /// </summary>
+        /// <param name="enumRuleStepTypes"></param>
+        /// <returns></returns>
+        protected object GetRuleStepTypeMeta(EnumRuleStepTypes enumRuleStepTypes)
+        {
+            return new Dictionary<string, object>
+            {
+                ["value"] = (int)enumRuleStepTypes,
+                ["name"] = EnumUtil.GetEnumDisplayName(enumRuleStepTypes),
+                ["desc"] = EnumUtil.GetEnumDescription(enumRuleStepTypes)
+            };
+        }
+        public IDictionary<string, Property> ReadAttributes()
         {
             IList<DmeRuleStepAttribute> attributes = repository.GetDbContext().Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == this.step.Id).ToList();
             if (attributes?.Count > 0)
             {
-                IDictionary<string, object> dictionary = new Dictionary<string, object>();
+                IDictionary<string, Property> dictionary = new Dictionary<string, Property>();
                 foreach (var item in attributes)
                 {
-                    dictionary[item.AttributeCode] = item.AttributeValue;
+                    dictionary[item.AttributeCode] = new Property(item.AttributeCode, item.AttributeCode, default(EnumValueMetaType), item.AttributeValue);
                 }
                 return dictionary;
             }
             return null;
         }
+        // 参数值封装成Property
+        // public abstract IDictionary<string, object> ReadAttributesEx();
         public bool SaveAttributes(IDictionary<string, object> attributes)
         {
             if (attributes?.Count == 0)
@@ -164,7 +175,7 @@ namespace Dist.Dme.RuleSteps
                         SysCode = GuidUtil.NewGuid(),
                         ModelId = this.step.ModelId,
                         VersionId = this.step.VersionId,
-                        StepName = stepName,
+                        Name = stepName,
                         X = x,
                         Y = y,
                         StepTypeId = dmeRuleStepType.Id
@@ -182,7 +193,7 @@ namespace Dist.Dme.RuleSteps
                     if (!string.IsNullOrEmpty(stepName))
                     {
                         // 如果名称不为空，才更新原来的名称
-                        dmeRuleStep.StepName = stepName;
+                        dmeRuleStep.Name = stepName;
                     }
                     dmeRuleStep.X = x;
                     dmeRuleStep.Y = y;

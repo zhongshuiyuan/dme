@@ -91,20 +91,41 @@ namespace Dist.Dme.Service.Impls
                     versionDTO.Steps.Add(ruleStepDTO);
                     // 获取步骤类型实体
                     ruleStepDTO.StepType = db.Queryable<DmeRuleStepType>().Where(rst => rst.Id == ruleStep.StepTypeId).Single();
+                    IRuleStepData ruleStepData = RuleStepFactory.GetRuleStepData(ruleStepDTO.StepType.Code, base.Repository, -1, ruleStep);
+                    IDictionary<string, Property> attributeDic = ruleStepData.RuleStepMeta.ReadAttributes();
+                    if (attributeDic?.Count > 0)
+                    {
+                        foreach (var item in attributeDic.Values)
+                        {
+                            ruleStepDTO.Attributes.Add(item);
+                        }
+                    }
                     // 检索步骤的属性值信息
-                    IList<DmeRuleStepAttribute> attributes = db.Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == ruleStep.Id).ToList();
-                    if (null == attributes || 0 == attributes.Count)
-                    {
-                        continue;
-                    }
-                    foreach (var att in attributes)
-                    {
-                        ruleStepDTO.Attributes.Add(new KeyValuePair<string, object>(att.AttributeCode, att.AttributeValue));
-                    }
+                    //IList<DmeRuleStepAttribute> attributes = db.Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == ruleStep.Id).ToList();
+                    //if (null == attributes || 0 == attributes.Count)
+                    //{
+                    //    continue;
+                    //}
+                    //foreach (var att in attributes)
+                    //{
+                    //    ruleStepDTO.Attributes.Add(new KeyValuePair<string, object>(att.AttributeCode, att.AttributeValue));
+                    //}
                 }
                 // 每个模型版本下的数据源（多表关联查询）
-                versionDTO.DataSources = (IList<string>)db.Queryable<DmeDataSource, DmeRuleStepDataSource>((ds, rsds) => new object[] {
-                JoinType.Inner,ds.Id==rsds.DataSourceId}).Select<string>(ds => ds.SysCode).ToList();
+                // 当不需要用LEFT JOIN或者 RIGHT JOIN 只是单纯的INNER JOIN时我们还提供了更简单的语法实现多表查询
+                IList<DmeDataSource> datasources = db.Queryable<DmeDataSource, DmeRuleStepDataSource>((ds, rsds) => ds.Id == rsds.DataSourceId).Select(ds => 
+                       new DmeDataSource  { SysCode = ds.SysCode, Connection = ds.Connection, CreateTime = ds.CreateTime, Id = ds.Id, Name = ds.Name, Remark = ds.Remark, Type = ds.Type }).ToList();
+                if (datasources?.Count > 0)
+                {
+                    foreach (var datasourceItem in datasources)
+                    {
+                        if (versionDTO.DataSources.ContainsKey(datasourceItem.SysCode))
+                        {
+                            continue;
+                        }
+                        versionDTO.DataSources[datasourceItem.SysCode] = datasourceItem;
+                    }
+                }
                 // 每个模型版本下的节点向量信息
                 versionDTO.Hops = db.Queryable<DmeRuleStepHop>()
                      .Where(rsh => rsh.ModelId == model.Id && rsh.VersionId == v.Id)

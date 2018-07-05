@@ -2950,6 +2950,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.1",
         "dependencies": {
+          "Dist.Dme.Base": "1.0.0",
           "sqlSugarCore": "4.6.4.9"
         },
         "compile": {

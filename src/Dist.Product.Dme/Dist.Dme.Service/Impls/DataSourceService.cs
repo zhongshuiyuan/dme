@@ -78,7 +78,7 @@ namespace Dist.Dme.Service.Impls
             EnumDataSourceType @enum = EnumUtil.GetEnumObjByName<EnumDataSourceType>(typeCode);
             IDMEDataSourceFactory factory = null;
             IDMEDataSource dataSource = null;
-            string meta = "";
+            object meta = "";
             switch (@enum)
             {
                 case EnumDataSourceType.ORACLE:

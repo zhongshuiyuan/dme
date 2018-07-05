@@ -8,7 +8,7 @@ namespace Dist.Dme.Base.DataSource
     public interface IDMEDataSource
     {
         IPropertySetter ConnectionProperties { get; }
-        string ConnectionMeta { get; }
+        object ConnectionMeta { get; }
         IDMEDataSourceFactory DMEDataSourceFactory { get; }
         Boolean ValidConnection();
     }

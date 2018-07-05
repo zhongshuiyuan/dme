@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dist.Dme.Base.Common;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -39,7 +40,8 @@ namespace Dist.Dme.Base.Framework.Interfaces
         /// <param name="repository"></param>
         /// <param name="stepId">步骤id</param>
         /// <returns></returns>
-        IDictionary<string, object> ReadAttributes();
+        IDictionary<string, Property> ReadAttributes();
+        // IDictionary<string, object> ReadAttributesEx();
         /// <summary>
         /// 获取规则步骤输入参数
         /// </summary>

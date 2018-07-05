@@ -32,9 +32,9 @@ namespace Dist.Dme.Base.DataSource
         public abstract bool ValidConnection();
 
         /// <summary>
-        /// 获取连接的JSON字符串
+        /// 获取连接的JSON
         /// </summary>
-        public abstract string ConnectionMeta { get; }
+        public abstract object ConnectionMeta { get; }
         /// <summary>
         /// 
         /// </summary>

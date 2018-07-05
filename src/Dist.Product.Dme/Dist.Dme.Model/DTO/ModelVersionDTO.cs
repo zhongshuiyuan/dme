@@ -20,7 +20,7 @@ namespace Dist.Dme.Model.DTO
         /// <summary>
         /// 关联的数据源唯一编码
         /// </summary>
-        public IList<string> DataSources { get; set; } = new List<string>();
+        public IDictionary<string, DmeDataSource> DataSources { get; set; } = new Dictionary<string, DmeDataSource>();
         /// <summary>
         /// 节点与节点连接信息
         /// </summary>
