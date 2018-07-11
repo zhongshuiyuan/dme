@@ -136,6 +136,13 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
                         continue;
                     }
                     property = propertyDic[item.AttributeCode];
+                    property.IsNeedPrecursor = item.IsNeedPrecursor;
+                    if (1 == item.IsNeedPrecursor)
+                    {
+                        // 前驱参数格式：${步骤编码:属性编码}
+                        property.Value = item.AttributeValue.ToString().Substring(2, item.AttributeValue.ToString().LastIndexOf("}")-2);
+                        continue;
+                    }
                     if ((int)EnumValueMetaType.TYPE_FEATURECLASS == property.DataType)
                     {
                         // 如果是要素类，则值的格式：{"name":"图层名","source":"数据源唯一编码"}

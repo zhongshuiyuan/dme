@@ -9285,15 +9285,12 @@
   },
   "project": {
     "version": "1.0.0",
-    "restoreSettings": {
-      "hideWarningsAndErrors": true
-    },
     "restore": {
-      "projectUniqueName": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Service\\Dist.Dme.Service.csproj",
+      "projectUniqueName": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Service\\Dist.Dme.Service.csproj",
       "projectName": "Dist.Dme.Service",
-      "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Service\\Dist.Dme.Service.csproj",
+      "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Service\\Dist.Dme.Service.csproj",
       "packagesPath": "C:\\Users\\thinkpad\\.nuget\\packages\\",
-      "outputPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Service\\obj\\",
+      "outputPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Service\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
@@ -9316,23 +9313,23 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj"
+            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.LandConflictDetection\\Dist.Dme.Algorithms.LandConflictDetection.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.LandConflictDetection\\Dist.Dme.Algorithms.LandConflictDetection.csproj"
             },
-            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DAL\\Dist.Dme.DAL.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DAL\\Dist.Dme.DAL.csproj"
+            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj"
             },
-            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DisFS\\Dist.Dme.DisFS.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DisFS\\Dist.Dme.DisFS.csproj"
+            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.DAL\\Dist.Dme.DAL.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.DAL\\Dist.Dme.DAL.csproj"
             },
-            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.RuleSteps\\Dist.Dme.RuleSteps.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.RuleSteps\\Dist.Dme.RuleSteps.csproj"
+            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.DisFS\\Dist.Dme.DisFS.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.DisFS\\Dist.Dme.DisFS.csproj"
             },
-            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj"
+            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj"
             },
-            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.LandConflictDetection\\Dist.Dme.Algorithms.LandConflictDetection.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.LandConflictDetection\\Dist.Dme.Algorithms.LandConflictDetection.csproj"
+            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.RuleSteps\\Dist.Dme.RuleSteps.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.RuleSteps\\Dist.Dme.RuleSteps.csproj"
             }
           }
         }

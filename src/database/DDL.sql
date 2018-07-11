@@ -738,6 +738,53 @@ alter table DME_RULESTEP_HOP add name varchar2(50);
 -- Add comments to the columns 
 comment on column DME_RULESTEP_HOP.name
   is '连接线的名称';
+  
+  
+  -- 创建注释表
+create table DME_NOTE
+(
+  id                     number(8) primary key,
+  content                    CLOB,
+  gui_location_x               INTEGER,
+  gui_location_y               INTEGER,
+  gui_location_width           INTEGER,
+  gui_location_height          INTEGER,
+  font_name                    VARCHAR2(255),
+  font_size                    INTEGER,
+  font_bold                    CHAR(1),
+  font_italic                  CHAR(1),
+  font_color_red               INTEGER,
+  font_color_green             INTEGER,
+  font_color_blue              INTEGER,
+  font_back_ground_color_red   INTEGER,
+  font_back_ground_color_green INTEGER,
+  font_back_ground_color_blue  INTEGER,
+  font_border_color_red        INTEGER,
+  font_border_color_green      INTEGER,
+  font_border_color_blue       INTEGER,
+  draw_shadow                  INTEGER,
+  model_id number(8),
+  version_id number(8)
+);
+create sequence SEQ_DME_NOTE
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
+-- 添加属性 
+alter table DME_RULESTEP_ATTRIBUTE add isneedprecursor inteGER default 0;
+-- Add comments to the columns 
+comment on column DME_RULESTEP_ATTRIBUTE.isneedprecursor
+  is '是否需要前驱，表示依赖其它步骤的参数，如果是1，则attribute_value格式：${步骤编码:参数编码}';
+  
+  -- Add/modify columns 
+alter table DME_RULESTEP rename column step_name to NAME;
+alter table DME_RULESTEP add remark varchar2(255);
+-- Add comments to the columns 
+comment on column DME_RULESTEP.remark
+  is '步骤备注信息';
 
 
 

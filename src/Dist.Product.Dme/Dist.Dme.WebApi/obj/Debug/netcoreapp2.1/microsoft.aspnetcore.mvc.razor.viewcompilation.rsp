@@ -1,0 +1,5 @@
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi
+--output-path=obj\Debug\netcoreapp2.1\
+--application-name=Dist.Dme.WebApi
+--content-root=D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi
+--file=

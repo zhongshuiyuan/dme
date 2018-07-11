@@ -7531,15 +7531,12 @@
   },
   "project": {
     "version": "1.0.0",
-    "restoreSettings": {
-      "hideWarningsAndErrors": true
-    },
     "restore": {
-      "projectUniqueName": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Extensions\\Dist.Dme.Extensions.csproj",
+      "projectUniqueName": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Extensions\\Dist.Dme.Extensions.csproj",
       "projectName": "Dist.Dme.Extensions",
-      "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Extensions\\Dist.Dme.Extensions.csproj",
+      "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Extensions\\Dist.Dme.Extensions.csproj",
       "packagesPath": "C:\\Users\\thinkpad\\.nuget\\packages\\",
-      "outputPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Extensions\\obj\\",
+      "outputPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Extensions\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
@@ -7562,11 +7559,11 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DisCache\\Dist.Dme.DisCache.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DisCache\\Dist.Dme.DisCache.csproj"
+            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.DisCache\\Dist.Dme.DisCache.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.DisCache\\Dist.Dme.DisCache.csproj"
             },
-            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DisFS\\Dist.Dme.DisFS.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DisFS\\Dist.Dme.DisFS.csproj"
+            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.DisFS\\Dist.Dme.DisFS.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.DisFS\\Dist.Dme.DisFS.csproj"
             }
           }
         }

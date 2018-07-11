@@ -18,13 +18,12 @@ namespace Dist.Dme.Model.DTO
         public double X { get; set; }
         public double Y { get; set; }
         public string Name { get; set; }
+        public string Remark { get; set; }
         public DmeRuleStepType StepType { get; set; }
-        // public int StepTypeId { get; set; }
-
+   
         /// <summary>
         /// 步骤关联的属性键值对
         /// </summary>
-        // public IList<KeyValuePair<string, object>> Attributes { get; set; } = new List<KeyValuePair<string, object>>();
         public IList<Property> Attributes { get; set; } = new List<Property>();
     }
 }

@@ -8281,15 +8281,12 @@
   },
   "project": {
     "version": "1.0.0",
-    "restoreSettings": {
-      "hideWarningsAndErrors": true
-    },
     "restore": {
-      "projectUniqueName": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj",
+      "projectUniqueName": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj",
       "projectName": "Dist.Dme.Algorithms.Overlay",
-      "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj",
+      "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj",
       "packagesPath": "C:\\Users\\thinkpad\\.nuget\\packages\\",
-      "outputPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\obj\\",
+      "outputPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
@@ -8312,11 +8309,11 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.SRCE\\Dist.Dme.SRCE.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.SRCE\\Dist.Dme.SRCE.csproj"
+            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj"
             },
-            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj"
+            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.SRCE\\Dist.Dme.SRCE.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.SRCE\\Dist.Dme.SRCE.csproj"
             }
           }
         }

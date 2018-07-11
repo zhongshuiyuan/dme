@@ -192,37 +192,199 @@ namespace Dist.Dme.Service.Impls
                 // 自动赋予一个唯一编码
                 dto.SysCode = GuidUtil.NewGuid();
             }
+            var db = base.Repository.GetDbContext();
             // 使用事务
-            DbResult< DmeModel > dbResult = base.Repository.GetDbContext().Ado.UseTran<DmeModel>(()=> 
+            DbResult< DmeModel > dbResult = db.Ado.UseTran<DmeModel>(()=> 
             {
                 // 查询单条没有数据返回NULL, Single超过1条会报错，First不会
                 // base.DmeModelDb.GetContext().Queryable<DmeModel>().Single(m => m.SysCode == dto.SysCode);
-                DmeModel model = base.Repository.GetDbContext().Queryable<DmeModel>().Where(m => m.SysCode == dto.SysCode).Single();
+                DmeModel model = db.Queryable<DmeModel>().Where(m => m.SysCode == dto.SysCode).Single();
                 if (null == model)
                 {
-                    model = ClassValueCopier<DmeModel>.Copy(dto);
-                    model.CreateTime = DateUtil.CurrentTimeMillis;
-                    int identity = base.Repository.GetDbContext().Insertable<DmeModel>(model).ExecuteReturnIdentity();
-                    if (identity <= 0)
+                    model = new DmeModel
                     {
-                        throw new Exception(String.Format("创建模型失败，编码：[{0}]，名称：[{1}]", dto.SysCode, dto.Name));
-                    }
-                    // 同时默认添加一个版本
-                    DmeModelVersion mv = new DmeModelVersion
-                    {
-                        SysCode = GuidUtil.NewGuid(),
-                        Name = "版本1",
-                        ModelId = identity,
-                        CreateTime = DateUtil.CurrentTimeMillis
+                        Name = dto.Name,
+                        Remark = dto.Remark,
+                        CreateTime = DateUtil.CurrentTimeMillis,
+                        IsPublish = 1,
+                        PublishTime = DateUtil.CurrentTimeMillis
                     };
-                    base.Repository.GetDbContext().Insertable<DmeModelVersion>(mv).ExecuteReturnEntity();
+                    model = db.Insertable<DmeModel>(model).ExecuteReturnEntity();
+                    if (null == model)
+                    {
+                        throw new Exception(String.Format("创建模型失败，原因未明，编码：[{0}]，名称：[{1}]。", dto.SysCode, dto.Name));
+                    }
+                    // 处理版本
+                    this.HandleVersions(dto, db, model);
+                    return model;
                 }
-                // 重复的模型不再添加，直接返回已存在的模型
-                return model;
+                else
+                {
+                    throw new BusinessException($"模型[{dto.SysCode}]已存在，不能重复注册");
+                }
             });
             return dbResult.Data;
         }
+        /// <summary>
+        /// 处理版本信息
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="db"></param>
+        /// <param name="model"></param>
+        private void HandleVersions(ModelAddReqDTO dto, SqlSugarClient db, DmeModel model)
+        {
+            IList<ModelVersionAddDTO> versions = dto.Versions;
+            if (versions?.Count == 0)
+            {
+                throw new BusinessException("注册模型时，缺失版本信息。");
+            }
+            foreach (var subVersion in versions)
+            {
+                DmeModelVersion mv = new DmeModelVersion
+                {
+                    SysCode = GuidUtil.NewGuid(),
+                    Name = subVersion.Name,
+                    ModelId = model.Id,
+                    CreateTime = DateUtil.CurrentTimeMillis
+                };
+                mv = db.Insertable<DmeModelVersion>(mv).ExecuteReturnEntity();
+                // 添加步骤信息
+                IList<RuleStepAddDTO> stepsAdd = subVersion.Steps;
+                if (stepsAdd?.Count == 0)
+                {
+                    continue;
+                }
+                // 步骤名称与步骤实体的映射
+                IDictionary<string, DmeRuleStep> ruleStepMap = new Dictionary<string, DmeRuleStep>();
+                foreach (var subStepAdd in stepsAdd)
+                {
+                    DmeRuleStepType dmeRuleStepType = subStepAdd.StepType;
+                    if (null == dmeRuleStepType)
+                    {
+                        throw new BusinessException("注册模型，缺失步骤类型元数据。");
+                    }
+                    DmeRuleStep step = new DmeRuleStep
+                    {
+                        SysCode = GuidUtil.NewGuid(),
+                        ModelId = model.Id,
+                        VersionId = mv.Id,
+                        X = subStepAdd.X,
+                        Y = subStepAdd.Y,
+                        Name = subStepAdd.Name,
+                        Remark = subStepAdd.Remark,
+                        StepTypeId = dmeRuleStepType.Id
+                    };
+                    step = db.Insertable<DmeRuleStep>(step).ExecuteReturnEntity();
+                    ruleStepMap[subStepAdd.Name] = step;
+                    // 处理步骤属性
+                    this.HandleAttributes(db, model, mv, subStepAdd, step);
+                }
+                // 处理步骤之间的连接关系
+                this.HandleHop(db, subVersion, model, mv, ruleStepMap);
+            }
+        }
 
+        /// <summary>
+        /// 处理步骤属性信息
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="model"></param>
+        /// <param name="version"></param>
+        /// <param name="subStepAdd"></param>
+        /// <param name="step"></param>
+        private void HandleAttributes(SqlSugarClient db, DmeModel model, DmeModelVersion version, RuleStepAddDTO subStepAdd, DmeRuleStep step)
+        {
+            IList<AttributeReqDTO> properties = subStepAdd.Attributes;
+            if (properties?.Count == 0)
+            {
+                return;
+            }
+            // 属性
+            if (nameof(EnumRuleStepTypes.DataSourceInput).Equals(subStepAdd.StepType.Code))
+            {
+                // 数据源类型的步骤，下面有且仅有一个属性
+                DmeRuleStepDataSource dmeRuleStepDataSource = new DmeRuleStepDataSource
+                {
+                    ModelId = model.Id,
+                    VersionId = version.Id,
+                    RuleStepId = step.Id
+                };
+                DmeDataSource dmeDataSource = db.Queryable<DmeDataSource>().Single(ds => ds.SysCode == properties[0].DataSourceCode);
+                dmeRuleStepDataSource.DataSourceId = dmeDataSource.Id;
+                db.Insertable<DmeRuleStepDataSource>(dmeRuleStepDataSource).ExecuteCommand();
+            }
+            else
+            {
+                List<DmeRuleStepAttribute> attributes = new List<DmeRuleStepAttribute>();
+                DmeRuleStepAttribute dmeRuleStepAttribute = null;
+                foreach (var p in properties)
+                {
+                    if (nameof(EnumValueMetaType.TYPE_FEATURECLASS).Equals(p.DataTypeCode))
+                    {
+                        // 要素类的属性，注意值的存储格式
+                        dmeRuleStepAttribute = new DmeRuleStepAttribute
+                        {
+                            RuleStepId = step.Id,
+                            ModelId = model.Id,
+                            VersionId = version.Id,
+                            IsNeedPrecursor = p.IsNeedPrecursor,
+                            AttributeCode = p.Name,
+                            AttributeValue = "{\"name\":\"" + p.Value + "\",\"source\":\"" + p.DataSourceCode + "\"}"
+                        };
+                    }
+                    else
+                    {
+                        dmeRuleStepAttribute = new DmeRuleStepAttribute
+                        {
+                            RuleStepId = step.Id,
+                            ModelId = model.Id,
+                            VersionId = version.Id,
+                            IsNeedPrecursor = p.IsNeedPrecursor,
+                            AttributeCode = p.Name,
+                            AttributeValue = p.Value
+                        };
+                    }
+                    if (1 == p.IsNeedPrecursor)
+                    {
+                        dmeRuleStepAttribute.AttributeValue = "${" + p.Value + "}";
+                    }
+                    attributes.Add(dmeRuleStepAttribute);
+                }
+                db.Insertable<DmeRuleStepAttribute>(attributes).ExecuteCommand();
+            }
+        }
+
+        /// <summary>
+        /// 处理步骤连线信息
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="versionDTO"></param>
+        /// <param name="model"></param>
+        /// <param name="version"></param>
+        /// <param name="ruleStepMap"></param>
+        private void HandleHop(SqlSugarClient db, ModelVersionAddDTO versionDTO, DmeModel model, DmeModelVersion version, IDictionary<string, DmeRuleStep> ruleStepMap)
+        {
+            IList<RuleStepHopDTO> ruleStepHopDTOs = versionDTO.Hops;
+            if (ruleStepHopDTOs?.Count == 0)
+            {
+                return;
+            }
+            List<DmeRuleStepHop> hops = new List<DmeRuleStepHop>();
+            foreach (var hopDTO in ruleStepHopDTOs)
+            {
+                DmeRuleStepHop hop = new DmeRuleStepHop
+                {
+                    ModelId = model.Id,
+                    VersionId = version.Id,
+                    StepFromId = ruleStepMap[hopDTO.StepFromName].Id,
+                    StepToId = ruleStepMap[hopDTO.StepToName].Id,
+                    Enabled = hopDTO.Enabled,
+                    Name = hopDTO.Name
+                };
+                hops.Add(hop);
+            }
+            db.Insertable<DmeRuleStepHop>(hops).ExecuteCommand();
+        }
         public DmeTask RunModelAsync(string versionCode)
         {
             // 尽管使用了async关键字，如果不使用await，则还是同步操作
@@ -474,7 +636,7 @@ namespace Dist.Dme.Service.Impls
                         foreach (var vector in info.Vectors)
                         {
                             // 只要向量的信息不完整，都不需要保存连接信息
-                            if (!key2BizId.ContainsKey(vector.FromKey) || !key2BizId.ContainsKey(vector.ToKey))
+                            if (!key2BizId.ContainsKey(vector.StepFromName) || !key2BizId.ContainsKey(vector.StepToName))
                             {
                                 continue;
                             }
@@ -482,8 +644,8 @@ namespace Dist.Dme.Service.Impls
                             {
                                 ModelId = modelVersion.ModelId,
                                 VersionId = modelVersion.Id,
-                                StepFromId = key2BizId[vector.FromKey],
-                                StepToId = key2BizId[vector.ToKey],
+                                StepFromId = key2BizId[vector.StepFromName],
+                                StepToId = key2BizId[vector.StepToName],
                                 Enabled = vector.Enabled
                             });
                         }
@@ -659,6 +821,11 @@ namespace Dist.Dme.Service.Impls
                 base.Repository.GetDbContext().Updateable<DmeModel>().
                       UpdateColumns(m => new DmeModel() { IsPublish = enabled, PublishTime = DateUtil.CurrentTimeMillis }).
                       Where(m => m.SysCode == modelCode).ExecuteCommandHasChange();
+        }
+
+        public object ValidModel(string modelCode)
+        {
+            throw new NotImplementedException();
         }
     }
 }

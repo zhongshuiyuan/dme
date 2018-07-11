@@ -44,7 +44,7 @@ namespace Dist.Dme.WebApi.Controllers
         /// 根据模型唯一编码获取模型
         /// </summary>
         /// <param name="code">模型唯一编码</param>
-        /// <param name="detail">是否获取详情</param>
+        /// <param name="detail">是否获取详情，0：否；1：是</param>
         /// <returns></returns>
         [HttpGet]
         [Route("v1/{code}")]
@@ -159,15 +159,15 @@ namespace Dist.Dme.WebApi.Controllers
             return base.Success(this.ModelService.RunModelAsync(modelVersionCode), "已开始模型的云计算......");
         }
         /// <summary>
-        /// 注册模型
+        /// 模型注册
         /// </summary>
         /// <param name="dto">参数模型，当SysCode为空时，系统会自动附上一个唯一编码</param>
         /// <returns></returns>
         [HttpPost]
         [Route("register/v1")]
-        public Result NewModel([FromBody]ModelAddReqDTO dto)
+        public Result NewModelSimple([FromBody]ModelAddReqDTO dto)
         {
-            if (!this.ModelService.IsBizGuid(dto.SysCode))
+            if (!string.IsNullOrEmpty(dto.SysCode) && !this.ModelService.IsBizGuid(dto.SysCode))
             {
                 return base.Fail($"业务编码格式不正确[{dto.SysCode}]");
             }
@@ -238,7 +238,7 @@ namespace Dist.Dme.WebApi.Controllers
             return base.Success(this.ModelService.GetTaskResult(taskCode, ruleStepId));
         }
         /// <summary>
-        /// 发布模型和取消模型
+        /// 设置模型的发布状态
         /// </summary>
         /// <param name="modelCode">模型唯一编码</param>
         /// <param name="isPublish">是否发布，1：发布：0：取消发布</param>

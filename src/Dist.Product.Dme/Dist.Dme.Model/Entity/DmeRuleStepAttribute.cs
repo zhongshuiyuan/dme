@@ -20,5 +20,6 @@ namespace Dist.Dme.Model.Entity
         public String AttributeCode { get; set; }
         [SugarColumn(ColumnName = "ATTRIBUTE_VALUE")]
         public object AttributeValue { get; set; }
+        public int IsNeedPrecursor { get; set; }
     }
 }

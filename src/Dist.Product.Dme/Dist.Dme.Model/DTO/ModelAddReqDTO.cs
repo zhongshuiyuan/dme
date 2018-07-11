@@ -14,5 +14,9 @@ namespace Dist.Dme.Model.DTO
         [Required(AllowEmptyStrings = false)]
         public String Name { get; set; }
         public String Remark { get; set; }
+        /// <summary>
+        /// 模型版本集合
+        /// </summary>
+        public IList<ModelVersionAddDTO> Versions { get; set; } = new List<ModelVersionAddDTO>();
     }
 }

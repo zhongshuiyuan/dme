@@ -245,7 +245,7 @@
             根据模型唯一编码获取模型
             </summary>
             <param name="code">模型唯一编码</param>
-            <param name="detail">是否获取详情</param>
+            <param name="detail">是否获取详情，0：否；1：是</param>
             <returns></returns>
         </member>
         <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.ListRuleStepTypes">
@@ -281,9 +281,9 @@
             <param name="modelVersionCode">模型版本唯一编码</param>
             <returns></returns>
         </member>
-        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.NewModel(Dist.Dme.Model.DTO.ModelAddReqDTO)">
+        <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.NewModelSimple(Dist.Dme.Model.DTO.ModelAddReqDTO)">
             <summary>
-            注册模型
+            模型注册
             </summary>
             <param name="dto">参数模型，当SysCode为空时，系统会自动附上一个唯一编码</param>
             <returns></returns>
@@ -325,7 +325,7 @@
         </member>
         <member name="M:Dist.Dme.WebApi.Controllers.ModelsController.PublishModel(System.String,System.Int32)">
             <summary>
-            发布模型和取消模型
+            设置模型的发布状态
             </summary>
             <param name="modelCode">模型唯一编码</param>
             <param name="isPublish">是否发布，1：发布：0：取消发布</param>

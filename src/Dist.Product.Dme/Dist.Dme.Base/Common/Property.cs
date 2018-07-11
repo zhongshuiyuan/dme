@@ -62,6 +62,10 @@ namespace Dist.Dme.Base.Common
         /// 属性值所依赖的数据源
         /// </summary>
         public string DataSourceCode { get; set; }
+        /// <summary>
+        /// 是否需要前驱依赖
+        /// </summary>
+        public int IsNeedPrecursor { get; set; } = 0;
 
         /// <summary>
         /// 构造函数
@@ -75,7 +79,9 @@ namespace Dist.Dme.Base.Common
         /// <param name="valueSet">值的可选集</param>
         /// <param name="isVisible">是否可见</param>
         /// <param name="readOnly">是否只读</param>
-        public Property(string name, string alias, EnumValueMetaType dataType, object value = null, object defaultValue = null, string remark = "", object[] valueSet = null, int isVisible = 1, int readOnly = 0, int required = 1, string dataSourceCode = "")
+        /// <param name="dataSourceCode">数据源编码</param>
+        /// <param name="isNeedPrecursor">是否需要前驱依赖，0和1</param>
+        public Property(string name, string alias, EnumValueMetaType dataType, object value = null, object defaultValue = null, string remark = "", object[] valueSet = null, int isVisible = 1, int readOnly = 0, int required = 1, string dataSourceCode = "", int isNeedPrecursor = 0)
         {
             this.Name = name;
             this.Alias = alias;
@@ -90,6 +96,7 @@ namespace Dist.Dme.Base.Common
             this.ReadOnly = readOnly;
             this.Required = required;
             this.DataSourceCode = dataSourceCode;
+            this.IsNeedPrecursor = isNeedPrecursor;
         }
     }
 }

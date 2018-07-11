@@ -7984,15 +7984,12 @@
   },
   "project": {
     "version": "1.0.0",
-    "restoreSettings": {
-      "hideWarningsAndErrors": true
-    },
     "restore": {
-      "projectUniqueName": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DAL\\Dist.Dme.DAL.csproj",
+      "projectUniqueName": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.DAL\\Dist.Dme.DAL.csproj",
       "projectName": "Dist.Dme.DAL",
-      "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DAL\\Dist.Dme.DAL.csproj",
+      "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.DAL\\Dist.Dme.DAL.csproj",
       "packagesPath": "C:\\Users\\thinkpad\\.nuget\\packages\\",
-      "outputPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.DAL\\obj\\",
+      "outputPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.DAL\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
@@ -8015,11 +8012,11 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj"
+            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj"
             },
-            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj"
+            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Model\\Dist.Dme.Model.csproj"
             }
           }
         }

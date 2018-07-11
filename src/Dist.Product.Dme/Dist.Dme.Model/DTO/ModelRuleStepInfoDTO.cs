@@ -64,16 +64,20 @@ namespace Dist.Dme.Model.DTO
     public class RuleStepHopDTO
     {
         /// <summary>
-        /// 步骤的源，步骤的key
+        /// 步骤的源，步骤的名称
         /// </summary>
-        public string FromKey { get; set; }
+        public string StepFromName { get; set; }
         /// <summary>
-        /// 步骤的目标，步骤的key
+        /// 步骤的目标，步骤的名称
         /// </summary>
-        public string ToKey { get; set; }
+        public string StepToName { get; set; }
         /// <summary>
         /// 是否可用
         /// </summary>
         public int Enabled { get; set; }
+        /// <summary>
+        /// 连线名称
+        /// </summary>
+        public string Name { get; set; }
     }
 }

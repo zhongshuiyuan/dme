@@ -21,7 +21,7 @@ namespace Dist.Dme.Service.Interfaces
         /// <returns></returns>
         object ListModels(Boolean detail, int isPublish);
         /// <summary>
-        /// 添加模型
+        /// 添加模型，只是注册简单的信息
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
@@ -99,5 +99,11 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="isPublish">是否发布，1：发布；0：取消发布</param>
         /// <returns></returns>
         object PublishModel(string modelCode, int isPublish);
+        /// <summary>
+        /// 校验模型
+        /// </summary>
+        /// <param name="modelCode">模型唯一编码</param>
+        /// <returns></returns>
+        object ValidModel(string modelCode);
     }
 }
