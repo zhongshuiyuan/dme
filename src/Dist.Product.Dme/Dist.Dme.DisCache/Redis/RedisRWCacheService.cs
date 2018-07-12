@@ -1,10 +1,9 @@
 ﻿using Dist.Dme.DisCache.Interfaces;
-using log4net;
+using NLog;
 using ServiceStack.Redis;
 using ServiceStack.Redis.Generic;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Dist.Dme.DisCache.Redis
@@ -14,10 +13,7 @@ namespace Dist.Dme.DisCache.Redis
     /// </summary>
     public class RedisRWCacheService : RedisBase, ICacheService
     {
-        /// <summary>  
-        /// 针对Log4net的实例  
-        /// </summary>  
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(RedisRWCacheService));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>  
         /// The seconds time out.  
         /// 默认缓存过期时间单位秒  
@@ -43,7 +39,7 @@ namespace Dist.Dme.DisCache.Redis
             catch (Exception ex)
             {
                 var message = string.Format("设置过期时间出错");
-                Logger.Error(message, ex);
+                LOG.Error(ex, message);
             }
         }
         /// <summary>  
@@ -73,7 +69,7 @@ namespace Dist.Dme.DisCache.Redis
             catch (Exception ex)
             {
                 string message = string.Format("设置Redis缓存出错");
-                Logger.Error(message, ex);
+                LOG.Error(ex, message);
                 return false;
             }
         }
@@ -92,7 +88,7 @@ namespace Dist.Dme.DisCache.Redis
             catch (Exception ex)
             {
                 string message = string.Format("获取Redis缓存出错");
-                Logger.Error(message, ex);
+                LOG.Error(ex, message);
                 return default(T);
             }
         }
@@ -110,7 +106,7 @@ namespace Dist.Dme.DisCache.Redis
             catch (Exception ex)
             {
                 string message = string.Format("删除Redis缓存出错");
-                Logger.Error(message, ex);
+                LOG.Error(ex, message);
                 return false;
             }
         }
@@ -158,7 +154,7 @@ namespace Dist.Dme.DisCache.Redis
             catch (Exception ex)
             {
                 string message = string.Format("添加Redis缓存出错");
-                Logger.Error(message, ex);
+                LOG.Error(ex, message);
                 return false;
             }
         }
@@ -192,7 +188,7 @@ namespace Dist.Dme.DisCache.Redis
             catch (Exception ex)
             {
                 string message = string.Format("添加链表出错");
-                Logger.Error(message, ex);
+                LOG.Error(ex, message);
             }
         }
 
@@ -224,7 +220,7 @@ namespace Dist.Dme.DisCache.Redis
             catch (Exception ex)
             {
                 string message = string.Format("添加单个的实体到链表中出错");
-                Logger.Error(message, ex);
+                LOG.Error(ex, message);
             }
         }
 
@@ -243,7 +239,7 @@ namespace Dist.Dme.DisCache.Redis
             catch (Exception ex)
             {
                 string message = string.Format("获取链表出错");
-                Logger.Error(message, ex);
+                LOG.Error(ex, message);
                 return null;
             }
         }
@@ -265,7 +261,7 @@ namespace Dist.Dme.DisCache.Redis
             catch (Exception ex)
             {
                 string message = string.Format("删除链表中的单个实体出错");
-                Logger.Error(message, ex);
+                LOG.Error(ex, message);
             }
         }
 
@@ -285,7 +281,7 @@ namespace Dist.Dme.DisCache.Redis
             catch (Exception ex)
             {
                 string message = string.Format("删除链表集合");
-                Logger.Error(message, ex);
+                LOG.Error(ex, message);
             }
         }
 
@@ -320,7 +316,7 @@ namespace Dist.Dme.DisCache.Redis
             catch (Exception ex)
             {
                 string message = string.Format("添加链表出错");
-                Logger.Error(message, ex);
+                LOG.Error(ex, message);
                 return false;
             }
         }

@@ -3,18 +3,16 @@ using Dist.Dme.Base.Framework.AlgorithmTypes;
 using Dist.Dme.Base.Framework.Exception;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
-using Dist.Dme.DAL.Context;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.RuleSteps;
 using Dist.Dme.RuleSteps.AlgorithmInput.DTO;
-using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 
 namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
 {
@@ -23,7 +21,7 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
     /// </summary>
     public class AlgorithmInputStepMeta : BaseRuleStepMeta, IRuleStepMeta
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(AlgorithmInputStepMeta));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 算法唯一编码
         /// </summary>
@@ -97,10 +95,15 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
             DmeRuleStepAttribute dmeRuleStepAttribute = db.Queryable<DmeRuleStepAttribute>().Single(rsa => rsa.RuleStepId == this.step.Id && rsa.AttributeCode == nameof(this.AlgorithmCode));
             if (null == dmeRuleStepAttribute)
             {
-                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, "没有找到步骤关联的算法");
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, "没有找到步骤关联的算法属性值");
             }
             string algorithmCode = dmeRuleStepAttribute.AttributeValue.ToString();
-            return db.Queryable<DmeAlgorithm>().Single(alg => alg.SysCode == algorithmCode);
+            DmeAlgorithm dmeAlgorithm = db.Queryable<DmeAlgorithm>().Single(alg => alg.SysCode == algorithmCode);
+            if (null == dmeAlgorithm)
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"没有找到步骤关联的算法，编码[{algorithmCode}]");
+            }
+            return dmeAlgorithm;
         }
         /// <summary>
         /// 覆写父类的方法

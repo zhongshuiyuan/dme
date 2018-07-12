@@ -15,11 +15,15 @@ namespace Dist.Dme.Model.DTO
         public double Y { get; set; }
         public string Name { get; set; }
         public string Remark { get; set; }
-        public DmeRuleStepType StepType { get; set; }
+        public RuleStepTypeDTO StepType { get; set; }
 
         /// <summary>
         /// 步骤关联的属性键值对
         /// </summary>
         public IList<AttributeReqDTO> Attributes { get; set; } = new List<AttributeReqDTO>();
+    }
+    public class RuleStepTypeDTO
+    {
+        public String Code { get; set; }
     }
 }

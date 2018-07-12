@@ -2,10 +2,9 @@
 using Dist.Dme.SRCE.Esri.Utils;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
-using log4net;
+using NLog;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Dist.Dme.SRCE.Esri.AnalysisTools.Overlay
 {
@@ -14,7 +13,7 @@ namespace Dist.Dme.SRCE.Esri.AnalysisTools.Overlay
     /// </summary>
     public class OverlayCommonTool
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(OverlayCommonTool));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 获取topo下的geometry union的数据
         /// </summary>

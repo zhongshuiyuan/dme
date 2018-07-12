@@ -1,10 +1,9 @@
 ﻿using Dist.Dme.Base.Framework;
 using Dist.Dme.DisCache.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
-using log4net;
 using Microsoft.AspNetCore.Mvc;
+using NLog;
 using System;
-using System.Collections.Generic;
 
 namespace Dist.Dme.WebApi.Controllers
 {
@@ -14,7 +13,7 @@ namespace Dist.Dme.WebApi.Controllers
     [Route("api/cache")]
     public class CacheController : BaseController
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(CacheController));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         public ICacheService CacheService { get; private set; }
         /// <summary>
         /// 自动注入（DI）

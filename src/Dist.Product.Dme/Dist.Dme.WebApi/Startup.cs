@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Dist.Dme.Base.Conf;
 using Dist.Dme.Base.Framework.Interfaces;
@@ -25,6 +26,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using MongoDB.Driver;
+using NLog.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Dist.Dme.WebApi
@@ -147,7 +149,7 @@ namespace Dist.Dme.WebApi
         }
        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -164,6 +166,10 @@ namespace Dist.Dme.WebApi
                 //c.ShowRequestHeaders();
             });
             app.UseMvc();
+
+            // log
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);//这是为了防止中文乱码
+            loggerFactory.AddNLog();//添加NLog
         }
     }
 }

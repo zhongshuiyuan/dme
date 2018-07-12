@@ -63,6 +63,14 @@ namespace Dist.Dme.Model.DTO
     /// </summary>
     public class RuleStepHopDTO
     {
+        public RuleStepHopDTO() { }
+        public RuleStepHopDTO(string stepFromName, string stepToName, int enabled, string name)
+        {
+            this.StepFromName = stepFromName;
+            this.StepToName = stepToName;
+            this.Enabled = enabled;
+            this.Name = name;
+        }
         /// <summary>
         /// 步骤的源，步骤的名称
         /// </summary>

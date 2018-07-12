@@ -4,11 +4,10 @@ using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
-using log4net;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace Dist.Dme.SRCE.Esri.Utils
 {
@@ -17,8 +16,7 @@ namespace Dist.Dme.SRCE.Esri.Utils
     /// </summary>
     public class FeatureClassUtil
     {
-        private static log4net.ILog LOG = LogManager.GetLogger(typeof(FeatureClassUtil));
-
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>  
         /// 根据传入的源要素类OldFeatureClass,新空间范围,要素存储工作空间,新要素类名  
         /// 产生具有相同字段结构和不同空间范围的要素类  

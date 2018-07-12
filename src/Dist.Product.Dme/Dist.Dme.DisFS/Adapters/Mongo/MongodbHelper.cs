@@ -1,12 +1,11 @@
-﻿using log4net;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Dist.Dme.DisFS.Adapters.Mongo
@@ -17,7 +16,7 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
     /// <typeparam name="T"></typeparam>
     public static class MongodbHelper<T> where T : class, new()
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(T));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         #region Add 添加一条数据
         /// <summary>
         /// 添加一条数据

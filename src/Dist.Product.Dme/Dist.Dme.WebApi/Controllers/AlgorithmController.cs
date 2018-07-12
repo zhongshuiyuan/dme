@@ -5,6 +5,7 @@ using Dist.Dme.Service.Impls;
 using Dist.Dme.Service.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
+using NLog;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -16,6 +17,7 @@ namespace Dist.Dme.WebApi.Controllers
     [Route("api/algorithms")]
     public class AlgorithmController : BaseController
     {
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 算法服务
         /// </summary>

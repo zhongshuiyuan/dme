@@ -36,3 +36,4 @@ D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.1\Dist.
 D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.1\Dist.Dme.WebApi.csproj.CopyComplete
 D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.1\Dist.Dme.WebApi.dll
 D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\obj\Debug\netcoreapp2.1\Dist.Dme.WebApi.pdb
+D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.1\nlog.config

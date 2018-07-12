@@ -639,6 +639,15 @@
           "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {}
         }
       },
+      "NLog/4.5.6": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NLog.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/NLog.dll": {}
+        }
+      },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
         "type": "package",
         "runtimeTargets": {
@@ -2653,8 +2662,8 @@
         "framework": ".NETCoreApp,Version=v2.1",
         "dependencies": {
           "Microsoft.AspNet.WebApi.Core": "5.2.6",
+          "NLog": "4.5.6",
           "Newtonsoft.Json": "11.0.2",
-          "log4net": "2.0.8",
           "sqlSugarCore": "4.6.4.9"
         },
         "compile": {
@@ -2698,8 +2707,7 @@
           "ESRI.ArcGIS.Geoprocessor": "10.1.0.3035",
           "ESRI.ArcGIS.Server": "10.1.0.3035",
           "ESRI.ArcGIS.System": "10.1.0.3035",
-          "ESRI.ArcGIS.Version": "10.1.0.3035",
-          "log4net": "2.0.8"
+          "ESRI.ArcGIS.Version": "10.1.0.3035"
         },
         "compile": {
           "bin/placeholder/Dist.Dme.SRCE.dll": {}
@@ -3656,6 +3664,37 @@
         "lib/netstandard1.3/Newtonsoft.Json.Bson.xml",
         "newtonsoft.json.bson.1.0.1.nupkg.sha512",
         "newtonsoft.json.bson.nuspec"
+      ]
+    },
+    "NLog/4.5.6": {
+      "sha512": "FZIdeH92NTu6ePm+QbLT9pyd5vY9B+GYX8S2bh6ZxJC+XSTZDhZ6EHWxDzyBIEjtIb+nSBJfIgdMuQNQEYMqbQ==",
+      "type": "package",
+      "path": "nlog/4.5.6",
+      "files": [
+        "lib/monoandroid44/NLog.dll",
+        "lib/monoandroid44/NLog.xml",
+        "lib/net35/NLog.dll",
+        "lib/net35/NLog.xml",
+        "lib/net40-client/NLog.dll",
+        "lib/net40-client/NLog.xml",
+        "lib/net45/NLog.dll",
+        "lib/net45/NLog.xml",
+        "lib/netstandard1.3/NLog.dll",
+        "lib/netstandard1.3/NLog.xml",
+        "lib/netstandard1.5/NLog.dll",
+        "lib/netstandard1.5/NLog.xml",
+        "lib/netstandard2.0/NLog.dll",
+        "lib/netstandard2.0/NLog.xml",
+        "lib/sl4/NLog.dll",
+        "lib/sl4/NLog.xml",
+        "lib/sl5/NLog.dll",
+        "lib/sl5/NLog.xml",
+        "lib/wp8/NLog.dll",
+        "lib/wp8/NLog.xml",
+        "lib/xamarinios10/NLog.dll",
+        "lib/xamarinios10/NLog.xml",
+        "nlog.4.5.6.nupkg.sha512",
+        "nlog.nuspec"
       ]
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
@@ -8281,12 +8320,15 @@
   },
   "project": {
     "version": "1.0.0",
+    "restoreSettings": {
+      "hideWarningsAndErrors": true
+    },
     "restore": {
-      "projectUniqueName": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj",
+      "projectUniqueName": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj",
       "projectName": "Dist.Dme.Algorithms.Overlay",
-      "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj",
+      "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\Dist.Dme.Algorithms.Overlay.csproj",
       "packagesPath": "C:\\Users\\thinkpad\\.nuget\\packages\\",
-      "outputPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\obj\\",
+      "outputPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Algorithms\\Dist.Dme.Algorithms.Overlay\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
@@ -8309,11 +8351,11 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj"
+            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.SRCE\\Dist.Dme.SRCE.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.SRCE\\Dist.Dme.SRCE.csproj"
             },
-            "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.SRCE\\Dist.Dme.SRCE.csproj": {
-              "projectPath": "D:\\gitrep\\dme\\src\\Dist.Product.Dme\\Dist.Dme.SRCE\\Dist.Dme.SRCE.csproj"
+            "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj": {
+              "projectPath": "D:\\gitrep\\dme\\src\\dist.product.dme\\Dist.Dme.Base\\Dist.Dme.Base.csproj"
             }
           }
         }

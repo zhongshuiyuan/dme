@@ -1,16 +1,15 @@
 ﻿using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Model.Entity;
-using log4net;
+using NLog;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Dist.Dme.RuleSteps.DataSourceInput
 {
     public class DataSourceInputStepData : BaseRuleStepData, IRuleStepData
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(DataSourceInputStepData));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         private DataSourceInputStepMeta ruleStepMeta;
 
         public DataSourceInputStepData(IRepository repository, int taskId, DmeRuleStep step) : 

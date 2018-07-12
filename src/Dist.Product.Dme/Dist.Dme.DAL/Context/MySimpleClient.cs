@@ -1,8 +1,7 @@
-﻿using log4net;
+﻿using NLog;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Dist.Dme.DAL.Context
 {
@@ -12,7 +11,7 @@ namespace Dist.Dme.DAL.Context
     /// <typeparam name="T"></typeparam>
     public class MySimpleClient<T> : SimpleClient<T> where T : class, new()
     {
-        protected static ILog LOG = LogManager.GetLogger(typeof(MySimpleClient<T>));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
 
         public MySimpleClient(SqlSugarClient context) : base(context)
         {

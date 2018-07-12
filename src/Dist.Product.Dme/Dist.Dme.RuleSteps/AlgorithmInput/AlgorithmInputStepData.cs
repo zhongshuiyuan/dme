@@ -6,22 +6,15 @@ using Dist.Dme.Base.Utils;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.RuleSteps.AlgorithmInput.DTO;
-using log4net;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
+using NLog;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Dist.Dme.RuleSteps.AlgorithmInput
 {
     public class AlgorithmInputStepData : BaseRuleStepData, IRuleStepData
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(AlgorithmInputStepData));
-
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         private AlgorithmInputStepMeta ruleStepMeta;
 
         public AlgorithmInputStepData(IRepository repository, int taskId, DmeRuleStep step) 

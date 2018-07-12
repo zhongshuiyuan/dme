@@ -1,9 +1,7 @@
 ﻿using ESRI.ArcGIS.AnalysisTools;
 using ESRI.ArcGIS.Geoprocessor;
-using log4net;
+using NLog;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Dist.Dme.SRCE.Esri.AnalysisTools.Overlay
 {
@@ -13,7 +11,7 @@ namespace Dist.Dme.SRCE.Esri.AnalysisTools.Overlay
     /// </summary>
     public sealed class UnionTool
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(UnionTool));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// 容差值

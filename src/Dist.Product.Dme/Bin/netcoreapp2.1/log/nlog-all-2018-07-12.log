@@ -1,0 +1,119 @@
+2018-07-12 18:37:29.1008|0|INFO|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|User profile is available. Using 'C:\Users\thinkpad\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest. 
+2018-07-12 18:37:32.7302|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/   
+2018-07-12 18:37:32.8022|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/   
+2018-07-12 18:37:33.1260|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 418.3343ms 200 text/html 
+2018-07-12 18:37:33.1260|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 418.3343ms 200 text/html 
+2018-07-12 18:37:33.9257|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/v1/swagger.json   
+2018-07-12 18:37:33.9257|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/v1/swagger.json   
+2018-07-12 18:37:34.5043|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 578.6658ms 200 application/json 
+2018-07-12 18:37:34.5043|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 578.6658ms 200 application/json 
+2018-07-12 18:37:35.7783|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-bundle.js.map   
+2018-07-12 18:37:35.7807|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-bundle.js.map   
+2018-07-12 18:37:35.8570|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 78.7252ms 404  
+2018-07-12 18:37:35.8606|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 78.7252ms 404  
+2018-07-12 18:37:35.8606|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-standalone-preset.js.map   
+2018-07-12 18:37:35.8606|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-standalone-preset.js.map   
+2018-07-12 18:37:35.8606|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 3.5566ms 404  
+2018-07-12 18:37:35.8606|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 3.5566ms 404  
+2018-07-12 18:39:13.4467|0|INFO|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|User profile is available. Using 'C:\Users\thinkpad\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest. 
+2018-07-12 18:39:16.2628|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/   
+2018-07-12 18:39:16.3154|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/   
+2018-07-12 18:39:16.4299|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 180.4766ms 200 text/html 
+2018-07-12 18:39:16.4299|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 180.4766ms 200 text/html 
+2018-07-12 18:39:16.8624|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/v1/swagger.json   
+2018-07-12 18:39:16.8624|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/v1/swagger.json   
+2018-07-12 18:39:17.2954|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 432.9482ms 200 application/json 
+2018-07-12 18:39:17.2954|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 432.9482ms 200 application/json 
+2018-07-12 18:39:17.3169|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-bundle.js.map   
+2018-07-12 18:39:17.3169|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-bundle.js.map   
+2018-07-12 18:39:17.4154|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 98.5178ms 404  
+2018-07-12 18:39:17.4154|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 98.5178ms 404  
+2018-07-12 18:39:17.4242|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-standalone-preset.js.map   
+2018-07-12 18:39:17.4242|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-standalone-preset.js.map   
+2018-07-12 18:39:17.4242|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 4.4953ms 404  
+2018-07-12 18:39:17.4242|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 4.4953ms 404  
+2018-07-12 21:34:09.0634|0|INFO|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|User profile is available. Using 'C:\Users\thinkpad\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest. 
+2018-07-12 21:35:00.1086|0|INFO|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|User profile is available. Using 'C:\Users\thinkpad\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest. 
+2018-07-12 21:35:03.5487|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/   
+2018-07-12 21:35:03.5984|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/   
+2018-07-12 21:35:03.7169|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 183.0413ms 200 text/html 
+2018-07-12 21:35:03.7169|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 183.0413ms 200 text/html 
+2018-07-12 21:35:04.0304|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-bundle.js.map   
+2018-07-12 21:35:04.0304|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-bundle.js.map   
+2018-07-12 21:35:04.2393|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/v1/swagger.json   
+2018-07-12 21:35:04.2393|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/v1/swagger.json   
+2018-07-12 21:35:04.3252|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 294.7836ms 404  
+2018-07-12 21:35:04.3252|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 294.7836ms 404  
+2018-07-12 21:35:04.3479|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-standalone-preset.js.map   
+2018-07-12 21:35:04.3479|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-standalone-preset.js.map   
+2018-07-12 21:35:04.3479|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 3.8316ms 404  
+2018-07-12 21:35:04.3544|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 3.8316ms 404  
+2018-07-12 21:35:04.5051|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 265.7638ms 200 application/json 
+2018-07-12 21:35:04.5051|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 265.7638ms 200 application/json 
+2018-07-12 21:35:09.6848|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/api/datasources/v1/types   
+2018-07-12 21:35:09.6848|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/api/datasources/v1/types   
+2018-07-12 21:35:09.9025|1|INFO|Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker|Executing action method Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes (Dist.Dme.WebApi) with arguments ((null)) - ModelState is Valid 
+2018-07-12 21:35:09.9025|1|INFO|Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker|Executing action method Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes (Dist.Dme.WebApi) with arguments ((null)) - ModelState is Valid 
+2018-07-12 21:35:09.9174|0|INFO|Dist.Dme.WebApi.Controllers.DataSourcesController|>>>test info 
+2018-07-12 21:35:12.3828|1|INFO|Microsoft.AspNetCore.Mvc.Internal.ObjectResultExecutor|Executing ObjectResult, writing value Microsoft.AspNetCore.Mvc.ControllerContext. 
+2018-07-12 21:35:12.3889|1|INFO|Microsoft.AspNetCore.Mvc.Internal.ObjectResultExecutor|Executing ObjectResult, writing value Microsoft.AspNetCore.Mvc.ControllerContext. 
+2018-07-12 21:35:12.4233|2|INFO|Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker|Executed action Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes (Dist.Dme.WebApi) in 2593.3836ms 
+2018-07-12 21:35:12.4233|2|INFO|Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker|Executed action Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes (Dist.Dme.WebApi) in 2593.3836ms 
+2018-07-12 21:35:12.4233|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 2745.1631ms 200 application/json; charset=utf-8 
+2018-07-12 21:35:12.4343|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 2745.1631ms 200 application/json; charset=utf-8 
+2018-07-12 21:38:01.7247|0|INFO|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|User profile is available. Using 'C:\Users\thinkpad\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest. 
+2018-07-12 21:38:04.8218|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/   
+2018-07-12 21:38:04.8660|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/   
+2018-07-12 21:38:04.9863|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 178.6576ms 200 text/html 
+2018-07-12 21:38:04.9863|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 178.6576ms 200 text/html 
+2018-07-12 21:38:05.4705|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/v1/swagger.json   
+2018-07-12 21:38:05.4705|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/v1/swagger.json   
+2018-07-12 21:38:05.9108|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-bundle.js.map   
+2018-07-12 21:38:05.9108|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-bundle.js.map   
+2018-07-12 21:38:05.9987|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 528.3426ms 200 application/json 
+2018-07-12 21:38:05.9987|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 528.3426ms 200 application/json 
+2018-07-12 21:38:06.0183|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 107.5186ms 404  
+2018-07-12 21:38:06.0183|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 107.5186ms 404  
+2018-07-12 21:38:06.0257|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-standalone-preset.js.map   
+2018-07-12 21:38:06.0257|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-standalone-preset.js.map   
+2018-07-12 21:38:06.0257|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 3.9235ms 404  
+2018-07-12 21:38:06.0257|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 3.9235ms 404  
+2018-07-12 21:38:10.2046|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/api/datasources/v1/types   
+2018-07-12 21:38:10.2046|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/api/datasources/v1/types   
+2018-07-12 21:38:10.3990|1|INFO|Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker|Executing action method Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes (Dist.Dme.WebApi) with arguments ((null)) - ModelState is Valid 
+2018-07-12 21:38:10.4023|1|INFO|Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker|Executing action method Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes (Dist.Dme.WebApi) with arguments ((null)) - ModelState is Valid 
+2018-07-12 21:38:10.4023|0|INFO|Dist.Dme.WebApi.Controllers.Base.BaseController|>>>test info 
+2018-07-12 21:38:12.1643|1|INFO|Microsoft.AspNetCore.Mvc.Internal.ObjectResultExecutor|Executing ObjectResult, writing value Microsoft.AspNetCore.Mvc.ControllerContext. 
+2018-07-12 21:38:12.1688|1|INFO|Microsoft.AspNetCore.Mvc.Internal.ObjectResultExecutor|Executing ObjectResult, writing value Microsoft.AspNetCore.Mvc.ControllerContext. 
+2018-07-12 21:38:12.1968|2|INFO|Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker|Executed action Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes (Dist.Dme.WebApi) in 1846.42ms 
+2018-07-12 21:38:12.2010|2|INFO|Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker|Executed action Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes (Dist.Dme.WebApi) in 1846.42ms 
+2018-07-12 21:38:12.2010|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 1997.4079ms 200 application/json; charset=utf-8 
+2018-07-12 21:38:12.2010|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 1997.4079ms 200 application/json; charset=utf-8 
+2018-07-12 21:54:07.9470|0|INFO|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|User profile is available. Using 'C:\Users\thinkpad\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest. 
+2018-07-12 21:54:11.1742|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/   
+2018-07-12 21:54:11.2312|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/   
+2018-07-12 21:54:11.3629|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 201.5265ms 200 text/html 
+2018-07-12 21:54:11.3629|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 201.5265ms 200 text/html 
+2018-07-12 21:54:11.8435|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/v1/swagger.json   
+2018-07-12 21:54:11.8435|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/v1/swagger.json   
+2018-07-12 21:54:12.2713|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 427.8818ms 200 application/json 
+2018-07-12 21:54:12.2757|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 427.8818ms 200 application/json 
+2018-07-12 21:54:13.8371|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-bundle.js.map   
+2018-07-12 21:54:13.8400|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-bundle.js.map   
+2018-07-12 21:54:13.9102|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 73.1531ms 404  
+2018-07-12 21:54:13.9102|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 73.1531ms 404  
+2018-07-12 21:54:13.9102|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-standalone-preset.js.map   
+2018-07-12 21:54:13.9191|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/swagger/swagger-ui-standalone-preset.js.map   
+2018-07-12 21:54:13.9191|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 3.5628ms 404  
+2018-07-12 21:54:13.9191|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 3.5628ms 404  
+2018-07-12 21:54:20.3898|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/api/datasources/v1/types   
+2018-07-12 21:54:20.3898|1|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request starting HTTP/1.1 GET http://localhost:13880/api/datasources/v1/types   
+2018-07-12 21:54:20.5723|1|INFO|Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker|Executing action method Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes (Dist.Dme.WebApi) with arguments ((null)) - ModelState is Valid 
+2018-07-12 21:54:20.5765|1|INFO|Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker|Executing action method Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes (Dist.Dme.WebApi) with arguments ((null)) - ModelState is Valid 
+2018-07-12 21:54:20.5765|0|INFO|Dist.Dme.WebApi.Controllers.DataSourcesController|>>>test info 
+2018-07-12 21:54:22.2582|1|INFO|Microsoft.AspNetCore.Mvc.Internal.ObjectResultExecutor|Executing ObjectResult, writing value Microsoft.AspNetCore.Mvc.ControllerContext. 
+2018-07-12 21:54:22.2621|1|INFO|Microsoft.AspNetCore.Mvc.Internal.ObjectResultExecutor|Executing ObjectResult, writing value Microsoft.AspNetCore.Mvc.ControllerContext. 
+2018-07-12 21:54:22.2895|2|INFO|Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker|Executed action Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes (Dist.Dme.WebApi) in 1768.0893ms 
+2018-07-12 21:54:22.2946|2|INFO|Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker|Executed action Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes (Dist.Dme.WebApi) in 1768.0893ms 
+2018-07-12 21:54:22.2946|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 1907.8165ms 200 application/json; charset=utf-8 
+2018-07-12 21:54:22.2946|2|INFO|Microsoft.AspNetCore.Hosting.Internal.WebHost|Request finished in 1907.8165ms 200 application/json; charset=utf-8 

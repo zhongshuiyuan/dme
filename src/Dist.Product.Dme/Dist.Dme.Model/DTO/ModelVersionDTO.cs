@@ -24,6 +24,6 @@ namespace Dist.Dme.Model.DTO
         /// <summary>
         /// 节点与节点连接信息
         /// </summary>
-        public IList<DmeRuleStepHop> Hops { get; set; } = new List<DmeRuleStepHop>();
+        public IList<RuleStepHopDTO> Hops { get; set; } = new List<RuleStepHopDTO>();
     }
 }

@@ -1,8 +1,6 @@
 ﻿using ESRI.ArcGIS.esriSystem;
-using log4net;
+using NLog;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Dist.Dme.SRCE.Esri.Utils
 {
@@ -11,8 +9,7 @@ namespace Dist.Dme.SRCE.Esri.Utils
     /// </summary>
     public class LicenseUtil
     {
-        private static log4net.ILog LOG = LogManager.GetLogger(typeof(LicenseUtil));
-
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         private static ESRI.ArcGIS.esriSystem.IAoInitialize m_AoInitializeClass;
 
         static LicenseUtil()

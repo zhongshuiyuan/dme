@@ -1,0 +1,3 @@
+2018-07-12 21:35:09.9174|0|INFO|Dist.Dme.WebApi.Controllers.DataSourcesController|>>>test info |url: http://localhost/api/datasources/v1/types|action: ListDatabaseTypes|Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes
+2018-07-12 21:38:10.4023|0|INFO|Dist.Dme.WebApi.Controllers.Base.BaseController|>>>test info |url: http://localhost/api/datasources/v1/types|action: ListDatabaseTypes|Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes
+2018-07-12 21:54:20.5765|0|INFO|Dist.Dme.WebApi.Controllers.DataSourcesController|>>>test info |url: http://localhost/api/datasources/v1/types|action: ListDatabaseTypes|Dist.Dme.WebApi.Controllers.DataSourcesController.ListDatabaseTypes

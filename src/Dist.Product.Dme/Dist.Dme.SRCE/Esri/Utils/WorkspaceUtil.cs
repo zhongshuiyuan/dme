@@ -1,23 +1,20 @@
-﻿using ESRI.ArcGIS.DataSourcesGDB;
-using ESRI.ArcGIS.esriSystem;
-using ESRI.ArcGIS.Geodatabase;
+﻿using Dist.Dme.Base.Utils;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.DataSourcesFile;
-using ESRI.ArcGIS.DataSourcesRaster;
+using ESRI.ArcGIS.DataSourcesGDB;
 using ESRI.ArcGIS.DataSourcesOleDB;
+using ESRI.ArcGIS.DataSourcesRaster;
+using ESRI.ArcGIS.esriSystem;
+using ESRI.ArcGIS.Geodatabase;
+using NLog;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using log4net;
-using Dist.Dme.SRCE.Esri.Utils;
-using Dist.Dme.Base.Utils;
 
 namespace Dist.Dme.SRCE.Esri.Utils
 {
     public sealed class WorkspaceUtil
     {
-        private static log4net.ILog LOG = LogManager.GetLogger(typeof(WorkspaceUtil));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// 通过sde连接信息打开工作空间

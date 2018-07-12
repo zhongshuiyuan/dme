@@ -1,4 +1,4 @@
-﻿using log4net;
+﻿using NLog;
 using System;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -12,7 +12,7 @@ namespace Dist.Dme.Base.Utils
     /// </summary>
     public sealed class NetAssist
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(NetAssist));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 对ip进行ping操作
         /// </summary>

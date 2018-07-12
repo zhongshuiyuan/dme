@@ -127,10 +127,26 @@ namespace Dist.Dme.Service.Impls
                     }
                 }
                 // 每个模型版本下的节点向量信息
-                versionDTO.Hops = db.Queryable<DmeRuleStepHop>()
+                IList<DmeRuleStepHop> hops = db.Queryable<DmeRuleStepHop>()
                      .Where(rsh => rsh.ModelId == model.Id && rsh.VersionId == v.Id)
                      .OrderBy(rsh => rsh.StepFromId)
                      .ToList();
+                if (hops?.Count > 0)
+                {
+                    DmeRuleStep stepFromTemp = null;
+                    DmeRuleStep stepToTemp = null;
+                    foreach (var item in hops)
+                    {
+                        stepFromTemp = db.Queryable<DmeRuleStep>().InSingle(item.StepFromId);
+                        stepToTemp = db.Queryable<DmeRuleStep>().InSingle(item.StepToId);
+                        if (null == stepFromTemp || null == stepToTemp)
+                        {
+                            LOG.Warn($"开始步骤[{item.StepFromId}]，或者结束步骤[{item.StepToId}]找不到对应实体信息");
+                            continue;
+                        }
+                        versionDTO.Hops.Add(new RuleStepHopDTO(stepFromTemp.Name, stepToTemp.Name, item.Enabled, item.Name));
+                    }
+                }
             }
            
             return modelDTO;
@@ -165,7 +181,14 @@ namespace Dist.Dme.Service.Impls
                 IList<ModelDTO> modelDTOs = new List<ModelDTO>();
                 foreach (DmeModel m in models)
                 {
-                    modelDTOs.Add(this.GetModelMetadata(m, detail));
+                    try
+                    {
+                        modelDTOs.Add(this.GetModelMetadata(m, detail));
+                    }
+                    catch(Exception ex)
+                    {
+                        LOG.Error(ex.Message, ex);
+                    }
                 }
                 return modelDTOs;
             }
@@ -203,6 +226,7 @@ namespace Dist.Dme.Service.Impls
                 {
                     model = new DmeModel
                     {
+                        SysCode = dto.SysCode,
                         Name = dto.Name,
                         Remark = dto.Remark,
                         CreateTime = DateUtil.CurrentTimeMillis,
@@ -258,11 +282,12 @@ namespace Dist.Dme.Service.Impls
                 IDictionary<string, DmeRuleStep> ruleStepMap = new Dictionary<string, DmeRuleStep>();
                 foreach (var subStepAdd in stepsAdd)
                 {
-                    DmeRuleStepType dmeRuleStepType = subStepAdd.StepType;
-                    if (null == dmeRuleStepType)
+                    RuleStepTypeDTO ruleStepTypeDTO = subStepAdd.StepType;
+                    if (null == ruleStepTypeDTO)
                     {
                         throw new BusinessException("注册模型，缺失步骤类型元数据。");
                     }
+                    DmeRuleStepType dmeRuleStepType = db.Queryable<DmeRuleStepType>().Single(rst => rst.Code == ruleStepTypeDTO.Code);
                     DmeRuleStep step = new DmeRuleStep
                     {
                         SysCode = GuidUtil.NewGuid(),

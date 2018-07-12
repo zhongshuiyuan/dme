@@ -31,7 +31,6 @@
     <PackageReference Include="ESRI.ArcGIS.Server" Version="10.1.0.3035" />
     <PackageReference Include="ESRI.ArcGIS.System" Version="10.1.0.3035" />
     <PackageReference Include="ESRI.ArcGIS.Version" Version="10.1.0.3035" />
-    <PackageReference Include="log4net" Version="2.0.8" />
   </ItemGroup>
 
   <ItemGroup>

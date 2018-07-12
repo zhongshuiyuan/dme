@@ -3,12 +3,11 @@ using Dist.Dme.Base.Framework.Exception;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.Model.Entity;
-using log4net;
 using Newtonsoft.Json.Linq;
+using NLog;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Dist.Dme.RuleSteps
 {
@@ -17,8 +16,7 @@ namespace Dist.Dme.RuleSteps
     /// </summary>
     public abstract class BaseRuleStepMeta
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(BaseRuleStepMeta));
-
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         // public abstract IRuleStepType RuleStepType { get; }
         protected abstract EnumRuleStepTypes MyRuleStepType { get; }
         public abstract object InParams { get; }

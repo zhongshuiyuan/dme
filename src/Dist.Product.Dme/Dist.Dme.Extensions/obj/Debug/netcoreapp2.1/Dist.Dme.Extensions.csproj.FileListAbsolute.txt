@@ -10,5 +10,4 @@ D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Extensions\obj\Debug\netcoreapp2.1\D
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Extensions\obj\Debug\netcoreapp2.1\Dist.Dme.Extensions.AssemblyInfo.cs
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Extensions\obj\Debug\netcoreapp2.1\Dist.Dme.Extensions.dll
 D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Extensions\obj\Debug\netcoreapp2.1\Dist.Dme.Extensions.pdb
-D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.Extensions\obj\Debug\netcoreapp2.1\Dist.Dme.Extensions.csprojAssemblyReference.cache
-D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.Extensions\obj\Debug\netcoreapp2.1\Dist.Dme.Extensions.csproj.CopyComplete
+D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Extensions\obj\Debug\netcoreapp2.1\Dist.Dme.Extensions.csprojResolveAssemblyReference.cache

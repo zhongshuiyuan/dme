@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "cd301b716a59f7f1cffadcb25c81d538d064c411"
+    "signature": "8d3b4f784f901d1ae1dbf8656e5e4fb9e50e77f6"
   },
   "compilationOptions": {},
   "targets": {
@@ -383,6 +383,14 @@
           "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.1.20722"
+          }
+        }
+      },
+      "NLog/4.5.6": {
+        "runtime": {
+          "lib/netstandard2.0/NLog.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.5.6.7874"
           }
         }
       },
@@ -1765,8 +1773,8 @@
       "Dist.Dme.Base/1.0.0": {
         "dependencies": {
           "Microsoft.AspNet.WebApi.Core": "5.2.6",
+          "NLog": "4.5.6",
           "Newtonsoft.Json": "11.0.2",
-          "log4net": "2.0.8",
           "sqlSugarCore": "4.6.4.9"
         },
         "runtime": {
@@ -1800,8 +1808,7 @@
           "ESRI.ArcGIS.Geoprocessor": "10.1.0.3035",
           "ESRI.ArcGIS.Server": "10.1.0.3035",
           "ESRI.ArcGIS.System": "10.1.0.3035",
-          "ESRI.ArcGIS.Version": "10.1.0.3035",
-          "log4net": "2.0.8"
+          "ESRI.ArcGIS.Version": "10.1.0.3035"
         },
         "runtime": {
           "Dist.Dme.SRCE.dll": {}
@@ -2045,6 +2052,13 @@
       "sha512": "sha512-5PYT/IqQ+UK31AmZiSS102R6EsTo+LGTSI8bp7WAUqDKaF4wHXD8U9u4WxTI1vc64tYi++8p3dk3WWNqPFgldw==",
       "path": "newtonsoft.json.bson/1.0.1",
       "hashPath": "newtonsoft.json.bson.1.0.1.nupkg.sha512"
+    },
+    "NLog/4.5.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FZIdeH92NTu6ePm+QbLT9pyd5vY9B+GYX8S2bh6ZxJC+XSTZDhZ6EHWxDzyBIEjtIb+nSBJfIgdMuQNQEYMqbQ==",
+      "path": "nlog/4.5.6",
+      "hashPath": "nlog.4.5.6.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
       "type": "package",

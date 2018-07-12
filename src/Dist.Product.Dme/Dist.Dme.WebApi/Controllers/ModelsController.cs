@@ -8,6 +8,7 @@ using Dist.Dme.Service.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace Dist.Dme.WebApi.Controllers
     [Route("api/models")]
     public class ModelsController : BaseController
     {
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 模型服务
         /// </summary>

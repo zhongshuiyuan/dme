@@ -4,6 +4,7 @@ using Dist.Dme.Base.Framework.Exception;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using NLog;
 using System;
 using System.Net;
 
@@ -15,6 +16,7 @@ namespace Dist.Dme.WebApi.Controllers.Base
     [WebApiExceptionFilterAttribute]
     public class BaseController : Controller
     {
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 获得Header
         /// </summary>

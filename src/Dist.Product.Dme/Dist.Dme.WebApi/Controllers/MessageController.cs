@@ -6,17 +6,19 @@ using Dist.Dme.Base.Framework;
 using Dist.Dme.HSMessage.Kafka;
 using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
+using NLog;
 
 namespace Dist.Dme.WebApi.Controllers
 {
     [Route("api/messages")]
     public class MessageController : BaseController
     {
-       /// <summary>
-       /// 开启监听
-       /// </summary>
-       /// <param name="topic"></param>
-       /// <returns></returns>
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
+        /// <summary>
+        /// 开启监听
+        /// </summary>
+        /// <param name="topic"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("listen/v1/start/{topic}")]
         public Result StartListen(string topic)

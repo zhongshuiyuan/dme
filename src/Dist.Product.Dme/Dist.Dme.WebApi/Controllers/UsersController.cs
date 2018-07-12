@@ -2,6 +2,7 @@
 using Dist.Dme.Service.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
+using NLog;
 
 namespace Dist.Dme.WebApi.Controllers
 {
@@ -11,6 +12,7 @@ namespace Dist.Dme.WebApi.Controllers
     [Route("api/users")]
     public class UsersController : BaseController
     {
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         public IUserService UserService { get; private set; }
         /// <summary>
         /// 自动注入（DI）

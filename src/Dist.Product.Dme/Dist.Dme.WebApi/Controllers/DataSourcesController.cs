@@ -8,6 +8,7 @@ using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using NLog;
 
 namespace Dist.Dme.WebApi.Controllers
 {
@@ -17,6 +18,8 @@ namespace Dist.Dme.WebApi.Controllers
     [Route("api/datasources")]
     public class DataSourcesController : BaseController
     {
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
+
         public IDataSourceService DataSourceService { get; private set; }
         public IMongoDatabase MongoDatabase { get; private set; }
         public MongodbHost MongodbHost { get; private set; }
@@ -34,6 +37,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/types")]
         public Result ListDatabaseTypes()
         {
+            LOG.Info(">>>test info");
             return base.Success(DataSourceService.ListDataSourceTypes());
         }
         /// <summary>

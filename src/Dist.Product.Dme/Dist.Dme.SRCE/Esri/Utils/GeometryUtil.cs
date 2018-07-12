@@ -1,8 +1,7 @@
 ﻿using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geometry;
-using log4net;
+using NLog;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Dist.Dme.SRCE.Esri.Utils
@@ -12,7 +11,7 @@ namespace Dist.Dme.SRCE.Esri.Utils
     /// </summary>
     public class GeometryUtil
     {
-        private static log4net.ILog LOG = LogManager.GetLogger(typeof(GeometryUtil));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 转换点空间参考
         /// </summary>

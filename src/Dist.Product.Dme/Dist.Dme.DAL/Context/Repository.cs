@@ -1,10 +1,7 @@
 ﻿using Dist.Dme.Base.Conf;
 using Dist.Dme.Model.Entity;
-using log4net;
+using NLog;
 using SqlSugar;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Dist.Dme.DAL.Context
 {
@@ -13,7 +10,7 @@ namespace Dist.Dme.DAL.Context
     /// </summary>
     public class Repository : RepositoryBase
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(Repository));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// oracle 类型
         /// </summary>

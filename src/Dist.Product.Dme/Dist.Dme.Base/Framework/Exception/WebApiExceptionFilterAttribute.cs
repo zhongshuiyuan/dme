@@ -1,9 +1,7 @@
-﻿using log4net;
+﻿using NLog;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 // 需要依赖：Microsoft.AspNet.WebApi.Core.dll，其它的可能会缺失dll
 using System.Web.Http.Filters;
 
@@ -15,7 +13,7 @@ namespace Dist.Dme.Base.Framework.Exception
     /// </summary>
     public class WebApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(WebApiExceptionFilterAttribute));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         //重写基类的异常处理方法
         public override void OnException(HttpActionExecutedContext actionExecutedContext)
         {

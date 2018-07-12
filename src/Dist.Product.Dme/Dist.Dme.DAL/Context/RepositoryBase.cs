@@ -1,20 +1,18 @@
 ﻿using Dist.Dme.Base.Conf;
-using Dist.Dme.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 
 namespace Dist.Dme.DAL.Context
 {
     using Dist.Dme.Base.Framework.Interfaces;
-    using log4net;
+    using NLog;
     using SqlSugar;
 
     public class RepositoryBase : IRepository
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(RepositoryBase));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         protected SqlSugarClient Db;
 
         public RepositoryBase(DbType dbType, String connectionConfig, bool IsAutoCloseConnection)
