@@ -8,5 +8,19 @@
       "Assembly": "Dist.Dme.Algorithms.Overlay.dll",
       "MainClass": "Dist.Dme.Algorithms.Overlay.OverlayMain"
     }
-  ]
+  ],
+  "RuleStepPlugins": {
+    "AlgorithmInput": {
+      "assembly": "Dist.Dme.RuleSteps.dll",
+      "classId": "Dist.Dme.RuleSteps.AlgorithmInput.AlgorithmInputStepData",
+      "displayName": "算法输入",
+      "description": "算法输入"
+    },
+    "DataSourceInput": {
+      "assembly": "Dist.Dme.RuleSteps.dll",
+      "classId": "Dist.Dme.RuleSteps.DataSourceInput.DataSourceInputStepData",
+      "displayName": "数据源输入",
+      "description": "数据源输入，选择数据源"
+    }
+  }
 }

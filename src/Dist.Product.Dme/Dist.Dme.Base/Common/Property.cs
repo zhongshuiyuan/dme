@@ -98,5 +98,13 @@ namespace Dist.Dme.Base.Common
             this.DataSourceCode = dataSourceCode;
             this.IsNeedPrecursor = isNeedPrecursor;
         }
+        /// <summary>
+        /// 覆写ToString方法
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Convert.ToString(this.Value);
+        }
     }
 }

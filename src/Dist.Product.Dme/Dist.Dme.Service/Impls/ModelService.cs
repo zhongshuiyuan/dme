@@ -10,6 +10,7 @@ using Dist.Dme.DAL.Context;
 using Dist.Dme.DisFS.Adapters.Mongo;
 using Dist.Dme.DisFS.Collection;
 using Dist.Dme.Extensions;
+using Dist.Dme.Extensions.DTO;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.RuleSteps;
@@ -21,6 +22,8 @@ using SqlSugar;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Dist.Dme.Service.Impls
@@ -324,63 +327,132 @@ namespace Dist.Dme.Service.Impls
             IList<AttributeReqDTO> properties = subStepAdd.Attributes;
             if (properties?.Count == 0)
             {
+                LOG.Warn("没有可处理的步骤属性信息");
                 return;
             }
-            // 属性
-            if (nameof(EnumRuleStepTypes.DataSourceInput).Equals(subStepAdd.StepType.Code))
+            if (Register.RuleStepPluginsMap.ContainsKey(subStepAdd.StepType.Code))
             {
-                // 数据源类型的步骤，下面有且仅有一个属性
-                DmeRuleStepDataSource dmeRuleStepDataSource = new DmeRuleStepDataSource
+                RuleStepPluginRegisterDTO ruleStepPluginRegisterDTO = Register.RuleStepPluginsMap[subStepAdd.StepType.Code];
+                String baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string assemblyPath = Path.Combine(baseDir, ruleStepPluginRegisterDTO.Assembly);
+                Assembly assembly = Assembly.LoadFile(assemblyPath);
+                IRuleStepData ruleStepData = (IRuleStepData)assembly.CreateInstance(ruleStepPluginRegisterDTO.ClassId, true, BindingFlags.CreateInstance,null
+                    ,new object[] { Repository, -1, step}, null, null);
+                if (null == ruleStepData)
                 {
-                    ModelId = model.Id,
-                    VersionId = version.Id,
-                    RuleStepId = step.Id
-                };
-                DmeDataSource dmeDataSource = db.Queryable<DmeDataSource>().Single(ds => ds.SysCode == properties[0].DataSourceCode);
-                dmeRuleStepDataSource.DataSourceId = dmeDataSource.Id;
-                db.Insertable<DmeRuleStepDataSource>(dmeRuleStepDataSource).ExecuteCommand();
-            }
-            else
-            {
-                List<DmeRuleStepAttribute> attributes = new List<DmeRuleStepAttribute>();
-                DmeRuleStepAttribute dmeRuleStepAttribute = null;
+                    LOG.Warn($"无法创建步骤实体[{ruleStepPluginRegisterDTO.ClassId}]");
+                    return;
+                }
+                IDictionary<string, Property> attributes = new Dictionary<string, Property>();
+                // DmeRuleStepAttribute dmeRuleStepAttribute = null;
                 foreach (var p in properties)
                 {
-                    if (nameof(EnumValueMetaType.TYPE_FEATURECLASS).Equals(p.DataTypeCode)
-                        || nameof(EnumValueMetaType.TYPE_MDB_FEATURECLASS).Equals(p.DataTypeCode)
-                        || nameof(EnumValueMetaType.TYPE_SDE_FEATURECLASS).Equals(p.DataTypeCode))
+                    //if (nameof(EnumValueMetaType.TYPE_FEATURECLASS).Equals(p.DataTypeCode)
+                    //    || nameof(EnumValueMetaType.TYPE_MDB_FEATURECLASS).Equals(p.DataTypeCode)
+                    //    || nameof(EnumValueMetaType.TYPE_SDE_FEATURECLASS).Equals(p.DataTypeCode))
+                    //{
+                    //    attributes[p.Name] = new Property(p.Name, p.Name, EnumValueMetaType.TYPE_UNKNOWN, "{\"name\":\"" + p.Value + "\",\"source\":\"" + p.DataSourceCode + "\"}",
+                    //        null, null, null, 1, 0, 1, p.DataSourceCode, p.IsNeedPrecursor);
+                    //    // 要素类的属性，注意值的存储格式
+                    //    //dmeRuleStepAttribute = new DmeRuleStepAttribute
+                    //    //{
+                    //    //    RuleStepId = step.Id,
+                    //    //    ModelId = model.Id,
+                    //    //    VersionId = version.Id,
+                    //    //    IsNeedPrecursor = p.IsNeedPrecursor,
+                    //    //    AttributeCode = p.Name,
+                    //    //    AttributeValue = "{\"name\":\"" + p.Value + "\",\"source\":\"" + p.DataSourceCode + "\"}"
+                    //    //};
+                    //}
+                    //else
+                    //{
+                    //    //dmeRuleStepAttribute = new DmeRuleStepAttribute
+                    //    //{
+                    //    //    RuleStepId = step.Id,
+                    //    //    ModelId = model.Id,
+                    //    //    VersionId = version.Id,
+                    //    //    IsNeedPrecursor = p.IsNeedPrecursor,
+                    //    //    AttributeCode = p.Name,
+                    //    //    AttributeValue = p.Value
+                    //    //};
+                    //    attributes[p.Name] = new Property(p.Name, p.Name, EnumValueMetaType.TYPE_UNKNOWN, p.Value,
+                    //       null, null, null, 1, 0, 1, p.DataSourceCode, p.IsNeedPrecursor);
+                    //}
+                    EnumValueMetaType enumValueMetaType;
+                    if (string.IsNullOrEmpty(p.DataTypeCode))
                     {
-                        // 要素类的属性，注意值的存储格式
-                        dmeRuleStepAttribute = new DmeRuleStepAttribute
-                        {
-                            RuleStepId = step.Id,
-                            ModelId = model.Id,
-                            VersionId = version.Id,
-                            IsNeedPrecursor = p.IsNeedPrecursor,
-                            AttributeCode = p.Name,
-                            AttributeValue = "{\"name\":\"" + p.Value + "\",\"source\":\"" + p.DataSourceCode + "\"}"
-                        };
+                        enumValueMetaType = EnumValueMetaType.TYPE_UNKNOWN;
                     }
                     else
                     {
-                        dmeRuleStepAttribute = new DmeRuleStepAttribute
-                        {
-                            RuleStepId = step.Id,
-                            ModelId = model.Id,
-                            VersionId = version.Id,
-                            IsNeedPrecursor = p.IsNeedPrecursor,
-                            AttributeCode = p.Name,
-                            AttributeValue = p.Value
-                        };
+                        enumValueMetaType = EnumUtil.GetEnumObjByName<EnumValueMetaType>(p.DataTypeCode);
                     }
+                    attributes[p.Name] = new Property(p.Name, p.Name, enumValueMetaType, p.Value,
+                          null, null, null, 1, 0, 1, p.DataSourceCode, p.IsNeedPrecursor);
                     //if (1 == p.IsNeedPrecursor)
                     //{
                     //    dmeRuleStepAttribute.AttributeValue = "${" + p.Value + "}";
                     //}
-                    attributes.Add(dmeRuleStepAttribute);
+                    // attributes.Add(dmeRuleStepAttribute);
                 }
-                db.Insertable<DmeRuleStepAttribute>(attributes).ExecuteCommand();
+                ruleStepData.SaveAttributes(attributes);
             }
+            
+            // 属性
+            //if (nameof(EnumRuleStepTypes.DataSourceInput).Equals(subStepAdd.StepType.Code))
+            //{
+            //    // 数据源类型的步骤，下面有且仅有一个属性
+            //    DmeRuleStepDataSource dmeRuleStepDataSource = new DmeRuleStepDataSource
+            //    {
+            //        ModelId = model.Id,
+            //        VersionId = version.Id,
+            //        RuleStepId = step.Id
+            //    };
+            //    DmeDataSource dmeDataSource = db.Queryable<DmeDataSource>().Single(ds => ds.SysCode == properties[0].DataSourceCode);
+            //    dmeRuleStepDataSource.DataSourceId = dmeDataSource.Id;
+            //    db.Insertable<DmeRuleStepDataSource>(dmeRuleStepDataSource).ExecuteCommand();
+            //}
+            //else
+            //{
+            //    List<DmeRuleStepAttribute> attributes = new List<DmeRuleStepAttribute>();
+            //    DmeRuleStepAttribute dmeRuleStepAttribute = null;
+            //    foreach (var p in properties)
+            //    {
+            //        if (nameof(EnumValueMetaType.TYPE_FEATURECLASS).Equals(p.DataTypeCode)
+            //            || nameof(EnumValueMetaType.TYPE_MDB_FEATURECLASS).Equals(p.DataTypeCode)
+            //            || nameof(EnumValueMetaType.TYPE_SDE_FEATURECLASS).Equals(p.DataTypeCode))
+            //        {
+            //            // 要素类的属性，注意值的存储格式
+            //            dmeRuleStepAttribute = new DmeRuleStepAttribute
+            //            {
+            //                RuleStepId = step.Id,
+            //                ModelId = model.Id,
+            //                VersionId = version.Id,
+            //                IsNeedPrecursor = p.IsNeedPrecursor,
+            //                AttributeCode = p.Name,
+            //                AttributeValue = "{\"name\":\"" + p.Value + "\",\"source\":\"" + p.DataSourceCode + "\"}"
+            //            };
+            //        }
+            //        else
+            //        {
+            //            dmeRuleStepAttribute = new DmeRuleStepAttribute
+            //            {
+            //                RuleStepId = step.Id,
+            //                ModelId = model.Id,
+            //                VersionId = version.Id,
+            //                IsNeedPrecursor = p.IsNeedPrecursor,
+            //                AttributeCode = p.Name,
+            //                AttributeValue = p.Value
+            //            };
+            //        }
+            //        //if (1 == p.IsNeedPrecursor)
+            //        //{
+            //        //    dmeRuleStepAttribute.AttributeValue = "${" + p.Value + "}";
+            //        //}
+            //        attributes.Add(dmeRuleStepAttribute);
+            //    }
+            //    db.Insertable<DmeRuleStepAttribute>(attributes).ExecuteCommand();
+            //}
         }
 
         /// <summary>

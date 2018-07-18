@@ -4,6 +4,7 @@ using Dist.Dme.Base.Utils;
 using Dist.Dme.Model.Entity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Dist.Dme.RuleSteps.DataSourceInput
@@ -11,19 +12,21 @@ namespace Dist.Dme.RuleSteps.DataSourceInput
     /// <summary>
     /// 数据源步骤类型
     /// </summary>
+    [RuleStepTypeAttribute(Name = "DataSourceInput", DisplayName = "数据源输入", Description = "数据源输入，选择数据源")]
     public class DataSourceInputStepMeta : BaseRuleStepMeta, IRuleStepMeta
     {
         public DataSourceInputStepMeta(IRepository repository, DmeRuleStep step)
           : base(repository, step)
         {
         }
-        public string RuleStepName { get; set; } = EnumUtil.GetEnumDisplayName(EnumRuleStepTypes.DataSourceInput);
-        protected override EnumRuleStepTypes MyRuleStepType => EnumRuleStepTypes.DataSourceInput;
+        public string RuleStepName { get; set; } = "数据源输入";
+        // protected override EnumRuleStepTypes MyRuleStepType => EnumRuleStepTypes.DataSourceInput;
         public object RuleStepType
         {
             get
             {
-                return base.GetRuleStepTypeMeta(MyRuleStepType);
+                var attribute = (RuleStepTypeAttribute)this.GetType().GetCustomAttributes(typeof(RuleStepTypeAttribute), false).FirstOrDefault();
+                return attribute;
             }
         }
         public override object InParams

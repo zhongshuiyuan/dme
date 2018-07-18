@@ -29,8 +29,10 @@ namespace Dist.Dme.WebApi
                 .UseStartup<Startup>()
                 .ConfigureLogging(logging =>
                 {
-                    logging.ClearProviders(); //移除已经注册的其他日志处理程序
-                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace); //设置最小的日志级别
+                    //移除已经注册的其他日志处理程序
+                    logging.ClearProviders();
+                    //设置最小的日志级别
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace); 
                 })
                 .UseNLog()
                 .Build();

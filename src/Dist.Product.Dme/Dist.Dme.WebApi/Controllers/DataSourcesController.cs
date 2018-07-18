@@ -3,6 +3,7 @@ using Dist.Dme.Base.Common.Http;
 using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.DisFS.Adapters.Mongo;
+using Dist.Dme.Extensions;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Service.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
@@ -40,7 +41,8 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/types")]
         public Result ListDatabaseTypes()
         {
-            LOG.Info(">>>test info");
+            Register register = new Register();
+            LOG.Info(">>>test log info");
             return base.Success(DataSourceService.ListDataSourceTypes());
         }
         /// <summary>

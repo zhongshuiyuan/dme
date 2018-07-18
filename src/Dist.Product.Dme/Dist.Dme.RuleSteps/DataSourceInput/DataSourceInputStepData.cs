@@ -1,4 +1,5 @@
-﻿using Dist.Dme.Base.Framework;
+﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Model.Entity;
 using NLog;
@@ -25,7 +26,7 @@ namespace Dist.Dme.RuleSteps.DataSourceInput
             return new Result(Base.Common.EnumSystemStatusCode.DME_SUCCESS, "不需要计算", null);
         }
 
-        public bool SaveAttributes(IDictionary<string, object> attributes)
+        public bool SaveAttributes(IDictionary<string, Property> attributes)
         {
             return this.ruleStepMeta.SaveAttributes(attributes);
         }

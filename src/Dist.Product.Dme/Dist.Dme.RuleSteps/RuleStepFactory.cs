@@ -1,11 +1,15 @@
 ﻿using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
+using Dist.Dme.Extensions;
+using Dist.Dme.Extensions.DTO;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.RuleSteps.AlgorithmInput;
 using Dist.Dme.RuleSteps.DataSourceInput;
 using Dist.Dme.RuleSteps.MongoDBOutput;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace Dist.Dme.RuleSteps
@@ -26,23 +30,34 @@ namespace Dist.Dme.RuleSteps
         /// <returns></returns>
         public static IRuleStepData GetRuleStepData(string stepTypeCode, IRepository repository, int taskId, DmeRuleStep step)
         {
-            IRuleStepData ruleStepData = null;
-            EnumRuleStepTypes @enum = EnumUtil.GetEnumObjByName<EnumRuleStepTypes>(stepTypeCode);
-            switch (@enum)
+            if (!Register.RuleStepPluginsMap.ContainsKey(stepTypeCode))
             {
-                case EnumRuleStepTypes.AlgorithmInput:
-                    ruleStepData = new AlgorithmInputStepData(repository, taskId, step);
-                    break;
-                case EnumRuleStepTypes.DataSourceInput:
-                    ruleStepData = new DataSourceInputStepData(repository, taskId, step);
-                    break;
-                case EnumRuleStepTypes.MongodbOutput:
-                    ruleStepData = new MongoDBOutputStepData(repository, taskId, step);
-                    break;
-                default:
-                    break;
+                return null;
             }
+            RuleStepPluginRegisterDTO ruleStepPluginRegisterDTO = Register.RuleStepPluginsMap[stepTypeCode];
+            String baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string assemblyPath = Path.Combine(baseDir, ruleStepPluginRegisterDTO.Assembly);
+            Assembly assembly = Assembly.LoadFile(assemblyPath);
+            IRuleStepData ruleStepData = (IRuleStepData)assembly.CreateInstance(ruleStepPluginRegisterDTO.ClassId, true, BindingFlags.CreateInstance, null
+                , new object[] { repository, -1, step }, null, null);
+
             return ruleStepData;
+            //EnumRuleStepTypes @enum = EnumUtil.GetEnumObjByName<EnumRuleStepTypes>(stepTypeCode);
+            //switch (@enum)
+            //{
+            //    case EnumRuleStepTypes.AlgorithmInput:
+            //        ruleStepData = new AlgorithmInputStepData(repository, taskId, step);
+            //        break;
+            //    case EnumRuleStepTypes.DataSourceInput:
+            //        ruleStepData = new DataSourceInputStepData(repository, taskId, step);
+            //        break;
+            //    case EnumRuleStepTypes.MongodbOutput:
+            //        ruleStepData = new MongoDBOutputStepData(repository, taskId, step);
+            //        break;
+            //    default:
+            //        break;
+            //}
+            //return ruleStepData;
         }
     }
 }

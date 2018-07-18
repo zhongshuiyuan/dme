@@ -10,6 +10,7 @@ using NLog;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Dist.Dme.RuleSteps.MongoDBOutput
@@ -17,6 +18,7 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
     /// <summary>
     /// mongodb
     /// </summary>
+    [RuleStepTypeAttribute(Name = "MongoDBOutput", DisplayName = "mongo输出", Description = "mongo输出")]
     public class MongoDBOutputStepMeta : BaseRuleStepMeta, IRuleStepMeta
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
@@ -37,14 +39,15 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
         : base(repository, step)
         {
         }
-        protected override EnumRuleStepTypes MyRuleStepType => EnumRuleStepTypes.MongodbOutput;
-        public string RuleStepName { get; set; } = EnumUtil.GetEnumDisplayName(EnumRuleStepTypes.MongodbOutput);
+        // protected override EnumRuleStepTypes MyRuleStepType => EnumRuleStepTypes.MongodbOutput;
+        public string RuleStepName { get; set; } = "mongo输出";
 
         public object RuleStepType
         {
             get
             {
-                return base.GetRuleStepTypeMeta(MyRuleStepType);
+                var attribute = (RuleStepTypeAttribute)this.GetType().GetCustomAttributes(typeof(RuleStepTypeAttribute), false).FirstOrDefault();
+                return attribute;
             }
         }
 
@@ -141,37 +144,43 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
 
             return att;
         }
-
-        public new bool SaveAttributes(IDictionary<string, object> attributes)
+        /// <summary>
+        /// 覆写基类方法
+        /// </summary>
+        /// <param name="attributes"></param>
+        /// <returns></returns>
+        public new bool SaveAttributes(IDictionary<string, Property> attributes)
         {
             if (attributes?.Count == 0)
             {
                 LOG.Info("属性个数为 0，不再执行后面的操作。");
                 return true;
             }
-            base.SaveDataSourceAttribute(attributes);
+            if (!attributes.ContainsKey(nameof(Database)))
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"缺失属性[{nameof(Database)}]");
+            }
+            if (!attributes.ContainsKey(nameof(Collection)))
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"缺失属性[{nameof(Collection)}]");
+            }
+            if (!attributes.ContainsKey(nameof(MongoFields)))
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"缺失属性[{nameof(MongoFields)}]");
+            }
+           
             var db = repository.GetDbContext();
             db.Ado.UseTran(() =>
             {
-                if (!attributes.ContainsKey(nameof(Database)))
-                {
-                    throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"缺失属性[{nameof(Database)}]");
-                }
-                if (!attributes.ContainsKey(nameof(Collection)))
-                {
-                    throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"缺失属性[{nameof(Collection)}]");
-                }
-                if (!attributes.ContainsKey(nameof(MongoFields)))
-                {
-                    throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"缺失属性[{nameof(MongoFields)}]");
-                }
                 // 删除的影响条目
                 int deleteCount = db.Deleteable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == this.step.Id).ExecuteCommand();
                 LOG.Info($"共删除[{deleteCount}]条属性记录");
                
-                this.Database = attributes[nameof(Database)].ToString();
-                this.Collection = attributes[nameof(Collection)].ToString();
-              
+                this.Database = attributes[nameof(Database)].Value.ToString();
+                this.SaveStepAttribute(db, 0, nameof(this.Database), this.Database, attributes[nameof(Database)].IsNeedPrecursor);
+                this.Collection = attributes[nameof(Collection)].Value.ToString();
+                this.SaveStepAttribute(db, 0, nameof(this.Collection), this.Collection, attributes[nameof(Collection)].IsNeedPrecursor);
+
                 this.MongoFields = JsonConvert.DeserializeObject<IList<MongoFieldDTO>>(attributes[nameof(MongoFields)].ToString());
                 for (int i = 0; i < this.MongoFields.Count; i++)
                 {
@@ -181,6 +190,16 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
                     this.SaveStepAttribute(db, i, nameof(field.NewName), field.NewName, field.IsNeedPrecursor);
                     this.SaveStepAttribute(db, i, nameof(field.ConstantValue), field.ConstantValue, field.IsNeedPrecursor);
                 }
+                ISet<string> datasources = new HashSet<string>();
+                foreach (var item in attributes.Values)
+                {
+                    if (string.IsNullOrEmpty(item.DataSourceCode))
+                    {
+                        continue;
+                    }
+                    datasources.Add(item.DataSourceCode);
+                }
+              base.SaveDataSourceAttribute(db, datasources);
             });
             return true;
         }

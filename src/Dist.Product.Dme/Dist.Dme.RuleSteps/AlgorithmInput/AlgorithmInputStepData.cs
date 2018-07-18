@@ -95,7 +95,7 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
             return new Result(EnumSystemStatusCode.DME_FAIL, "执行失败，无异常信息", false);
         }
 
-        public bool SaveAttributes(IDictionary<string, object> attributes)
+        public bool SaveAttributes(IDictionary<string, Property> attributes)
         {
             return this.ruleStepMeta.SaveAttributes(attributes);
         }

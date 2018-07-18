@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
@@ -8,6 +9,7 @@ namespace Dist.Dme.Base.Utils
 {
     public sealed class EnumUtil
     {
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 获取一个枚举值的中文描述
         /// </summary>
@@ -48,7 +50,14 @@ namespace Dist.Dme.Base.Utils
         /// <returns></returns>
         public static T GetEnumObjByName<T>(string name)
         {
-            return (T)Enum.Parse(typeof(T), name);
+            try
+            {
+                return (T)Enum.Parse(typeof(T), name);
+            } catch (Exception ex)
+            {
+                LOG.Error(ex, ex.Message);
+            }
+            return default(T);
         }
         /// <summary>
         /// 根据值获取枚举对象

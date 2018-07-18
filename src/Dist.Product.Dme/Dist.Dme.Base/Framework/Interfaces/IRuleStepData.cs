@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Dist.Dme.Base.Common;
+using System.Collections.Generic;
 
 namespace Dist.Dme.Base.Framework.Interfaces
 {
@@ -21,6 +22,6 @@ namespace Dist.Dme.Base.Framework.Interfaces
         /// </summary>
         /// <param name="attributes">属性key-value</param>
         /// <returns></returns>
-        bool SaveAttributes(IDictionary<string, object> attributes);
+        bool SaveAttributes(IDictionary<string, Property> attributes);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dist.Dme.Base.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -56,7 +57,7 @@ namespace Dist.Dme.Model.DTO
         /// <summary>
         /// 步骤属性值清单，键值对
         /// </summary>
-        public IDictionary<string, object> Attributes { get; set; }
+        public IDictionary<string, Property> Attributes { get; set; }
     }
     /// <summary>
     /// 步骤的向量信息

@@ -12,6 +12,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
@@ -19,6 +20,7 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
     /// <summary>
     /// 算法输入步骤元数据
     /// </summary>
+    [RuleStepTypeAttribute(Name = "AlgorithmInput", DisplayName = "算法输入", Description = "选择已注册的算法，配置算法参数")]
     public class AlgorithmInputStepMeta : BaseRuleStepMeta, IRuleStepMeta
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
@@ -26,8 +28,7 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
         /// 算法唯一编码
         /// </summary>
         private string AlgorithmCode { get; set; }
-     
-        protected override EnumRuleStepTypes MyRuleStepType => EnumRuleStepTypes.AlgorithmInput;
+
         /// <summary>
         /// 对外提供访问
         /// </summary>
@@ -35,10 +36,11 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
         {
             get
             {
-                return base.GetRuleStepTypeMeta(MyRuleStepType);
+                var attribute = (RuleStepTypeAttribute)this.GetType().GetCustomAttributes(typeof(RuleStepTypeAttribute), false).FirstOrDefault();
+                return attribute;
             }
         }
-        public string RuleStepName { get; set; } = EnumUtil.GetEnumDisplayName(EnumRuleStepTypes.AlgorithmInput);
+        public string RuleStepName { get; set; } = "算法输入";
 
         public AlgorithmInputStepMeta(IRepository repository, DmeRuleStep step)
             : base(repository, step)
@@ -149,7 +151,9 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
                         dictionary[subAtt.AttributeCode] = property;
                         continue;
                     }
-                    if ((int)EnumValueMetaType.TYPE_FEATURECLASS == property.DataType)
+                    if ((int)EnumValueMetaType.TYPE_FEATURECLASS == property.DataType 
+                        || (int)EnumValueMetaType.TYPE_MDB_FEATURECLASS == property.DataType
+                        || (int)EnumValueMetaType.TYPE_SDE_FEATURECLASS == property.DataType)
                     {
                         // 如果是要素类，则值的格式：{"name":"图层名","source":"数据源唯一编码"}
                         JObject jObject = JObject.Parse(subAtt.AttributeValue.ToString());

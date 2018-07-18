@@ -15,7 +15,6 @@ using Dist.Dme.DisFS.Adapters.Mongo;
 using Dist.Dme.Extensions;
 using Dist.Dme.Service.Impls;
 using Dist.Dme.Service.Interfaces;
-using log4net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
@@ -26,6 +25,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using MongoDB.Driver;
+using NLog;
 using NLog.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -33,7 +33,7 @@ namespace Dist.Dme.WebApi
 {
     public class Startup
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(Startup));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
 
         public Startup(IConfiguration configuration)
         {
@@ -76,18 +76,13 @@ namespace Dist.Dme.WebApi
                 }
                 catch (Exception ex)
                 {
-                    LOG.Error("redis连接失败", ex);
+                    LOG.Error(ex, "redis连接失败，准备启用MemoryCache服务");
+                    SetCacheService(services);
                 }
             }
             else
             {
-                // 如果为空，默认使用memorycache
-                services.AddSingleton<IMemoryCache>(factory =>
-                {
-                    var cache = new MemoryCache(new MemoryCacheOptions());
-                    return cache;
-                });
-                services.AddSingleton<ICacheService, MemoryCacheService>();
+                SetCacheService(services);
             }
             // mongo
             IConfigurationSection mongoSection = this.Configuration.GetSection("ConnectionStrings").GetSection("Mongo");
@@ -106,7 +101,7 @@ namespace Dist.Dme.WebApi
                 }
                 catch (Exception ex)
                 {
-                    LOG.Error("mongo连接失败", ex);
+                    LOG.Error(ex, "mongo连接失败");
                 }
             }
             // 注册知识库
@@ -147,7 +142,18 @@ namespace Dist.Dme.WebApi
             // 配置日志服务
             services.AddLogging();
         }
-       
+
+        private static void SetCacheService(IServiceCollection services)
+        {
+            // 如果为空，默认使用memorycache
+            services.AddSingleton<IMemoryCache>(factory =>
+            {
+                var cache = new MemoryCache(new MemoryCacheOptions());
+                return cache;
+            });
+            services.AddSingleton<ICacheService, MemoryCacheService>();
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {

@@ -24,7 +24,7 @@
               },
               "attributes": [
                 {
-                  "name": "791b05180d8c4e2186f7684ecf557457",
+                  "name": "Source",
                   "alias": "791b05180d8c4e2186f7684ecf557457",
                   "dataType": 2,
                   "dataTypeDesc": "简单字符串类型，String",
@@ -36,7 +36,8 @@
                   "readOnly": 0,
                   "valueSet": null,
                   "required": 1,
-                  "dataSourceCode": "791b05180d8c4e2186f7684ecf557457"
+                  "dataSourceCode": "791b05180d8c4e2186f7684ecf557457",
+                  "isNeedPrecursor":0
                 }
               ]
             },
@@ -66,7 +67,8 @@
                   "readOnly": 0,
                   "valueSet": null,
                   "required": 1,
-                  "dataSourceCode": "30143df1123449a896429854899f37f3"
+                  "dataSourceCode": "30143df1123449a896429854899f37f3",
+                  "isNeedPrecursor":0
                 },
                 {
                   "name": "TargetFeatureClass",
@@ -81,7 +83,8 @@
                   "readOnly": 0,
                   "valueSet": null,
                   "required": 1,
-                  "dataSourceCode": "791b05180d8c4e2186f7684ecf557457"
+                  "dataSourceCode": "791b05180d8c4e2186f7684ecf557457",
+                  "isNeedPrecursor":0
                 },
                 {
                   "name": "AnalysisType",
@@ -96,7 +99,8 @@
                   "readOnly": 0,
                   "valueSet": null,
                   "required": 1,
-                  "dataSourceCode": ""
+                  "dataSourceCode": "",
+                  "isNeedPrecursor":0
                 }
               ]
             }

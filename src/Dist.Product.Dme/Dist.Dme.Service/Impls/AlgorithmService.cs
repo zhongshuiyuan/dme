@@ -4,6 +4,8 @@ using Dist.Dme.Base.Framework.Exception;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.DAL.Context;
+using Dist.Dme.Extensions;
+using Dist.Dme.Extensions.DTO;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Interfaces;
@@ -197,33 +199,38 @@ namespace Dist.Dme.Service.Impls
         public object ListAlgorithmMetadatasLocal()
         {
             String baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            String registerFile = Path.Combine(new string[] { baseDir, "register.json" });
-            if (!File.Exists(registerFile))
-            {
-                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"注册文件[{registerFile}]不存在");
-            }
-            String jsonText = File.ReadAllText(registerFile);
-            JObject jObject = JObject.Parse(jsonText);
-           JToken[] jTokens = jObject["Algorithms"].ToArray<JToken>();
-            if (null == jTokens || 0 == jTokens.Length)
+            // String registerFile = Path.Combine(new string[] { baseDir, "register.json" });
+            // if (!File.Exists(registerFile))
+            // {
+            //     throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"注册文件[{registerFile}]不存在");
+            // }
+            // String jsonText = File.ReadAllText(registerFile);
+            // JObject jObject = JObject.Parse(jsonText);
+            //JToken[] jTokens = jObject["Algorithms"].ToArray<JToken>();
+            // if (null == jTokens || 0 == jTokens.Length)
+            // {
+            //     return new List<IAlgorithm>();
+            // }
+            IList<AlgorithmRegisterDTO> registerAlgorithms = Register.Algorithms;
+            if (0 == registerAlgorithms?.Count)
             {
                 return new List<IAlgorithm>();
             }
             IAlgorithm temp = null;
             // 元数据集合
             IList<object> localAlgorithmMetadatas = new List<object>();
-            foreach (var item in jTokens)
+            foreach (var item in registerAlgorithms)
             {
                 try
                 {
-                    string assemblyPath = Path.Combine(baseDir, item["Assembly"].Value<string>());
+                    string assemblyPath = Path.Combine(baseDir, item.Assembly);
                     Assembly assembly = Assembly.LoadFile(assemblyPath);
                     if (null == assembly)
                     {
                         LOG.Warn($"程序集文件[{assemblyPath}]不存在");
                         continue;
                     }
-                    string fullName = item["MainClass"].Value<string>();
+                    string fullName = item.MainClass;
                     if (string.IsNullOrEmpty(fullName))
                     {
                         LOG.Warn($"接口名称缺失[MainClass]");
@@ -250,32 +257,37 @@ namespace Dist.Dme.Service.Impls
         public object RegistryAlgorithmFromLocal(string algCode)
         {
             String baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            String registerFile = Path.Combine(new string[] { baseDir, "register.json" });
-            if (!File.Exists(registerFile))
+            // String registerFile = Path.Combine(new string[] { baseDir, "register.json" });
+            //if (!File.Exists(registerFile))
+            //{
+            //    throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"注册文件[{registerFile}]不存在");
+            //}
+            //String jsonText = File.ReadAllText(registerFile);
+            //JObject jObject = JObject.Parse(jsonText);
+            //JToken[] jTokens = jObject["Algorithms"].ToArray<JToken>();
+            //if (null == jTokens || 0 == jTokens.Length)
+            //{
+            //    LOG.Warn("在注册文件中没有找到节点[Algorithms]的内容");
+            //    return false;
+            //}
+            IList<AlgorithmRegisterDTO> registerAlgorithms = Register.Algorithms;
+            if (0 == registerAlgorithms?.Count)
             {
-                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"注册文件[{registerFile}]不存在");
-            }
-            String jsonText = File.ReadAllText(registerFile);
-            JObject jObject = JObject.Parse(jsonText);
-            JToken[] jTokens = jObject["Algorithms"].ToArray<JToken>();
-            if (null == jTokens || 0 == jTokens.Length)
-            {
-                LOG.Warn("在注册文件中没有找到节点[Algorithms]的内容");
                 return false;
             }
             IAlgorithm tempAlgorithm = null;
-            foreach (var item in jTokens)
+            foreach (var item in registerAlgorithms)
             {
                 try
                 {
-                    string assemblyPath = Path.Combine(baseDir, item["Assembly"].Value<string>());
+                    string assemblyPath = Path.Combine(baseDir, item.Assembly);
                     Assembly assembly = Assembly.LoadFile(assemblyPath);
                     if (null == assembly)
                     {
                         LOG.Warn($"程序集文件[{assemblyPath}]不存在");
                         continue;
                     }
-                    string fullName = item["MainClass"].Value<string>();
+                    string fullName = item.MainClass;
                     if (string.IsNullOrEmpty(fullName))
                     {
                         LOG.Warn($"接口名称缺失[MainClass]");

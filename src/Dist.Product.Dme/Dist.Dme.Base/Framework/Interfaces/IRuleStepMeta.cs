@@ -21,11 +21,11 @@ namespace Dist.Dme.Base.Framework.Interfaces
         /// <param name="modelId">模型id</param>
         /// <param name="modelVersionId">模型版本id</param>
         /// <param name="stepId">步骤id，如果是新步骤，则传入-1；否则传入真实的步骤id</param>
-        /// <param name="guiLocationX">界面布局x坐标</param>
-        /// <param name="guiLocationY">界面布局y坐标</param>
+        /// <param name="x">界面布局x坐标</param>
+        /// <param name="y">界面布局y坐标</param>
         /// <param name="stepName">步骤名称</param>
         /// <returns>返回保存的步骤标识id</returns>
-        int SaveMeta(double guiLocationX, double guiLocationY, string stepName);
+        // int SaveMeta(double x, double y, string stepName);
         /// <summary>
         /// 保存步骤属性数据
         /// </summary>
@@ -33,7 +33,7 @@ namespace Dist.Dme.Base.Framework.Interfaces
         /// <param name="modelVersionId">版本id</param>
         /// <param name="stepId">步骤id</param>
         /// <param name="attributes">属性值，键值对</param>
-        Boolean SaveAttributes(IDictionary<string, object> attributes);
+        Boolean SaveAttributes(IDictionary<string, Property> attributes);
         /// <summary>
         /// 读取步骤属性
         /// </summary>
