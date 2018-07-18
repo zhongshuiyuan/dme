@@ -92,59 +92,54 @@ namespace Dist.Dme.RuleSteps
                 return false;
             }
             // 先删除这个步骤的属性，再重新添加
-            Boolean result = db.Ado.UseTran<Boolean>(() =>
+            // 删除的影响条目
+            int deleteCount = db.Deleteable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == this.step.Id).ExecuteCommand();
+            LOG.Info($"删除规则[{this.step.Id}]下的{deleteCount} 条属性记录");
+            // 不使用接口IList，Insertable<>批量插入存在问题
+            List<DmeRuleStepAttribute> attributeEntities = new List<DmeRuleStepAttribute>();
+            // 去重
+            ISet<string> datasources = new HashSet<string>();
+            foreach (var item in attributes)
             {
-                // 删除的影响条目
-                int deleteCount = db.Deleteable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == this.step.Id).ExecuteCommand();
-                LOG.Info($"删除规则[{this.step.Id}]下的{deleteCount} 条属性记录");
-                // 保存步骤属性
-                //DmeRuleStep dmeRuleStep = db.Queryable<DmeRuleStep>().Single(rs => rs.Id == this.step.Id);
-                //if (null == dmeRuleStep)
-                //{
-                //    throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"规则[{this.step.Id}]没有找到数据库记录");
-                //}
-                // 不使用接口IList，Insertable<>批量插入存在问题
-                List<DmeRuleStepAttribute> attributeEntities = new List<DmeRuleStepAttribute>();
-                // 去重
-                ISet<string> datasources = new HashSet<string>();
-                foreach (var item in attributes)
+                if (nameof(Source).Equals(item.Value.Name) && !string.IsNullOrEmpty(item.Value.DataSourceCode))
                 {
-                    if (nameof(Source).Equals(item.Value.Name) && !string.IsNullOrEmpty(item.Value.DataSourceCode))
-                    {
-                        // 不需要在实体[DmeRuleStepAttribute]添加数据源
-                        datasources.Add(item.Value.DataSourceCode);
-                        continue;
-                    }
+                    // 不需要在实体[DmeRuleStepAttribute]添加数据源
+                    datasources.Add(item.Value.DataSourceCode);
+                    continue;
+                }
 
-                    DmeRuleStepAttribute dmeRuleStepAttribute = new DmeRuleStepAttribute
-                    {
-                        RuleStepId = this.step.Id,
-                        ModelId = this.step.ModelId,
-                        VersionId = this.step.VersionId,
-                        AttributeCode = item.Key,
-                        AttributeValue = item.Value.Value
-                    };
-                    
-                    if (nameof(EnumValueMetaType.TYPE_FEATURECLASS).Equals(item.Value.DataTypeCode)
-                        || nameof(EnumValueMetaType.TYPE_MDB_FEATURECLASS).Equals(item.Value.DataTypeCode)
-                        || nameof(EnumValueMetaType.TYPE_SDE_FEATURECLASS).Equals(item.Value.DataTypeCode))
-                    {
-                        // 要素图层需要处理一下
-                        dmeRuleStepAttribute.AttributeValue = "{\"name\":\"" + item.Value.Value + "\",\"source\":\"" + item.Value.DataSourceCode + "\"}";
-                    }
-                    attributeEntities.Add(dmeRuleStepAttribute);
-                }
-                if (attributeEntities.Count > 0)
+                DmeRuleStepAttribute dmeRuleStepAttribute = new DmeRuleStepAttribute
                 {
-                    db.Insertable<DmeRuleStepAttribute>(attributeEntities).ExecuteCommand();
-                }
-                if (datasources.Count > 0)
+                    RuleStepId = this.step.Id,
+                    ModelId = this.step.ModelId,
+                    VersionId = this.step.VersionId,
+                    AttributeCode = item.Key,
+                    AttributeValue = item.Value.Value
+                };
+
+                if (nameof(EnumValueMetaType.TYPE_FEATURECLASS).Equals(item.Value.DataTypeCode)
+                    || nameof(EnumValueMetaType.TYPE_MDB_FEATURECLASS).Equals(item.Value.DataTypeCode)
+                    || nameof(EnumValueMetaType.TYPE_SDE_FEATURECLASS).Equals(item.Value.DataTypeCode))
                 {
-                    this.SaveDataSourceAttribute(db, datasources);
+                    // 要素图层需要处理一下
+                    dmeRuleStepAttribute.AttributeValue = "{\"name\":\"" + item.Value.Value + "\",\"source\":\"" + item.Value.DataSourceCode + "\"}";
                 }
-                return true;
-            }).Data;
-            return result;
+                attributeEntities.Add(dmeRuleStepAttribute);
+            }
+            if (attributeEntities.Count > 0)
+            {
+                db.Insertable<DmeRuleStepAttribute>(attributeEntities).ExecuteCommand();
+            }
+            if (datasources.Count > 0)
+            {
+                this.SaveDataSourceAttribute(db, datasources);
+            }
+            //Boolean result = db.Ado.UseTran<Boolean>(() =>
+            //{
+
+            //    return true;
+            //}).Data;
+            return true;
         }
         /// <summary>
         /// 保存数据源关联信息
@@ -152,7 +147,7 @@ namespace Dist.Dme.RuleSteps
         /// <param name="attributes"></param>
         protected void SaveDataSourceAttribute(SqlSugarClient db, ISet<string> datasources)
         {
-            // 删除这个步骤原来关联的数据源
+            // 删除这个步骤原来关联的数据源，注意需要ExecuteCommand
             db.Deleteable<DmeRuleStepDataSource>().Where(rsds => rsds.RuleStepId == step.Id).ExecuteCommand();
             List<DmeRuleStepDataSource> newRefDatasources = new List<DmeRuleStepDataSource>();
             foreach (var item in datasources)
@@ -172,7 +167,8 @@ namespace Dist.Dme.RuleSteps
             }
             if (newRefDatasources.Count > 0)
             {
-                db.Insertable<DmeRuleStepDataSource>(newRefDatasources);
+                // 注意需要ExecuteCommand
+                db.Insertable<DmeRuleStepDataSource>(newRefDatasources).ExecuteCommand();
             }
         }
 
