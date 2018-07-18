@@ -13,7 +13,7 @@ namespace Dist.Dme.WebApi.Controllers.Base
     /// <summary>
     /// WebApiExceptionFilterAttribute：统一处理异常信息
     /// </summary>
-    [WebApiExceptionFilterAttribute]
+    [WebApiExceptionFilter]
     public class BaseController : Controller
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();

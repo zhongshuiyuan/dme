@@ -1,4 +1,5 @@
-﻿using Dist.Dme.SRCE.Esri.DTO;
+﻿using Dist.Dme.Base.Utils;
+using Dist.Dme.SRCE.Esri.DTO;
 using Dist.Dme.SRCE.Esri.Utils;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
@@ -124,14 +125,16 @@ namespace Dist.Dme.SRCE.Esri.AnalysisTools.Overlay
                     {
                         continue;
                     }
+                    
                     intersectFeatureDTOTemp = new IntersectFeatureDTO
                     {
                         Geometry = feature.Shape,
                         OID = feature.OID,
-                        CoordJson = GeometryUtil.ConvertGeometryToJson(intersectGeometry, out string message),
+                        Coordinates = GeometryUtil.ConvertGeometryToJson(intersectGeometry, out string message),
                         Area = GeometryUtil.GetArea(intersectGeometry),
                         QueryGeometry = queryGeometry,
-                        IntersectGeometry = intersectGeometry
+                        IntersectGeometry = intersectGeometry,
+                        GeoType = EnumUtil.GetEnumName<esriGeometryType>((int)intersectGeometry.GeometryType)
                     };
                     intersectFeatureDTOs.Add(intersectFeatureDTOTemp);
                     IArea area = intersectGeometry as IArea;

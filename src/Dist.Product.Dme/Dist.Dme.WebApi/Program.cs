@@ -16,7 +16,7 @@ namespace Dist.Dme.WebApi
         public static void Main(string[] args)
         {
             //NLog配置文件，如果没有用默认的名字，则使用以下方式加载
-            NLog.Web.NLogBuilder.ConfigureNLog("nlog.config");  
+            // NLog.Web.NLogBuilder.ConfigureNLog("nlog.config");  
             BuildWebHost(args).Run();
         }
 

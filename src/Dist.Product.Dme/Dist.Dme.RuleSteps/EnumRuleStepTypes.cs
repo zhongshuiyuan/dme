@@ -15,6 +15,9 @@ namespace Dist.Dme.RuleSteps
         AlgorithmInput,
         [Description("数据源输入，选择数据源")]
         [DisplayName("数据源输入")]
-        DataSourceInput
+        DataSourceInput,
+        [Description("mongo输出")]
+        [DisplayName("mongo输出")]
+        MongodbOutput
     }
 }

@@ -122,6 +122,8 @@ namespace Dist.Dme.Service.Impls
                     dataSource = factory.OpenFromConnectionStr(dto.Connection, true);
                     valid = dataSource.ValidConnection();
                     break;
+                case EnumDataSourceType.MONGODB:
+                    break;
                 default:
                     break;
             }

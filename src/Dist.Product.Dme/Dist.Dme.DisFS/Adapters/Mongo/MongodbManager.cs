@@ -96,9 +96,17 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
         /// <returns></returns>
         public static IMongoCollection<T> GetMongodbCollection(MongodbHost host)
         {
-            IMongoClient client = GetMongodbClient((host.Connection));
-            var mongoDataBase = client.GetDatabase(host.DataBase);
+            var mongoDataBase = GetMongoDatabase(host);
             return mongoDataBase.GetCollection<T>(typeof(T).Name);
+        }
+        /// <summary>
+        /// 获取集合类
+        /// </summary>
+        /// <param name="database"></param>
+        /// <returns></returns>
+        public static IMongoCollection<T> GetMongodbCollection(IMongoDatabase database)
+        {
+            return database.GetCollection<T>(typeof(T).Name);
         }
         /// <summary>
         /// 获取mongo集合类

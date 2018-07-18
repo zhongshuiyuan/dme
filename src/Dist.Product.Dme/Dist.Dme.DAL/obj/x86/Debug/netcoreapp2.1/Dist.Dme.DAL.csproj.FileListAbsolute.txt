@@ -1,9 +1,0 @@
-D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.1\Dist.Dme.DAL.deps.json
-D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.1\Dist.Dme.DAL.dll
-D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.1\Dist.Dme.DAL.pdb
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DAL\obj\x86\Debug\netcoreapp2.1\Dist.Dme.DAL.csprojResolveAssemblyReference.cache
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DAL\obj\x86\Debug\netcoreapp2.1\Dist.Dme.DAL.csproj.CoreCompileInputs.cache
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DAL\obj\x86\Debug\netcoreapp2.1\Dist.Dme.DAL.AssemblyInfoInputs.cache
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DAL\obj\x86\Debug\netcoreapp2.1\Dist.Dme.DAL.AssemblyInfo.cs
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DAL\obj\x86\Debug\netcoreapp2.1\Dist.Dme.DAL.dll
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.DAL\obj\x86\Debug\netcoreapp2.1\Dist.Dme.DAL.pdb

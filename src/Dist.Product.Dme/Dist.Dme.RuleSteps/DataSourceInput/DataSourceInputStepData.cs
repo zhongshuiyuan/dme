@@ -22,7 +22,7 @@ namespace Dist.Dme.RuleSteps.DataSourceInput
 
         public Result Run()
         {
-            throw new NotImplementedException();
+            return new Result(Base.Common.EnumSystemStatusCode.DME_SUCCESS, "不需要计算", null);
         }
 
         public bool SaveAttributes(IDictionary<string, object> attributes)

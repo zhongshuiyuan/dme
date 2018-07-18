@@ -24,6 +24,8 @@ namespace Dist.Dme.Base.Common
         [Description("CAD数据")]
         CAD,
         [Description("oracle")]
-        ORACLE
+        ORACLE,
+        [Description("mongodb")]
+        MONGODB
     }
 }

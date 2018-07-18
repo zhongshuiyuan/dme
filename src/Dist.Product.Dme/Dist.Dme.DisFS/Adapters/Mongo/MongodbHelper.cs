@@ -37,6 +37,26 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
                 return 0;
             }
         }
+        /// <summary>
+        /// 插入记录
+        /// </summary>
+        /// <param name="mongoDataBase"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static int Add(IMongoDatabase mongoDataBase, T t)
+        {
+            try
+            {
+                var collection = MongodbManager<T>.GetMongodbCollection(mongoDataBase);
+                collection.InsertOne(t);
+                return 1;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+        
         #endregion
 
         #region AddAsync 异步添加一条数据
@@ -468,7 +488,10 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
                 }
                 var projection = Builders<T>.Projection.Combine(fieldList);
                 fieldList?.Clear();
-                if (sort == null) return client.Find(filter).Project<T>(projection).ToList();
+                if (sort == null)
+                {
+                    return client.Find(filter).Project<T>(projection).ToList();
+                }
                 //排序查询
                 return client.Find(filter).Sort(sort).Project<T>(projection).ToList();
             }
@@ -477,6 +500,40 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
                 throw ex;
             }
         }
+        public static List<T> FindList(IMongoDatabase database, FilterDefinition<T> filter, string[] field = null, SortDefinition<T> sort = null)
+        {
+            try
+            {
+                var client = MongodbManager<T>.GetMongodbCollection(database);
+                //不指定查询字段
+                if (field == null || field.Length == 0)
+                {
+                    if (sort == null) return client.Find(filter).ToList();
+                    //进行排序
+                    return client.Find(filter).Sort(sort).ToList();
+                }
+
+                //制定查询字段
+                var fieldList = new List<ProjectionDefinition<T>>();
+                for (int i = 0; i < field.Length; i++)
+                {
+                    fieldList.Add(Builders<T>.Projection.Include(field[i].ToString()));
+                }
+                var projection = Builders<T>.Projection.Combine(fieldList);
+                fieldList?.Clear();
+                if (sort == null)
+                {
+                    return client.Find(filter).Project<T>(projection).ToList();
+                }
+                //排序查询
+                return client.Find(filter).Sort(sort).Project<T>(projection).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        
         #endregion
 
         #region FindListAsync 异步查询集合

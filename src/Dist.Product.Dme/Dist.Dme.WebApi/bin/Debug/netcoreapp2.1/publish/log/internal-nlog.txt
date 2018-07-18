@@ -1,5 +1,0 @@
-2018-07-12 19:11:13.2771 Info Message Template Auto Format enabled
-2018-07-12 19:11:13.3329 Info Adding target File Target[allfile]
-2018-07-12 19:11:13.3329 Info Adding target File Target[ownFile-web]
-2018-07-12 19:11:13.3471 Info Configured from an XML element in D:\gitrep\dme\src\Dist.Product.Dme\Dist.Dme.WebApi\bin\Debug\netcoreapp2.1\publish\nlog.config...
-2018-07-12 19:11:13.3578 Info Found 55 configuration items

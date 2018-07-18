@@ -1,9 +1,0 @@
-D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.Algorithms.Overlay.deps.json
-D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.Algorithms.Overlay.dll
-D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.Algorithms.Overlay.pdb
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Algorithms\Dist.Dme.Algorithms.Overlay\obj\x86\Debug\netcoreapp2.0\Dist.Dme.Algorithms.Overlay.csprojResolveAssemblyReference.cache
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Algorithms\Dist.Dme.Algorithms.Overlay\obj\x86\Debug\netcoreapp2.0\Dist.Dme.Algorithms.Overlay.csproj.CoreCompileInputs.cache
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Algorithms\Dist.Dme.Algorithms.Overlay\obj\x86\Debug\netcoreapp2.0\Dist.Dme.Algorithms.Overlay.AssemblyInfoInputs.cache
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Algorithms\Dist.Dme.Algorithms.Overlay\obj\x86\Debug\netcoreapp2.0\Dist.Dme.Algorithms.Overlay.AssemblyInfo.cs
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Algorithms\Dist.Dme.Algorithms.Overlay\obj\x86\Debug\netcoreapp2.0\Dist.Dme.Algorithms.Overlay.dll
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.Algorithms\Dist.Dme.Algorithms.Overlay\obj\x86\Debug\netcoreapp2.0\Dist.Dme.Algorithms.Overlay.pdb

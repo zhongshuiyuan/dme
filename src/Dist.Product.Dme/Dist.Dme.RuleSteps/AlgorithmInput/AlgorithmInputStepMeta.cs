@@ -127,37 +127,40 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
                     new Property(paraMetaItem.Name, paraMetaItem.Alias, EnumUtil.GetEnumObjByName<EnumValueMetaType>(paraMetaItem.DataType),
                     null, null, paraMetaItem.Remark, null, paraMetaItem.IsVisible, paraMetaItem.ReadOnly, paraMetaItem.Required, "");
             }
-            IList<DmeRuleStepAttribute> attributes = repository.GetDbContext().Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == this.step.Id).ToList();
-            if (attributes?.Count > 0)
+            // 把算法编码加进去
+            propertyDic[nameof(this.AlgorithmCode)] = new Property(nameof(this.AlgorithmCode), nameof(this.AlgorithmCode), EnumValueMetaType.TYPE_STRING);
+            IList<DmeRuleStepAttribute> ruleStepAttributes = repository.GetDbContext().Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == this.step.Id).ToList();
+            if (ruleStepAttributes?.Count > 0)
             {
                 IDictionary<string, Property> dictionary = new Dictionary<string, Property>();
                 Property property = null;
-                foreach (var item in attributes)
+                foreach (var subAtt in ruleStepAttributes)
                 {
-                    if (!propertyDic.ContainsKey(item.AttributeCode) || null == item.AttributeValue)
+                    if (!propertyDic.ContainsKey(subAtt.AttributeCode) || null == subAtt.AttributeValue)
                     {
                         continue;
                     }
-                    property = propertyDic[item.AttributeCode];
-                    property.IsNeedPrecursor = item.IsNeedPrecursor;
-                    if (1 == item.IsNeedPrecursor)
+                    property = propertyDic[subAtt.AttributeCode];
+                    property.IsNeedPrecursor = subAtt.IsNeedPrecursor;
+                    if (1 == subAtt.IsNeedPrecursor)
                     {
-                        // 前驱参数格式：${步骤编码:属性编码}
-                        property.Value = item.AttributeValue.ToString().Substring(2, item.AttributeValue.ToString().LastIndexOf("}")-2);
+                        // 前驱参数格式：${步骤编码:属性编码}（已过时）
+                        property.Value = subAtt.AttributeValue.ToString();//subAtt.AttributeValue.ToString().Substring(2, subAtt.AttributeValue.ToString().LastIndexOf("}")-2);
+                        dictionary[subAtt.AttributeCode] = property;
                         continue;
                     }
                     if ((int)EnumValueMetaType.TYPE_FEATURECLASS == property.DataType)
                     {
                         // 如果是要素类，则值的格式：{"name":"图层名","source":"数据源唯一编码"}
-                        JObject jObject = JObject.Parse(item.AttributeValue.ToString());
+                        JObject jObject = JObject.Parse(subAtt.AttributeValue.ToString());
                         property.Value = jObject.GetValue("name").Value<string>();
                         property.DataSourceCode = jObject.GetValue("source").Value<string>();
                     }
                     else
                     {
-                        property.Value = item.AttributeValue;
+                        property.Value = subAtt.AttributeValue;
                     }
-                    dictionary[item.AttributeCode] = property;
+                    dictionary[subAtt.AttributeCode] = property;
                 }
                 return dictionary;
             }

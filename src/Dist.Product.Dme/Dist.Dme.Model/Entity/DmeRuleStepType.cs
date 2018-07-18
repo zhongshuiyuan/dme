@@ -13,6 +13,6 @@ namespace Dist.Dme.Model.Entity
         public String Code { get; set; }
         public String Name { get; set; }
         public String Remark { get; set; }
-        public String GroupBox { get; set; }
+        public String Category { get; set; }
     }
 }

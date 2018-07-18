@@ -2,6 +2,7 @@
 using Dist.Dme.Algorithms.Overlay;
 using Dist.Dme.Base.Common;
 using Dist.Dme.Base.Framework;
+using Dist.Dme.Base.Framework.Collections;
 using Dist.Dme.Base.Framework.Exception;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
@@ -18,6 +19,7 @@ using log4net;
 using MongoDB.Driver;
 using SqlSugar;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -344,7 +346,9 @@ namespace Dist.Dme.Service.Impls
                 DmeRuleStepAttribute dmeRuleStepAttribute = null;
                 foreach (var p in properties)
                 {
-                    if (nameof(EnumValueMetaType.TYPE_FEATURECLASS).Equals(p.DataTypeCode))
+                    if (nameof(EnumValueMetaType.TYPE_FEATURECLASS).Equals(p.DataTypeCode)
+                        || nameof(EnumValueMetaType.TYPE_MDB_FEATURECLASS).Equals(p.DataTypeCode)
+                        || nameof(EnumValueMetaType.TYPE_SDE_FEATURECLASS).Equals(p.DataTypeCode))
                     {
                         // 要素类的属性，注意值的存储格式
                         dmeRuleStepAttribute = new DmeRuleStepAttribute
@@ -369,10 +373,10 @@ namespace Dist.Dme.Service.Impls
                             AttributeValue = p.Value
                         };
                     }
-                    if (1 == p.IsNeedPrecursor)
-                    {
-                        dmeRuleStepAttribute.AttributeValue = "${" + p.Value + "}";
-                    }
+                    //if (1 == p.IsNeedPrecursor)
+                    //{
+                    //    dmeRuleStepAttribute.AttributeValue = "${" + p.Value + "}";
+                    //}
                     attributes.Add(dmeRuleStepAttribute);
                 }
                 db.Insertable<DmeRuleStepAttribute>(attributes).ExecuteCommand();
@@ -456,8 +460,50 @@ namespace Dist.Dme.Service.Impls
                 return newTask;
             });
             // 此时不阻塞
-            RunModelAsync(db, newTask, modelVersion, model, ruleSteps);
+            RunModelAsync(db, model, modelVersion, newTask, ruleSteps);
             return newTask;
+        }
+        /// <summary>
+        /// 构建步骤的链表信息
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="ruleSteps"></param>
+        /// <returns>多个链表</returns>
+        private IList<RuleStepLinkedListNode<DmeRuleStep>> GetRuleStepNodeLinkedList(SqlSugarClient db, DmeModel model, DmeModelVersion modelVersion, IList<DmeRuleStep> ruleSteps)
+        {
+            IList<RuleStepLinkedListNode<DmeRuleStep>> newLinkedSteps = new List<RuleStepLinkedListNode<DmeRuleStep>>();
+            // 一次性构建步骤实体字典
+            IDictionary<int, RuleStepLinkedListNode<DmeRuleStep>> ruleStepDic = new Dictionary<int, RuleStepLinkedListNode<DmeRuleStep>>();
+            foreach (var subStep in ruleSteps)
+            {
+                ruleStepDic[subStep.Id] = new RuleStepLinkedListNode<DmeRuleStep>(subStep);
+                newLinkedSteps.Add(ruleStepDic[subStep.Id]);
+            }
+            //IList<RuleStepLinkedListNode<DmeRuleStep>> multiLinkedList = new List<RuleStepLinkedListNode<DmeRuleStep>>();
+            IList<DmeRuleStepHop> hops = db.Queryable<DmeRuleStepHop>().Where(rsh => rsh.ModelId == model.Id && rsh.VersionId == modelVersion.Id).OrderBy(rsh => rsh.StepFromId).ToList();
+            if (0 == hops?.Count)
+            {
+                return newLinkedSteps;
+            }
+           
+            IDictionary<int, RuleStepLinkedListNode<DmeRuleStep>> newRuleStepLinkedNodeDic = new Dictionary<int, RuleStepLinkedListNode<DmeRuleStep>>();
+            // 已经使用的步骤id集合
+            IList<int> usedStepIds = new List<int>();
+            RuleStepLinkedListNode<DmeRuleStep> linkedStepFromNode = null;
+            RuleStepLinkedListNode<DmeRuleStep> linkedStepToNode = null;
+            // 反过来构建？
+            foreach (var hop in hops)
+            {
+                if (!ruleStepDic.ContainsKey(hop.StepFromId) || !ruleStepDic.ContainsKey(hop.StepToId) || 0 == hop.Enabled)
+                {
+                    continue;
+                }
+                linkedStepFromNode = ruleStepDic[hop.StepFromId];
+                linkedStepToNode = ruleStepDic[hop.StepToId];
+                linkedStepFromNode.Next.Add(linkedStepToNode);
+                linkedStepToNode.Previous.Add(linkedStepFromNode);
+            }
+            return newLinkedSteps;
         }
         /// <summary>
         /// 异步处理模型后面的步骤运算
@@ -467,13 +513,14 @@ namespace Dist.Dme.Service.Impls
         /// <param name="modelVersion"></param>
         /// <param name="model"></param>
         /// <param name="ruleSteps"></param>
-        private async void RunModelAsync(SqlSugarClient db, DmeTask task, DmeModelVersion modelVersion, DmeModel model, IList<DmeRuleStep> ruleSteps)
+        private async void RunModelAsync(SqlSugarClient db, DmeModel model, DmeModelVersion modelVersion, DmeTask task,  IList<DmeRuleStep> ruleSteps)
         {
             await Task.Run<DmeTask>(() =>
             {
                 // 查询步骤前后依赖关系
-                // TODO 暂时不处理
+                // 形成链表
                 IList<DmeRuleStepHop> hops = db.Queryable<DmeRuleStepHop>().Where(rsh => rsh.ModelId == model.Id && rsh.VersionId == modelVersion.Id).OrderBy("STEP_FROM_ID").ToList();
+                IList <RuleStepLinkedListNode< DmeRuleStep>>  rulestepLinkedList = this.GetRuleStepNodeLinkedList(db, model, modelVersion, ruleSteps);
 
                 return db.Ado.UseTran<DmeTask>(() =>
                {
@@ -825,7 +872,7 @@ namespace Dist.Dme.Service.Impls
                             Builders<TaskResultColl>.Filter.Eq("TaskId", item.TaskId),
                             Builders<TaskResultColl>.Filter.Eq("RuleStepId", item.RuleStepId),
                             Builders<TaskResultColl>.Filter.Eq("Code", item.ResultCode));
-                        IList<TaskResultColl> colls = MongodbHelper<TaskResultColl>.FindList(ServiceFactory.MongoHost, filter);
+                        IList<TaskResultColl> colls = MongodbHelper<TaskResultColl>.FindList(ServiceFactory.MongoDatabase, filter);
                         if (colls != null && colls.Count > 0)
                         {
                             temp.Value = colls[0].Value;

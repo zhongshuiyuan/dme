@@ -29,6 +29,10 @@ namespace Dist.Dme.Algorithms.Overlay.DTO
         /// <summary>
         /// 相交那一部分的图形坐标串，JSON格式
         /// </summary>
-        public string CoordJson { get; set; }
+        public string Coordinates { get; set; }
+        /// <summary>
+        /// geometry类型
+        /// </summary>
+        public string GeoType { get; set; }
     }
 }

@@ -42,12 +42,15 @@ namespace Dist.Dme.RuleSteps.DataSourceInput
             IDictionary<string, Property> atts = new Dictionary<string, Property>();
             // 数据源步骤的属性不会存在数据模型[DME_RULESTEP_ATTRIBUTE]，而是存在数据模型[DME_RULESTEP_DATASOURCE]
             var db = base.repository.GetDbContext();
-            IList<string> dataSources = db.Queryable<DmeRuleStepDataSource, DmeDataSource>((rsds, ds) => rsds.DataSourceId == ds.Id).Select<string>((rsds, ds) => ds.SysCode).ToList();
+            // 选择数据源标识符
+            IList<string> dataSources = db.Queryable<DmeRuleStepDataSource, DmeDataSource>((rsds, ds) => rsds.DataSourceId == ds.Id && rsds.RuleStepId == step.Id).Select<string>((rsds, ds) => ds.SysCode).ToList();
             if (dataSources?.Count > 0)
             {
                 foreach (var item in dataSources)
                 {
-                    atts["source"] = new Property(item, item, EnumValueMetaType.TYPE_STRING, item, "", "", null, 1, 0, 1, item);
+                    atts[nameof(base.Source)] = new Property(nameof(base.Source), nameof(base.Source), EnumValueMetaType.TYPE_STRING, item, "", "", null, 1, 0, 1, item);
+                    // 一个数据源有且仅有一个关联
+                    break;
                 }
             }
             return atts;

@@ -1,4 +1,5 @@
 ﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Common.Http;
 using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.DisFS.Adapters.Mongo;
@@ -34,6 +35,8 @@ namespace Dist.Dme.WebApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [CompressContent]
+        [CacheFilter(CacheSecondDuration = 100)]
         [Route("v1/types")]
         public Result ListDatabaseTypes()
         {

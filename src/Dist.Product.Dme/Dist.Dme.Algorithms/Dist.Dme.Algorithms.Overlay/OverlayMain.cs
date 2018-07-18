@@ -93,7 +93,7 @@ namespace Dist.Dme.Algorithms.Overlay
                             new Property(nameof(AnalysisType.OVERTOP), EnumUtil.GetEnumDescription(AnalysisType.OVERTOP), EnumValueMetaType.TYPE_INTEGER, (int)AnalysisType.OVERTOP, null, EnumUtil.GetEnumDescription(AnalysisType.OVERTOP))}));
             base.InputParametersMeta.Add(nameof(IsClearTemp), new Property(nameof(IsClearTemp), nameof(IsClearTemp), EnumValueMetaType.TYPE_BOOLEAN, false, false, "是否清理临时目录或文件", new object[] { true, false}));
             // 指定输出参数类型
-            base.OutputParametersMeta.Add(nameof(Result), new Property(nameof(Result), "输出结果", EnumValueMetaType.TYPE_JSON));
+            base.OutputParametersMeta.Add(nameof(Result), new Property(nameof(Result), "输出结果", EnumValueMetaType.TYPE_JSON, null, null, "输出结果，json格式", null, 1, 1));
         }
         public override Result Execute()
         {
@@ -137,7 +137,8 @@ namespace Dist.Dme.Algorithms.Overlay
                         {
                             OID = item.OID,
                             Area = item.Area,
-                            CoordJson = item.CoordJson
+                            Coordinates = item.Coordinates,
+                            GeoType = item.GeoType
                         };
                         overlayRespDTO.Features.Add(intersectFeatureRespDTO);
                     }
@@ -178,7 +179,7 @@ namespace Dist.Dme.Algorithms.Overlay
                             {
                                 OID = pFeature.OID,
                                 Area = area,
-                                CoordJson = GeometryUtil.ConvertGeometryToJson(pFeature.Shape, out string msg)
+                                Coordinates = GeometryUtil.ConvertGeometryToJson(pFeature.Shape, out string msg)
                             };
                             overlayRespDTO.Features.Add(featureRespDTO);
                             pFeature = pFeatureCursor.NextFeature();

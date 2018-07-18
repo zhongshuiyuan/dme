@@ -21,7 +21,7 @@ namespace Dist.Dme.SRCE.Esri.DTO
         /// <summary>
         /// 相交那一部分的图形坐标串，JSON格式
         /// </summary>
-        public string CoordJson { get; set; }
+        public string Coordinates { get; set; }
         /// <summary>
         /// 查询图形范围
         /// </summary>
@@ -34,6 +34,10 @@ namespace Dist.Dme.SRCE.Esri.DTO
         /// 相交那部分geometry
         /// </summary>
         public IGeometry IntersectGeometry { get; set; }
+        /// <summary>
+        /// geometry类型
+        /// </summary>
+        public string GeoType { get; set; }
 
     }
 }

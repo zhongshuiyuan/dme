@@ -1,9 +1,0 @@
-D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.SRCE.deps.json
-D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.SRCE.dll
-D:\gitrep\dme\src\Dist.Product.Dme\Bin\netcoreapp2.0\Dist.Dme.SRCE.pdb
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\obj\x86\Debug\netcoreapp2.0\Dist.Dme.SRCE.csprojResolveAssemblyReference.cache
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\obj\x86\Debug\netcoreapp2.0\Dist.Dme.SRCE.csproj.CoreCompileInputs.cache
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\obj\x86\Debug\netcoreapp2.0\Dist.Dme.SRCE.AssemblyInfoInputs.cache
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\obj\x86\Debug\netcoreapp2.0\Dist.Dme.SRCE.AssemblyInfo.cs
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\obj\x86\Debug\netcoreapp2.0\Dist.Dme.SRCE.dll
-D:\gitrep\dme\src\dist.product.dme\Dist.Dme.SRCE\obj\x86\Debug\netcoreapp2.0\Dist.Dme.SRCE.pdb

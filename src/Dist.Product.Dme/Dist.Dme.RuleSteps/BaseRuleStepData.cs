@@ -26,7 +26,12 @@ namespace Dist.Dme.RuleSteps
         //protected int modelId;
         //protected int versionId;
         //protected int ruleStepId;
-
+        /// <summary>
+        /// 真正运行的时候，taskId和step才被使用到
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="taskId"></param>
+        /// <param name="step"></param>
         public BaseRuleStepData(IRepository repository, int taskId, DmeRuleStep step)
         {
             this.repository = repository;
@@ -76,7 +81,7 @@ namespace Dist.Dme.RuleSteps
                             Code = item.Key,
                             Value = JsonConvert.SerializeObject(item.Value.Value)
                         };
-                        MongodbHelper<TaskResultColl>.Add(ServiceFactory.MongoHost, taskResultColl);
+                        MongodbHelper<TaskResultColl>.Add(ServiceFactory.MongoDatabase, taskResultColl);
                         //taskResult.ResultValue = JsonConvert.SerializeObject(item.Value.Value);
                         break;
                     case (int)EnumValueMetaType.TYPE_DATE:

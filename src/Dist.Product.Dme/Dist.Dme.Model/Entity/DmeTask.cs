@@ -22,5 +22,6 @@ namespace Dist.Dme.Model.Entity
         public int VersionId { get; set; }
         public long CreateTime { get; set; }
         public long LastTime { get; set; }
+        public string NodeServer { get; set; }
     }
 }

@@ -26,6 +26,6 @@ namespace Dist.Dme.DisFS.Collection
         /// <summary>
         /// 值
         /// </summary>
-        public string Value { get; set; }
+        public object Value { get; set; }
     }
 }
