@@ -1,0 +1,7 @@
+*/.vs/
+*.~sql
+**/bin/**
+**/obj/**
+**/log/**
+**/temp/**
+**/packages/**
