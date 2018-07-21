@@ -828,7 +828,8 @@ create table DME_TASK_RuleSTEP
   task_id     number(8),
   rulestep_id number(8),
   status      varchar2(20),
-  createtime  number(20)
+  createtime  number(20),
+  lastTime number(20)
 )
 ;
 -- Add comments to the table 
@@ -845,6 +846,9 @@ comment on column DME_TASK_RuleSTEP.status
   is '状态，运行中：running，停止：stop，成功：success，失败：fail';
 comment on column DME_TASK_RuleSTEP.createtime
   is '创建时间，毫秒';
+ comment on column DME_TASK_RuleSTEP.Lasttime
+  is '最后修改时间，毫秒';
+  
 alter table DME_TASK_RuleSTEP add primary key(id);
 
 create sequence SEQ_DME_TASK_RuleSTEP

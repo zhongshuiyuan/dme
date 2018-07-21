@@ -21,24 +21,24 @@ namespace Dist.Dme.Base.Framework
         /// <summary>
         /// 获取结果状态码
         /// </summary>
-        public int Code { get; set; }
+        public EnumSystemStatusCode Code { get; set; }
         /// <summary>
         /// 数据
         /// </summary>
         public Object Data { get; set; }
 
-        public Result(EnumSystemStatusCode status, String message, int code, Object data)
+        public Result(EnumSystemStatusCode status, String message, EnumSystemStatusCode code, Object data)
         {
             this.Status = EnumUtil.GetEnumDisplayName(status);
             this.Message = message;
             this.Code = code;
             this.Data = data;
         }
-        public Result(EnumSystemStatusCode status, String message, Object data)
+        public Result(EnumSystemStatusCode code, String message, Object data)
         {
-            this.Status = EnumUtil.GetEnumDisplayName(status);
+            this.Status = EnumUtil.GetEnumDisplayName(code);
             this.Message = message;
-            this.Code = (int)status;
+            this.Code = code;
             this.Data = data;
         }
         /// <summary>

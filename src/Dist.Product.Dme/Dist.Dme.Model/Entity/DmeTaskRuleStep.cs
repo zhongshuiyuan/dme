@@ -16,5 +16,6 @@ namespace Dist.Dme.Model.Entity
         public int RuleStepId { get; set; }
         public string Status { get; set; }
         public long CreateTime { get; set; }
+        public long LastTime { get; set; }
     }
 }

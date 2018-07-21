@@ -122,7 +122,7 @@ namespace Dist.Dme.WebApi
             ServiceFactory.MongoHost = serviceProvider.GetService<MongodbHost>();
             ServiceFactory.MongoClient = serviceProvider.GetService<IMongoClient>();
             ServiceFactory.MongoDatabase = serviceProvider.GetService<IMongoDatabase>();
-
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info

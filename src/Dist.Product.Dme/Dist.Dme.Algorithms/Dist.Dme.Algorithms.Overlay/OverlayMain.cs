@@ -144,7 +144,7 @@ namespace Dist.Dme.Algorithms.Overlay
                     }
                     Property resultProp = base.OutputParametersMeta[nameof(Result)];
                     resultProp.Value = overlayRespDTO;
-                    return new Result(EnumSystemStatusCode.DME_SUCCESS, "运行完成", (int)EnumSystemStatusCode.DME_SUCCESS, null);
+                    return new Result(EnumSystemStatusCode.DME_SUCCESS, "运行完成", EnumSystemStatusCode.DME_SUCCESS, null);
                 }
             }
             else if (AnalysisType.OVERTOP == this.AnalysisType)
@@ -187,7 +187,7 @@ namespace Dist.Dme.Algorithms.Overlay
                         overlayRespDTO.SumArea = sumArea;
                         Property resultProp = base.OutputParametersMeta[nameof(Result)];
                         resultProp.Value = overlayRespDTO;
-                        return new Result(EnumSystemStatusCode.DME_SUCCESS, "运行完成", (int)EnumSystemStatusCode.DME_SUCCESS, null);
+                        return new Result(EnumSystemStatusCode.DME_SUCCESS, "运行完成", EnumSystemStatusCode.DME_SUCCESS, null);
                     }
                 }
                 // 删除临时文件
@@ -201,7 +201,7 @@ namespace Dist.Dme.Algorithms.Overlay
                 throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, "分析类型不匹配");
             }
            
-            return new Result(EnumSystemStatusCode.DME_SUCCESS, "运行完成，但没有运算结果", (int)EnumSystemStatusCode.DME_SUCCESS, null);
+            return new Result(EnumSystemStatusCode.DME_SUCCESS, "运行完成，但没有运算结果", EnumSystemStatusCode.DME_SUCCESS, null);
         }
 
         public override void Init(IDictionary<string, object> parameters)

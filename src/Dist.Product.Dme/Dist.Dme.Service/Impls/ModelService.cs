@@ -1,6 +1,7 @@
 ﻿using Dist.Dme.Algorithms.LandConflictDetection;
 using Dist.Dme.Algorithms.Overlay;
 using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Common.Log;
 using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.Collections;
 using Dist.Dme.Base.Framework.Exception;
@@ -16,8 +17,8 @@ using Dist.Dme.Model.Entity;
 using Dist.Dme.RuleSteps;
 using Dist.Dme.RuleSteps.AlgorithmInput;
 using Dist.Dme.Service.Interfaces;
-using log4net;
 using MongoDB.Driver;
+using NLog;
 using SqlSugar;
 using System;
 using System.Collections;
@@ -33,7 +34,7 @@ namespace Dist.Dme.Service.Impls
     /// </summary>
     public class ModelService : BaseBizService, IModelService
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(ModelService));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 用地差异分析
         /// </summary>
@@ -192,7 +193,7 @@ namespace Dist.Dme.Service.Impls
                     }
                     catch(Exception ex)
                     {
-                        LOG.Error(ex.Message, ex);
+                        LOG.Error(ex, ex.Message);
                     }
                 }
                 return modelDTOs;
@@ -531,8 +532,20 @@ namespace Dist.Dme.Service.Impls
                 newTask = db.Insertable<DmeTask>(newTask).ExecuteReturnEntity();
                 return newTask;
             });
-            // 此时不阻塞
-            RunModelAsync(db, model, modelVersion, newTask, ruleSteps);
+            try
+            {
+                // 此时不阻塞，返回类型为Task，为了能捕获到线程异常信息
+                RunModelAsyncEx(db, model, modelVersion, newTask, ruleSteps);
+            }
+            catch (Exception ex)
+            {
+                LOG.Error(ex, ex.Message);
+                // 更改任务状态
+                newTask.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_ERROR);
+                newTask.LastTime = DateUtil.CurrentTimeMillis;
+                db.Updateable<DmeTask>(newTask).UpdateColumns(task => new { task.Status, task.LastTime}).ExecuteCommand();
+            }
+         
             return newTask;
         }
         /// <summary>
@@ -585,14 +598,15 @@ namespace Dist.Dme.Service.Impls
         /// <param name="modelVersion"></param>
         /// <param name="model"></param>
         /// <param name="ruleSteps"></param>
-        private async void RunModelAsync(SqlSugarClient db, DmeModel model, DmeModelVersion modelVersion, DmeTask task,  IList<DmeRuleStep> ruleSteps)
+        [Obsolete]
+        private async Task RunModelAsync(SqlSugarClient db, DmeModel model, DmeModelVersion modelVersion, DmeTask task,  IList<DmeRuleStep> ruleSteps)
         {
             await Task.Run<DmeTask>(() =>
             {
                 // 查询步骤前后依赖关系
                 // 形成链表
                 IList<DmeRuleStepHop> hops = db.Queryable<DmeRuleStepHop>().Where(rsh => rsh.ModelId == model.Id && rsh.VersionId == modelVersion.Id).OrderBy("STEP_FROM_ID").ToList();
-                IList <RuleStepLinkedListNode< DmeRuleStep>>  rulestepLinkedList = this.GetRuleStepNodeLinkedList(db, model, modelVersion, ruleSteps);
+                IList <RuleStepLinkedListNode<DmeRuleStep>>  rulestepLinkedList = this.GetRuleStepNodeLinkedList(db, model, modelVersion, ruleSteps);
 
                 return db.Ado.UseTran<DmeTask>(() =>
                {
@@ -609,7 +623,7 @@ namespace Dist.Dme.Service.Impls
                            {
                                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"步骤工厂无法创建编码为[{ruleStepTypeTemp.Code}]的流程实例节点");
                            }
-                           ruleStepData.Run();
+                           stepResult = ruleStepData.Run();
                            //if (1 == subRuleStep.StepTypeId)
                            //{
                            //    // 算法输入
@@ -617,9 +631,9 @@ namespace Dist.Dme.Service.Impls
                            //    // 执行计算
                            //    stepResult = ruleStepData.Run();
                            //}
-                           if (stepResult.Code != (int)EnumSystemStatusCode.DME_SUCCESS)
+                           if (stepResult.Code != EnumSystemStatusCode.DME_SUCCESS)
                            {
-                               throw new BusinessException(stepResult.Code, stepResult.Message);
+                               throw new BusinessException((int)stepResult.Code, stepResult.Message);
                            }
                        }
                        task.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_SUCCESS);
@@ -645,6 +659,122 @@ namespace Dist.Dme.Service.Impls
                        throw ex;
                    }
                }).Data;
+            });
+        }
+        /// <summary>
+        /// 运行步骤节点
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="task"></param>
+        /// <param name="node"></param>
+        private void RunRuleStepNode(SqlSugarClient db, DmeTask task, RuleStepLinkedListNode<DmeRuleStep> node)
+        {
+            // 先计算前置节点
+            if (node.Previous?.Count > 0)
+            {
+                foreach (var item in node.Previous)
+                {
+                    RunRuleStepNode(db, task, item);
+                }
+            }
+            DmeTaskRuleStep dmeTaskRuleStep = null;
+            try
+            {
+                // 先判断任务的状态，是否被停止
+                DmeTask taskStatus = db.Queryable<DmeTask>().Single(t => t.SysCode == task.SysCode);
+                if (null == taskStatus || taskStatus.Status.Equals(EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_STOP)))
+                {
+                    LOG.Info($"任务[{task.SysCode}]不存在或者已被停止");
+                    return;
+                }
+                string cacheKey = $"{task.SysCode}_{node.Value.SysCode}";
+                dmeTaskRuleStep = ServiceFactory.CacheService.Get<DmeTaskRuleStep>(cacheKey);
+                if (dmeTaskRuleStep != null)
+                {
+                    LOG.Info($"任务[{task.SysCode}]下的步骤[{node.Value.SysCode}]已被计算过，或者正在计算");
+                    return;
+                }
+                // 如果前置节点没有了，则计算当前节点内容
+                DmeRuleStepType ruleStepTypeTemp = db.Queryable<DmeRuleStepType>().Single(rst => rst.Id == node.Value.StepTypeId);
+                IRuleStepData ruleStepData = RuleStepFactory.GetRuleStepData(ruleStepTypeTemp.Code, this.Repository, task.Id, node.Value);
+                if (null == ruleStepData)
+                {
+                    throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"步骤工厂无法创建编码为[{ruleStepTypeTemp.Code}]的流程实例节点");
+                }
+                DmeTaskRuleStep dmeRuleStep = new DmeTaskRuleStep
+                {
+                    TaskId = task.Id,
+                    RuleStepId = node.Value.Id,
+                    Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_RUNNING),
+                    CreateTime = DateUtil.CurrentTimeMillis,
+                    LastTime = DateUtil.CurrentTimeMillis
+                };
+                dmeTaskRuleStep = db.Insertable<DmeTaskRuleStep>(dmeTaskRuleStep).ExecuteReturnEntity();
+                // 任务步骤创建成功后，把相关信息记录在缓存中
+                ServiceFactory.CacheService.AddAsync(cacheKey, dmeTaskRuleStep);
+                Result stepResult = ruleStepData.Run();
+                dmeTaskRuleStep.Status = EnumUtil.GetEnumDisplayName(stepResult.Code);
+                dmeTaskRuleStep.LastTime = DateUtil.CurrentTimeMillis;
+                // 只更新状态和最后时间
+                db.Updateable<DmeTaskRuleStep>(dmeTaskRuleStep).UpdateColumns(ts => new { ts.Status, ts.LastTime }).ExecuteCommand();
+                // 然后计算下一个步骤
+                if (node?.Next.Count > 0)
+                {
+                    foreach (var item in node.Next)
+                    {
+                        RunRuleStepNode(db, task, item);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                dmeTaskRuleStep.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_ERROR);
+                dmeTaskRuleStep.LastTime = DateUtil.CurrentTimeMillis;
+                // 只更新状态和最后时间
+                db.Updateable<DmeTaskRuleStep>(dmeTaskRuleStep).UpdateColumns(ts => new { ts.Status, ts.LastTime }).ExecuteCommand();
+                this.LogService.AddLogAsync(Base.Common.Log.EnumLogType.ENTITY, EnumLogLevel.ERROR, nameof(DmeTaskRuleStep), dmeTaskRuleStep.Id.ToString(), ex.Message, ex);
+            } 
+        }
+        private async Task RunModelAsyncEx(SqlSugarClient db, DmeModel model, DmeModelVersion modelVersion, DmeTask task, IList<DmeRuleStep> ruleSteps)
+        {
+            await Task.Run<DmeTask>(() =>
+            {
+                return db.Ado.UseTran<DmeTask>(() =>
+                {
+                    try
+                    {
+                        // 查询步骤前后依赖关系
+                        // 形成链表
+                        IList<DmeRuleStepHop> hops = db.Queryable<DmeRuleStepHop>().Where(rsh => rsh.ModelId == model.Id && rsh.VersionId == modelVersion.Id).OrderBy("STEP_FROM_ID").ToList();
+                        IList<RuleStepLinkedListNode<DmeRuleStep>> rulestepLinkedList = this.GetRuleStepNodeLinkedList(db, model, modelVersion, ruleSteps);
+                        foreach (var item in rulestepLinkedList)
+                        {
+                            // 开始计算步骤
+                            this.RunRuleStepNode(db, task, item);
+                        }
+                        task.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_SUCCESS);
+                        task.LastTime = DateUtil.CurrentTimeMillis;
+                        db.Updateable<DmeTask>(task).ExecuteCommand();
+                        return task;
+                    }
+                    catch (Exception ex)
+                    {
+                        // 更改任务执行的状态
+                        if (ex is BusinessException)
+                        {
+                            task.Status = EnumUtil.GetEnumDisplayName(EnumUtil.GetEnumObjByValue<EnumSystemStatusCode>(((BusinessException)ex).Code));
+                        }
+                        else
+                        {
+                            task.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_ERROR);
+                        }
+                        task.LastTime = DateUtil.CurrentTimeMillis;
+                        db.Updateable<DmeTask>(task).ExecuteCommand();
+                        // 添加日志
+                        this.LogService.AddLogAsync(Base.Common.Log.EnumLogType.ENTITY, Base.Common.Log.EnumLogLevel.ERROR, nameof(DmeTask), task.SysCode, "", ex);
+                        throw ex;
+                    }
+                }).Data;
             });
         }
 
