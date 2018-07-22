@@ -132,15 +132,15 @@ namespace Dist.Dme.Algorithms.LandConflictDetection
                 object result = unionTool.Excute();
                 if (null == result)
                 {
-                    return new Result(EnumSystemStatusCode.DME_ERROR, "图层联合分析失败", (int)EnumSystemStatusCode.DME_ERROR, false);
+                    return new Result(EnumSystemStatusCode.DME_ERROR, "图层联合分析失败", EnumSystemStatusCode.DME_ERROR, false);
                 }
                 // 对输出图层进行规则计算
                 // TODO
-                return new Result(EnumSystemStatusCode.DME_SUCCESS, "差异分析完成", (int)EnumSystemStatusCode.DME_SUCCESS, true);
+                return new Result(EnumSystemStatusCode.DME_SUCCESS, "差异分析完成", EnumSystemStatusCode.DME_SUCCESS, true);
             } catch (Exception ex)
             {
                 LOG.Error("差异分析失败，详情：" + ex.Message);
-                return new Result(EnumSystemStatusCode.DME_ERROR, "差异分析失败，详情：" + ex.Message, (int)EnumSystemStatusCode.DME_ERROR, false);
+                return new Result(EnumSystemStatusCode.DME_ERROR, "差异分析失败，详情：" + ex.Message, EnumSystemStatusCode.DME_ERROR, false);
             }
         }
 

@@ -353,7 +353,18 @@ namespace Dist.Dme.DisCache.Impls
         /// <returns></returns>
         public Task<bool> ReplaceAsync(string key, object value)
         {
-            throw new NotImplementedException();
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            if (Exists(key))
+                if (!Remove(key)) return new Task<bool>(() => false);
+
+            return this.AddAsync(key, value);
         }
 
         /// <summary>

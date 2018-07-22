@@ -487,7 +487,7 @@ namespace Dist.Dme.Service.Impls
             }
             db.Insertable<DmeRuleStepHop>(hops).ExecuteCommand();
         }
-        public DmeTask RunModelAsync(string versionCode)
+        public async Task<DmeTask> RunModelAsync(string versionCode)
         {
             // 尽管使用了async关键字，如果不使用await，则还是同步操作
             //return await Task.Run<DmeTask>(() =>
@@ -535,7 +535,7 @@ namespace Dist.Dme.Service.Impls
             try
             {
                 // 此时不阻塞，返回类型为Task，为了能捕获到线程异常信息
-                RunModelAsyncEx(db, model, modelVersion, newTask, ruleSteps);
+                await RunModelAsyncEx(db, model, modelVersion, newTask, ruleSteps);
             }
             catch (Exception ex)
             {
@@ -689,7 +689,7 @@ namespace Dist.Dme.Service.Impls
                 }
                 string cacheKey = $"{task.SysCode}_{node.Value.SysCode}";
                 dmeTaskRuleStep = ServiceFactory.CacheService.Get<DmeTaskRuleStep>(cacheKey);
-                if (dmeTaskRuleStep != null)
+                if (dmeTaskRuleStep != null && nameof(EnumSystemStatusCode.DME_SUCCESS).Equals(dmeTaskRuleStep.Status))
                 {
                     LOG.Info($"任务[{task.SysCode}]下的步骤[{node.Value.SysCode}]已被计算过，或者正在计算");
                     return;
@@ -701,7 +701,7 @@ namespace Dist.Dme.Service.Impls
                 {
                     throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"步骤工厂无法创建编码为[{ruleStepTypeTemp.Code}]的流程实例节点");
                 }
-                DmeTaskRuleStep dmeRuleStep = new DmeTaskRuleStep
+                dmeTaskRuleStep = new DmeTaskRuleStep
                 {
                     TaskId = task.Id,
                     RuleStepId = node.Value.Id,
@@ -717,6 +717,8 @@ namespace Dist.Dme.Service.Impls
                 dmeTaskRuleStep.LastTime = DateUtil.CurrentTimeMillis;
                 // 只更新状态和最后时间
                 db.Updateable<DmeTaskRuleStep>(dmeTaskRuleStep).UpdateColumns(ts => new { ts.Status, ts.LastTime }).ExecuteCommand();
+                // 刷新缓存
+                ServiceFactory.CacheService.ReplaceAsync(cacheKey, dmeTaskRuleStep);
                 // 然后计算下一个步骤
                 if (node?.Next.Count > 0)
                 {
