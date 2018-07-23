@@ -29,13 +29,16 @@ namespace Dist.Dme.RuleSteps.DataSourceInput
                 return attribute;
             }
         }
-        public override object InParams
+        public override IDictionary<string, Property> InParams
         {
             get
             {
                 return base.InputParameters;
             }
         }
+
+        public override IDictionary<string, Property> OutParams => throw new NotImplementedException();
+
         /// <summary>
         /// 覆写父类的方法
         /// </summary>

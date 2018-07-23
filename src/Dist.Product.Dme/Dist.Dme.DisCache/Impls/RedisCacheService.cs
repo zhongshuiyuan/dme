@@ -37,7 +37,8 @@ namespace Dist.Dme.DisCache.Impls
         }
         public string GetKeyForRedis(string key)
         {
-            return instance + key;
+            // instance + key
+            return key;
         }
         #region 验证缓存是否存在
         /// <summary>
@@ -177,7 +178,29 @@ namespace Dist.Dme.DisCache.Impls
         /// <returns></returns>
         public Task<bool> AddAsync(string key, object value, TimeSpan expiresIn, bool isSliding = false)
         {
-            throw new NotImplementedException();
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            TimeSpan expiressAbsoulte = new TimeSpan(DateTime.Now.Add(expiresIn).Ticks);
+            return cache.StringSetAsync(GetKeyForRedis(key), Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(value)), expiressAbsoulte);
+        }
+        public Task<bool> AddAsync(string key, object value, long seconds)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            TimeSpan expiressAbsoulte = new TimeSpan(DateTime.Now.AddSeconds(seconds).Ticks);
+            return cache.StringSetAsync(GetKeyForRedis(key), Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(value)), expiressAbsoulte);
         }
         #endregion
 

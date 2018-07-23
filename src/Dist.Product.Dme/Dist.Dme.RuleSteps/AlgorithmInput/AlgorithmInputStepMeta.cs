@@ -46,7 +46,7 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
             : base(repository, step)
         {
         }
-        public override object InParams
+        public override IDictionary<string, Property> InParams
         {
             get
             {
@@ -57,6 +57,8 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
                 return base.InputParameters;
             }
         }
+
+        public override IDictionary<string, Property> OutParams => throw new NotImplementedException();
 
         /// <summary>
         /// 获取算法

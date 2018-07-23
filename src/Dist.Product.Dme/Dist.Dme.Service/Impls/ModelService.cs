@@ -158,7 +158,7 @@ namespace Dist.Dme.Service.Impls
             return modelDTO;
         }
 
-        public object LandConflictExecute(IDictionary<string, object> parameters)
+        public object LandConflictExecute(IDictionary<string, Property> parameters)
         {
             this.landConflictDetectionAlgorithm.Init(parameters);
             return this.landConflictDetectionAlgorithm.Execute();
@@ -203,7 +203,7 @@ namespace Dist.Dme.Service.Impls
                 return models;
             } 
         }
-        public object OverlayExecute(IDictionary<String, Object> parameters)
+        public object OverlayExecute(IDictionary<String, Property> parameters)
         {
             this.OverlayAlg.Init(parameters);
             Result result = this.OverlayAlg.Execute();
@@ -525,7 +525,8 @@ namespace Dist.Dme.Service.Impls
                     CreateTime = DateUtil.CurrentTimeMillis,
                     Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_RUNNING),
                     ModelId = model.Id,
-                    VersionId = modelVersion.Id
+                    VersionId = modelVersion.Id,
+                    NodeServer = NetAssist.GetLocalHost()
                 };
                 newTask.Name = "task-" + newTask.CreateTime;
                 newTask.LastTime = newTask.CreateTime;
@@ -655,7 +656,7 @@ namespace Dist.Dme.Service.Impls
                        task.LastTime = DateUtil.CurrentTimeMillis;
                        db.Updateable<DmeTask>(task).ExecuteCommand();
                        // 添加日志
-                       this.LogService.AddLogAsync(Base.Common.Log.EnumLogType.ENTITY, Base.Common.Log.EnumLogLevel.ERROR, nameof(DmeTask), task.SysCode, "", ex);
+                       this.LogService.AddLogAsync(Base.Common.Log.EnumLogType.ENTITY, Base.Common.Log.EnumLogLevel.ERROR, nameof(DmeTask), task.SysCode, "", ex, "", NetAssist.GetLocalHost());
                        throw ex;
                    }
                }).Data;
@@ -687,11 +688,12 @@ namespace Dist.Dme.Service.Impls
                     LOG.Info($"任务[{task.SysCode}]不存在或者已被停止");
                     return;
                 }
-                string cacheKey = $"{task.SysCode}_{node.Value.SysCode}";
-                dmeTaskRuleStep = ServiceFactory.CacheService.Get<DmeTaskRuleStep>(cacheKey);
-                if (dmeTaskRuleStep != null && nameof(EnumSystemStatusCode.DME_SUCCESS).Equals(dmeTaskRuleStep.Status))
+                dmeTaskRuleStep = this.GetTaskRuleStep(db, task, node.Value, out string cacheKey);
+                if (dmeTaskRuleStep != null && EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_SUCCESS).Equals(dmeTaskRuleStep.Status))
                 {
-                    LOG.Info($"任务[{task.SysCode}]下的步骤[{node.Value.SysCode}]已被计算过，或者正在计算");
+                    // 释放
+                    dmeTaskRuleStep = null;
+                    LOG.Info($"任务[{task.SysCode}]下的步骤[{node.Value.SysCode}]已被计算过，并且状态为[success]");
                     return;
                 }
                 // 如果前置节点没有了，则计算当前节点内容
@@ -703,6 +705,7 @@ namespace Dist.Dme.Service.Impls
                 }
                 dmeTaskRuleStep = new DmeTaskRuleStep
                 {
+                    SysCode = GuidUtil.NewGuid(),
                     TaskId = task.Id,
                     RuleStepId = node.Value.Id,
                     Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_RUNNING),
@@ -711,14 +714,9 @@ namespace Dist.Dme.Service.Impls
                 };
                 dmeTaskRuleStep = db.Insertable<DmeTaskRuleStep>(dmeTaskRuleStep).ExecuteReturnEntity();
                 // 任务步骤创建成功后，把相关信息记录在缓存中
-                ServiceFactory.CacheService.AddAsync(cacheKey, dmeTaskRuleStep);
+                ServiceFactory.CacheService.AddAsync(cacheKey, dmeTaskRuleStep, 60);
                 Result stepResult = ruleStepData.Run();
-                dmeTaskRuleStep.Status = EnumUtil.GetEnumDisplayName(stepResult.Code);
-                dmeTaskRuleStep.LastTime = DateUtil.CurrentTimeMillis;
-                // 只更新状态和最后时间
-                db.Updateable<DmeTaskRuleStep>(dmeTaskRuleStep).UpdateColumns(ts => new { ts.Status, ts.LastTime }).ExecuteCommand();
-                // 刷新缓存
-                ServiceFactory.CacheService.ReplaceAsync(cacheKey, dmeTaskRuleStep);
+                UpdateRuleStep(db, dmeTaskRuleStep, cacheKey, stepResult);
                 // 然后计算下一个步骤
                 if (node?.Next.Count > 0)
                 {
@@ -734,9 +732,50 @@ namespace Dist.Dme.Service.Impls
                 dmeTaskRuleStep.LastTime = DateUtil.CurrentTimeMillis;
                 // 只更新状态和最后时间
                 db.Updateable<DmeTaskRuleStep>(dmeTaskRuleStep).UpdateColumns(ts => new { ts.Status, ts.LastTime }).ExecuteCommand();
-                this.LogService.AddLogAsync(Base.Common.Log.EnumLogType.ENTITY, EnumLogLevel.ERROR, nameof(DmeTaskRuleStep), dmeTaskRuleStep.Id.ToString(), ex.Message, ex);
+                this.LogService.AddLogAsync(Base.Common.Log.EnumLogType.ENTITY, EnumLogLevel.ERROR, nameof(DmeTaskRuleStep), dmeTaskRuleStep.SysCode, ex.Message, ex, "", NetAssist.GetLocalHost());
             } 
         }
+
+        /// <summary>
+        /// 从缓存或者db中获取任务步骤信息
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="task"></param>
+        /// <param name="ruleStep"></param>
+        /// <param name="cacheKey"></param>
+        /// <returns></returns>
+        private DmeTaskRuleStep GetTaskRuleStep(SqlSugarClient db, DmeTask task, DmeRuleStep ruleStep, out string cacheKey)
+        {
+            // 先从缓存查找
+            cacheKey = HashUtil.Hash_2_MD5_32($"{task.SysCode}_{ruleStep.SysCode}");
+            DmeTaskRuleStep dmeTaskRuleStep = ServiceFactory.CacheService.Get<DmeTaskRuleStep>(cacheKey);
+            if (dmeTaskRuleStep != null)
+            {
+                LOG.Info($"缓存中获取到任务步骤信息，任务id[{dmeTaskRuleStep.TaskId}]，步骤id[{dmeTaskRuleStep.RuleStepId}]");
+                return dmeTaskRuleStep;
+            }
+
+            // 从数据库中查找
+            dmeTaskRuleStep = db.Queryable<DmeTaskRuleStep>().Single(tr => tr.TaskId == task.Id && tr.RuleStepId == ruleStep.Id);
+            return dmeTaskRuleStep;
+        }
+        /// <summary>
+        /// 更新任务和步骤信息到数据和缓存
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="dmeTaskRuleStep"></param>
+        /// <param name="cacheKey"></param>
+        /// <param name="stepResult"></param>
+        private static void UpdateRuleStep(SqlSugarClient db, DmeTaskRuleStep dmeTaskRuleStep, string cacheKey, Result stepResult)
+        {
+            dmeTaskRuleStep.Status = EnumUtil.GetEnumDisplayName(stepResult.Code);
+            dmeTaskRuleStep.LastTime = DateUtil.CurrentTimeMillis;
+            // 只更新状态和最后时间
+            db.Updateable<DmeTaskRuleStep>(dmeTaskRuleStep).UpdateColumns(ts => new { ts.Status, ts.LastTime }).ExecuteCommand();
+            // 刷新缓存
+            ServiceFactory.CacheService.ReplaceAsync(cacheKey, dmeTaskRuleStep);
+        }
+
         private async Task RunModelAsyncEx(SqlSugarClient db, DmeModel model, DmeModelVersion modelVersion, DmeTask task, IList<DmeRuleStep> ruleSteps)
         {
             await Task.Run<DmeTask>(() =>
@@ -773,7 +812,7 @@ namespace Dist.Dme.Service.Impls
                         task.LastTime = DateUtil.CurrentTimeMillis;
                         db.Updateable<DmeTask>(task).ExecuteCommand();
                         // 添加日志
-                        this.LogService.AddLogAsync(Base.Common.Log.EnumLogType.ENTITY, Base.Common.Log.EnumLogLevel.ERROR, nameof(DmeTask), task.SysCode, "", ex);
+                        this.LogService.AddLogAsync(Base.Common.Log.EnumLogType.ENTITY, Base.Common.Log.EnumLogLevel.ERROR, nameof(DmeTask), task.SysCode, "", ex, "", NetAssist.GetLocalHost());
                         throw ex;
                     }
                 }).Data;

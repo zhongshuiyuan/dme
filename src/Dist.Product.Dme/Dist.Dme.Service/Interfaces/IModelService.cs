@@ -1,4 +1,5 @@
-﻿using Dist.Dme.Base.Framework.Interfaces;
+﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using System;
@@ -49,13 +50,13 @@ namespace Dist.Dme.Service.Interfaces
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        object LandConflictExecute(IDictionary<String, Object> parameters);
+        object LandConflictExecute(IDictionary<String, Property> parameters);
         /// <summary>
         /// 压盖分析
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        object OverlayExecute(IDictionary<String, Object> parameters);
+        object OverlayExecute(IDictionary<String, Property> parameters);
         /// <summary>
         /// 复制模型的一个版本
         /// </summary>

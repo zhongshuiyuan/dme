@@ -97,7 +97,11 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
         public static IMongoCollection<T> GetMongodbCollection(MongodbHost host)
         {
             var mongoDataBase = GetMongoDatabase(host);
-            return mongoDataBase.GetCollection<T>(typeof(T).Name);
+            if (string.IsNullOrEmpty(host.Collection))
+            {
+                return mongoDataBase.GetCollection<T>(typeof(T).Name);
+            }
+            return mongoDataBase.GetCollection<T>(host.Collection);
         }
         /// <summary>
         /// 获取集合类
@@ -147,5 +151,9 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
         /// 库
         /// </summary>
         public string DataBase { get; set; }
+        /// <summary>
+        /// 集合类名称
+        /// </summary>
+        public string Collection { get; set; }
     }
 }

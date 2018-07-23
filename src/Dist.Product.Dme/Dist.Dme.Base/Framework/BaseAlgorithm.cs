@@ -42,7 +42,7 @@ namespace Dist.Dme.Base.Framework
         /// </summary>
         protected Boolean InitComplete { get; set; } = false;
 
-        public abstract void Init(IDictionary<string, object> parameters);
+        public abstract void Init(IDictionary<string, Property> parameters);
         public abstract IAlgorithmDevType AlgorithmType { get; }
         public virtual object MetadataJSON
         {

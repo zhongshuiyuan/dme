@@ -10,6 +10,7 @@ namespace Dist.Dme.Model.Entity
     {
         [SugarColumn(IsPrimaryKey = true, ColumnName = "ID", OracleSequenceName = "SEQ_DME_TASK_RULESTEP")]
         public int Id { get; set; }
+        public string SysCode { get; set; }
         [SugarColumn(ColumnName = "TASK_ID")]
         public int TaskId { get; set; }
         [SugarColumn(ColumnName = "RULESTEP_ID")]

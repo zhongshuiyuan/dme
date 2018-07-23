@@ -93,6 +93,14 @@ namespace Dist.Dme.DisCache.Interfaces
         /// <param name="isSliding">是否滑动过期（如果在过期时间内有操作，则以当前时间点延长过期时间）</param>
         /// <returns></returns>
         Task<bool> AddAsync(string key, object value, TimeSpan expiresIn, bool isSliding = false);
+        /// <summary>
+        /// 添加缓存（异步方式）
+        /// </summary>
+        /// <param name="key">缓存Key</param>
+        /// <param name="value">缓存Value</param>
+        /// <param name="seconds">缓存时长，以秒为单位</param>
+        /// <returns></returns>
+        Task<bool> AddAsync(string key, object value, long seconds);
         #endregion
 
         #region 删除缓存

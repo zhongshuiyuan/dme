@@ -49,7 +49,7 @@ namespace Dist.Dme.Base.Framework.Interfaces
         /// 初始化工作，设置参数
         /// </summary>
         /// <returns></returns>
-        void Init(IDictionary<string, object> parameters);
+        void Init(IDictionary<string, Property> parameters);
         /// <summary>
         /// 获取算法json元数据信息
         /// </summary>

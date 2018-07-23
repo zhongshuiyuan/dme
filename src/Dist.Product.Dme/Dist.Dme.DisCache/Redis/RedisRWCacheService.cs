@@ -335,6 +335,10 @@ namespace Dist.Dme.DisCache.Redis
         {
             throw new NotImplementedException();
         }
+        public Task<bool> AddAsync(string key, object value, long seconds)
+        {
+            throw new NotImplementedException();
+        }
 
         public Task<bool> RemoveAsync(string key)
         {

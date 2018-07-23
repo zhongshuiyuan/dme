@@ -45,6 +45,11 @@ namespace Dist.Dme.Base.Framework.Interfaces
         /// <summary>
         /// 获取规则步骤输入参数
         /// </summary>
-        Object InParams { get; }
-}
+        IDictionary<string, Property> InParams { get; }
+        /// <summary>
+        /// 获取规则步骤输入参数
+        /// </summary>
+        IDictionary<string, Property> OutParams { get; }
+
+    }
 }

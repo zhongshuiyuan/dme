@@ -23,7 +23,7 @@ namespace Dist.Dme.DAL.Context
                 DbType = dbType,
                 IsAutoCloseConnection = IsAutoCloseConnection,
                 //设为true，表示相同线程是同一个SqlSugarClient
-                IsShardSameThread = true
+                IsShardSameThread = false
                 // 可以使用自定义的缓存，可以把查询的结果作为缓存
                 //ConfigureExternalServices = new ConfigureExternalServices()
                 //{

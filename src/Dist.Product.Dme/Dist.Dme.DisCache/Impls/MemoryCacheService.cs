@@ -171,6 +171,10 @@ namespace Dist.Dme.DisCache.Impls
         {
             throw new NotImplementedException();
         }
+        public Task<bool> AddAsync(string key, object value, long seconds)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
         #region 删除缓存

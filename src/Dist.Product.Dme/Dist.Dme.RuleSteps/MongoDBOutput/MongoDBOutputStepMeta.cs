@@ -31,6 +31,10 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
         /// </summary>
         public string Collection { get; set; }
         /// <summary>
+        /// 结果输出的属性编码
+        /// </summary>
+        public string OutputResultAttCode { get; set; } = "Result";
+        /// <summary>
         /// 文档字段json数组
         /// </summary>
         public IList<MongoFieldDTO> MongoFields { get; set; } = new List<MongoFieldDTO>();
@@ -51,7 +55,7 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
             }
         }
 
-        public override object InParams
+        public override IDictionary<string, Property> InParams
         {
             get
             {
@@ -60,6 +64,15 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
                 base.InputParameters[nameof(Collection)] = new Property(nameof(Collection), "mongo文档类", EnumValueMetaType.TYPE_STRING, null, null, "mongo集合类名称");
                 base.InputParameters[nameof(MongoFields)] = new Property(nameof(MongoFields), "mongo输出字段", EnumValueMetaType.TYPE_JSON_ARRAY, MongoFields, MongoFields, "保存字段JSON数组");
                 return base.InputParameters;
+            }
+        }
+
+        public override IDictionary<string, Property> OutParams
+        {
+            get
+            {
+                base.OutputParameters[OutputResultAttCode] = new Property(OutputResultAttCode, "步骤结果输出属性编码", EnumValueMetaType.TYPE_JSON);
+                return OutputParameters;
             }
         }
         /// <summary>
@@ -79,7 +92,7 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
             {
                 foreach (var item in dataSources)
                 {
-                    atts[nameof(base.Source)] = new Property(nameof(base.Source), item.Name, EnumValueMetaType.TYPE_STRING, item.SysCode, "", "", null, 1, 0, 1, item.SysCode);
+                    atts[nameof(base.Source)] = new Property(nameof(base.Source), item.Name, EnumValueMetaType.TYPE_OBJECT, item, "", "", null, 1, 0, 1, item.SysCode);
                     // 一个数据源有且仅有一个关联
                     break;
                 }

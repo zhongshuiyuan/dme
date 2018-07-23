@@ -14,7 +14,7 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput.DTO
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// 是否使用输入的字段名称作为mongo本身的字段名称
+        /// 是否使用输入的字段名称作为mongo本身的字段名称，1：是；0：否
         /// </summary>
         public int IsUseName { get; set; }
         /// <summary>

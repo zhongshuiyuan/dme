@@ -825,6 +825,7 @@ values(seq_dme_rulestep_attribute.nextval, 85, 21, 41, 'Database', 'DME', 0);
 create table DME_TASK_RuleSTEP
 (
   id          number(8),
+  syscode VARCHAR2(38),
   task_id     number(8),
   rulestep_id number(8),
   status      varchar2(20),
@@ -836,6 +837,8 @@ create table DME_TASK_RuleSTEP
 comment on table DME_TASK_RuleSTEP
   is '任务与规则步骤关联关系';
 -- Add comments to the columns 
+comment on column DME_TASK_RuleSTEP.syscode
+  is '系统唯一编码';
 comment on column DME_TASK_RuleSTEP.id
   is '主键id';
 comment on column DME_TASK_RuleSTEP.task_id

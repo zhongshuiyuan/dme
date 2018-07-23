@@ -6,6 +6,7 @@ using Dist.Dme.Model.Entity;
 using Dist.Dme.RuleSteps.AlgorithmInput;
 using Dist.Dme.RuleSteps.DataSourceInput;
 using Dist.Dme.RuleSteps.MongoDBOutput;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,6 +20,7 @@ namespace Dist.Dme.RuleSteps
     /// </summary>
     public static class RuleStepFactory
     {
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 获取规则步骤数据操作类
         /// @TODO 这一块需要独立到配置文件去，否则不便于二次开发
@@ -32,6 +34,7 @@ namespace Dist.Dme.RuleSteps
         {
             if (!Register.RuleStepPluginsMap.ContainsKey(stepTypeCode))
             {
+                LOG.Warn($"没有找到步骤类型为[{stepTypeCode}]的插件信息");
                 return null;
             }
             RuleStepPluginRegisterDTO ruleStepPluginRegisterDTO = Register.RuleStepPluginsMap[stepTypeCode];
@@ -39,7 +42,7 @@ namespace Dist.Dme.RuleSteps
             string assemblyPath = Path.Combine(baseDir, ruleStepPluginRegisterDTO.Assembly);
             Assembly assembly = Assembly.LoadFile(assemblyPath);
             IRuleStepData ruleStepData = (IRuleStepData)assembly.CreateInstance(ruleStepPluginRegisterDTO.ClassId, true, BindingFlags.CreateInstance, null
-                , new object[] { repository, -1, step }, null, null);
+                , new object[] { repository, taskId, step }, null, null);
 
             return ruleStepData;
             //EnumRuleStepTypes @enum = EnumUtil.GetEnumObjByName<EnumRuleStepTypes>(stepTypeCode);

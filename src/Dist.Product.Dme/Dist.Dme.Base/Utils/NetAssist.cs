@@ -150,7 +150,7 @@ namespace Dist.Dme.Base.Utils
             catch (Exception ex)
             {
                 LOG.Error("获取本地host地址错误，详情：" + ex.Message);
-                return "";
+                return "0.0.0.0";
             }
         }
     }

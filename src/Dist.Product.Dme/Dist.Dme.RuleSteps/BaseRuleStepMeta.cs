@@ -19,7 +19,8 @@ namespace Dist.Dme.RuleSteps
         private static Logger LOG = LogManager.GetCurrentClassLogger();
         // public abstract IRuleStepType RuleStepType { get; }
         // protected abstract EnumRuleStepTypes MyRuleStepType { get; }
-        public abstract object InParams { get; }
+        public abstract IDictionary<string, Property> InParams { get; }
+        public abstract IDictionary<string, Property> OutParams { get; }
         protected IRepository repository;
         protected DmeRuleStep step;
         //protected int modelId;
@@ -28,7 +29,7 @@ namespace Dist.Dme.RuleSteps
         /// <summary>
         /// 数据源id
         /// </summary>
-        protected string Source { get; set; }
+        public string Source { get; set; }
         /// <summary>
         /// 真正在运行的时候，step才会被使用到
         /// </summary>
@@ -45,6 +46,10 @@ namespace Dist.Dme.RuleSteps
         protected IDictionary<String, Property> InputParameters { get; set; } = new Dictionary<String, Property>() {
             [nameof(Source)] = new Property(nameof(Source), "数据源唯一Code", EnumValueMetaType.TYPE_STRING, "", "", "数据源唯一Code")
         };
+        /// <summary>
+        /// 步骤输出的参数
+        /// </summary>
+        protected IDictionary<String, Property> OutputParameters { get; set; } = new Dictionary<String, Property>();
         /// <summary>
         /// 获取步骤类型元数据
         /// </summary>
@@ -171,55 +176,5 @@ namespace Dist.Dme.RuleSteps
                 db.Insertable<DmeRuleStepDataSource>(newRefDatasources).ExecuteCommand();
             }
         }
-
-        //public int SaveMeta(double x, double y,
-        //    string stepName)
-        //{
-        //    int identity = -1;
-        //    SqlSugarClient db = repository.GetDbContext();
-        //    return db.Ado.UseTran<int>(() => 
-        //    {
-        //        if (-1 == this.step.Id)
-        //        {
-        //            LOG.Info($"步骤id为{this.step.Id}，为新创建步骤");
-        //            // 查找当前步骤类型
-        //            DmeRuleStepType dmeRuleStepType = db.Queryable<DmeRuleStepType>().Single(rst => rst.Code == nameof(this.MyRuleStepType));
-        //            if (null == dmeRuleStepType)
-        //            {
-        //                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"步骤编码{nameof(this.MyRuleStepType)}不存在，请核实数据。");
-        //            }
-        //            DmeRuleStep dmeRuleStep = new DmeRuleStep
-        //            {
-        //                SysCode = GuidUtil.NewGuid(),
-        //                ModelId = this.step.ModelId,
-        //                VersionId = this.step.VersionId,
-        //                Name = stepName,
-        //                X = x,
-        //                Y = y,
-        //                StepTypeId = dmeRuleStepType.Id
-        //            };
-        //            identity = db.Insertable<DmeRuleStep>(dmeRuleStep).ExecuteReturnIdentity();
-        //        }
-        //        else
-        //        {
-        //            LOG.Info($"步骤id为{this.step.Id}，更新步骤信息");
-        //            DmeRuleStep dmeRuleStep = db.Queryable<DmeRuleStep>().InSingle(this.step.Id);
-        //            if(null == dmeRuleStep)
-        //            {
-        //                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"步骤id[{this.step.Id}]不存在，请核实数据。");
-        //            }
-        //            if (!string.IsNullOrEmpty(stepName))
-        //            {
-        //                // 如果名称不为空，才更新原来的名称
-        //                dmeRuleStep.Name = stepName;
-        //            }
-        //            dmeRuleStep.X = x;
-        //            dmeRuleStep.Y = y;
-        //            db.Updateable<DmeRuleStep>(dmeRuleStep).ExecuteCommandHasChange();
-        //            identity = dmeRuleStep.Id;
-        //        }
-        //        return identity;
-        //    }).Data;
-        //}
     }
 }

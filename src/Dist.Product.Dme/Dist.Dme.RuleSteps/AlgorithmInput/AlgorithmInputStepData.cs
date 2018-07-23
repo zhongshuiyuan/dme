@@ -42,7 +42,7 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
             }
             IDictionary<string, Property> inputParams = dto.AlgorithmInstance.InParams;
             // 载入参数值
-            IDictionary<string, object> paraValues = new Dictionary<string, object>();
+            IDictionary<string, Property> paraValues = new Dictionary<string, Property>();
             foreach (var item in stepAttributes)
             {
                 if (!inputParams.ContainsKey(item.AttributeCode))
@@ -68,7 +68,7 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
                     {
                         throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"步骤[{step.SysCode}]的参数[{item.AttributeCode}]无效，找不到前驱参数信息");
                     }
-                    paraValues[item.AttributeCode] = preRuleStepAttribute.AttributeValue;
+                    paraValues[item.AttributeCode] = base.GetStepAttributeValue(preStepName, preAttributeName);// new Property(item.AttributeCode, item.AttributeCode, EnumValueMetaType.TYPE_UNKNOWN, preRuleStepAttribute.AttributeValue);
                 }
                 else
                 {
@@ -86,11 +86,11 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
                             Name = featureClassName,
                             Source = ClassValueCopier<DataSourceDTO>.Copy(dataSource)
                         };
-                        paraValues[item.AttributeCode] = inputFeatureClassDTO;
+                        paraValues[item.AttributeCode] = new Property(item.AttributeCode, item.AttributeCode, EnumValueMetaType.TYPE_OBJECT, inputFeatureClassDTO);
                     }
                     else
                     {
-                        paraValues[item.AttributeCode] = item.AttributeValue;
+                        paraValues[item.AttributeCode] = new Property(item.AttributeCode, item.AttributeCode, EnumValueMetaType.TYPE_UNKNOWN, item.AttributeValue);
                     }
                 }
             }
@@ -98,7 +98,7 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
             dto.AlgorithmInstance.Init(paraValues);
             Result result = dto.AlgorithmInstance.Execute();
             // 保存输出
-            if (result != null && EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_SUCCESS) == result.Status)
+            if (result != null && EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_SUCCESS).Equals(result.Status))
             {
                 base.SaveOutput(dto.AlgorithmInstance.OutParams);
                 return new Result(EnumSystemStatusCode.DME_SUCCESS, "执行完毕", true);

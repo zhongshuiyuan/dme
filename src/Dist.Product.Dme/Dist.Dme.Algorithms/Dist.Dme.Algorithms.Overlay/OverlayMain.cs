@@ -204,7 +204,7 @@ namespace Dist.Dme.Algorithms.Overlay
             return new Result(EnumSystemStatusCode.DME_SUCCESS, "运行完成，但没有运算结果", EnumSystemStatusCode.DME_SUCCESS, null);
         }
 
-        public override void Init(IDictionary<string, object> parameters)
+        public override void Init(IDictionary<string, Property> parameters)
         {
             if (0 == base.InParams?.Count)
             {
@@ -236,9 +236,9 @@ namespace Dist.Dme.Algorithms.Overlay
                 this.IsClearTemp = Boolean.Parse(parameters[nameof(IsClearTemp)].ToString());
             }
             // 从步骤层传过来的数据已经被格式化成对象了（JSON->实体对象）
-            this.sourceFeatureClassDTO = (InputFeatureClassDTO)parameters[nameof(this.SourceFeatureClass)];//JsonConvert.DeserializeObject<InputFeatureClassDTO>(parameters[nameof(this.SourceFeatureClass)].ToString());
-            this.targetFeatureClassDTO = (InputFeatureClassDTO)parameters[nameof(this.TargetFeatureClass)];//JsonConvert.DeserializeObject<InputFeatureClassDTO>(parameters[nameof(this.TargetFeatureClass)].ToString());
-            this.AnalysisType = EnumUtil.GetEnumObjByValue<AnalysisType>(int.Parse(parameters[nameof(this.AnalysisType)].ToString()));
+            this.sourceFeatureClassDTO = (InputFeatureClassDTO)parameters[nameof(this.SourceFeatureClass)].Value;//JsonConvert.DeserializeObject<InputFeatureClassDTO>(parameters[nameof(this.SourceFeatureClass)].ToString());
+            this.targetFeatureClassDTO = (InputFeatureClassDTO)parameters[nameof(this.TargetFeatureClass)].Value;//JsonConvert.DeserializeObject<InputFeatureClassDTO>(parameters[nameof(this.TargetFeatureClass)].ToString());
+            this.AnalysisType = EnumUtil.GetEnumObjByValue<AnalysisType>(int.Parse(parameters[nameof(this.AnalysisType)].Value.ToString()));
 
             base.InitComplete = true;
         }

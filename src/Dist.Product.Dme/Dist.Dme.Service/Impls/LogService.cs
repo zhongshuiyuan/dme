@@ -2,6 +2,7 @@
 using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.Exception;
 using Dist.Dme.Base.Framework.Interfaces;
+using Dist.Dme.Base.Utils;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Interfaces;
 using System;
@@ -25,14 +26,15 @@ namespace Dist.Dme.Service.Impls
             {
                 DmeLog log = new DmeLog
                 {
-                    LogType = nameof(logType),
-                    LogLevel = nameof(logLevel),
+                    LogType = EnumUtil.GetEnumName<EnumLogType>((int)logType),
+                    LogLevel = EnumUtil.GetEnumName<EnumLogLevel>((int)logLevel),
                     ObjectType = objectType,
                     ObjectId = objectId,
                     UserCode = userCode,
                     Address = address,
                     Apps = apps,
-                    Remark = remark
+                    Remark = remark,
+                    CreateTime = DateUtil.CurrentTimeMillis
                 };
                 if (String.IsNullOrEmpty(remark) && ex != null)
                 {

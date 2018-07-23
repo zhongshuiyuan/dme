@@ -21,6 +21,12 @@
       "classId": "Dist.Dme.RuleSteps.DataSourceInput.DataSourceInputStepData",
       "displayName": "数据源输入",
       "description": "数据源输入，选择数据源"
+    },
+    "MongodbOutput": {
+      "assembly": "Dist.Dme.RuleSteps.dll",
+      "classId": "Dist.Dme.RuleSteps.MongoDBOutput.MongoDBOutputStepData",
+      "displayName": "mongo输出",
+      "description": "mongo输出"
     }
   }
 }

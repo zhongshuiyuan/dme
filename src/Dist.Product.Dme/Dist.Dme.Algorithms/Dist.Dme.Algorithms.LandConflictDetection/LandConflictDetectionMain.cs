@@ -144,7 +144,7 @@ namespace Dist.Dme.Algorithms.LandConflictDetection
             }
         }
 
-        public override void Init(IDictionary<string, object> parameters)
+        public override void Init(IDictionary<string, Property> parameters)
         {
             if (!parameters.ContainsKey(nameof(this.FeatureClass_Source_First)))
             {
