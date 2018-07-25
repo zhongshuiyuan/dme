@@ -21,4 +21,8 @@
     <PackageReference Include="sqlSugarCore" Version="4.6.4.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Dist.Dme.DisFS\Dist.Dme.DisFS.csproj" />
+  </ItemGroup>
+
 </Project>

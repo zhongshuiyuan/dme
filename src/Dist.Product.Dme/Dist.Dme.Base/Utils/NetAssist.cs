@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Dist.Dme.Base.Utils
 {
@@ -152,6 +153,21 @@ namespace Dist.Dme.Base.Utils
                 LOG.Error("获取本地host地址错误，详情：" + ex.Message);
                 return "0.0.0.0";
             }
+        }
+        /// <summary>
+        /// 是否一个合法ip地址
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <returns>true/false</returns>
+        public static bool IsIP(string ip)
+        {
+            if (string.IsNullOrEmpty(ip))
+            {
+                return false;
+            }
+            String regexStr = @"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$";
+            Regex guidReg = new Regex(regexStr);
+            return guidReg.IsMatch(ip);
         }
     }
 }

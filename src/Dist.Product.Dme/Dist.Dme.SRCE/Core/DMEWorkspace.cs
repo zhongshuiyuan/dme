@@ -1,4 +1,4 @@
-﻿using Dist.Dme.Base.DataSourceDefine;
+﻿using Dist.Dme.Base.DataSource.Define;
 using System;
 using System.Collections.Generic;
 using System.Text;

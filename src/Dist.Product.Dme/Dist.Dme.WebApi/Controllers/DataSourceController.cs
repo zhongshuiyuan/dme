@@ -1,6 +1,8 @@
 ﻿using Dist.Dme.Base.Common;
 using Dist.Dme.Base.Common.Http;
+using Dist.Dme.Base.DataSource.Define;
 using Dist.Dme.Base.Framework;
+using Dist.Dme.Base.Framework.Exception;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.DisFS.Adapters.Mongo;
 using Dist.Dme.Extensions;
@@ -11,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using NLog;
+using System.ComponentModel.DataAnnotations;
 
 namespace Dist.Dme.WebApi.Controllers
 {
@@ -117,7 +120,87 @@ namespace Dist.Dme.WebApi.Controllers
             {
                 return base.Error(ModelState, "验证失败");
             }
-            return base.Success(this.DataSourceService.CheckConnectionValid(dto), "验证通过");
+            ValidResult validResult = (ValidResult)DataSourceService.CheckConnectionValid(dto);
+            if(!validResult.IsValid)
+            {
+                if (validResult.Ex != null)
+                {
+                    return base.Error(validResult.Message, "验证不通过");
+                }
+                return base.Fail(validResult.Message, "验证不通过");
+            }
+            return base.Success(null, "验证通过");
+        }
+        /// <summary>
+        /// 获取mongo下的所有database
+        /// </summary>
+        /// <param name="dataSourceCode">数据源唯一编码</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("mongo/v1/databases/{dataSourceCode}")]
+        public Result ListMongoDataBases([Required] string dataSourceCode)
+        {
+            if (string.IsNullOrEmpty(dataSourceCode))
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, "数据源编码不能为空");
+            }
+            return base.Success(this.DataSourceService.ListMongoDataBase(dataSourceCode));
+        }
+        /// <summary>
+        /// 获取mongo下的所有database
+        /// </summary>
+        /// <param name="host">服务ip</param>
+        /// <param name="port">端口号</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("mongo/v1/databases")]
+        public Result ListMongoDataBase([FromQuery] string host, [FromQuery] int port)
+        {
+            if (string.IsNullOrEmpty(host))
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, "host不能为空");
+            }
+            if (!NetAssist.IsIP(host))
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, "host不合法");
+            }
+            return base.Success(this.DataSourceService.ListMongoDataBase(host, port));
+        }
+        /// <summary>
+        /// 获取mongo下的指定数据库的集合类
+        /// </summary>
+        /// <param name="dataSourceCode"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("mongo/v1/collections/{dataSourceCode}")]
+        public Result ListMongoCollection([Required] string dataSourceCode)
+        {
+            if (string.IsNullOrEmpty(dataSourceCode))
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, "数据源编码不能为空");
+            }
+            return base.Success(this.DataSourceService.ListMongoCollection(dataSourceCode));
+        }
+        /// <summary>
+        /// 获取mongo下的指定数据库所有collections
+        /// </summary>
+        /// <param name="host">服务ip</param>
+        /// <param name="port">端口号</param>
+        /// <param name="dataBase">数据库实例名称，大小写敏感</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("mongo/v1/collections")]
+        public Result ListMongoCollection([FromQuery] string host, [FromQuery] int port, [FromQuery] string dataBase)
+        {
+            if (string.IsNullOrEmpty(host) || string.IsNullOrEmpty(dataBase))
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, "host或dataBase不能为空");
+            }
+            if (!NetAssist.IsIP(host))
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, "host不合法");
+            }
+            return base.Success(this.DataSourceService.ListMongoCollection(host, port, dataBase));
         }
     }
 }

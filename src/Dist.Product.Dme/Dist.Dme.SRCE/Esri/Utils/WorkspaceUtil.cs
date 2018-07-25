@@ -517,7 +517,7 @@ namespace Dist.Dme.SRCE.Esri.Utils
             }
             catch (Exception ex)
             {
-                LOG.Error($"打开数据集[{featureDatasetName}]失败", ex);
+                LOG.Error(ex, $"打开数据集[{featureDatasetName}]失败");
             }
             return null;
         }
@@ -947,7 +947,7 @@ namespace Dist.Dme.SRCE.Esri.Utils
             }
             catch (Exception ex)
             {
-                LOG.Error("释放对象出错", ex);
+                LOG.Error(ex, "释放对象出错");
             }
         }
         /// <summary>

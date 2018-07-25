@@ -104,12 +104,12 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
         /// <returns></returns>
         public static GridFSBucket GetGridFSBucket(MongodbHost host)
         {
-            if (string.IsNullOrWhiteSpace(host.Connection)) throw new ArgumentException("MongoDB Connection String is Empty");
+            if (string.IsNullOrWhiteSpace(host.ConnectionString)) throw new ArgumentException("MongoDB Connection String is Empty");
             if (string.IsNullOrWhiteSpace(host.DataBase)) throw new ArgumentException("MongoDB DataBase is Empty");
 
             return GridFSBucketCache.GetOrAdd(host.DataBase, new Lazy<GridFSBucket>(() =>
             {
-                return new GridFSBucket(GetMongodbClient(host.Connection).GetDatabase(host.DataBase));
+                return new GridFSBucket(GetMongodbClient(host.ConnectionString).GetDatabase(host.DataBase));
             })).Value;
         }
         /// <summary>
@@ -130,7 +130,7 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
         /// <returns></returns>
         public static IMongoDatabase GetMongoDatabase(MongodbHost host)
         {
-            IMongoClient client = GetMongodbClient(host.Connection);
+            IMongoClient client = GetMongodbClient(host.ConnectionString);
             return client.GetDatabase(host.DataBase);
         }
         /// <summary>
@@ -188,9 +188,29 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
     public class MongodbHost
     {
         /// <summary>
-        /// 连接字符串
+        /// 获取连接字符串
         /// </summary>
-        public string Connection { get; set; }
+        public string ConnectionString
+        {
+            get
+            {
+                string conn = $"mongodb://{Server}:{Port}";
+                if (!string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password))
+                {
+                    // 改变格式，PS：先不考虑密码加密
+                    conn = $"mongodb://{UserName}:{Password}@{Server}:{Port}";
+                }
+                return conn;
+            }
+        }
+        /// <summary>
+        /// 服务器
+        /// </summary>
+        public string Server { get; set; } = "127.0.0.1";
+        /// <summary>
+        /// 端口，默认27017
+        /// </summary>
+        public int Port { get; set; } = 27017;
         /// <summary>
         /// 库
         /// </summary>

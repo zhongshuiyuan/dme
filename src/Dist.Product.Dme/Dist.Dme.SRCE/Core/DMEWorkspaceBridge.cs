@@ -1,5 +1,5 @@
 ﻿using Dist.Dme.Base.Common;
-using Dist.Dme.Base.DataSourceDefine;
+using Dist.Dme.Base.DataSource.Define;
 using Dist.Dme.Base.Framework.Exception;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.Model.DTO;

@@ -94,7 +94,7 @@ namespace Dist.Dme.WebApi
                     MongodbHost mongohost = mongoSection.Get<MongodbHost>();
                     services.AddSingleton(typeof(MongodbHost), mongohost);
                     // IMongoClient mongoClient = new MongoClient(mongohost.Connection);
-                    IMongoClient mongoClient = MongodbManager<object>.GetMongodbClient(mongohost.Connection);
+                    IMongoClient mongoClient = MongodbManager<object>.GetMongodbClient(mongohost.ConnectionString);
                     services.AddSingleton(typeof(IMongoClient), mongoClient);
                     IMongoDatabase mongoDatabase = mongoClient.GetDatabase(mongohost.DataBase);
                     services.AddSingleton(typeof(IMongoDatabase), mongoDatabase);
@@ -118,8 +118,6 @@ namespace Dist.Dme.WebApi
             services.AddSingleton<ILogService, LogService>();
             // 注册任务服务
             services.AddSingleton<ITaskService, TaskService>();
-            // 注册存储服务
-            services.AddSingleton<IStoreService, StoreService>();
             // 设置全局
             IServiceProvider serviceProvider = services.BuildServiceProvider();
             ServiceFactory.CacheService = serviceProvider.GetService<ICacheService>();
