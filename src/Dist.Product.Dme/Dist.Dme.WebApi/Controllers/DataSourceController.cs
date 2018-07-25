@@ -107,12 +107,13 @@ namespace Dist.Dme.WebApi.Controllers
             }
             return base.Success(this.DataSourceService.AddDataSource(dto));
         }
-        /// <summary>
-        /// 验证连接是否有效
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <returns>true/false</returns>
-        [HttpPost]
+  
+    /// <summary>
+    /// 验证连接是否有效
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns>true/false</returns>
+    [HttpPost]
         [Route("conn/valid/v1")]
         public Result CheckConnectionValid([FromBody]DataSourceConnDTO dto)
         {

@@ -10,7 +10,7 @@ namespace Dist.Dme.WebApi.Controllers
     /// <summary>
     /// 数据源服务
     /// </summary>
-    [Route("api/cache")]
+    [Route("api/caches")]
     public class CacheController : BaseController
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();

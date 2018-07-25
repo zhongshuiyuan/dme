@@ -118,13 +118,12 @@ namespace Dist.Dme.Service.Impls
                         break;
                     case EnumDataSourceType.FILE_GEODATABASE:
                         break;
-                    case EnumDataSourceType.ENTERPRISE_GEODATABASE:
-                        break;
                     case EnumDataSourceType.TIN:
                         break;
                     case EnumDataSourceType.CAD:
                         break;
                     case EnumDataSourceType.ORACLE:
+                    case EnumDataSourceType.ENTERPRISE_GEODATABASE:
                         factory = new DMEOracleFactory();
                         dataSource = factory.OpenFromConnectionStr(dto.Connection, true);
                         result.IsValid = dataSource.ValidConnection();
