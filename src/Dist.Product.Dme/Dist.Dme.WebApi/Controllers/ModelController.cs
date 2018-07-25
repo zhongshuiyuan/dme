@@ -216,6 +216,5 @@ namespace Dist.Dme.WebApi.Controllers
         {
             return base.Success(this.ModelService.PublishModel(modelCode, isPublish));
         }
-       
     }
 }

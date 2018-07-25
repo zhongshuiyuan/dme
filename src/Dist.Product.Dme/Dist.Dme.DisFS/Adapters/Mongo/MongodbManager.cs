@@ -2,6 +2,8 @@
 using MongoDB.Driver.GridFS;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Dist.Dme.DisFS.Adapters.Mongo
 {
@@ -40,8 +42,8 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
         /// <summary>
         /// 获取数据库的bucket
         /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="dataBase"></param>
+        /// <param name="connectionString">连接字符串，格式：mongodb://ip:port</param>
+        /// <param name="dataBase">数据库实例名称，大小写敏感</param>
         /// <returns></returns>
         public static GridFSBucket GetGridFSBucket(string connectionString, string dataBase)
         {
@@ -52,6 +54,48 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
             {
                 return new GridFSBucket(GetMongodbClient(connectionString).GetDatabase(dataBase));
             })).Value;
+        }
+        /// <summary>
+        /// 获取mongo所有database
+        /// </summary>
+        /// <param name="connectionString">连接字符串，格式：mongodb://ip:port</param>
+        /// <returns></returns>
+        public static IList<string> ListDataBases(string connectionString)
+        {
+            IMongoClient mongoClient = GetMongodbClient(connectionString);
+            return mongoClient.ListDatabaseNames().ToList();
+        }
+        /// <summary>
+        /// 异步获取mongo所有database
+        /// </summary>
+        /// <param name="connectionString">连接字符串，格式：mongodb://ip:port</param>
+        /// <returns></returns>
+        public static Task<List<string>> ListDataBasesAsync(string connectionString)
+        {
+            IMongoClient mongoClient = GetMongodbClient(connectionString);
+            return mongoClient.ListDatabaseNames().ToListAsync();
+        }
+        /// <summary>
+        /// 获取指定database下的所有集合类
+        /// </summary>
+        /// <param name="connectionString">连接字符串，格式：mongodb://ip:port</param>
+        /// <param name="dataBase">数据库实例，大小写敏感</param>
+        /// <returns></returns>
+        public static IList<string> ListCollections(string connectionString, string dataBase)
+        {
+            IMongoDatabase mongoDatabase = GetMongoDatabase(connectionString, dataBase);
+            return mongoDatabase.ListCollectionNames().ToList();
+        }
+        /// <summary>
+        /// 异步获取指定database下的所有集合类
+        /// </summary>
+        /// <param name="connectionString">连接字符串，格式：mongodb://ip:port</param>
+        /// <param name="dataBase">数据库实例</param>
+        /// <returns></returns>
+        public static Task<List<string>> ListCollectionsAsync(string connectionString, string dataBase)
+        {
+            IMongoDatabase mongoDatabase = GetMongoDatabase(connectionString, dataBase);
+            return mongoDatabase.ListCollectionNames().ToListAsync();
         }
         /// <summary>
         /// 获取数据库的bucket
@@ -155,5 +199,13 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
         /// 集合类名称
         /// </summary>
         public string Collection { get; set; }
+        /// <summary>
+        /// 用户名
+        /// </summary>
+        public string UserName { get; set; }
+        /// <summary>
+        /// 密码
+        /// </summary>
+        public string Password { get; set; }
     }
 }

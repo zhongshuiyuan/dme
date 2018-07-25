@@ -116,7 +116,7 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
             // PS:不能使用json.ToJson()和json.ToBsonDocument构建一个BsonDocument，否则插入进去的实体对象不对；
             //      需要使用json.ToString()
             BsonDocument document = BsonDocument.Parse(json.ToString()); 
-            int count = MongodbHelper<BsonDocument>.Add(mongodbHost, document);
+            MongodbHelper<BsonDocument>.Add(mongodbHost, document);
 
             return new Result(EnumSystemStatusCode.DME_SUCCESS, $"模型[{step.ModelId}]的步骤[{step.SysCode}]运算完毕", null);
         }
