@@ -732,7 +732,7 @@ namespace Dist.Dme.Service.Impls
                 dmeTaskRuleStep.LastTime = DateUtil.CurrentTimeMillis;
                 // 只更新状态和最后时间
                 db.Updateable<DmeTaskRuleStep>(dmeTaskRuleStep).UpdateColumns(ts => new { ts.Status, ts.LastTime }).ExecuteCommand();
-                this.LogService.AddLogAsync(Base.Common.Log.EnumLogType.ENTITY, EnumLogLevel.ERROR, nameof(DmeTaskRuleStep), dmeTaskRuleStep.SysCode, ex.Message, ex, "", NetAssist.GetLocalHost());
+                this.LogService.AddLogAsync(Base.Common.Log.EnumLogType.ENTITY, EnumLogLevel.ERROR, nameof(DmeTaskRuleStep), dmeTaskRuleStep.SysCode, "", ex, "", NetAssist.GetLocalHost());
             } 
         }
 
@@ -748,13 +748,20 @@ namespace Dist.Dme.Service.Impls
         {
             // 先从缓存查找
             cacheKey = HashUtil.Hash_2_MD5_32($"{task.SysCode}_{ruleStep.SysCode}");
-            DmeTaskRuleStep dmeTaskRuleStep = ServiceFactory.CacheService.Get<DmeTaskRuleStep>(cacheKey);
-            if (dmeTaskRuleStep != null)
+            DmeTaskRuleStep dmeTaskRuleStep = null;
+            try
             {
-                LOG.Info($"缓存中获取到任务步骤信息，任务id[{dmeTaskRuleStep.TaskId}]，步骤id[{dmeTaskRuleStep.RuleStepId}]");
-                return dmeTaskRuleStep;
+                dmeTaskRuleStep = ServiceFactory.CacheService.Get<DmeTaskRuleStep>(cacheKey);
+                if (dmeTaskRuleStep != null)
+                {
+                    LOG.Info($"缓存中获取到任务步骤信息，任务id[{dmeTaskRuleStep.TaskId}]，步骤id[{dmeTaskRuleStep.RuleStepId}]");
+                    return dmeTaskRuleStep;
+                }
             }
-
+            catch (Exception ex)
+            {
+                LOG.Warn("从缓存中获取任务步骤信息失败，详情：" + ex.Message);
+            }
             // 从数据库中查找
             dmeTaskRuleStep = db.Queryable<DmeTaskRuleStep>().Single(tr => tr.TaskId == task.Id && tr.RuleStepId == ruleStep.Id);
             return dmeTaskRuleStep;
@@ -1014,121 +1021,7 @@ namespace Dist.Dme.Service.Impls
                 return newVersion;
             }).Data;
         }
-        public object ListTask()
-        {
-            SqlSugarClient db = base.Repository.GetDbContext();
-            IList<DmeTask> tasks = db.Queryable<DmeTask>().OrderBy(t => t.CreateTime, OrderByType.Desc).ToList();
-            if (0 == tasks?.Count)
-            {
-                return 0;
-            }
-            IList<TaskRespDTO> taskRespDTOs = new List<TaskRespDTO>();
-            foreach (var item in tasks)
-            {
-                TaskRespDTO dto = new TaskRespDTO
-                {
-                    Task = item,
-                    Model = db.Queryable<DmeModel>().Single(m => m.Id == item.ModelId),
-                    ModelVersion = db.Queryable<DmeModelVersion>().Single(mv => mv.Id == item.VersionId)
-                };
-                taskRespDTOs.Add(dto);
-            }
-            return taskRespDTOs;
-        }
         
-        public object GetTaskResult(string taskCode, int ruleStepId)
-        {
-            SqlSugarClient db = base.Repository.GetDbContext();
-            DmeTask task = db.Queryable<DmeTask>().Single(t => t.SysCode == taskCode);
-            if (null == task)
-            {
-                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"任务不存在[{taskCode}]");
-            }
-            // 查询任务的结果输出
-            IList<DmeTaskResult> taskResults = null;
-            if (-1 == ruleStepId)
-            {
-                // 全部步骤
-                taskResults = db.Queryable<DmeTaskResult>().Where(tr => tr.TaskId == task.Id).ToList();
-            }
-            else
-            {
-                // 指定步骤
-                taskResults = db.Queryable<DmeTaskResult>().Where(tr => tr.TaskId == task.Id && tr.RuleStepId == ruleStepId).ToList();
-            }
-            if (null == taskResults || 0 == taskResults.Count)
-            {
-                return null;
-            }
-            IList<TaskResultRespDTO> taskResultRespDTOs = new List<TaskResultRespDTO>();
-            TaskResultRespDTO temp = null;
-            foreach (var item in taskResults)
-            {
-                temp = new TaskResultRespDTO
-                {
-                    RuleStepId = item.RuleStepId,
-                    Code = item.ResultCode,
-                    Type = item.ResultType
-                };
-                // 解析步骤类型
-                DmeRuleStep ruleStep = db.Queryable<DmeRuleStep>().Single(rs => rs.Id == item.RuleStepId);
-
-                //   Value = item.ResultValue
-                EnumValueMetaType @enum = EnumUtil.GetEnumObjByName<EnumValueMetaType>(temp.Type);
-                switch (@enum)
-                {
-                    case EnumValueMetaType.TYPE_UNKNOWN:
-                    case EnumValueMetaType.TYPE_NUMBER:
-                    case EnumValueMetaType.TYPE_STRING:
-                    case EnumValueMetaType.TYPE_INTEGER:
-                    case EnumValueMetaType.TYPE_BIGNUMBER:
-                    case EnumValueMetaType.TYPE_TIMESTAMP:
-                    case EnumValueMetaType.TYPE_INET:
-                    case EnumValueMetaType.TYPE_LOCAL_FILE:
-                    case EnumValueMetaType.TYPE_GDB_PATH:
-                    case EnumValueMetaType.TYPE_FOLDER:
-                        temp.Value = item.ResultValue;
-                        break;
-                    case EnumValueMetaType.TYPE_DATE:
-                        // 要求格式：yyyy-MM-dd hh:mm:ss 
-                        temp.Value = Convert.ToDateTime(item.ResultValue?.ToString());
-                        break;
-                    case EnumValueMetaType.TYPE_BOOLEAN:
-                        temp.Value = Boolean.Parse(item.ResultValue?.ToString());
-                        break;
-                    case EnumValueMetaType.TYPE_SERIALIZABLE:
-                        break;
-                    case EnumValueMetaType.TYPE_BINARY:
-                        break;
-                    case EnumValueMetaType.TYPE_MDB_FEATURECLASS:
-                        break;
-                    case EnumValueMetaType.TYPE_STRING_LIST:
-                        temp.Value = item.ResultValue?.ToString().Split(";");
-                        break;
-                    case EnumValueMetaType.TYPE_SDE_FEATURECLASS:
-                        break;
-                    case EnumValueMetaType.TYPE_FEATURECLASS:
-                        break;
-                    case EnumValueMetaType.TYPE_JSON:
-                        // 从mongo中获取
-                        var filter = Builders<TaskResultColl>.Filter.And(
-                            Builders<TaskResultColl>.Filter.Eq("TaskId", item.TaskId),
-                            Builders<TaskResultColl>.Filter.Eq("RuleStepId", item.RuleStepId),
-                            Builders<TaskResultColl>.Filter.Eq("Code", item.ResultCode));
-                        IList<TaskResultColl> colls = MongodbHelper<TaskResultColl>.FindList(ServiceFactory.MongoDatabase, filter);
-                        if (colls != null && colls.Count > 0)
-                        {
-                            temp.Value = colls[0].Value;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-                taskResultRespDTOs.Add(temp);
-            }
-            return taskResultRespDTOs;
-        }
         public object PublishModel(string modelCode, int enabled)
         {
             // 只更新列：IsPublish和PublishTime

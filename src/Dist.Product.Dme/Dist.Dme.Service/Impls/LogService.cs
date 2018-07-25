@@ -45,7 +45,7 @@ namespace Dist.Dme.Service.Impls
                     }
                     else
                     {
-                        log.Remark = ex.Message;
+                        log.Remark = ex.StackTrace + "\\r\\n" +ex.Message;
                     }
                 }
                 base.Repository.GetDbContext().Insertable<DmeLog>(log).ExecuteCommandAsync();

@@ -106,9 +106,10 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
             ReadSingleAttribute(atts, db, nameof(Database), "mongo数据库");
             ReadSingleAttribute(atts, db, nameof(Collection), "mongo文档类");
             // 输出字段
-            int fieldCount = db.Queryable<DmeRuleStepAttribute>().Count(rsa => rsa.ModelId == step.ModelId && rsa.VersionId == step.VersionId && rsa.RuleStepId == step.Id && rsa.AttributeCode == "name");
+            int fieldCount = db.Queryable<DmeRuleStepAttribute>().Count(rsa => rsa.ModelId == step.ModelId && rsa.VersionId == step.VersionId && rsa.RuleStepId == step.Id && rsa.AttributeCode == "Name");
             if (fieldCount > 0)
             {
+                LOG.Info("mongo输出字段个数：" + fieldCount);
                 for (int i = 0; i < fieldCount; i++)
                 {
                     MongoFieldDTO field = new MongoFieldDTO();
@@ -124,7 +125,7 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
                                 field.Name = item.AttributeValue.ToString();
                                 break;
                             case nameof(field.IsUseName):
-                                field.IsUseName = int.Parse(item.AttributeValue.ToString());
+                                field.IsUseName = Convert.ToInt32(item.AttributeValue.ToString());
                                 break;
                             case nameof(field.NewName):
                                 field.NewName = item.AttributeValue.ToString();
@@ -137,6 +138,7 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
                         }
                     }
                 }
+                LOG.Info("MongoFields：" + JsonConvert.SerializeObject(MongoFields));
             }
             atts[nameof(MongoFields)] = new Property(nameof(MongoFields), "mongo输出字段", EnumValueMetaType.TYPE_JSON_ARRAY, MongoFields, MongoFields, "保存字段JSON数组");
 

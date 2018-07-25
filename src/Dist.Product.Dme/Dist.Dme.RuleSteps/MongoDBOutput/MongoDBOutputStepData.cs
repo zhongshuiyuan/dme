@@ -47,22 +47,36 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
             mongodbHost.Collection = collection;
             JObject json = new JObject
             {
-                { "TaskId", this.taskId },
-                { "RuleStepId", this.step.Id }
+                { new JProperty("TaskId", this.taskId) },
+                { new JProperty("RuleStepId", this.step.Id) }
             };
             foreach (var item in mongoFields)
             {
                 string fieldName = item.Name;
                 if (0 == item.IsNeedPrecursor)
                 {
+                    LOG.Info($"当前[{item.Name}]为非前驱参数");
                     if (0 == item.IsUseName)
                     {
+                        LOG.Info($"IsUseName为[{item.IsUseName}]，将会使用NewName");
                         fieldName = item.NewName;
                     }
-                    json.Add(fieldName, JToken.FromObject(item.ConstantValue));
+                    LOG.Info($"fieldName值为[{fieldName}]");
+                    if (string.IsNullOrEmpty(fieldName))
+                    {
+                        LOG.Error("mongo输出字段名称为空，不能构建");
+                        continue;
+                    }
+                    if (null == item.ConstantValue)
+                    {
+                        LOG.Error($"mongo输出字段[{fieldName}]的值不能为NULL");
+                        continue;
+                    }
+                    json.Add(new JProperty(fieldName, item.ConstantValue));
                 }
                 else
                 {
+                    LOG.Info($"当前[{item.Name}]为前驱参数");
                     // 前驱参数
                     if (string.IsNullOrEmpty(item.Name)
                       || !item.Name.ToString().Contains(":"))
@@ -84,10 +98,24 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
                     {
                         fieldName = preAttributeName;
                     }
-                    json.Add(fieldName, JToken.FromObject(property.Value));
+                    if (string.IsNullOrEmpty(fieldName))
+                    {
+                        LOG.Error("mongo输出字段名称为空，不能构建");
+                        continue;
+                    }
+                    if (null == property.Value)
+                    {
+                        LOG.Error($"mongo输出字段[{fieldName}]的值不能为NULL");
+                        continue;
+                    }
+                    json.Add(new JProperty(fieldName, property.Value));
                 }  
             }
-            BsonDocument document = BsonDocument.Parse(json.ToJson());
+            // LOG.Info("JSON对象，方法ToJson：" + json.ToJson());
+            // LOG.Info("JSON对象，方法ToString：" + json.ToString());
+            // PS:不能使用json.ToJson()和json.ToBsonDocument构建一个BsonDocument，否则插入进去的实体对象不对；
+            //      需要使用json.ToString()
+            BsonDocument document = BsonDocument.Parse(json.ToString()); 
             int count = MongodbHelper<BsonDocument>.Add(mongodbHost, document);
 
             return new Result(EnumSystemStatusCode.DME_SUCCESS, $"模型[{step.ModelId}]的步骤[{step.SysCode}]运算完毕", null);

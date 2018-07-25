@@ -82,18 +82,6 @@ namespace Dist.Dme.Service.Interfaces
         /// <returns></returns>
         object CopyFromModelVersion(string modelVersionCode);
         /// <summary>
-        /// 获取任务清单，以创建时间倒序
-        /// </summary>
-        /// <returns></returns>
-        object ListTask();
-        /// <summary>
-        /// 获取任务步骤的执行结果
-        /// </summary>
-        /// <param name="taskCode"></param>
-        /// <param name="ruleStepId"></param>
-        /// <returns></returns>
-        object GetTaskResult(string taskCode, int ruleStepId);
-        /// <summary>
         /// 发布模型
         /// </summary>
         /// <param name="modelCode">模型唯一编码</param>
@@ -106,5 +94,6 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="modelCode">模型唯一编码</param>
         /// <returns></returns>
         object ValidModel(string modelCode);
+   
     }
 }

@@ -45,22 +45,6 @@ namespace Dist.Dme.RuleSteps
                 , new object[] { repository, taskId, step }, null, null);
 
             return ruleStepData;
-            //EnumRuleStepTypes @enum = EnumUtil.GetEnumObjByName<EnumRuleStepTypes>(stepTypeCode);
-            //switch (@enum)
-            //{
-            //    case EnumRuleStepTypes.AlgorithmInput:
-            //        ruleStepData = new AlgorithmInputStepData(repository, taskId, step);
-            //        break;
-            //    case EnumRuleStepTypes.DataSourceInput:
-            //        ruleStepData = new DataSourceInputStepData(repository, taskId, step);
-            //        break;
-            //    case EnumRuleStepTypes.MongodbOutput:
-            //        ruleStepData = new MongoDBOutputStepData(repository, taskId, step);
-            //        break;
-            //    default:
-            //        break;
-            //}
-            //return ruleStepData;
         }
     }
 }
