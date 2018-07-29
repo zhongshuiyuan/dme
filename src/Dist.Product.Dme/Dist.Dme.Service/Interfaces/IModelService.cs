@@ -32,7 +32,7 @@ namespace Dist.Dme.Service.Interfaces
         /// </summary>
         /// <param name="versionCode">模型版本唯一编码</param>
         /// <returns></returns>
-        Task<DmeTask> RunModelAsync(string versionCode);
+        DmeTask RunModel(string versionCode);
         /// <summary>
         /// 根据模型唯一编码，获取模型的元数据信息
         /// </summary>

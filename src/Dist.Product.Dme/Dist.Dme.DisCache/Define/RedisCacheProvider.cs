@@ -20,7 +20,7 @@ namespace Dist.Dme.DisCache.Define
 
     public class RedisCacheProvider
     {
-        public int Database { get; set; }
+        public int DataBase { get; set; }
         public string HostName { get; set; }
         public string InstanceName { get; set; }
         public int Port { get; set; }

@@ -62,7 +62,7 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
                 // base.InputParameters.Clear();
                 base.InputParameters[nameof(Database)] = new Property(nameof(Database), "mongo数据库", EnumValueMetaType.TYPE_STRING, null, null, "mongo数据库实例名称");
                 base.InputParameters[nameof(Collection)] = new Property(nameof(Collection), "mongo文档类", EnumValueMetaType.TYPE_STRING, null, null, "mongo集合类名称");
-                base.InputParameters[nameof(MongoFields)] = new Property(nameof(MongoFields), "mongo输出字段", EnumValueMetaType.TYPE_JSON_ARRAY, MongoFields, MongoFields, "保存字段JSON数组");
+                base.InputParameters[nameof(MongoFields)] = new Property(nameof(MongoFields), "mongo输出字段", EnumValueMetaType.TYPE_JSON_ARRAY, MongoFields, null, "保存字段JSON数组");
                 return base.InputParameters;
             }
         }

@@ -487,7 +487,7 @@ namespace Dist.Dme.Service.Impls
             }
             db.Insertable<DmeRuleStepHop>(hops).ExecuteCommand();
         }
-        public async Task<DmeTask> RunModelAsync(string versionCode)
+        public DmeTask RunModel(string versionCode)
         {
             // 尽管使用了async关键字，如果不使用await，则还是同步操作
             //return await Task.Run<DmeTask>(() =>
@@ -536,7 +536,7 @@ namespace Dist.Dme.Service.Impls
             try
             {
                 // 此时不阻塞，返回类型为Task，为了能捕获到线程异常信息
-                await RunModelAsyncEx(db, model, modelVersion, newTask, ruleSteps);
+                RunModelAsyncEx(db, model, modelVersion, newTask, ruleSteps);
             }
             catch (Exception ex)
             {
@@ -544,9 +544,9 @@ namespace Dist.Dme.Service.Impls
                 // 更改任务状态
                 newTask.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_ERROR);
                 newTask.LastTime = DateUtil.CurrentTimeMillis;
-                db.Updateable<DmeTask>(newTask).UpdateColumns(task => new { task.Status, task.LastTime}).ExecuteCommand();
+                db.Updateable<DmeTask>(newTask).UpdateColumns(task => new { task.Status, task.LastTime }).ExecuteCommand();
             }
-         
+
             return newTask;
         }
         /// <summary>

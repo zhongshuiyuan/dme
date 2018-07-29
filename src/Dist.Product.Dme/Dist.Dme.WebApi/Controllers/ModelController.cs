@@ -155,7 +155,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/run/{modelVersionCode}")]
         public Result Run(string modelVersionCode)
         {
-            return base.Success(this.ModelService.RunModelAsync(modelVersionCode), "已开始模型的云计算......");
+            return base.Success(this.ModelService.RunModel(modelVersionCode), "已开始模型的云计算......");
         }
         /// <summary>
         /// 模型注册

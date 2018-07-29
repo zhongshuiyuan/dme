@@ -64,7 +64,7 @@ namespace Dist.Dme.WebApi
                         {
                             Configuration = provider.HostName + ":" + provider.Port,
                             InstanceName = provider.InstanceName
-                        }, provider.Database));
+                        }, provider.DataBase));
                     }
                     else if ("redis.r.w".Equals(type, StringComparison.OrdinalIgnoreCase))
                     {

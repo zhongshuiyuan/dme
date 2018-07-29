@@ -40,14 +40,14 @@ namespace Dist.Dme.Service.Impls
                 return 0;
             }
             IList<TaskRespDTO> taskRespDTOs = new List<TaskRespDTO>();
-            
-                   // Model = db.Queryable<DmeModel>().Single(m => m.Id == item.ModelId),
-                   // ModelVersion = db.Queryable<DmeModelVersion>().Single(mv => mv.Id == item.VersionId)
+
             foreach (var item in tasks)
             {
                 TaskRespDTO dto = new TaskRespDTO
                 {
-                    Task = item
+                    Task = item,
+                    Model = db.Queryable<DmeModel>().Single(m => m.Id == item.ModelId),
+                    ModelVersion = db.Queryable<DmeModelVersion>().Single(mv => mv.Id == item.VersionId)
                 };
                 taskRespDTOs.Add(dto);
             }
@@ -183,6 +183,16 @@ namespace Dist.Dme.Service.Impls
                     break;
             }
             return true;
+        }
+        public object GetTask(string taskCode)
+        {
+            var db = base.Repository.GetDbContext();
+            DmeTask task = db.Queryable<DmeTask>().Single(t => t.SysCode == taskCode);
+            if(null == task)
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"任务[{taskCode}]不存在");
+            }
+            return task;
         }
     }
 }

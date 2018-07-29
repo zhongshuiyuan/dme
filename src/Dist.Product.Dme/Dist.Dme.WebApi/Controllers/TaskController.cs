@@ -24,6 +24,17 @@ namespace Dist.Dme.WebApi.Controllers
             TaskService = taskService;
         }
         /// <summary>
+        /// 获取任务
+        /// </summary>
+        /// <param name="taskCode">任务唯一标识符</param>
+        /// <returns>返回任务实体</returns>
+        [HttpGet]
+        [Route("v1/{taskCode}")]
+        public Result GetTask(string taskCode)
+        {
+            return base.Success(this.TaskService.GetTask(taskCode));
+        }
+        /// <summary>
         /// 分页获取任务清单，以创建时间倒序
         /// </summary>
         /// <param name="pageIndex">页码</param>

@@ -25,5 +25,11 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="operation">操作符号，0：停止；1：重启；-1：删除</param>
         /// <returns></returns>
         object OperateTask(string taskCode, int operation);
+        /// <summary>
+        /// 根据唯一编码获任务实体
+        /// </summary>
+        /// <param name="taskCode"></param>
+        /// <returns></returns>
+        object GetTask(string taskCode);
     }
 }
