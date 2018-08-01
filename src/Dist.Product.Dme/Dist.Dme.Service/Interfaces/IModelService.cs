@@ -94,6 +94,21 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="modelCode">模型唯一编码</param>
         /// <returns></returns>
         object ValidModel(string modelCode);
-   
+        /// <summary>
+        /// 添加模型图片
+        /// </summary>
+        /// <param name="modelVersionCode"></param>
+        /// <param name="sourceName"></param>
+        /// <param name="suffix"></param>
+        /// <param name="contentType">类型</param>
+        /// <param name="objectId"></param>
+        /// <returns></returns>
+        object AddModelImg(string modelVersionCode, string sourceName, string suffix, string contentType, string objectId);
+        /// <summary>
+        /// 获取模型图片
+        /// </summary>
+        /// <param name="modelVersionCode"></param>
+        /// <returns></returns>
+        DmeModelImg GetModelImg(string modelVersionCode);
     }
 }

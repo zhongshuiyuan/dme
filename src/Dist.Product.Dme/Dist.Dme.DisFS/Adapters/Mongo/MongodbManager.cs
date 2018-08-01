@@ -56,6 +56,18 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
             })).Value;
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="database"></param>
+        /// <returns></returns>
+        public static GridFSBucket GetGridFSBucket(IMongoDatabase database)
+        {
+            return GridFSBucketCache.GetOrAdd(database.DatabaseNamespace.DatabaseName, new Lazy<GridFSBucket>(() =>
+            {
+                return new GridFSBucket(database);
+            })).Value;
+        }
+        /// <summary>
         /// 获取mongo所有database
         /// </summary>
         /// <param name="connectionString">连接字符串，格式：mongodb://ip:port</param>

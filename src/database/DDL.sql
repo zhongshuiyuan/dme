@@ -872,5 +872,44 @@ alter table DME_RULESTEP_ATTRIBUTE add rowindex inteGER default 0;
 -- Add comments to the columns 
 comment on column DME_RULESTEP_ATTRIBUTE.rowindex
   is '行号，默认为0，用于标识多行索引号';
+  
+  create table DME_MODEL_IMG
+(
+  id         number(8),
+  model_id   number(8),
+  version_id number(8),
+  imgcode    varchar2(38) not null,
+  suffix varchar2(20),
+  SOURCENAME varchar2(100),
+  contentType VARCHAR2(50)
+)
+;
+-- Add comments to the table 
+comment on table DME_MODEL_IMG
+  is '模型图片';
+-- Add comments to the columns 
+comment on column DME_MODEL_IMG.id
+  is '主键';
+comment on column DME_MODEL_IMG.model_id
+  is '模型id';
+comment on column DME_MODEL_IMG.version_id
+  is '版本id';
+comment on column DME_MODEL_IMG.imgcode
+  is '图片唯一编码';
+  comment on column DME_MODEL_IMG.suffix
+  is '后缀';
+  comment on column DME_MODEL_IMG.SOURCENAME
+  is '源文件名';
+  comment on column DME_MODEL_IMG.contentType
+  is '类型';
+  alter table DME_MODEL_IMG add primary key(id);
+  
+  create sequence SEQ_DME_MODEL_IMG
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
 
   

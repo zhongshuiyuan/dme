@@ -1,12 +1,27 @@
 ﻿using Dist.Dme.Algorithms.LandConflictDetection.DTO;
 using Dist.Dme.Algorithms.Overlay.DTO;
+using Dist.Dme.Base.Conf;
 using Dist.Dme.Base.Framework;
+using Dist.Dme.Base.Framework.Exception;
+using Dist.Dme.Base.Utils;
+using Dist.Dme.DisFS.Adapters.Mongo;
+using Dist.Dme.Extensions;
 using Dist.Dme.Model.DTO;
+using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
+using MongoDB.Driver.GridFS;
 using NLog;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Dist.Dme.WebApi.Controllers
 {
@@ -215,6 +230,80 @@ namespace Dist.Dme.WebApi.Controllers
         public Result PublishModel(string modelCode, int isPublish)
         {
             return base.Success(this.ModelService.PublishModel(modelCode, isPublish));
+        }
+        /// <summary>
+        /// 上传模型图片
+        /// </summary>
+        /// <param name="modelVersionCode"></param>
+        /// <param name="file">文档，注意：前端传过来的form表单数据key为file</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("v1/img/{modelVersionCode}")]
+        public Result UploadModelImg(string modelVersionCode, IFormFile file)
+        {
+            String baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string uploadFolderPath = baseDir + GlobalSystemConfig.DIR_TEMP;
+            //如果路径不存在，创建路径
+            if (!Directory.Exists(uploadFolderPath))
+            {
+                Directory.CreateDirectory(uploadFolderPath);
+            }
+            if (file.Length > 0)
+            {
+                string suffix = file.FileName.Substring(file.FileName.LastIndexOf("."));
+                string localFileName = GuidUtil.NewGuid() + suffix;
+                GridFSUploadOptions options = new GridFSUploadOptions
+                {
+                    Metadata = new BsonDocument(new Dictionary<string, object>() { ["contentType"]= file.ContentType})
+                };
+                ObjectId objectId = MongodbHelper<object>.UploadFileFromStream(ServiceFactory.MongoDatabase, localFileName, file.OpenReadStream(), options);
+                return base.Success(this.ModelService.AddModelImg(modelVersionCode, file.FileName, suffix, file.ContentType, objectId.ToString()));
+                //using (var fileStream = new FileStream(Path.Combine(uploadFolderPath, localFileName), FileMode.Create))
+                //{
+                //    await file.CopyToAsync(fileStream);
+                //}
+
+            }
+            return base.Fail("上传失败，请管理员查看详细日志");
+        }
+        /// <summary>
+        /// 获取模型图片
+        /// </summary>
+        /// <param name="modelVersionCode">模型版本编码</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("v1/img/{modelVersionCode}")]
+        public IActionResult GetModelImg(string modelVersionCode)
+        {
+            String baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string defaultImgPath = baseDir + GlobalSystemConfig.PATH_DEFAULT_IMG;
+            Stream imgStream = null;
+            string contentType = "image/jpeg";
+            byte[] bytes = null;
+
+            DmeModelImg dmeModelImg = this.ModelService.GetModelImg(modelVersionCode);
+            if (null == dmeModelImg)
+            {
+                LOG.Warn($"模型版本[{modelVersionCode}]还没设置图片，使用默认图片");
+                if (!System.IO.File.Exists(defaultImgPath))
+                {
+                    throw new BusinessException($"默认图片[{defaultImgPath}]不存在");
+                }
+                bytes = System.IO.File.ReadAllBytes(defaultImgPath);
+            }
+            else
+            {
+                //从mongodb中读取流，DownloadFileToStream有问题
+                bytes = MongodbHelper<object>.DownloadFileAsByteArray(ServiceFactory.MongoDatabase, new ObjectId(dmeModelImg.ImgCode));
+                //imgStream = FileUtil.BytesToStream(bytes);
+                contentType = dmeModelImg.ContentType;
+            }
+            // byte[] buffer = new byte[imgStream.Length];
+            //读取图片字节流
+            // imgStream.Read(buffer, 0, Convert.ToInt32(imgStream.Length));;
+            var response = File(bytes, contentType);
+            // imgStream.Close();
+            return response;
         }
     }
 }

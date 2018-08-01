@@ -33,5 +33,9 @@ namespace Dist.Dme.Base.Conf
         /// 个人geodatabase模板路径，/template/pgdb.mdb
         /// </summary>
         public static string PATH_TEMPLATE_PGDB = "/template/pgdb.mdb";
+        /// <summary>
+        /// 默认图片路径
+        /// </summary>
+        public static string PATH_DEFAULT_IMG = "/default/default.png";
     }
 }

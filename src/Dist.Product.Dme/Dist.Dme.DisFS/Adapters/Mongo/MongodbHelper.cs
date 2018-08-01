@@ -301,7 +301,7 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
 
         #region DeleteMany 删除多条数据
         /// <summary>
-        /// 删除一条数据
+        /// 批量删除数据
         /// </summary>
         /// <param name="host">mongodb连接信息</param>
         /// <param name="filter">删除的条件</param>
@@ -317,7 +317,24 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
             {
                 throw ex;
             }
-
+        }
+        /// <summary>
+        /// 批量删除数据
+        /// </summary>
+        /// <param name="database"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static DeleteResult DeleteMany(IMongoDatabase database, FilterDefinition<T> filter)
+        {
+            try
+            {
+                var client = MongodbManager<T>.GetMongodbCollection(database);
+                return client.DeleteMany(filter);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         #endregion
 
@@ -329,6 +346,19 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
         /// <param name="filter">删除的条件</param>
         /// <returns></returns>
         public static async Task<DeleteResult> DeleteManyAsync(MongodbHost host, FilterDefinition<T> filter)
+        {
+            try
+            {
+                var client = MongodbManager<T>.GetMongodbCollection(host);
+                return await client.DeleteManyAsync(filter);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+        public static async Task<DeleteResult> DeleteManyAsync(IMongoDatabase host, FilterDefinition<T> filter)
         {
             try
             {
@@ -731,6 +761,19 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
             return bucket.UploadFromStream(fileName, source, options);
         }
         /// <summary>
+        /// 同步上传
+        /// </summary>
+        /// <param name="database"></param>
+        /// <param name="fileName"></param>
+        /// <param name="source"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public static ObjectId UploadFileFromStream(IMongoDatabase database, string fileName, Stream source, GridFSUploadOptions options = null)
+        {
+            var bucket = MongodbManager<GridFSBucket>.GetGridFSBucket(database);
+            return bucket.UploadFromStream(fileName, source, options);
+        }
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="host"></param>
@@ -800,7 +843,20 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
             return bucket.UploadFromStreamAsync(fileName, source, options);
         }
         /// <summary>
-        /// 
+        /// 异步上传
+        /// </summary>
+        /// <param name="database"></param>
+        /// <param name="fileName"></param>
+        /// <param name="source"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public static Task<ObjectId> UploadFileFromStreamAsync(IMongoDatabase database, string fileName, Stream source, GridFSUploadOptions options = null)
+        {
+            var bucket = MongodbManager<GridFSBucket>.GetGridFSBucket(database);
+            return bucket.UploadFromStreamAsync(fileName, source, options);
+        }
+        /// <summary>
+        /// 获取文件流
         /// </summary>
         /// <param name="host"></param>
         /// <param name="id">文件id，fs.files中的_id，也对应fs.chunks的files_id</param>
@@ -813,7 +869,7 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
             return destination;
         }
         /// <summary>
-        /// 
+        /// 获取文件流
         /// </summary>
         /// <param name="host"></param>
         /// <param name="id"></param>
@@ -822,6 +878,19 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
         {
             Stream destination = new MemoryStream();
             var bucket = MongodbManager<GridFSBucket>.GetGridFSBucket(host);
+            bucket.DownloadToStream(id, destination);
+            return destination;
+        }
+        /// <summary>
+        /// 获取文件流（有问题？）
+        /// </summary>
+        /// <param name="database"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static Stream DownloadFileToStream(IMongoDatabase database, ObjectId id)
+        {
+            Stream destination = new MemoryStream();
+            var bucket = MongodbManager<GridFSBucket>.GetGridFSBucket(database);
             bucket.DownloadToStream(id, destination);
             return destination;
         }
@@ -851,7 +920,18 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
             return bucket.DownloadAsBytesByName(fileName);
         }
         /// <summary>
-        /// 
+        /// 获取文件字节数组
+        /// </summary>
+        /// <param name="database"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static Byte[] DownloadFileAsBytesByName(IMongoDatabase database, string fileName)
+        {
+            var bucket = MongodbManager<GridFSBucket>.GetGridFSBucket(database);
+            return bucket.DownloadAsBytesByName(fileName);
+        }
+        /// <summary>
+        /// 获取文件字节数组
         /// </summary>
         /// <param name="host"></param>
         /// <param name="id">文件_id值？</param>
@@ -859,6 +939,18 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
         public static Byte[] DownloadFileAsByteArray(MongodbHost host, ObjectId id)
         {
             var bucket = MongodbManager<GridFSBucket>.GetGridFSBucket(host);
+            Byte[] bytes = bucket.DownloadAsBytes(id);
+            return bytes;
+        }
+        /// <summary>
+        /// 获取文件字节数组
+        /// </summary>
+        /// <param name="database"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static Byte[] DownloadFileAsByteArray(IMongoDatabase database, ObjectId id)
+        {
+            var bucket = MongodbManager<GridFSBucket>.GetGridFSBucket(database);
             Byte[] bytes = bucket.DownloadAsBytes(id);
             return bytes;
         }
@@ -915,6 +1007,31 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
                 Sort = sort
             };
             var bucket = MongodbManager<GridFSBucket>.GetGridFSBucket(host);
+            using (var cursor = bucket.Find(Builders<GridFSFileInfo>.Filter.And(filters), options))
+            {
+                return cursor.ToList().FirstOrDefault();
+            }
+        }
+        /// <summary>
+        /// 查找唯一文件
+        /// </summary>
+        /// <param name="database"></param>
+        /// <param name="metadatas"></param>
+        /// <returns></returns>
+        public static GridFSFileInfo FindSingleFile(IMongoDatabase database, IDictionary<string, object> metadatas)
+        {
+            IList<FilterDefinition<GridFSFileInfo>> filters = new List<FilterDefinition<GridFSFileInfo>>();
+            foreach (var item in metadatas)
+            {
+                filters.Add(Builders<GridFSFileInfo>.Filter.Eq(item.Key, item.Value));
+            }
+            var sort = Builders<GridFSFileInfo>.Sort.Descending(x => x.UploadDateTime);
+            var options = new GridFSFindOptions
+            {
+                Limit = 1,
+                Sort = sort
+            };
+            var bucket = MongodbManager<GridFSBucket>.GetGridFSBucket(database);
             using (var cursor = bucket.Find(Builders<GridFSFileInfo>.Filter.And(filters), options))
             {
                 return cursor.ToList().FirstOrDefault();

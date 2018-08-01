@@ -177,6 +177,10 @@ namespace Dist.Dme.Service.Impls
                     LOG.Info($"删除任务[{taskCode}]关联的[{count}]个步骤记录");
                     count = db.Deleteable<DmeTaskResult>(tr => tr.TaskId == task.Id).ExecuteCommand();
                     LOG.Info($"删除任务[{taskCode}]关联的[{count}]个结果记录");
+                    // 从mongo中获取
+                    var filter = Builders<TaskResultColl>.Filter.And(
+                        Builders<TaskResultColl>.Filter.Eq("TaskId", task.Id));
+                    MongodbHelper<TaskResultColl>.DeleteMany(ServiceFactory.MongoDatabase, filter);
                     db.Deleteable<DmeTask>(task).ExecuteCommand();
                     break;
                 default:

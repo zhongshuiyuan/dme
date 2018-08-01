@@ -1035,5 +1035,47 @@ namespace Dist.Dme.Service.Impls
         {
             throw new NotImplementedException();
         }
+        public object AddModelImg(string modelVersionCode, string sourceName, string suffix, string contentType, string objectId)
+        {
+            var db = Repository.GetDbContext();
+            DmeModelVersion modelVersion = db.Queryable<DmeModelVersion>().Single(mv => mv.SysCode == modelVersionCode);
+            if (null == modelVersion)
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"模型版本[{modelVersionCode}]不存在");
+            }
+            DmeModelImg modelImg = db.Queryable<DmeModelImg>().Single(mi => mi.ModelId == modelVersion.ModelId && mi.VersionId == modelVersion.Id);
+            if (null == modelImg)
+            {
+                modelImg = new DmeModelImg
+                {
+                    ModelId = modelVersion.ModelId,
+                    VersionId = modelVersion.Id,
+                    Suffix = suffix,
+                    SourceName = sourceName,
+                    ContentType = contentType,
+                    ImgCode = objectId
+                };
+                modelImg = db.Insertable<DmeModelImg>(modelImg).ExecuteReturnEntity();
+            }
+            else
+            {
+                modelImg.ImgCode = objectId;
+                modelImg.Suffix = suffix;
+                modelImg.ContentType = contentType;
+                modelImg.SourceName = sourceName;
+                db.Updateable<DmeModelImg>(modelImg).ExecuteCommand();
+            }
+            return modelImg;
+        }
+        public DmeModelImg GetModelImg(string modelVersionCode)
+        {
+            var db = Repository.GetDbContext();
+            DmeModelVersion modelVersion = db.Queryable<DmeModelVersion>().Single(mv => mv.SysCode == modelVersionCode);
+            if (null == modelVersion)
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"模型版本[{modelVersionCode}]不存在");
+            }
+            return db.Queryable<DmeModelImg>().Single(mi => mi.ModelId == modelVersion.ModelId && mi.VersionId == modelVersion.Id);
+        }
     }
 }
