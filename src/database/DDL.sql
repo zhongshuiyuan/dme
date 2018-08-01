@@ -911,5 +911,16 @@ start with 1
 increment by 1
 cache 20;
 
+-- Add/modify columns 
+alter table DME_MODEL add status integer default 1;
+-- Add comments to the columns 
+comment on column DME_MODEL.status
+  is '×´Ì¬¡£0£ºÉ¾³ý£»1£ºÕý³£';
+
+-- Add/modify columns 
+alter table DME_MODEL_VERSION add status integer default 1;
+-- Add comments to the columns 
+comment on column DME_MODEL_VERSION.status
+  is '×´Ì¬¡£0£ºÉ¾³ý£»1£ºÕý³£';
 
   

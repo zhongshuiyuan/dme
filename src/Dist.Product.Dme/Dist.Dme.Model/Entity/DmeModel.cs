@@ -17,5 +17,6 @@ namespace Dist.Dme.Model.Entity
         public int IsPublish { get; set; }
         public long PublishTime { get; set; }
         public string Category { get; set; }
+        public int Status { get; set; }
     }
 }

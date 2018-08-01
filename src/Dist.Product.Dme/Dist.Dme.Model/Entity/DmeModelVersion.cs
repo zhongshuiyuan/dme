@@ -21,5 +21,6 @@ namespace Dist.Dme.Model.Entity
         [SugarColumn(ColumnName = "MODEL_ID")]
         public int ModelId { get; set; }
         public long CreateTime { get; set; }
+        public int Status { get; set; }
     }
 }

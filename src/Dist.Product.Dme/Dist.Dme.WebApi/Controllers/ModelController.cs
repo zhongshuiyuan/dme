@@ -22,6 +22,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace Dist.Dme.WebApi.Controllers
 {
@@ -257,12 +258,19 @@ namespace Dist.Dme.WebApi.Controllers
                     Metadata = new BsonDocument(new Dictionary<string, object>() { ["contentType"]= file.ContentType})
                 };
                 ObjectId objectId = MongodbHelper<object>.UploadFileFromStream(ServiceFactory.MongoDatabase, localFileName, file.OpenReadStream(), options);
-                return base.Success(this.ModelService.AddModelImg(modelVersionCode, file.FileName, suffix, file.ContentType, objectId.ToString()));
-                //using (var fileStream = new FileStream(Path.Combine(uploadFolderPath, localFileName), FileMode.Create))
-                //{
-                //    await file.CopyToAsync(fileStream);
-                //}
-
+                try
+                {
+                    return base.Success(this.ModelService.AddModelImg(modelVersionCode, file.FileName, suffix, file.ContentType, objectId.ToString()));
+                }
+                catch (Exception ex)
+                {
+                    LOG.Error(ex, "模型图片数据库持久化失败，详情："+ex.Message);
+                    if (objectId != null)
+                    {
+                        LOG.Warn($"文件[{objectId}]撤销保存");
+                        MongodbHelper<object>.DeleteFileById(ServiceFactory.MongoDatabase, objectId);
+                    }
+                }
             }
             return base.Fail("上传失败，请管理员查看详细日志");
         }
@@ -277,7 +285,6 @@ namespace Dist.Dme.WebApi.Controllers
         {
             String baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string defaultImgPath = baseDir + GlobalSystemConfig.PATH_DEFAULT_IMG;
-            Stream imgStream = null;
             string contentType = "image/jpeg";
             byte[] bytes = null;
 
@@ -300,10 +307,26 @@ namespace Dist.Dme.WebApi.Controllers
             }
             // byte[] buffer = new byte[imgStream.Length];
             //读取图片字节流
-            // imgStream.Read(buffer, 0, Convert.ToInt32(imgStream.Length));;
+            // imgStream.Read(buffer, 0, Convert.ToInt32(imgStream.Length));
             var response = File(bytes, contentType);
             // imgStream.Close();
             return response;
+        }
+        /// <summary>
+        /// 逻辑删除模型
+        /// </summary>
+        /// <param name="modelCode">模型编码</param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("v1/{modelCode}")]
+        public async Task<Result> DeleteModelAsync(string modelCode)
+        {
+            Boolean result = await ModelService.DeleteModel(modelCode);
+            if (result)
+            {
+                return base.Success(result);
+            }
+            return base.Fail("删除模型失败，详情请管理员查看具体日志信息。");
         }
     }
 }

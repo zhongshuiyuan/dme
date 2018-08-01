@@ -1077,5 +1077,27 @@ namespace Dist.Dme.Service.Impls
             }
             return db.Queryable<DmeModelImg>().Single(mi => mi.ModelId == modelVersion.ModelId && mi.VersionId == modelVersion.Id);
         }
+        public async Task<Boolean> DeleteModel(string modelCode)
+        {
+            return await Task.Run<Boolean>(() => {
+                var db = Repository.GetDbContext();
+                return db.Ado.UseTran<Boolean>(() =>
+                {
+                    DmeModel model = db.Queryable<DmeModel>().Single(m => m.SysCode == modelCode);
+                    if (null == model)
+                    {
+                        throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"模型[{modelCode}]不存在");
+                    }
+                    model.Status = 0;
+                    db.Updateable<DmeModel>(model).UpdateColumns(m => m.Status);
+                    // 级联逻辑删除版本
+                    var updateCount = db.Updateable<DmeModelVersion>()
+                        .UpdateColumns(it => new DmeModelVersion() { Status = 0 })
+                        .Where(it => it.ModelId == model.Id).ExecuteCommand();
+                    LOG.Info($"共更新[{updateCount}]版本记录");
+                    return true;
+                }).Data;
+            });
+        }
     }
 }

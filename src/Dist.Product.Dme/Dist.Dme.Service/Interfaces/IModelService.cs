@@ -110,5 +110,11 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="modelVersionCode"></param>
         /// <returns></returns>
         DmeModelImg GetModelImg(string modelVersionCode);
+        /// <summary>
+        /// 逻辑删除模型，级联逻辑删除版本
+        /// </summary>
+        /// <param name="modelCode">模型编码</param>
+        /// <returns></returns>
+        Task<Boolean> DeleteModel(string modelCode);
     }
 }

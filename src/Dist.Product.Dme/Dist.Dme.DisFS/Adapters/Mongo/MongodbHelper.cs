@@ -1098,6 +1098,26 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
             bucket.Delete(new ObjectId(id));
         }
         /// <summary>
+        /// 根据id删除文件
+        /// </summary>
+        /// <param name="database"></param>
+        /// <param name="id"></param>
+        public static void DeleteFileById(IMongoDatabase database, string id)
+        {
+            var bucket = MongodbManager<GridFSBucket>.GetGridFSBucket(database);
+            bucket.Delete(new ObjectId(id));
+        }
+        /// <summary>
+        /// 根据ObjectId删除文件
+        /// </summary>
+        /// <param name="database"></param>
+        /// <param name="id"></param>
+        public static void DeleteFileById(IMongoDatabase database, ObjectId id)
+        {
+            var bucket = MongodbManager<GridFSBucket>.GetGridFSBucket(database);
+            bucket.Delete(id);
+        }
+        /// <summary>
         /// 根据ObjectId删除文件
         /// </summary>
         /// <param name="host"></param>
