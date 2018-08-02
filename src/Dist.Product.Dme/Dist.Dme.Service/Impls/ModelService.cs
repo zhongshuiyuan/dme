@@ -163,18 +163,18 @@ namespace Dist.Dme.Service.Impls
             this.landConflictDetectionAlgorithm.Init(parameters);
             return this.landConflictDetectionAlgorithm.Execute();
         }
-        public object ListModels(Boolean detail, int isPublish)
+        public object ListModels(Boolean detail, int isPublish, EnumModelStatus enumModelStatus)
         {
             List<DmeModel> models = null;
             // 倒序
             if (-1 == isPublish)
             {
-                models = base.Repository.GetDbContext().Queryable<DmeModel>().OrderBy(m => m.CreateTime, OrderByType.Desc).ToList();
+                models = base.Repository.GetDbContext().Queryable<DmeModel>().Where(m => m.Status == (int)enumModelStatus).OrderBy(m => m.CreateTime, OrderByType.Desc).ToList();
             }
             else
             {
                 // 是否发布
-                models = base.Repository.GetDbContext().Queryable<DmeModel>().Where(m => m.IsPublish == isPublish).OrderBy(m => m.CreateTime, OrderByType.Desc).ToList();
+                models = base.Repository.GetDbContext().Queryable<DmeModel>().Where(m => m.IsPublish == isPublish && m.Status == (int)enumModelStatus).OrderBy(m => m.CreateTime, OrderByType.Desc).ToList();
             }
 
             if (null == models || 0 == models.Count)
@@ -1089,12 +1089,34 @@ namespace Dist.Dme.Service.Impls
                         throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"模型[{modelCode}]不存在");
                     }
                     model.Status = 0;
-                    db.Updateable<DmeModel>(model).UpdateColumns(m => m.Status);
+                    db.Updateable<DmeModel>(model).UpdateColumns(m => m.Status).ExecuteCommand();
                     // 级联逻辑删除版本
                     var updateCount = db.Updateable<DmeModelVersion>()
                         .UpdateColumns(it => new DmeModelVersion() { Status = 0 })
                         .Where(it => it.ModelId == model.Id).ExecuteCommand();
-                    LOG.Info($"共更新[{updateCount}]版本记录");
+                    LOG.Info($"共更新[{updateCount}]条版本记录");
+                    return true;
+                }).Data;
+            });
+        }
+        public async Task<bool> RestoreModelAsync(string modelCode)
+        {
+            return await Task.Run<Boolean>(() => {
+                var db = Repository.GetDbContext();
+                return db.Ado.UseTran<Boolean>(() =>
+                {
+                    DmeModel model = db.Queryable<DmeModel>().Single(m => m.SysCode == modelCode);
+                    if (null == model)
+                    {
+                        throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"模型[{modelCode}]不存在");
+                    }
+                    model.Status = 1;
+                    db.Updateable<DmeModel>(model).UpdateColumns(m => m.Status).ExecuteCommand();
+                    // 级联逻辑恢复版本
+                    var updateCount = db.Updateable<DmeModelVersion>()
+                        .UpdateColumns(it => new DmeModelVersion() { Status = 1 })
+                        .Where(it => it.ModelId == model.Id).ExecuteCommand();
+                    LOG.Info($"共更新[{updateCount}]条版本记录");
                     return true;
                 }).Data;
             });

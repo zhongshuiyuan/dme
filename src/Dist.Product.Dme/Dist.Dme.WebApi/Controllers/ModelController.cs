@@ -1,5 +1,6 @@
 ﻿using Dist.Dme.Algorithms.LandConflictDetection.DTO;
 using Dist.Dme.Algorithms.Overlay.DTO;
+using Dist.Dme.Base.Common;
 using Dist.Dme.Base.Conf;
 using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.Exception;
@@ -46,12 +47,16 @@ namespace Dist.Dme.WebApi.Controllers
         /// </summary>
         /// <param name="detail">是否获取详情信息，0：否；1：是</param>
         /// <param name="isPublish">是否被发布的模型，1：已发布；0：未发布；-1：全部</param>
+        /// <param name="status">模型状态，0：被删除；1：正常</param>
         /// <returns></returns>
         [HttpGet]
         [Route("v1")]
-        public Result ListModels([FromQuery(Name = "detail")] int detail = 0, [FromQuery(Name = "ispublish")] int isPublish = 0)
+        public Result ListModels(
+            [FromQuery(Name = "detail")] int detail = 0, 
+            [FromQuery(Name = "ispublish")] int isPublish = 0,
+            [FromQuery(Name = "status")] int status = 1)
         {
-            return base.Success(ModelService.ListModels(1 == detail, isPublish));
+            return base.Success(ModelService.ListModels(1 == detail, isPublish, EnumUtil.GetEnumObjByValue<EnumModelStatus>(status)));
         }
         /// <summary>
         /// 根据模型唯一编码获取模型
@@ -328,5 +333,22 @@ namespace Dist.Dme.WebApi.Controllers
             }
             return base.Fail("删除模型失败，详情请管理员查看具体日志信息。");
         }
+        /// <summary>
+        /// 还原模型
+        /// </summary>
+        /// <param name="modelCode"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("v1/restore/{modelCode}")]
+        public async Task<Result> RestoreModelAsync(string modelCode)
+        {
+            Boolean result = await ModelService.RestoreModelAsync(modelCode);
+            if (result)
+            {
+                return base.Success(result);
+            }
+            return base.Fail("删除模型失败，详情请管理员查看具体日志信息。");
+        }
+        
     }
 }

@@ -19,8 +19,9 @@ namespace Dist.Dme.Service.Interfaces
         /// </summary>
         /// <param name="detail">是否获取模型的详情信息</param>
         /// <param name="isPublish">是否被发布，1：已发布；0：未发布；-1：全部</param>
+        /// <param name="enumModelStatus">模型状态，0：被删除；1：正常</param>
         /// <returns></returns>
-        object ListModels(Boolean detail, int isPublish);
+        object ListModels(Boolean detail, int isPublish, EnumModelStatus enumModelStatus);
         /// <summary>
         /// 添加模型，只是注册简单的信息
         /// </summary>
@@ -116,5 +117,11 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="modelCode">模型编码</param>
         /// <returns></returns>
         Task<Boolean> DeleteModel(string modelCode);
+        /// <summary>
+        /// 恢复模型
+        /// </summary>
+        /// <param name="modelCode">模型编码</param>
+        /// <returns></returns>
+        Task<bool> RestoreModelAsync(string modelCode);
     }
 }
