@@ -18,5 +18,7 @@ namespace Dist.Dme.Model.Entity
         public long PublishTime { get; set; }
         public string Category { get; set; }
         public int Status { get; set; }
+        [SugarColumn(ColumnName = "MODEL_TYPE_ID")]
+        public int ModelTypeId { get; set; }
     }
 }

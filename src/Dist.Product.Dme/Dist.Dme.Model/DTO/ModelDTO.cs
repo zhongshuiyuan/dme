@@ -15,6 +15,7 @@ namespace Dist.Dme.Model.DTO
         public String Name { get; set; }
         public String Remark { get; set; }
         public long CreateTime { get; set; }
+        public ModelTypeDTO Type { get; set; }
         /// <summary>
         /// 模型版本集合
         /// </summary>

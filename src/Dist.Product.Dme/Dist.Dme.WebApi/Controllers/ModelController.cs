@@ -1,6 +1,4 @@
-﻿using Dist.Dme.Algorithms.LandConflictDetection.DTO;
-using Dist.Dme.Algorithms.Overlay.DTO;
-using Dist.Dme.Base.Common;
+﻿using Dist.Dme.Base.Common;
 using Dist.Dme.Base.Conf;
 using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.Exception;
@@ -18,11 +16,7 @@ using MongoDB.Driver.GridFS;
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace Dist.Dme.WebApi.Controllers
@@ -43,6 +37,44 @@ namespace Dist.Dme.WebApi.Controllers
             this.ModelService = modelService;
         }
         /// <summary>
+        /// 添加模型类型
+        /// </summary>
+        /// <param name="types">类型名称数组</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("v1/types")]
+        public async Task<Result> AddModelTypesAsync([FromBody]string[] types)
+        {
+            return  base.Success(await ModelService.AddModelTypesAsync(types));
+        }
+        /// <summary>
+        /// 更新模型类型
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("v1/types")]
+        public Result UpdateModelTypes([FromBody] ModelTypeUpdateDTO dto )
+        {
+            return base.Success(ModelService.UpdateModelTypes(dto));
+        }
+        /// <summary>
+        ///  获取模型类型列表
+        /// </summary>
+        /// <param name="orderFieldName">排序字段名称（仅限一个）</param>
+        /// <param name="orderType">排序类型，升序：0，降序：1</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("v1/types")]
+        public Result ListModelTypes([FromQuery(Name = "orderfieldname")]string orderFieldName, [FromQuery(Name ="ordertype")]int orderType = 0)
+        {
+            if (orderType < 0 || orderType > 1)
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"输入参数orderType值[{orderType}]有误，不允许小于0或大于1");
+            }
+            return base.Success(ModelService.ListModelTypes(orderFieldName, orderType));
+        }
+        /// <summary>
         /// 获取所有模型
         /// </summary>
         /// <param name="detail">是否获取详情信息，0：否；1：是</param>
@@ -53,7 +85,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1")]
         public Result ListModels(
             [FromQuery(Name = "detail")] int detail = 0, 
-            [FromQuery(Name = "ispublish")] int isPublish = 0,
+            [FromQuery(Name = "ispublish")] int isPublish = 1,
             [FromQuery(Name = "status")] int status = 1)
         {
             return base.Success(ModelService.ListModels(1 == detail, isPublish, EnumUtil.GetEnumObjByValue<EnumModelStatus>(status)));
@@ -88,38 +120,38 @@ namespace Dist.Dme.WebApi.Controllers
         /// 获取用地冲突分析元数据信息
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [Route("landconflict/v1/metadata")]
-        public Result GetLandConflictMetadata()
-        {
-            return base.Success(ModelService.GetLandConflictMetadata());
-        }
+        //[HttpGet]
+        //[Route("landconflict/v1/metadata")]
+        //public Result GetLandConflictMetadata()
+        //{
+        //    return base.Success(ModelService.GetLandConflictMetadata());
+        //}
         /// <summary>
         /// 用地冲突分析计算
         /// </summary>
         /// <param name="dto">参数输入</param>
         /// <returns></returns>
-        [HttpPost]
-        [Route("landconflict/v1/execute")]
-        public Result LandConflictExecute([FromBody][Required]LandConflictReqDTO dto)
-        {
+        //[HttpPost]
+        //[Route("landconflict/v1/execute")]
+        //public Result LandConflictExecute([FromBody][Required]LandConflictReqDTO dto)
+        //{
             //dto.Parameters.Add("FeatureClass_Source_First", @"D:\work\data\zgkg.mdb&BZY_YDGH_PY");
             //dto.Parameters.Add("FeatureClass_Source_Second", @"D:\work\data\zgkg.mdb&BKY_YDGH_PY");
             //dto.Parameters.Add("Yddm_Second", "YDDM");
             //dto.Parameters.Add("Yddm_First", "YDDM");
 
             // return (Result)ModelService.LandConflictExecute(dto.Parameters);
-            return null;
-        }
+        //    return null;
+        //}
         /// <summary>
         /// 叠加分析计算
         /// </summary>
         /// <param name="dto">参数输入</param>
         /// <returns></returns>
-        [HttpPost]
-        [Route("overlay/v1/execute")]
-        public Result OverlayExecute([FromBody][Required]OverlayReqDTO dto)
-        {
+        //[HttpPost]
+        //[Route("overlay/v1/execute")]
+        //public Result OverlayExecute([FromBody][Required]OverlayReqDTO dto)
+        //{
             //if (null == dto)
             //{
             //    dto = new OverlayReqDTO();
@@ -165,8 +197,8 @@ namespace Dist.Dme.WebApi.Controllers
             //dto.Parameters.Add("AnalysisType", 0);
             //dto.Parameters.Add("IsClearTemp", true);
             //return base.Success(ModelService.OverlayExecute(dto.Parameters));
-            return null;
-        }
+        //    return null;
+        //}
         /// <summary>
         /// 运行模型计算
         /// </summary>
@@ -177,6 +209,28 @@ namespace Dist.Dme.WebApi.Controllers
         public Result Run(string modelVersionCode)
         {
             return base.Success(this.ModelService.RunModel(modelVersionCode), "已开始模型的云计算......");
+        }
+        /// <summary>
+        /// 更新模型基本信息
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("v1/basicinfo")]
+        public Result UpdateModelBasicInfo([FromBody]ModelBasicInfoUpdateDTO dto)
+        {
+            return base.Success(this.ModelService.UpdateModelBasicInfo(dto));
+        }
+        /// <summary>
+        /// 更新模型版本信息
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("v1/version")]
+        public Result UpdateModelVersion([FromBody]ModelVersionUpdateDTO dto)
+        {
+            return base.Success(this.ModelService.UpdateModelVersion(dto));
         }
         /// <summary>
         /// 模型注册
@@ -240,7 +294,7 @@ namespace Dist.Dme.WebApi.Controllers
         /// <summary>
         /// 上传模型图片
         /// </summary>
-        /// <param name="modelVersionCode"></param>
+        /// <param name="modelVersionCode">模型版本唯一编码</param>
         /// <param name="file">文档，注意：前端传过来的form表单数据key为file</param>
         /// <returns></returns>
         [HttpPost]
@@ -260,7 +314,7 @@ namespace Dist.Dme.WebApi.Controllers
                 string localFileName = GuidUtil.NewGuid() + suffix;
                 GridFSUploadOptions options = new GridFSUploadOptions
                 {
-                    Metadata = new BsonDocument(new Dictionary<string, object>() { ["contentType"]= file.ContentType})
+                    Metadata = new BsonDocument(new Dictionary<string, object>() { ["ContentType"]= file.ContentType})
                 };
                 ObjectId objectId = MongodbHelper<object>.UploadFileFromStream(ServiceFactory.MongoDatabase, localFileName, file.OpenReadStream(), options);
                 try
@@ -283,7 +337,7 @@ namespace Dist.Dme.WebApi.Controllers
         /// 获取模型图片
         /// </summary>
         /// <param name="modelVersionCode">模型版本编码</param>
-        /// <returns></returns>
+        /// <returns>FileContentResult</returns>
         [HttpGet]
         [Route("v1/img/{modelVersionCode}")]
         public IActionResult GetModelImg(string modelVersionCode)
@@ -326,7 +380,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/{modelCode}")]
         public async Task<Result> DeleteModelAsync(string modelCode)
         {
-            Boolean result = await ModelService.DeleteModel(modelCode);
+            Boolean result = await ModelService.DeleteModelAsync(modelCode);
             if (result)
             {
                 return base.Success(result);
@@ -336,7 +390,7 @@ namespace Dist.Dme.WebApi.Controllers
         /// <summary>
         /// 还原模型
         /// </summary>
-        /// <param name="modelCode"></param>
+        /// <param name="modelCode">模型唯一编码</param>
         /// <returns></returns>
         [HttpGet]
         [Route("v1/restore/{modelCode}")]
@@ -349,6 +403,5 @@ namespace Dist.Dme.WebApi.Controllers
             }
             return base.Fail("删除模型失败，详情请管理员查看具体日志信息。");
         }
-        
     }
 }

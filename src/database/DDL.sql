@@ -922,5 +922,46 @@ alter table DME_MODEL_VERSION add status integer default 1;
 -- Add comments to the columns 
 comment on column DME_MODEL_VERSION.status
   is '状态。0：删除；1：正常';
+  
+  
+  -- Create table
+create table DME_MODEL_TYPE
+(
+  id         number(8),
+  syscode    varchar2(38),
+  name       varchar2(50),
+  createtime number(20),
+  lasttime   number(20)
+)
+;
+-- Add comments to the table 
+comment on table DME_MODEL_TYPE
+  is '模型类型';
+-- Add comments to the columns 
+comment on column DME_MODEL_TYPE.id
+  is '主键ID';
+comment on column DME_MODEL_TYPE.syscode
+  is '唯一编码';
+comment on column DME_MODEL_TYPE.name
+  is '名称';
+comment on column DME_MODEL_TYPE.createtime
+  is '创建时间';
+comment on column DME_MODEL_TYPE.lasttime
+  is '修改时间';
+  alter table DME_MODEL_TYPE add primary key(id);
+  
+create sequence SEQ_DME_MODEL_TYPE
+minvalue 1
+maxvalue 9999999999999999999999999
+start with 1
+increment by 1
+cache 20;
+
+-- Add/modify columns 
+alter table DME_MODEL add model_type_id number(8);
+-- Add comments to the columns 
+comment on column DME_MODEL.model_type_id
+  is '模型类型ID';
+
 
   

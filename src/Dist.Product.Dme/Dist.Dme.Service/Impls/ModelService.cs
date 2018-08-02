@@ -80,7 +80,7 @@ namespace Dist.Dme.Service.Impls
             {
                 return modelDTO;
             }
-            
+
             foreach (var v in versions)
             {
                 ModelVersionDTO versionDTO = ClassValueCopier<ModelVersionDTO>.Copy(v);
@@ -119,8 +119,8 @@ namespace Dist.Dme.Service.Impls
                 }
                 // 每个模型版本下的数据源（多表关联查询）
                 // 当不需要用LEFT JOIN或者 RIGHT JOIN 只是单纯的INNER JOIN时我们还提供了更简单的语法实现多表查询
-                IList<DmeDataSource> datasources = db.Queryable<DmeDataSource, DmeRuleStepDataSource>((ds, rsds) => ds.Id == rsds.DataSourceId).Select(ds => 
-                       new DmeDataSource  { SysCode = ds.SysCode, Connection = ds.Connection, CreateTime = ds.CreateTime, Id = ds.Id, Name = ds.Name, Remark = ds.Remark, Type = ds.Type }).ToList();
+                IList<DmeDataSource> datasources = db.Queryable<DmeDataSource, DmeRuleStepDataSource>((ds, rsds) => ds.Id == rsds.DataSourceId).Select(ds =>
+                       new DmeDataSource { SysCode = ds.SysCode, Connection = ds.Connection, CreateTime = ds.CreateTime, Id = ds.Id, Name = ds.Name, Remark = ds.Remark, Type = ds.Type }).ToList();
                 if (datasources?.Count > 0)
                 {
                     foreach (var datasourceItem in datasources)
@@ -154,7 +154,7 @@ namespace Dist.Dme.Service.Impls
                     }
                 }
             }
-           
+
             return modelDTO;
         }
 
@@ -181,27 +181,29 @@ namespace Dist.Dme.Service.Impls
             {
                 return models;
             }
-            if (detail)
+            IList<ModelDTO> modelDTOs = new List<ModelDTO>();
+            ModelTypeDTO modelTypeDTO = null;
+            ModelDTO modelDTO = null;
+            // 获取模型的详情信息
+            foreach (DmeModel m in models)
             {
-                // 获取模型的详情信息
-                IList<ModelDTO> modelDTOs = new List<ModelDTO>();
-                foreach (DmeModel m in models)
+                try
                 {
-                    try
+                    if (m.ModelTypeId > 0)
                     {
-                        modelDTOs.Add(this.GetModelMetadata(m, detail));
+                        DmeModelType dmeModelType = base.Db.Queryable<DmeModelType>().InSingle(m.ModelTypeId);
+                        modelTypeDTO = ClassValueCopier<ModelTypeDTO>.Copy(dmeModelType);
                     }
-                    catch(Exception ex)
-                    {
-                        LOG.Error(ex, ex.Message);
-                    }
+                    modelDTO = this.GetModelMetadata(m, detail);
+                    modelDTO.Type = modelTypeDTO;
+                    modelDTOs.Add(modelDTO);
                 }
-                return modelDTOs;
+                catch (Exception ex)
+                {
+                    LOG.Error(ex, ex.Message);
+                }
             }
-            else
-            {
-                return models;
-            } 
+            return modelDTOs;
         }
         public object OverlayExecute(IDictionary<String, Property> parameters)
         {
@@ -223,36 +225,39 @@ namespace Dist.Dme.Service.Impls
             }
             var db = base.Repository.GetDbContext();
             // 使用事务
-            DbResult< DmeModel > dbResult = db.Ado.UseTran<DmeModel>(()=> 
-            {
+            DbResult<DmeModel> dbResult = db.Ado.UseTran<DmeModel>(() =>
+          {
                 // 查询单条没有数据返回NULL, Single超过1条会报错，First不会
                 // base.DmeModelDb.GetContext().Queryable<DmeModel>().Single(m => m.SysCode == dto.SysCode);
                 DmeModel model = db.Queryable<DmeModel>().Where(m => m.SysCode == dto.SysCode).Single();
-                if (null == model)
-                {
-                    model = new DmeModel
-                    {
-                        SysCode = dto.SysCode,
-                        Name = dto.Name,
-                        Remark = dto.Remark,
-                        CreateTime = DateUtil.CurrentTimeMillis,
-                        IsPublish = 1,
-                        PublishTime = DateUtil.CurrentTimeMillis
-                    };
-                    model = db.Insertable<DmeModel>(model).ExecuteReturnEntity();
-                    if (null == model)
-                    {
-                        throw new Exception(String.Format("创建模型失败，原因未明，编码：[{0}]，名称：[{1}]。", dto.SysCode, dto.Name));
-                    }
-                    // 处理版本
-                    this.HandleVersions(dto, db, model);
-                    return model;
-                }
-                else
-                {
-                    throw new BusinessException($"模型[{dto.SysCode}]已存在，不能重复注册");
-                }
-            });
+              if (null == model)
+              {
+                  model = new DmeModel
+                  {
+                      SysCode = dto.SysCode,
+                      Name = dto.Name,
+                      Remark = dto.Remark,
+                      CreateTime = DateUtil.CurrentTimeMillis,
+                      IsPublish = 1,
+                      PublishTime = DateUtil.CurrentTimeMillis
+                  };
+                  // 模型类型
+                  DmeModelType modelType = db.Queryable<DmeModelType>().Single(mt => mt.SysCode == dto.TypeCode);
+                  model.ModelTypeId = modelType.Id;
+                  model = db.Insertable<DmeModel>(model).ExecuteReturnEntity();
+                  if (null == model)
+                  {
+                      throw new Exception(String.Format("创建模型失败，原因未明，编码：[{0}]，名称：[{1}]。", dto.SysCode, dto.Name));
+                  }
+                  // 处理版本
+                  this.HandleVersions(dto, db, model);
+                  return model;
+              }
+              else
+              {
+                  throw new BusinessException($"模型[{dto.SysCode}]已存在，不能重复注册");
+              }
+          });
             return dbResult.Data;
         }
         /// <summary>
@@ -337,8 +342,8 @@ namespace Dist.Dme.Service.Impls
                 String baseDir = AppDomain.CurrentDomain.BaseDirectory;
                 string assemblyPath = Path.Combine(baseDir, ruleStepPluginRegisterDTO.Assembly);
                 Assembly assembly = Assembly.LoadFile(assemblyPath);
-                IRuleStepData ruleStepData = (IRuleStepData)assembly.CreateInstance(ruleStepPluginRegisterDTO.ClassId, true, BindingFlags.CreateInstance,null
-                    ,new object[] { Repository, -1, step}, null, null);
+                IRuleStepData ruleStepData = (IRuleStepData)assembly.CreateInstance(ruleStepPluginRegisterDTO.ClassId, true, BindingFlags.CreateInstance, null
+                    , new object[] { Repository, -1, step }, null, null);
                 if (null == ruleStepData)
                 {
                     LOG.Warn($"无法创建步骤实体[{ruleStepPluginRegisterDTO.ClassId}]");
@@ -398,7 +403,7 @@ namespace Dist.Dme.Service.Impls
                 }
                 ruleStepData.SaveAttributes(attributes);
             }
-            
+
             // 属性
             //if (nameof(EnumRuleStepTypes.DataSourceInput).Equals(subStepAdd.StepType.Code))
             //{
@@ -571,7 +576,7 @@ namespace Dist.Dme.Service.Impls
             {
                 return newLinkedSteps;
             }
-           
+
             IDictionary<int, RuleStepLinkedListNode<DmeRuleStep>> newRuleStepLinkedNodeDic = new Dictionary<int, RuleStepLinkedListNode<DmeRuleStep>>();
             // 已经使用的步骤id集合
             IList<int> usedStepIds = new List<int>();
@@ -600,14 +605,14 @@ namespace Dist.Dme.Service.Impls
         /// <param name="model"></param>
         /// <param name="ruleSteps"></param>
         [Obsolete]
-        private async Task RunModelAsync(SqlSugarClient db, DmeModel model, DmeModelVersion modelVersion, DmeTask task,  IList<DmeRuleStep> ruleSteps)
+        private async Task RunModelAsync(SqlSugarClient db, DmeModel model, DmeModelVersion modelVersion, DmeTask task, IList<DmeRuleStep> ruleSteps)
         {
             await Task.Run<DmeTask>(() =>
             {
                 // 查询步骤前后依赖关系
                 // 形成链表
                 IList<DmeRuleStepHop> hops = db.Queryable<DmeRuleStepHop>().Where(rsh => rsh.ModelId == model.Id && rsh.VersionId == modelVersion.Id).OrderBy("STEP_FROM_ID").ToList();
-                IList <RuleStepLinkedListNode<DmeRuleStep>>  rulestepLinkedList = this.GetRuleStepNodeLinkedList(db, model, modelVersion, ruleSteps);
+                IList<RuleStepLinkedListNode<DmeRuleStep>> rulestepLinkedList = this.GetRuleStepNodeLinkedList(db, model, modelVersion, ruleSteps);
 
                 return db.Ado.UseTran<DmeTask>(() =>
                {
@@ -733,7 +738,7 @@ namespace Dist.Dme.Service.Impls
                 // 只更新状态和最后时间
                 db.Updateable<DmeTaskRuleStep>(dmeTaskRuleStep).UpdateColumns(ts => new { ts.Status, ts.LastTime }).ExecuteCommand();
                 this.LogService.AddLogAsync(Base.Common.Log.EnumLogType.ENTITY, EnumLogLevel.ERROR, nameof(DmeTaskRuleStep), dmeTaskRuleStep.SysCode, "", ex, "", NetAssist.GetLocalHost());
-            } 
+            }
         }
 
         /// <summary>
@@ -834,7 +839,7 @@ namespace Dist.Dme.Service.Impls
                 throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"模型版本[{versionCode}]不存在，或模型版本编码无效");
             }
             var db = base.Repository.GetDbContext();
-            return db.Ado.UseTran<DmeModelVersion>(()=>
+            return db.Ado.UseTran<DmeModelVersion>(() =>
             {
                 // 复制为新版本
                 DmeModelVersion newVersion = new DmeModelVersion
@@ -854,20 +859,20 @@ namespace Dist.Dme.Service.Impls
                     DmeRuleStepAttribute newTempStepAttr = null;
                     foreach (var subStep in steps)
                     {
-                        newTempStep = ClassValueCopier<DmeRuleStep>.Copy(subStep, new String[] { "Id", "SysCode", "VersionId"});
+                        newTempStep = ClassValueCopier<DmeRuleStep>.Copy(subStep, new String[] { "Id", "SysCode", "VersionId" });
                         newTempStep.SysCode = GuidUtil.NewGuid();
                         newTempStep.VersionId = newVersion.Id;
                         newTempStep = db.Insertable<DmeRuleStep>(newTempStep).ExecuteReturnEntity();
                         // copiedSteps.Add(copiedTempStep);
                         // 复制步骤的参数属性信息
-                       IList<DmeRuleStepAttribute> oldAttributes = db.Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == subStep.Id && rsa.VersionId == modelVersion.Id).ToList();
+                        IList<DmeRuleStepAttribute> oldAttributes = db.Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == subStep.Id && rsa.VersionId == modelVersion.Id).ToList();
                         if (oldAttributes?.Count > 0)
                         {
                             List<DmeRuleStepAttribute> newStepAttrs = new List<DmeRuleStepAttribute>();
                             foreach (var subAttr in oldAttributes)
                             {
-                                newTempStepAttr = ClassValueCopier<DmeRuleStepAttribute>.Copy(subAttr, 
-                                    new string[] { "Id", "RuleStepId", "VersionId"});
+                                newTempStepAttr = ClassValueCopier<DmeRuleStepAttribute>.Copy(subAttr,
+                                    new string[] { "Id", "RuleStepId", "VersionId" });
                                 newTempStepAttr.RuleStepId = newTempStep.Id;
                                 newTempStepAttr.VersionId = newVersion.Id;
                                 newStepAttrs.Add(newTempStepAttr);
@@ -895,20 +900,20 @@ namespace Dist.Dme.Service.Impls
                         }
                     }
                 }
-              
+
                 return newVersion;
             });
         }
 
         public object ListRuleStepTypes()
         {
-            return base.Repository.GetDbContext().Queryable<DmeRuleStepType>().OrderBy(rst =>rst.Code, OrderByType.Asc).ToList();
+            return base.Repository.GetDbContext().Queryable<DmeRuleStepType>().OrderBy(rst => rst.Code, OrderByType.Asc).ToList();
         }
         public object SaveRuleStepInfos(ModelRuleStepInfoDTO info)
         {
             var db = base.Repository.GetDbContext();
             // 开始事务
-            return db.Ado.UseTran<object>(()=>
+            return db.Ado.UseTran<object>(() =>
             {
                 // 根据模型版本号，获取模型版本信息
                 DmeModelVersion modelVersion = base.Repository.GetDbContext().Queryable<DmeModelVersion>().Single(mv => mv.SysCode == info.ModelVersionCode);
@@ -1021,7 +1026,7 @@ namespace Dist.Dme.Service.Impls
                 return newVersion;
             }).Data;
         }
-        
+
         public object PublishModel(string modelCode, int enabled)
         {
             // 只更新列：IsPublish和PublishTime
@@ -1077,7 +1082,7 @@ namespace Dist.Dme.Service.Impls
             }
             return db.Queryable<DmeModelImg>().Single(mi => mi.ModelId == modelVersion.ModelId && mi.VersionId == modelVersion.Id);
         }
-        public async Task<Boolean> DeleteModel(string modelCode)
+        public async Task<Boolean> DeleteModelAsync(string modelCode)
         {
             return await Task.Run<Boolean>(() => {
                 var db = Repository.GetDbContext();
@@ -1114,12 +1119,77 @@ namespace Dist.Dme.Service.Impls
                     db.Updateable<DmeModel>(model).UpdateColumns(m => m.Status).ExecuteCommand();
                     // 级联逻辑恢复版本
                     var updateCount = db.Updateable<DmeModelVersion>()
-                        .UpdateColumns(it => new DmeModelVersion() { Status = 1 })
+                        .UpdateColumns(mv => new DmeModelVersion() { Status = 1 })
                         .Where(it => it.ModelId == model.Id).ExecuteCommand();
                     LOG.Info($"共更新[{updateCount}]条版本记录");
                     return true;
                 }).Data;
             });
+        }
+        public async Task<object> AddModelTypesAsync(string[] types)
+        {
+            if (0 == types?.Length)
+            {
+                LOG.Warn("传入的模型类型数据为空");
+                return null;
+            }
+            List<DmeModelType> modelTypes = new List<DmeModelType>();
+            foreach (var item in types)
+            {
+                DmeModelType modelType = base.Db.Queryable<DmeModelType>().Single(mt => mt.Name == item);
+                if (modelType != null)
+                {
+                    continue;
+                }
+                modelType = new DmeModelType
+                {
+                    Name = item,
+                    SysCode = GuidUtil.NewGuid(),
+                    CreateTime = DateUtil.CurrentTimeMillis,
+                    LastTime = DateUtil.CurrentTimeMillis
+                };
+                modelType = await base.Db.Insertable<DmeModelType>(modelType).ExecuteReturnEntityAsync();
+                modelTypes.Add(modelType);
+            }
+            return modelTypes;
+        }
+        public object ListModelTypes(string orderFieldName, int orderType)
+        {
+            if (string.IsNullOrEmpty(orderFieldName))
+            {
+                return base.Db.Queryable<DmeModelType>().OrderBy(mt => mt.CreateTime, OrderByType.Desc).ToList();
+            }
+            return base.Db.Queryable<DmeModelType>().OrderBy(orderFieldName + " " + (0 == orderType ? nameof(OrderByType.Asc) : nameof(OrderByType.Desc))).ToList();
+        }
+        public object UpdateModelTypes(ModelTypeUpdateDTO dto)
+        {
+            base.Db.Updateable<DmeModelType>()
+                .UpdateColumns(mt => new DmeModelType { Name = dto.NewName, LastTime = DateUtil.CurrentTimeMillis })
+                .Where(mt2 => mt2.SysCode == dto.SysCode).ExecuteCommand();
+            return true;
+        }
+        public object UpdateModelBasicInfo(ModelBasicInfoUpdateDTO dto)
+        {
+            DmeModel model = base.Db.Queryable<DmeModel>().Single(m => m.SysCode == dto.SysCode);
+            if (null == model)
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"模型[{dto.SysCode}]不存在");
+            }
+            DmeModelType modelType = base.Db.Queryable<DmeModelType>().Single(mt => mt.SysCode == dto.TypeCode);
+            if (null == modelType)
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"模型类型[{dto.TypeCode}]不存在");
+            }
+            model.Name = dto.Name;
+            model.Remark = dto.Remark;
+            model.ModelTypeId = modelType.Id;
+            base.Db.Updateable<DmeModel>(model).ExecuteCommand();
+            return true;
+        }
+        public object UpdateModelVersion(ModelVersionUpdateDTO dto)
+        {
+            base.Db.Updateable<DmeModelVersion>().UpdateColumns(mv => new DmeModelVersion { Name = dto.NewName }).Where(mv => mv.SysCode == dto.SysCode).ExecuteCommand();
+            return true;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.Service.Interfaces;
+using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,7 +16,8 @@ namespace Dist.Dme.Service.Impls
         /// <summary>
         /// 存储库
         /// </summary>
-        public IRepository Repository { get; set; }
+        protected IRepository Repository { get; set; }
+        protected SqlSugarClient Db => Repository.GetDbContext();
         /// <summary>
         /// 日志服务
         /// </summary>

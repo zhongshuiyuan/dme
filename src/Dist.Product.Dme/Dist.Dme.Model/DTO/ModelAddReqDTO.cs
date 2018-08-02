@@ -15,6 +15,11 @@ namespace Dist.Dme.Model.DTO
         public String Name { get; set; }
         public String Remark { get; set; }
         /// <summary>
+        /// 模型类型编码
+        /// </summary>
+        [Required(AllowEmptyStrings = false)]
+        public String TypeCode { get; set; }
+        /// <summary>
         /// 模型版本集合
         /// </summary>
         public IList<ModelVersionAddDTO> Versions { get; set; } = new List<ModelVersionAddDTO>();

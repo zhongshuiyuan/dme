@@ -64,6 +64,7 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="versionCode">版本唯一编码</param>
         /// <returns></returns>
         object CopyModelVersion(string versionCode);
+
         /// <summary>
         /// 获取所有的规则步骤类型
         /// </summary>
@@ -116,12 +117,43 @@ namespace Dist.Dme.Service.Interfaces
         /// </summary>
         /// <param name="modelCode">模型编码</param>
         /// <returns></returns>
-        Task<Boolean> DeleteModel(string modelCode);
+        Task<Boolean> DeleteModelAsync(string modelCode);
         /// <summary>
         /// 恢复模型
         /// </summary>
         /// <param name="modelCode">模型编码</param>
         /// <returns></returns>
         Task<bool> RestoreModelAsync(string modelCode);
+        /// <summary>
+        /// 添加模型类型
+        /// </summary>
+        /// <param name="types">类型名称数组</param>
+        /// <returns></returns>
+        Task<object> AddModelTypesAsync(string[] types);
+        /// <summary>
+        /// 获取模型类型列表，如果orderFieldName为空，则以创建时间倒序
+        /// </summary>
+        /// <param name="orderFieldName">排序字段名称</param>
+        /// <param name="orderType">排序类型，0：升序；1：降序</param>
+        /// <returns></returns>
+        object ListModelTypes(string orderFieldName, int orderType);
+        /// <summary>
+        /// 更新模型类型
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        object UpdateModelTypes(ModelTypeUpdateDTO dto);
+        /// <summary>
+        /// 更新模型基本信息
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        object UpdateModelBasicInfo(ModelBasicInfoUpdateDTO dto);
+        /// <summary>
+        /// 更新模型版本信息
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        object UpdateModelVersion(ModelVersionUpdateDTO dto);
     }
 }
