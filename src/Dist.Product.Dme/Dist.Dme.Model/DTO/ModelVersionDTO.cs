@@ -13,6 +13,7 @@ namespace Dist.Dme.Model.DTO
         public string SysCode { get; set; }
         public string Name { get; set; }
         public long CreateTime { get; set; }
+        public int Status { get; set; }
         /// <summary>
         /// 模型版本关联的步骤
         /// </summary>

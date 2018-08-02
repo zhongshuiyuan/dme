@@ -13,6 +13,8 @@ using Dist.Dme.DisCache.Interfaces;
 using Dist.Dme.DisCache.Redis;
 using Dist.Dme.DisFS.Adapters.Mongo;
 using Dist.Dme.Extensions;
+using Dist.Dme.HSMessage.Conf;
+using Dist.Dme.HSMessage.Kafka;
 using Dist.Dme.Service.Impls;
 using Dist.Dme.Service.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -50,7 +52,8 @@ namespace Dist.Dme.WebApi
             GlobalSystemConfig.DBConnectionString = this.Configuration.GetConnectionString("DataSource");
             // 注册缓存对象
             services.AddMemoryCache();
-           IConfigurationSection cacheProviderSection = this.Configuration.GetSection("ConnectionStrings").GetSection("CacheProvider");
+            IConfigurationSection connectionStringsSection = this.Configuration.GetSection("ConnectionStrings");
+           IConfigurationSection cacheProviderSection = connectionStringsSection.GetSection("CacheProvider");
             if (cacheProviderSection != null)
             {
                 try
@@ -104,6 +107,13 @@ namespace Dist.Dme.WebApi
                     LOG.Error(ex, "mongo连接失败");
                 }
             }
+            // message
+            IConfigurationSection messageSection = connectionStringsSection.GetSection("Message");
+            if (messageSection != null)
+            {
+                MessageSetting messageSetting = messageSection.Get<MessageSetting>();
+                ServiceFactory.MessageSetting = messageSetting;
+            }
             // 注册知识库
             services.AddSingleton<IRepository, Repository>();
             // 注册用户服务
@@ -124,7 +134,11 @@ namespace Dist.Dme.WebApi
             ServiceFactory.MongoHost = serviceProvider.GetService<MongodbHost>();
             ServiceFactory.MongoClient = serviceProvider.GetService<IMongoClient>();
             ServiceFactory.MongoDatabase = serviceProvider.GetService<IMongoDatabase>();
-            
+            // 消息
+            ServiceFactory.ConsumerClient = new ConsumerClient(ServiceFactory.MessageSetting.Opinion.GroupId, ServiceFactory.MessageSetting.Opinion.Servers, ServiceFactory.MessageSetting.Opinion.Topics);
+            ServiceFactory.ConsumerClient.Start();
+            ServiceFactory.ProducerClient = new ProducerClient(ServiceFactory.MessageSetting.Opinion.Servers);
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info

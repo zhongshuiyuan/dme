@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dist.Dme.Base.Framework;
+using Dist.Dme.Extensions;
 using Dist.Dme.HSMessage.Kafka;
 using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
@@ -20,23 +21,33 @@ namespace Dist.Dme.WebApi.Controllers
         /// <param name="topic"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("listen/v1/start/{topic}")]
-        public Result StartListen(string topic)
+        [Route("v1/start")]
+        public Result StartListen([FromQuery]string topic)
         {
-            ConsumerClient.Start(topic);
-            return base.Success($"成功启动监控，主题[{topic}]......");
+            if (string.IsNullOrEmpty(topic) && ServiceFactory.ConsumerClient != null) 
+            {
+                ServiceFactory.ConsumerClient.Start();
+                return base.Success($"成功启动监控，主题[{ServiceFactory.MessageSetting.Opinion.Topics + (string.IsNullOrEmpty(topic) ? "" : "," + topic)}]......");
+            }
+            ServiceFactory.ConsumerClient = null;
+            ServiceFactory.ConsumerClient = new ConsumerClient(
+                ServiceFactory.MessageSetting.Opinion.GroupId, 
+                ServiceFactory.MessageSetting.Opinion.Servers, 
+                ServiceFactory.MessageSetting.Opinion.Topics + "," + topic);
+            ServiceFactory.ConsumerClient.Start();
+            // ConsumerClient.Start(topic);
+            return base.Success($"成功启动监控，主题[{ServiceFactory.MessageSetting.Opinion.Topics + "," + topic}]......");
         }
         /// <summary>
         /// 停止监听
         /// </summary>
-        /// <param name="topic"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("listen/v1/stop/{topic}")]
-        public Result StopListen(string topic)
+        [Route("v1/stop")]
+        public Result StopListen()
         {
-            ConsumerClient.Stop(topic);
-            return base.Success($"成功停止监控，主题[{topic}]......");
+            ServiceFactory.ConsumerClient.Stop();
+            return base.Success($"成功停止监控......");
         }
         /// <summary>
         /// 发送消息
@@ -46,10 +57,14 @@ namespace Dist.Dme.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("send/v1/{topic}")]
-        public Result SendMsg(string topic ,[FromBody] string msg)
+        public Result SendMsg(string topic ,[FromQuery] string msg)
         {
-            ProducerClinet.Send(topic, msg);
-            return base.Success($"成功往主题[{topic}]发送消息......");
+            Boolean finished = ServiceFactory.ProducerClient.Send(topic, msg);
+            if (finished)
+            {
+                return base.Success($"成功往主题[{topic}]发送消息......");
+            }
+            return base.Fail($"往主题[{topic}]发送消息失败，具体原因请管理员查看日志......");
         }
     }
 }
