@@ -14,7 +14,9 @@ namespace Dist.Dme.Model.Entity
         public int MajorVersion { get; set; }
         [SugarColumn(ColumnName = "MINOR_VERSION")]
         public int MinorVersion { get; set; }
+        [SugarColumn(ColumnName = "REVISION_VERSION")]
+        public int RevisionVersion { get; set; }
         [SugarColumn(ColumnName = "UPGRADE_TIME")]
-        public int UpgradeTime { get; set; }
+        public long UpgradeTime { get; set; }
     }
 }

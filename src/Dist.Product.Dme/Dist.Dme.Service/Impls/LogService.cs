@@ -5,6 +5,7 @@ using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Interfaces;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,6 +15,8 @@ namespace Dist.Dme.Service.Impls
 {
     public class LogService : BaseBizService, ILogService
     {
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
+
         public LogService(IRepository repository)
         {
             base.Repository = repository;

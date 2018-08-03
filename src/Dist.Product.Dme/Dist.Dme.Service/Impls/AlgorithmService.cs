@@ -1,24 +1,19 @@
 ﻿using Dist.Dme.Base.Common;
-using Dist.Dme.Base.Framework;
 using Dist.Dme.Base.Framework.Exception;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
-using Dist.Dme.DAL.Context;
 using Dist.Dme.Extensions;
 using Dist.Dme.Extensions.DTO;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Interfaces;
-using log4net;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using NLog;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace Dist.Dme.Service.Impls
 {
@@ -27,7 +22,8 @@ namespace Dist.Dme.Service.Impls
     /// </summary>
     public class AlgorithmService : BaseBizService, IAlgorithmService
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(AlgorithmService));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
+
         public AlgorithmService(IRepository repository)
         {
             base.Repository = repository;

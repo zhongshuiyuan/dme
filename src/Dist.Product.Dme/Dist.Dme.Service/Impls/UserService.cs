@@ -1,16 +1,11 @@
-﻿using Dist.Dme.Base.Framework;
-using Dist.Dme.Base.Framework.Interfaces;
+﻿using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
-using Dist.Dme.DAL.Context;
-using Dist.Dme.Model;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Interfaces;
-using log4net;
+using NLog;
 using SqlSugar;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Dist.Dme.Service.Impls
 {
@@ -19,7 +14,7 @@ namespace Dist.Dme.Service.Impls
     /// </summary>
     public class UserService : BaseBizService, IUserService
     {
-        private static ILog LOG = LogManager.GetLogger(typeof(UserService));
+        private static Logger LOG = LogManager.GetCurrentClassLogger();
 
         public UserService(IRepository repository)
         {

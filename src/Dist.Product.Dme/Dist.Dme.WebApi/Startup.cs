@@ -109,6 +109,8 @@ namespace Dist.Dme.WebApi
             }
             // 注册知识库
             services.AddSingleton<IRepository, Repository>();
+            // 注册版本服务
+            services.AddSingleton<IVersionService, VersionService>();
             // 注册用户服务
             services.AddSingleton<IUserService, UserService>();
             // 注册模型服务
