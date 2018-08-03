@@ -170,8 +170,9 @@ comment on column DME_RULESTEP_ATTRIBUTE.attribute_value
   CREATE TABLE DME_Version
 (
 	"ID" NUMBER(8) NOT NULL,
-	"MAJOR_VERSION" NUMBER(2),
-	"MINOR_VERSION" NUMBER(2),
+	"MAJOR_VERSION" NUMBER(3),
+	"MINOR_VERSION" NUMBER(3),
+  "REVISION_VERSION" NUMBER(3),
 	"UPGRADE_TIME" number(20)
 );
 -- Add comments to the table 
@@ -181,9 +182,11 @@ comment on table DME_VERSION
 comment on column DME_VERSION.id
   is '主键';
 comment on column DME_VERSION.major_version
-  is '主版本';
+  is '主版本，做了不兼容的 API 修改';
 comment on column DME_VERSION.minor_version
-  is '次版本';
+  is '次版本，做了向下兼容的功能性新增';
+ comment on column DME_VERSION.REVISION_VERSION
+  is '修订号，做了向下兼容的问题修正';
 comment on column DME_VERSION.UPGRADE_TIME
   is '更新时间，毫秒';
   alter table DME_VERSION add primary key(id);
