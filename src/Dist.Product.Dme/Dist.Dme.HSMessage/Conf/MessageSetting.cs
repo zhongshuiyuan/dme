@@ -11,6 +11,10 @@ namespace Dist.Dme.HSMessage.Conf
     }
     public class Opinion
     {
+        /// <summary>
+        /// 是否开启
+        /// </summary>
+        public Boolean Switch{ get; set;}
         public string GroupId { get; set; }
         public string Servers { get; set; }
         public string Topics { get; set; }

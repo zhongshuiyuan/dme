@@ -82,11 +82,29 @@ namespace Dist.Dme.HSMessage.Kafka
             });
         }
         /// <summary>
-        /// 停止
+        /// 停止所有订阅
         /// </summary>
         public void Stop()
         {
             isListening = false;
+        }
+        /// <summary>
+        /// 停止订阅指定专题
+        /// </summary>
+        /// <param name="topic"></param>
+        public void Stop(string topic)
+        {
+            List<string> topics = this.consumer.Subscription;
+            List<string> newTopics = new List<string>();
+            foreach (var item in topics)
+            {
+                if(!item.Equals(topic))
+                {
+                    newTopics.Add(item);
+                }
+            }
+            this.consumer.Unsubscribe();
+            this.consumer.Subscribe(newTopics);
         }
         /// <summary>
         /// 启动订阅消费

@@ -38,3 +38,6 @@ dist model engine，主要用于支撑空间模型、算法的构建、运算。
 
 >  [2018.06.11]  
 1. 发现vs ide编译器有时候提示无法找到项目元数据，则以管理员身份启动vs，然后重新编译整个解决方案；
+
+>  [2018.08.03]  
+1. 添加hosting.json，提供外部配置host和port；或者从命令行启动提供host和port，启动格式：>dotnet xxx.dll  --host 127.0.0.1 --port 7321

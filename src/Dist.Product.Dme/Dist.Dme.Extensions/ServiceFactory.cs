@@ -33,7 +33,7 @@ namespace Dist.Dme.Extensions
         /// <summary>
         /// 消息设置
         /// </summary>
-        public static MessageSetting MessageSetting { get; set; }
+        public static MessageSetting HSMessageSetting { get; set; }
         /// <summary>
         /// 消息消费方
         /// </summary>

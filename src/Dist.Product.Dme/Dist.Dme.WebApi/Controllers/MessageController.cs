@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Dist.Dme.Base.Framework;
@@ -16,37 +17,48 @@ namespace Dist.Dme.WebApi.Controllers
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>
-        /// 开启监听
+        /// 订阅主题
         /// </summary>
         /// <param name="topic"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("v1/start")]
-        public Result StartListen([FromQuery]string topic)
+        [Route("v1/subscibe")]
+        public Result Subscibe([FromQuery]string topic)
         {
             if (string.IsNullOrEmpty(topic) && ServiceFactory.ConsumerClient != null) 
             {
                 ServiceFactory.ConsumerClient.Start();
-                return base.Success($"成功启动监控，主题[{ServiceFactory.MessageSetting.Opinion.Topics + (string.IsNullOrEmpty(topic) ? "" : "," + topic)}]......");
+                return base.Success($"成功启动监控，主题[{ServiceFactory.HSMessageSetting.Opinion.Topics + (string.IsNullOrEmpty(topic) ? "" : "," + topic)}]......");
             }
             ServiceFactory.ConsumerClient = null;
             ServiceFactory.ConsumerClient = new ConsumerClient(
-                ServiceFactory.MessageSetting.Opinion.GroupId, 
-                ServiceFactory.MessageSetting.Opinion.Servers, 
-                ServiceFactory.MessageSetting.Opinion.Topics + "," + topic);
+                ServiceFactory.HSMessageSetting.Opinion.GroupId, 
+                ServiceFactory.HSMessageSetting.Opinion.Servers, 
+                ServiceFactory.HSMessageSetting.Opinion.Topics + "," + topic);
             ServiceFactory.ConsumerClient.Start();
             // ConsumerClient.Start(topic);
-            return base.Success($"成功启动监控，主题[{ServiceFactory.MessageSetting.Opinion.Topics + "," + topic}]......");
+            return base.Success($"成功启动监控，主题[{ServiceFactory.HSMessageSetting.Opinion.Topics + (string.IsNullOrEmpty(topic) ? "" : "," + topic)}]......");
         }
         /// <summary>
-        /// 停止监听
+        /// 停止订阅所有
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("v1/stop")]
-        public Result StopListen()
+        [Route("v1/unsubscribe")]
+        public Result Unsubscribe()
         {
             ServiceFactory.ConsumerClient.Stop();
+            return base.Success($"成功停止监控......");
+        }
+        /// <summary>
+        /// 停止订阅某个主题
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("v1/unsubscribe/topic")]
+        public Result UnsubscribeTopic([Required][FromQuery]string topic)
+        {
+            ServiceFactory.ConsumerClient.Stop(topic);
             return base.Success($"成功停止监控......");
         }
         /// <summary>

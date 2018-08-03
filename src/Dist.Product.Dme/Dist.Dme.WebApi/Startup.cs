@@ -107,13 +107,6 @@ namespace Dist.Dme.WebApi
                     LOG.Error(ex, "mongo连接失败");
                 }
             }
-            // message
-            IConfigurationSection messageSection = connectionStringsSection.GetSection("Message");
-            if (messageSection != null)
-            {
-                MessageSetting messageSetting = messageSection.Get<MessageSetting>();
-                ServiceFactory.MessageSetting = messageSetting;
-            }
             // 注册知识库
             services.AddSingleton<IRepository, Repository>();
             // 注册用户服务
@@ -135,10 +128,17 @@ namespace Dist.Dme.WebApi
             ServiceFactory.MongoClient = serviceProvider.GetService<IMongoClient>();
             ServiceFactory.MongoDatabase = serviceProvider.GetService<IMongoDatabase>();
             // 消息
-            ServiceFactory.ConsumerClient = new ConsumerClient(ServiceFactory.MessageSetting.Opinion.GroupId, ServiceFactory.MessageSetting.Opinion.Servers, ServiceFactory.MessageSetting.Opinion.Topics);
-            ServiceFactory.ConsumerClient.Start();
-            ServiceFactory.ProducerClient = new ProducerClient(ServiceFactory.MessageSetting.Opinion.Servers);
-
+            IConfigurationSection messageSection = connectionStringsSection.GetSection("Message");
+            if (messageSection != null)
+            {
+                ServiceFactory.HSMessageSetting = messageSection.Get<MessageSetting>();
+                if (ServiceFactory.HSMessageSetting.Opinion.Switch)
+                {
+                    ServiceFactory.ConsumerClient = new ConsumerClient(ServiceFactory.HSMessageSetting.Opinion.GroupId, ServiceFactory.HSMessageSetting.Opinion.Servers, ServiceFactory.HSMessageSetting.Opinion.Topics);
+                    ServiceFactory.ConsumerClient.Start();
+                    ServiceFactory.ProducerClient = new ProducerClient(ServiceFactory.HSMessageSetting.Opinion.Servers);
+                }
+            }
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info
