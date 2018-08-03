@@ -239,7 +239,8 @@ namespace Dist.Dme.Service.Impls
                       Remark = dto.Remark,
                       CreateTime = DateUtil.CurrentTimeMillis,
                       IsPublish = 1,
-                      PublishTime = DateUtil.CurrentTimeMillis
+                      PublishTime = DateUtil.CurrentTimeMillis,
+                      Status = 1
                   };
                   // 模型类型
                   DmeModelType modelType = db.Queryable<DmeModelType>().Single(mt => mt.SysCode == dto.TypeCode);
