@@ -43,9 +43,13 @@ namespace Dist.Dme.WebApi
                .Build();
             string host = config["host"];
             string port = config["port"];
-            if (!string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(port))
+            if (!string.IsNullOrEmpty(port))
             {
                 // >dotnet xxx.dll  --host 127.0.0.1 --port 7321
+                if (string.IsNullOrEmpty(host))
+                {
+                    host = "*";
+                }
                 return WebHost.CreateDefaultBuilder(args)
                 .UseUrls($"http://{host}:{port}");
             }

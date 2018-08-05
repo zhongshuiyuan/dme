@@ -18,8 +18,8 @@ namespace Dist.Dme.RuleSteps.AlgorithmInput
         private static Logger LOG = LogManager.GetCurrentClassLogger();
         private AlgorithmInputStepMeta ruleStepMeta;
 
-        public AlgorithmInputStepData(IRepository repository, int taskId, DmeRuleStep step) 
-            : base(repository, taskId, step)
+        public AlgorithmInputStepData(IRepository repository, DmeTask task, DmeRuleStep step) 
+            : base(repository, task, step)
         {
             ruleStepMeta = new AlgorithmInputStepMeta(repository, step);
         }

@@ -10,6 +10,9 @@ using System.Text;
 
 namespace Dist.Dme.Service.Impls
 {
+    /// <summary>
+    /// 版本管理服务
+    /// </summary>
     public class VersionService : BaseBizService, IVersionService
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();

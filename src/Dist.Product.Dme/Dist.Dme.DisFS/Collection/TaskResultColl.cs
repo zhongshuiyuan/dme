@@ -16,9 +16,17 @@ namespace Dist.Dme.DisFS.Collection
         /// </summary>
         public int TaskId { get; set; }
         /// <summary>
+        /// 任务编码
+        /// </summary>
+        public string TaskCode { get; set; }
+        /// <summary>
         /// 规则步骤id
         /// </summary>
         public int RuleStepId { get; set; }
+        /// <summary>
+        /// 规则步骤编码
+        /// </summary>
+        public string RuleStepCode { get; set; }
         /// <summary>
         /// 属性编码
         /// </summary>

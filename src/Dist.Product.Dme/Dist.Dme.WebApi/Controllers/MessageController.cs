@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dist.Dme.Base.Framework;
 using Dist.Dme.Extensions;
-using Dist.Dme.HSMessage.Kafka;
+using Dist.Dme.HSMessage.MQ.Kafka;
 using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
@@ -17,27 +17,22 @@ namespace Dist.Dme.WebApi.Controllers
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>
-        /// 订阅主题
+        /// 创建topic
         /// </summary>
-        /// <param name="topic"></param>
+        /// <param name="topic">主题标识符</param>
         /// <returns></returns>
-        [HttpGet]
-        [Route("v1/subscibe")]
-        public Result Subscibe([FromQuery]string topic)
+        [HttpPost]
+        [Route("v1/topic")]
+        public Result CreateTopic([Required][FromQuery]string topic)
         {
-            if (string.IsNullOrEmpty(topic) && ServiceFactory.ConsumerClient != null) 
-            {
-                ServiceFactory.ConsumerClient.Start();
-                return base.Success($"成功启动监控，主题[{ServiceFactory.HSMessageSetting.Opinion.Topics + (string.IsNullOrEmpty(topic) ? "" : "," + topic)}]......");
-            }
-            ServiceFactory.ConsumerClient = null;
-            ServiceFactory.ConsumerClient = new ConsumerClient(
-                ServiceFactory.HSMessageSetting.Opinion.GroupId, 
-                ServiceFactory.HSMessageSetting.Opinion.Servers, 
-                ServiceFactory.HSMessageSetting.Opinion.Topics + "," + topic);
-            ServiceFactory.ConsumerClient.Start();
+            //if (string.IsNullOrEmpty(topic) && ServiceFactory.KafkaConsumer != null) 
+            //{
+            //    ServiceFactory.KafkaConsumer.Start();
+            //    return base.Success($"成功创建channel[{ServiceFactory.HSMessageSetting.Opinion.Topics + (string.IsNullOrEmpty(topic) ? "" : "," + topic)}]......");
+            //}
+            ServiceFactory.KafkaConsumer.CreateTopic(topic);
             // ConsumerClient.Start(topic);
-            return base.Success($"成功启动监控，主题[{ServiceFactory.HSMessageSetting.Opinion.Topics + (string.IsNullOrEmpty(topic) ? "" : "," + topic)}]......");
+            return base.Success($"成功创建channel[{topic}]......");
         }
         /// <summary>
         /// 停止订阅所有
@@ -47,7 +42,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/unsubscribe")]
         public Result Unsubscribe()
         {
-            ServiceFactory.ConsumerClient.Stop();
+            ServiceFactory.KafkaConsumer.Unsubscribe();
             return base.Success($"成功停止监控......");
         }
         /// <summary>
@@ -58,8 +53,8 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/unsubscribe/topic")]
         public Result UnsubscribeTopic([Required][FromQuery]string topic)
         {
-            ServiceFactory.ConsumerClient.Stop(topic);
-            return base.Success($"成功停止监控......");
+            ServiceFactory.KafkaConsumer.Unsubscribe(topic);
+            return base.Success($"成功停止订阅主题[{topic}]......");
         }
         /// <summary>
         /// 发送消息
@@ -68,15 +63,39 @@ namespace Dist.Dme.WebApi.Controllers
         /// <param name="msg">消息体</param>
         /// <returns></returns>
         [HttpPost]
-        [Route("send/v1/{topic}")]
-        public Result SendMsg(string topic ,[FromQuery] string msg)
+        [Route("v1/send/{topic}")]
+        public async Task<Result> SendMsgAsync(string topic ,[FromQuery] string msg)
         {
-            Boolean finished = ServiceFactory.ProducerClient.Send(topic, msg);
-            if (finished)
+            bool result = await ServiceFactory.KafkaProducer.Send(topic, msg);
+            if (result)
             {
-                return base.Success($"成功往主题[{topic}]发送消息......");
+               return Success($"成功往主题[{topic}]发送消息[{msg}]......");
             }
             return base.Fail($"往主题[{topic}]发送消息失败，具体原因请管理员查看日志......");
+        }
+        /// <summary>
+        /// 广播消息
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("v1/broadcast")]
+        public Result Broadcast(string msg)
+        {
+            Task.Run(() => {
+                ServiceFactory.WebsocketServer.Broadcast(msg);
+            });
+            return base.Success($"已广播消息：{msg}");
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("v1/clients")]
+        public Result ListConnectClients()
+        {
+            return base.Success(ServiceFactory.WebsocketServer.ListClients());
         }
     }
 }

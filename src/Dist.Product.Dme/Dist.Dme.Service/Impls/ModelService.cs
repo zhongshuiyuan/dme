@@ -97,7 +97,7 @@ namespace Dist.Dme.Service.Impls
                     versionDTO.Steps.Add(ruleStepDTO);
                     // 获取步骤类型实体
                     ruleStepDTO.StepType = db.Queryable<DmeRuleStepType>().Where(rst => rst.Id == ruleStep.StepTypeId).Single();
-                    IRuleStepData ruleStepData = RuleStepFactory.GetRuleStepData(ruleStepDTO.StepType.Code, base.Repository, -1, ruleStep);
+                    IRuleStepData ruleStepData = RuleStepFactory.GetRuleStepData(ruleStepDTO.StepType.Code, base.Repository, null, ruleStep);
                     IDictionary<string, Property> attributeDic = ruleStepData.RuleStepMeta.ReadAttributes();
                     if (attributeDic?.Count > 0)
                     {
@@ -625,7 +625,7 @@ namespace Dist.Dme.Service.Impls
                        foreach (var subRuleStep in ruleSteps)
                        {
                            ruleStepTypeTemp = db.Queryable<DmeRuleStepType>().Single(rst => rst.Id == subRuleStep.StepTypeId);
-                           ruleStepData = RuleStepFactory.GetRuleStepData(ruleStepTypeTemp.Code, this.Repository, task.Id, subRuleStep);
+                           ruleStepData = RuleStepFactory.GetRuleStepData(ruleStepTypeTemp.Code, this.Repository, task, subRuleStep);
                            if (null == ruleStepData)
                            {
                                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"步骤工厂无法创建编码为[{ruleStepTypeTemp.Code}]的流程实例节点");
@@ -704,7 +704,7 @@ namespace Dist.Dme.Service.Impls
                 }
                 // 如果前置节点没有了，则计算当前节点内容
                 DmeRuleStepType ruleStepTypeTemp = db.Queryable<DmeRuleStepType>().Single(rst => rst.Id == node.Value.StepTypeId);
-                IRuleStepData ruleStepData = RuleStepFactory.GetRuleStepData(ruleStepTypeTemp.Code, this.Repository, task.Id, node.Value);
+                IRuleStepData ruleStepData = RuleStepFactory.GetRuleStepData(ruleStepTypeTemp.Code, this.Repository, task, node.Value);
                 if (null == ruleStepData)
                 {
                     throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"步骤工厂无法创建编码为[{ruleStepTypeTemp.Code}]的流程实例节点");
@@ -789,9 +789,9 @@ namespace Dist.Dme.Service.Impls
             ServiceFactory.CacheService.ReplaceAsync(cacheKey, dmeTaskRuleStep);
         }
 
-        private async Task RunModelAsyncEx(SqlSugarClient db, DmeModel model, DmeModelVersion modelVersion, DmeTask task, IList<DmeRuleStep> ruleSteps)
+        private Task RunModelAsyncEx(SqlSugarClient db, DmeModel model, DmeModelVersion modelVersion, DmeTask task, IList<DmeRuleStep> ruleSteps)
         {
-            await Task.Run<DmeTask>(() =>
+            return Task.Run<DmeTask>(() =>
             {
                 return db.Ado.UseTran<DmeTask>(() =>
                 {
@@ -940,7 +940,7 @@ namespace Dist.Dme.Service.Impls
                         // 处理步骤属性
                         if (step.Attributes?.Count > 0)
                         {
-                            IRuleStepData ruleStepData = RuleStepFactory.GetRuleStepData(step.TypeCode, base.Repository, -1, stepEntity);
+                            IRuleStepData ruleStepData = RuleStepFactory.GetRuleStepData(step.TypeCode, base.Repository, null, stepEntity);
                             ruleStepData.SaveAttributes(step.Attributes);
                             //IList<DmeRuleStepAttribute> attributeEntities = new List<DmeRuleStepAttribute>();
                             //foreach (var att in step.Attributes)

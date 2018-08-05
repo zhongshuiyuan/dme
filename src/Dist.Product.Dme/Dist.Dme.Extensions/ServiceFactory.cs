@@ -1,7 +1,8 @@
 ﻿using Dist.Dme.DisCache.Interfaces;
 using Dist.Dme.DisFS.Adapters.Mongo;
 using Dist.Dme.HSMessage.Conf;
-using Dist.Dme.HSMessage.Kafka;
+using Dist.Dme.HSMessage.MQ.Kafka;
+using Dist.Dme.HSMessage.Websocket.Fleck;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -33,14 +34,19 @@ namespace Dist.Dme.Extensions
         /// <summary>
         /// 消息设置
         /// </summary>
-        public static MessageSetting HSMessageSetting { get; set; }
+        public static KafkaSetting HSMessageSetting { get; set; }
         /// <summary>
         /// 消息消费方
         /// </summary>
-        public static ConsumerClient ConsumerClient { get; set; }
+        public static KafkaConsumer KafkaConsumer { get; set; }
         /// <summary>
         /// 消息生产方
         /// </summary>
-        public static ProducerClient ProducerClient { get; set; }
+        public static KafkaProducer KafkaProducer { get; set; }
+        /// <summary>
+        /// websocket服务器
+        /// </summary>
+        public static WebsocketFleckServer WebsocketServer { get; set; }
+
     }
 }

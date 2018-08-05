@@ -13,8 +13,8 @@ namespace Dist.Dme.RuleSteps.DataSourceInput
         private static Logger LOG = LogManager.GetCurrentClassLogger();
         private DataSourceInputStepMeta ruleStepMeta;
 
-        public DataSourceInputStepData(IRepository repository, int taskId, DmeRuleStep step) : 
-            base(repository, taskId, step)
+        public DataSourceInputStepData(IRepository repository, DmeTask task, DmeRuleStep step) : 
+            base(repository, task, step)
         {
             ruleStepMeta = new DataSourceInputStepMeta(repository, step);
         }

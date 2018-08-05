@@ -30,7 +30,7 @@ namespace Dist.Dme.RuleSteps
         /// <param name="taskId"></param>
         /// <param name="step"></param>
         /// <returns></returns>
-        public static IRuleStepData GetRuleStepData(string stepTypeCode, IRepository repository, int taskId, DmeRuleStep step)
+        public static IRuleStepData GetRuleStepData(string stepTypeCode, IRepository repository, DmeTask task, DmeRuleStep step)
         {
             if (!Register.RuleStepPluginsMap.ContainsKey(stepTypeCode))
             {
@@ -42,7 +42,7 @@ namespace Dist.Dme.RuleSteps
             string assemblyPath = Path.Combine(baseDir, ruleStepPluginRegisterDTO.Assembly);
             Assembly assembly = Assembly.LoadFile(assemblyPath);
             IRuleStepData ruleStepData = (IRuleStepData)assembly.CreateInstance(ruleStepPluginRegisterDTO.ClassId, true, BindingFlags.CreateInstance, null
-                , new object[] { repository, taskId, step }, null, null);
+                , new object[] { repository, task, step }, null, null);
 
             return ruleStepData;
         }

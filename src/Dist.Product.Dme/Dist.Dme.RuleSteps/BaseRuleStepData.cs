@@ -26,6 +26,7 @@ namespace Dist.Dme.RuleSteps
         private static Logger LOG = LogManager.GetCurrentClassLogger();
         protected IRepository repository;
         protected int taskId;
+        protected DmeTask task;
         protected DmeRuleStep step;
         //protected int modelId;
         //protected int versionId;
@@ -36,15 +37,21 @@ namespace Dist.Dme.RuleSteps
         /// <param name="repository"></param>
         /// <param name="taskId"></param>
         /// <param name="step"></param>
-        public BaseRuleStepData(IRepository repository, int taskId, DmeRuleStep step)
+        //public BaseRuleStepData(IRepository repository, int taskId, DmeRuleStep step)
+        //{
+        //    this.repository = repository;
+        //    this.taskId = taskId;
+        //    this.step = step;
+        //    //this.modelId = modelId;
+        //    //this.versionId = versionId;
+        //    //this.ruleStepId = ruleStepId;
+         
+        //}
+        public BaseRuleStepData(IRepository repository, DmeTask task, DmeRuleStep step)
         {
             this.repository = repository;
-            this.taskId = taskId;
+            this.task = task;
             this.step = step;
-            //this.modelId = modelId;
-            //this.versionId = versionId;
-            //this.ruleStepId = ruleStepId;
-         
         }
 
         /// <summary>
@@ -81,7 +88,9 @@ namespace Dist.Dme.RuleSteps
                         TaskResultColl taskResultColl = new TaskResultColl
                         {
                             TaskId = this.taskId,
+                            TaskCode = this.task.SysCode,
                             RuleStepId = this.step.Id,
+                            RuleStepCode = this.step.SysCode,
                             Code = item.Key,
                             Value = JsonConvert.SerializeObject(item.Value.Value)
                         };
@@ -113,7 +122,7 @@ namespace Dist.Dme.RuleSteps
             {
                 throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, $"步骤类型id[{otherStep.StepTypeId}]不存在");
             }
-            IRuleStepData ruleStepData = RuleStepFactory.GetRuleStepData(otherStepType.Name, repository, this.taskId, otherStep);
+            IRuleStepData ruleStepData = RuleStepFactory.GetRuleStepData(otherStepType.Name, repository, this.task, otherStep);
             IDictionary<string, Property> inputParameters = ruleStepData.RuleStepMeta.InParams;
             IDictionary<string, Property> outputParameters = ruleStepData.RuleStepMeta.OutParams;
             Property property = null;
@@ -168,8 +177,8 @@ namespace Dist.Dme.RuleSteps
                     case EnumValueMetaType.TYPE_JSON:
                         // 从mongo中获取
                         var filter = Builders<TaskResultColl>.Filter.And(
-                            Builders<TaskResultColl>.Filter.Eq("TaskId", this.taskId),
-                            Builders<TaskResultColl>.Filter.Eq("RuleStepId", otherStep.Id),
+                            Builders<TaskResultColl>.Filter.Eq("TaskCode", this.task.SysCode),
+                            Builders<TaskResultColl>.Filter.Eq("RuleStepCode", otherStep.SysCode),
                             Builders<TaskResultColl>.Filter.Eq("Code", attributeCode));
                         IList<TaskResultColl> colls = MongodbHelper<TaskResultColl>.FindList(ServiceFactory.MongoDatabase, filter);
                         if (colls != null && colls.Count > 0)

@@ -21,8 +21,8 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
         private static Logger LOG = LogManager.GetCurrentClassLogger();
         private MongoDBOutputStepMeta ruleStepMeta;
 
-        public MongoDBOutputStepData(IRepository repository, int taskId, DmeRuleStep step) :
-         base(repository, taskId, step)
+        public MongoDBOutputStepData(IRepository repository, DmeTask task, DmeRuleStep step) :
+         base(repository, task, step)
         {
             ruleStepMeta = new MongoDBOutputStepMeta(repository, step);
         }

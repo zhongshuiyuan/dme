@@ -14,7 +14,8 @@ using Dist.Dme.DisCache.Redis;
 using Dist.Dme.DisFS.Adapters.Mongo;
 using Dist.Dme.Extensions;
 using Dist.Dme.HSMessage.Conf;
-using Dist.Dme.HSMessage.Kafka;
+using Dist.Dme.HSMessage.MQ.Kafka;
+using Dist.Dme.HSMessage.Websocket.Fleck;
 using Dist.Dme.Service.Impls;
 using Dist.Dme.Service.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -129,18 +130,31 @@ namespace Dist.Dme.WebApi
             ServiceFactory.MongoHost = serviceProvider.GetService<MongodbHost>();
             ServiceFactory.MongoClient = serviceProvider.GetService<IMongoClient>();
             ServiceFactory.MongoDatabase = serviceProvider.GetService<IMongoDatabase>();
-            // 消息
+            
             IConfigurationSection messageSection = connectionStringsSection.GetSection("Message");
             if (messageSection != null)
             {
-                ServiceFactory.HSMessageSetting = messageSection.Get<MessageSetting>();
-                if (ServiceFactory.HSMessageSetting.Opinion.Switch)
+                // 消息
+                IConfigurationSection mqSection = messageSection.GetSection("MQ");
+                if (mqSection != null)
                 {
-                    ServiceFactory.ConsumerClient = new ConsumerClient(ServiceFactory.HSMessageSetting.Opinion.GroupId, ServiceFactory.HSMessageSetting.Opinion.Servers, ServiceFactory.HSMessageSetting.Opinion.Topics);
-                    ServiceFactory.ConsumerClient.Start();
-                    ServiceFactory.ProducerClient = new ProducerClient(ServiceFactory.HSMessageSetting.Opinion.Servers);
+                    ServiceFactory.HSMessageSetting = mqSection.Get<KafkaSetting>();
+                    if (ServiceFactory.HSMessageSetting.Switch)
+                    {
+                        ServiceFactory.KafkaConsumer = new KafkaConsumer(ServiceFactory.HSMessageSetting.Opinion.GroupId, ServiceFactory.HSMessageSetting.Opinion.Servers, ServiceFactory.HSMessageSetting.Opinion.Topics);
+                        ServiceFactory.KafkaConsumer.Start();
+                        ServiceFactory.KafkaProducer = new KafkaProducer(ServiceFactory.HSMessageSetting.Opinion.Servers);
+                    }
+                }
+                // websocket
+                IConfigurationSection websocketSection = messageSection.GetSection("Websocket");
+                if (websocketSection != null)
+                {
+                    WebsocketSetting websocketSetting = websocketSection.Get<WebsocketSetting>();
+                    ServiceFactory.WebsocketServer = new WebsocketFleckServer(websocketSetting.Port, websocketSetting.Host);
                 }
             }
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info
