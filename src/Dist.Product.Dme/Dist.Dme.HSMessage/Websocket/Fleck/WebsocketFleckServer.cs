@@ -1,9 +1,12 @@
-﻿using Dist.Dme.HSMessage.Define;
+﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Utils;
+using Dist.Dme.HSMessage.Define;
 using Fleck;
 using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,8 +19,18 @@ namespace Dist.Dme.HSMessage.Websocket.Fleck
     public class WebsocketFleckServer
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
-        //客户端url以及其对应的Socket对象字典
-        private static IDictionary<string, IWebSocketConnection> client_Sockets = new Dictionary<string, IWebSocketConnection>();
+        /// <summary>
+        /// appId和user-agent作为key，socket作为value
+        /// </summary>
+        private static IDictionary<string, IWebSocketConnection> appIdAgent_Sockets = new Dictionary<string, IWebSocketConnection>();
+        /// <summary>
+        ///  appId和user-agent作为key，MessageAuthKey作为value
+        /// </summary>
+        private static IDictionary<string, MessageAuthKey> appIdAgent_AuthKey = new Dictionary<string, MessageAuthKey>();
+        /// <summary>
+        /// 同一个appId下有多少个不同的端同时在线
+        /// </summary>
+        private static IDictionary<string, HashSet<string>> appId_Agent = new Dictionary<string, HashSet<string>>();
         private WebSocketServer webSocketServer;
         public WebsocketFleckServer(int port = 30000, string host = "0.0.0.0")
         {
@@ -45,17 +58,33 @@ namespace Dist.Dme.HSMessage.Websocket.Fleck
                     socket.OnOpen = () =>   //连接建立事件
                     {
                         //获取客户端网页的url
-                        string clientId = GetClientId(socket);
-
-                        client_Sockets.Add(clientId, socket);
-                        LOG.Info(DateTime.Now.ToString() + "|服务器：和客户端网页:" + clientId + " 建立WebSock连接！");
+                        MessageAuthKey messageAuthKey = GetAppAuthKey(socket);
+                        if (null == messageAuthKey)
+                        {
+                            return;
+                        }
+                        appIdAgent_Sockets.Add(messageAuthKey.AppId + "_" + messageAuthKey.AgentType  , socket);
+                        appIdAgent_AuthKey.Add(messageAuthKey.AppId + "_" + messageAuthKey.AgentType  , messageAuthKey);
+                        if (appId_Agent.ContainsKey(messageAuthKey.AppId))
+                        {
+                            appId_Agent[messageAuthKey.AppId].Add(messageAuthKey.AgentType);
+                        }
+                        else
+                        {
+                            appId_Agent[messageAuthKey.AppId] = new HashSet<string>() { messageAuthKey.AgentType};
+                        }
+                        LOG.Info(DateTime.Now.ToString() + $"|服务器：和客户端网页:{messageAuthKey.AgentType}，{messageAuthKey.AppId} 建立WebSock连接！");
                     };
                     socket.OnClose = () =>  //连接关闭事件
                     {
                         // string clientUrl = socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort;
-                        string clientId = GetClientId(socket);
+                        MessageAuthKey messageAuthKey = GetAppAuthKey(socket);
+                        if (null == messageAuthKey)
+                        {
+                            return;
+                        }
                         //如果存在这个客户端,那么对这个socket进行移除
-                        if (client_Sockets.ContainsKey(clientId))
+                        if (appIdAgent_Sockets.ContainsKey(messageAuthKey.AppId + "_" + messageAuthKey.AgentType ))
                         {
                             //注:Fleck中有释放
                             //关闭对象连接 
@@ -63,9 +92,11 @@ namespace Dist.Dme.HSMessage.Websocket.Fleck
                             //{
                             //dic_Sockets[clientUrl].Close();
                             //}
-                            client_Sockets.Remove(clientId);
+                            appIdAgent_Sockets.Remove(messageAuthKey.AppId  + "_" + messageAuthKey.AgentType);
+                            appIdAgent_AuthKey.Remove(messageAuthKey.AppId + "_" + messageAuthKey.AgentType );
+                            appId_Agent.Remove(messageAuthKey.AppId);
                         }
-                        LOG.Info(DateTime.Now.ToString() + "|服务器：和客户端:" + clientId + " 断开WebSock连接！");
+                        LOG.Info(DateTime.Now.ToString() + $"|服务器：和客户端:{messageAuthKey.AgentType}，{messageAuthKey.AppId}断开WebSock连接！");
                     };
                     socket.OnMessage = message =>
                     {
@@ -91,19 +122,50 @@ namespace Dist.Dme.HSMessage.Websocket.Fleck
         /// </summary>
         /// <param name="socket"></param>
         /// <returns></returns>
-        private static string GetClientId(IWebSocketConnection socket)
+        private static MessageAuthKey GetAppAuthKey(IWebSocketConnection socket)
         {
-            string clientId;
-            if (socket.ConnectionInfo.Path.Equals("/"))
+            MessageAuthKey messageAuthKey = null;
+            NameValueCollection queryParams = UriUtil.GetQueryString(socket.ConnectionInfo.Path);
+            string appKey = queryParams["appKey"];
+            string appId = queryParams["appId"];
+            // string authKeyStr =socket.ConnectionInfo.Path.Substring(socket.ConnectionInfo.Path.LastIndexOf("?") + 1);
+            string callbackMsg = "";
+            if (string.IsNullOrEmpty(appKey) || string.IsNullOrEmpty(appId))
             {
-                clientId = socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort;
+                callbackMsg = $"appKey或appId 信息不存在，连接被拒绝";
+                LOG.Error(callbackMsg);
+                socket.Send(callbackMsg);
+                socket.Close();
+                return null;
             }
-            else
+            try
             {
-                clientId = socket.ConnectionInfo.Path.Substring(socket.ConnectionInfo.Path.LastIndexOf("/") + 1);
-            }
+                // 获取agent类型，支持多端同时连接
+                EnumUserAgentType enumUserAgentType = NetAssist.GetUserAgentType(socket.ConnectionInfo.Headers["user-agent"]);
+                string agentType = EnumUtil.GetEnumName<EnumUserAgentType>((int)enumUserAgentType);
 
-            return clientId;
+                if (appIdAgent_AuthKey.ContainsKey(appId + "_" + agentType))
+                {
+                    return appIdAgent_AuthKey[appId + "_" + agentType];
+                }
+                messageAuthKey = new MessageAuthKey
+                {
+                    AppId = appId,
+                    AppKey = appKey,
+                    AgentType = agentType
+                };
+           
+                // @TODO 验证appkey的有限性和appId是否唯一
+                return messageAuthKey;
+            }
+            catch (Exception ex)
+            {
+                LOG.Error(ex, ex.Message);
+                callbackMsg = $"连接信息缺失，连接被拒绝。详情：{ex.Message}";
+                socket.Send(callbackMsg);
+                socket.Close();
+                return null;
+            }
         }
         /// <summary>
         /// 发送消息
@@ -114,29 +176,40 @@ namespace Dist.Dme.HSMessage.Websocket.Fleck
         private Task<Boolean> SendAsync(IWebSocketConnection socket, string message)
         {
             return Task.Run(() => {
-                string fromClientId = GetClientId(socket);
-                MessageBody messageBody = JsonConvert.DeserializeObject<MessageBody>(message);
-                // string clientUrl = socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort;
-                LOG.Info(DateTime.Now.ToString() + "|服务器：【收到】来客户端网页:" + fromClientId + "的信息：\n" + message);
-                if (client_Sockets.ContainsKey(messageBody.To))
+                MessageAuthKey fromClientId = GetAppAuthKey(socket);
+                if (null == fromClientId)
                 {
-                    LOG.Info($"客户端[{messageBody.To}]在线，发送在线消息");
-                    IWebSocketConnection desSocket = client_Sockets[messageBody.To];
-                    MessageBody desMsgBody = new MessageBody
+                    return false;
+                }
+                MessageReceivedBody messageBody = JsonConvert.DeserializeObject<MessageReceivedBody>(message);
+                // string clientUrl = socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort;
+                LOG.Info(DateTime.Now.ToString() + $"|服务器：【收到】来客户端:{fromClientId.AppId}的信息：\n" + message);
+                // 判断同一个appId下多端
+                if (appId_Agent.ContainsKey(messageBody.To))
+                {
+                    HashSet<string> agents = appId_Agent[messageBody.To];
+                    foreach (var agent in agents)
                     {
-                        From = fromClientId,
-                        To = messageBody.To,
-                        Type = messageBody.Type,
-                        Payload = messageBody.Payload
-                    };
-                    LOG.Info(DateTime.Now.ToString() + $"|服务器：【发出】消息，来源：{fromClientId}，目的：{messageBody.To}\n，内容：{messageBody.Payload}");
-                    desSocket.Send(JsonConvert.SerializeObject(desMsgBody));
+                        // 说明肯定在线
+                        LOG.Info($"客户端[{messageBody.To}]在线，设备类型[{agent}]，发送在线消息");
+                        IWebSocketConnection desSocket = appIdAgent_Sockets[messageBody.To + "_" + agent];
+
+                        MessageSendBody desSendMsgBody = new MessageSendBody
+                        {
+                            From = fromClientId.AppId,
+                            Type = messageBody.Type,
+                            Payload = messageBody.Payload
+                        };
+                        LOG.Info(DateTime.Now.ToString() + $"|服务器：【发出】消息，来源：{fromClientId.AppId}，目的：{messageBody.To}\n，内容：{messageBody.Payload}");
+                        desSocket.Send(JsonConvert.SerializeObject(desSendMsgBody));
+                    }
                 }
                 else
                 {
                     LOG.Info($"客户端[{messageBody.To}]离线，发送离线消息");
+                    // TODO
                 }
-                
+
                 return true;
             });
         }
@@ -146,7 +219,7 @@ namespace Dist.Dme.HSMessage.Websocket.Fleck
         /// </summary>
         public void CloseAll()
         {
-            foreach (var item in client_Sockets.Values)
+            foreach (var item in appIdAgent_Sockets.Values)
             {
                 if (item != null)
                 {
@@ -162,11 +235,11 @@ namespace Dist.Dme.HSMessage.Websocket.Fleck
         {
             LOG.Info($"广播消息：{message}");
             Task.Run(() => {
-                foreach (var clientConn in client_Sockets.Values)
+                foreach (var socket in appIdAgent_Sockets.Values)
                 {
-                    if (clientConn.IsAvailable)
+                    if (socket.IsAvailable)
                     {
-                        clientConn.Send(message);
+                        socket.Send(message);
                     }
                 }
             });
@@ -178,7 +251,7 @@ namespace Dist.Dme.HSMessage.Websocket.Fleck
         public IList<string> ListClients()
         {
             List<string> clients = new List<string>();
-            foreach (var item in client_Sockets.Keys)
+            foreach (var item in appIdAgent_Sockets.Keys)
             {
                 clients.Add(item);
             }

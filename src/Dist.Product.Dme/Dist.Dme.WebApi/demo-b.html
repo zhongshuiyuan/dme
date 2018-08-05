@@ -20,7 +20,7 @@
         var webSocket = {};
         //创建websockt
         function CreateWebSocket() {
-            webSocket = new WebSocket("ws://127.0.0.1:30000/b");
+            webSocket = new WebSocket("ws://127.0.0.1:30000/?appKey=efg&appId=567");
             webSocket.onopen = WebSokectOnOpen;
             webSocket.onmessage = WebSocketOnMessage;
             webSocket.onclose = WebSocketOnClose;
@@ -48,7 +48,7 @@
             //获取text中的值
             var text = document.getElementById("Text1").value;
             //发送到服务器
-            webSocket.send("{\"destination\":\"a\", \"type\":0 , \"payload\":\"" + text  + "\"}");
+            webSocket.send("{\"to\":\"123\", \"type\":0 , \"payload\":\"" + text  + "\"}");
         };
     </script>
 </head>

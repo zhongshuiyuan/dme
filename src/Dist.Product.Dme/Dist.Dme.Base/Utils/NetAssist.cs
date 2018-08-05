@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using Dist.Dme.Base.Common;
+using NLog;
 using System;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -168,6 +169,42 @@ namespace Dist.Dme.Base.Utils
             String regexStr = @"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$";
             Regex guidReg = new Regex(regexStr);
             return guidReg.IsMatch(ip);
+        }
+        /// <summary>
+        /// 获取user agent类型
+        /// </summary>
+        /// <param name="userAgent"></param>
+        /// <returns></returns>
+        public static EnumUserAgentType GetUserAgentType(string userAgent)
+        {
+            if (string.IsNullOrWhiteSpace(userAgent))
+            {
+                return EnumUserAgentType.UNKNOWN;
+            }
+            userAgent = userAgent.ToLower();
+            string[] mobileAgents = { "iphone", "android", "phone", "mobile", "wap", "netfront", "java", "opera mobi","opera mini", "ucweb",
+                "windows ce", "symbian", "series", "webos", "sony", "blackberry", "dopod", "nokia", "samsung", "palmsource", "xda", "pieplus",
+                "meizu", "midp", "cldc", "motorola", "foma", "docomo", "up.browser", "up.link", "blazer", "helio", "hosin", "huawei", "novarra",
+                "coolpad", "webos", "techfaith", "palmsource", "alcatel", "amoi", "ktouch", "nexian", "ericsson", "philips", "sagem", "wellcom",
+                "bunjalloo", "maui", "smartphone", "iemobile", "spice", "bird", "zte-", "longcos", "pantech", "gionee", "portalmmm", "jig browser",
+                "hiptop", "benq", "haier", "^lct", "320x320", "240x320", "176x220", "w3c ", "acs-", "alav", "alca", "amoi", "audi", "avan", "benq",
+                "bird", "blac", "blaz", "brew", "cell", "cldc", "cmd-", "dang", "doco", "eric", "hipt", "inno", "ipaq", "java", "jigs", "kddi", "keji", "leno",
+                "lg-c", "lg-d", "lg-g", "lge-", "maui", "maxo", "midp", "mits", "mmef", "mobi", "mot-", "moto", "mwbp", "nec-", "newt", "noki", "oper",
+                "palm", "pana", "pant", "phil", "play", "port", "prox", "qwap", "sage", "sams", "sany", "sch-", "sec-", "send", "seri", "sgh-", "shar", "sie-",
+                "siem", "smal", "smar", "sony", "sph-", "symb", "t-mo", "teli", "tim-", "tsm-", "upg1", "upsi", "vk-v", "voda", "wap-", "wapa", "wapi", "wapp",
+                "wapr", "webc", "winw", "winw", "xda", "xda-", "googlebot-mobile" };
+            for (int i = 0; i < mobileAgents.Length; i++)
+            {
+                if (userAgent.ToLower().IndexOf(mobileAgents[i], System.StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return EnumUserAgentType.MOBILE;
+                }
+            }
+            if (userAgent.IndexOf("micromessenger") > 0)
+            {
+                return EnumUserAgentType.WEIXIN;
+            }
+            return EnumUserAgentType.BROWSER;
         }
     }
 }

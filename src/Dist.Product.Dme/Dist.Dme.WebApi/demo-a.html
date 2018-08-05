@@ -20,7 +20,7 @@
         var webSocket = {};
         //创建websockt
         function CreateWebSocket() {
-            webSocket = new WebSocket("ws://127.0.0.1:30000/a");
+            webSocket = new WebSocket("ws://127.0.0.1:30000/?appKey=abc&appId=123");
             webSocket.onopen = WebSokectOnOpen;
             webSocket.onmessage = WebSocketOnMessage;
             webSocket.onclose = WebSocketOnClose;
