@@ -9,6 +9,7 @@ namespace Dist.Dme.HSMessage.Define
     /// </summary>
     public class MessageBody
     {
+        public string SysCode { get; set; }
         /// <summary>
         /// 发送方
         /// </summary>
@@ -18,9 +19,13 @@ namespace Dist.Dme.HSMessage.Define
         /// </summary>
         public string To { get; set; }
         /// <summary>
+        /// 频道类型
+        /// </summary>
+        public EnumChannelType ChannelType { get; set; }
+        /// <summary>
         /// 消息类型
         /// </summary>
-        public EnumMessageType Type { get; set; }
+        public EnumMessageType MessageType { get; set; }
         /// <summary>
         /// 具体内容
         /// </summary>

@@ -51,9 +51,9 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
                 collection.InsertOne(t);
                 return 1;
             }
-            catch
+            catch(Exception ex)
             {
-                return 0;
+                throw ex;
             }
         }
         
@@ -140,6 +140,50 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
                 var client = MongodbManager<T>.GetMongodbCollection(host);
                 //修改条件
                 FilterDefinition<T> filter = Builders<T>.Filter.Eq("_id", new ObjectId(id));
+                //要修改的字段
+                var list = new List<UpdateDefinition<T>>();
+                foreach (var item in t.GetType().GetProperties())
+                {
+                    if (item.Name.ToLower() == "id") continue;
+                    list.Add(Builders<T>.Update.Set(item.Name, item.GetValue(t)));
+                }
+                var updatefilter = Builders<T>.Update.Combine(list);
+                return client.UpdateOne(filter, updatefilter);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static UpdateResult Update(IMongoDatabase database, T t, string id)
+        {
+            try
+            {
+                var client = MongodbManager<T>.GetMongodbCollection(database);
+                //修改条件
+                FilterDefinition<T> filter = Builders<T>.Filter.Eq("_id", new ObjectId(id));
+                //要修改的字段
+                var list = new List<UpdateDefinition<T>>();
+                foreach (var item in t.GetType().GetProperties())
+                {
+                    if (item.Name.ToLower() == "id") continue;
+                    list.Add(Builders<T>.Update.Set(item.Name, item.GetValue(t)));
+                }
+                var updatefilter = Builders<T>.Update.Combine(list);
+                return client.UpdateOne(filter, updatefilter);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static UpdateResult Update(IMongoDatabase database, T t, ObjectId id)
+        {
+            try
+            {
+                var client = MongodbManager<T>.GetMongodbCollection(database);
+                //修改条件
+                FilterDefinition<T> filter = Builders<T>.Filter.Eq("_id", id);
                 //要修改的字段
                 var list = new List<UpdateDefinition<T>>();
                 foreach (var item in t.GetType().GetProperties())

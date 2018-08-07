@@ -11,20 +11,19 @@ namespace Dist.Dme.HSMessage.Define
     public enum EnumMessageType
     {
         /// <summary>
-        /// 群消息
+        /// 系统消息，每个客户端都能接收到
         /// </summary>
-        [Description("群消息")]
-        GROUP = 0,
+        [Description("系统消息")]
+        SYSTEM = 0,
         /// <summary>
-        /// 讨论组消息
+        /// 当前任务执行者才能接收到
         /// </summary>
-        [Description("讨论组消息")]
-        DISCUSSION = 1,
+        [Description("任务类型消息")]
+        TASK = 1,
         /// <summary>
-        /// 个人对个人消息
+        /// 踢人消息
         /// </summary>
-        [Description("个人对个人消息")]
-        [DisplayName("P2P")]
-        P2P = 2
+        [Description("踢人消息")]
+        KICK = 2
     }
 }

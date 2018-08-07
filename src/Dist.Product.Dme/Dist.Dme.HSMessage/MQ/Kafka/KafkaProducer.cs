@@ -1,5 +1,11 @@
 ﻿using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
+using Dist.Dme.Base.Utils;
+using Dist.Dme.DisFS.Adapters.Mongo;
+using Dist.Dme.DisFS.Collection;
+using Dist.Dme.Extensions;
+using Dist.Dme.HSMessage.Define;
+using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -14,7 +20,7 @@ namespace Dist.Dme.HSMessage.MQ.Kafka
     public class KafkaProducer
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
-        private Producer<Null, string> producer;
+        private static Producer<Null, string> producer;
 
         //static ProducerClinet()
         //{
@@ -24,13 +30,34 @@ namespace Dist.Dme.HSMessage.MQ.Kafka
         //    };
         //    _producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8));
         //}
-        public KafkaProducer(string servers)
+        public static Producer<Null, string> CreateProducer(string servers)
         {
             var config = new Dictionary<string, object>
             {
                 { "bootstrap.servers", servers }
             };
-            this.producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8));
+            producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8));
+            return producer;
+        }
+        /// <summary>
+        /// 通用的消息发送
+        /// </summary>
+        /// <param name="topic"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public static Task<Boolean> Send(string topic, string message)
+        {
+            return Task.Run(() => {
+               
+                var dr = producer.ProduceAsync(topic, null, message);
+                if (dr.Result.Error.HasError)
+                {
+                    LOG.Error($" 发送失败，详情[{dr.Result.Error.Reason}]");
+                    return false;
+                }
+                LOG.Info($"成功发送 '{dr.Result.Value}' to: {dr.Result.TopicPartitionOffset}");
+                return true;
+            });
         }
             /// <summary>
             /// 发送消息
@@ -38,15 +65,35 @@ namespace Dist.Dme.HSMessage.MQ.Kafka
             /// <param name="topic">主题</param>
             /// <param name="message"></param>
             /// <returns>是否发送成功，true/false</returns>
-            public Task<Boolean> Send(string topic, string message)
+            public static Task<Boolean> Send(string topic, MessageBody message)
            {
              return Task.Run(() => {
-                var dr = this.producer.ProduceAsync(topic, null, message);
+                 // 发送之前先持久化
+                 MessageColl messageCollection = new MessageColl
+                 {
+                     From = message.From,
+                     To = message.To,
+                     ChannelType = (int)message.ChannelType,
+                     MsgType = (int)message.MessageType,
+                     Payload = message.Payload,
+                     SendTime = DateUtil.CurrentTimeMillis,
+                     Delivered = (int)EnumDeliverType.UNDELIVERED,
+                     Read = (int)EnumReadType.UNREAD
+                 };
+                 if(string.IsNullOrWhiteSpace(messageCollection.SysCode))
+                 {
+                     messageCollection.SysCode = GuidUtil.NewGuid();
+                 }
+                 MongodbHelper<MessageColl>.Add(ServiceFactory.MongoDatabase, messageCollection);
+
+                 var dr = producer.ProduceAsync(topic, null, JsonConvert.SerializeObject(message));
                 if (dr.Result.Error.HasError)
                 {
                     LOG.Error($" 发送失败，详情[{dr.Result.Error.Reason}]");
                     return false;
                 }
+                 messageCollection.Delivered = (int)EnumDeliverType.DELIVERED;
+                 MongodbHelper<MessageColl>.Update(ServiceFactory.MongoDatabase, messageCollection, messageCollection._id);
                 LOG.Info($"成功发送 '{dr.Result.Value}' to: {dr.Result.TopicPartitionOffset}");
                 return true;
             });
@@ -64,6 +111,7 @@ namespace Dist.Dme.HSMessage.MQ.Kafka
             using (var producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8)))
             {
                 var dr = producer.ProduceAsync("my-topic", null, "test message text").Result;
+                // 已送达
                 Console.WriteLine($"Delivered '{dr.Value}' to: {dr.TopicPartitionOffset}");
             }
         }

@@ -12,6 +12,8 @@ using Dist.Dme.DisFS.Adapters.Mongo;
 using Dist.Dme.DisFS.Collection;
 using Dist.Dme.Extensions;
 using Dist.Dme.Extensions.DTO;
+using Dist.Dme.HSMessage.Define;
+using Dist.Dme.HSMessage.MQ.Kafka;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.RuleSteps;
@@ -806,9 +808,18 @@ namespace Dist.Dme.Service.Impls
                             // 开始计算步骤
                             this.RunRuleStepNode(db, task, item);
                         }
+                        // 完成模型计算
                         task.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_SUCCESS);
                         task.LastTime = DateUtil.CurrentTimeMillis;
                         db.Updateable<DmeTask>(task).ExecuteCommand();
+                        // @TODO 发送模型计算成功的消息
+                        KafkaProducer.Send(nameof(EnumMessageType.TASK), new MessageBody() {
+                            From = "123",
+                            To = "123",
+                            ChannelType = EnumChannelType.P2P,
+                            MessageType = EnumMessageType.TASK,
+                            Payload = $"模型[{task.SysCode}]计算完成，状态[{task.Status}]"
+                        });
                         return task;
                     }
                     catch (Exception ex)

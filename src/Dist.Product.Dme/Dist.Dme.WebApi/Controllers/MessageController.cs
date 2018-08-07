@@ -5,9 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dist.Dme.Base.Framework;
 using Dist.Dme.Extensions;
+using Dist.Dme.HSMessage.Define;
 using Dist.Dme.HSMessage.MQ.Kafka;
+using Dist.Dme.HSMessage.Websocket.Fleck;
 using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using NLog;
 
 namespace Dist.Dme.WebApi.Controllers
@@ -30,7 +33,7 @@ namespace Dist.Dme.WebApi.Controllers
             //    ServiceFactory.KafkaConsumer.Start();
             //    return base.Success($"成功创建channel[{ServiceFactory.HSMessageSetting.Opinion.Topics + (string.IsNullOrEmpty(topic) ? "" : "," + topic)}]......");
             //}
-            ServiceFactory.KafkaConsumer.CreateTopic(topic);
+            KafkaConsumer.CreateTopic(topic);
             // ConsumerClient.Start(topic);
             return base.Success($"成功创建channel[{topic}]......");
         }
@@ -42,7 +45,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/unsubscribe")]
         public Result Unsubscribe()
         {
-            ServiceFactory.KafkaConsumer.Unsubscribe();
+            KafkaConsumer.Unsubscribe();
             return base.Success($"成功停止监控......");
         }
         /// <summary>
@@ -53,7 +56,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/unsubscribe/topic")]
         public Result UnsubscribeTopic([Required][FromQuery]string topic)
         {
-            ServiceFactory.KafkaConsumer.Unsubscribe(topic);
+            KafkaConsumer.Unsubscribe(topic);
             return base.Success($"成功停止订阅主题[{topic}]......");
         }
         /// <summary>
@@ -64,9 +67,9 @@ namespace Dist.Dme.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("v1/send/{topic}")]
-        public async Task<Result> SendMsgAsync(string topic ,[FromQuery] string msg)
+        public async Task<Result> SendMsgAsync(string topic ,[FromBody] MessageBody msg)
         {
-            bool result = await ServiceFactory.KafkaProducer.Send(topic, msg);
+            bool result = await KafkaProducer.Send(topic, msg);
             if (result)
             {
                return Success($"成功往主题[{topic}]发送消息[{msg}]......");
@@ -83,7 +86,7 @@ namespace Dist.Dme.WebApi.Controllers
         public Result Broadcast(string msg)
         {
             Task.Run(() => {
-                ServiceFactory.WebsocketServer.Broadcast(msg);
+                WebsocketFleckServer.Broadcast(msg);
             });
             return base.Success($"已广播消息：{msg}");
         }
@@ -95,7 +98,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/clients")]
         public Result ListConnectClients()
         {
-            return base.Success(ServiceFactory.WebsocketServer.ListClients());
+            return base.Success(WebsocketFleckServer.ListClients());
         }
     }
 }

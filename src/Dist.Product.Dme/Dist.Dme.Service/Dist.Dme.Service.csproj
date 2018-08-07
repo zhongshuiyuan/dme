@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Dist.Dme.Algorithms\Dist.Dme.Algorithms.Overlay\Dist.Dme.Algorithms.Overlay.csproj" />
     <ProjectReference Include="..\Dist.Dme.DAL\Dist.Dme.DAL.csproj" />
     <ProjectReference Include="..\Dist.Dme.DisFS\Dist.Dme.DisFS.csproj" />
+    <ProjectReference Include="..\Dist.Dme.HSMessage\Dist.Dme.HSMessage.csproj" />
     <ProjectReference Include="..\Dist.Dme.Model\Dist.Dme.Model.csproj" />
     <ProjectReference Include="..\Dist.Dme.RuleSteps\Dist.Dme.RuleSteps.csproj" />
   </ItemGroup>

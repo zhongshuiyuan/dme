@@ -138,12 +138,12 @@ namespace Dist.Dme.WebApi
                 IConfigurationSection mqSection = messageSection.GetSection("MQ");
                 if (mqSection != null)
                 {
-                    ServiceFactory.HSMessageSetting = mqSection.Get<KafkaSetting>();
-                    if (ServiceFactory.HSMessageSetting.Switch)
+                    KafkaSetting kafkaSetting = mqSection.Get<KafkaSetting>();
+                    if (kafkaSetting.Switch)
                     {
-                        ServiceFactory.KafkaConsumer = new KafkaConsumer(ServiceFactory.HSMessageSetting.Opinion.GroupId, ServiceFactory.HSMessageSetting.Opinion.Servers, ServiceFactory.HSMessageSetting.Opinion.Topics);
-                        ServiceFactory.KafkaConsumer.Start();
-                        ServiceFactory.KafkaProducer = new KafkaProducer(ServiceFactory.HSMessageSetting.Opinion.Servers);
+                        KafkaConsumer.CreateConsumer(kafkaSetting.Opinion.GroupId, kafkaSetting.Opinion.Servers, kafkaSetting.Opinion.Topics);
+                        KafkaConsumer.Start();
+                        KafkaProducer.CreateProducer(kafkaSetting.Opinion.Servers);
                     }
                 }
                 // websocket
@@ -151,7 +151,7 @@ namespace Dist.Dme.WebApi
                 if (websocketSection != null)
                 {
                     WebsocketSetting websocketSetting = websocketSection.Get<WebsocketSetting>();
-                    ServiceFactory.WebsocketServer = new WebsocketFleckServer(websocketSetting.Port, websocketSetting.Host);
+                    WebsocketFleckServer.CreateWebsocketServer(websocketSetting.NodeId, websocketSetting.Port, websocketSetting.Host);
                 }
             }
 

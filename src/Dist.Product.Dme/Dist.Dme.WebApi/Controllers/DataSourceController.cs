@@ -45,7 +45,6 @@ namespace Dist.Dme.WebApi.Controllers
         public Result ListDatabaseTypes()
         {
             Register register = new Register();
-            LOG.Info(">>>test log info");
             return base.Success(DataSourceService.ListDataSourceTypes());
         }
         /// <summary>
