@@ -1,4 +1,5 @@
 ﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Framework.Define;
 using Dist.Dme.Base.Framework.Exception;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
@@ -18,7 +19,6 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
     /// <summary>
     /// mongodb
     /// </summary>
-    [RuleStepTypeAttribute(Name = "MongoDBOutput", DisplayName = "mongo输出", Description = "mongo输出")]
     public class MongoDBOutputStepMeta : BaseRuleStepMeta, IRuleStepMeta
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
@@ -43,18 +43,20 @@ namespace Dist.Dme.RuleSteps.MongoDBOutput
         : base(repository, step)
         {
         }
-        // protected override EnumRuleStepTypes MyRuleStepType => EnumRuleStepTypes.MongodbOutput;
-        public string RuleStepName { get; set; } = "mongo输出";
 
-        public object RuleStepType
+        public RuleStepTypeMeta RuleStepType
         {
             get
             {
-                var attribute = (RuleStepTypeAttribute)this.GetType().GetCustomAttributes(typeof(RuleStepTypeAttribute), false).FirstOrDefault();
-                return attribute;
+                return new RuleStepTypeMeta()
+                {
+                    Name = "MongoDBOutput",
+                    Category = "输出",
+                    DisplayName = "mongo输出",
+                    Description = "mongo输出"
+                };
             }
         }
-
         public override IDictionary<string, Property> InParams
         {
             get

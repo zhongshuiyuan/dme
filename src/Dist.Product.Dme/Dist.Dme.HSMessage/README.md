@@ -1,4 +1,4 @@
-﻿# HSMessage是什麽
+﻿# HSMessage是什么
 
 ------
 

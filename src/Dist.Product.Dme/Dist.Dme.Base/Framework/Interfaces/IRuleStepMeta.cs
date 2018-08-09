@@ -1,4 +1,5 @@
 ﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Framework.Define;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,13 +9,9 @@ namespace Dist.Dme.Base.Framework.Interfaces
     public interface IRuleStepMeta
     {
         /// <summary>
-        /// 规则步骤名称，如果不设置，则默认为规则类型的名称
+        /// 规则步骤类型元数据
         /// </summary>
-        string RuleStepName { get; set; }
-        /// <summary>
-        /// 规则步骤类型
-        /// </summary>
-        object RuleStepType { get; }
+        RuleStepTypeMeta RuleStepType { get; }
         /// <summary>
         /// 保存步骤元数据信息
         /// </summary>

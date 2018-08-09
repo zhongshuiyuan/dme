@@ -44,7 +44,8 @@ CREATE TABLE DME_Task
 	"MODEL_ID" NUMBER(8),
 	"VERSION_ID" NUMBER(8),
 	"CREATETIME" number(20),
-	"LASTTIME" number(20)
+	"LASTTIME" number(20),
+  REMARK VARCHAR2(250)
 );
 -- Add comments to the table 
 comment on table DME_Task
@@ -67,6 +68,8 @@ comment on column DME_Task.createtime
   is '创建时间，毫秒';
 comment on column DME_Task.lasttime
   is '最后更新时间，毫秒';
+comment on column DME_Task.REMARK
+  is '备注信息';
   
 alter table DME_Task add primary key(id);
 
@@ -965,6 +968,22 @@ alter table DME_MODEL add model_type_id number(8);
 -- Add comments to the columns 
 comment on column DME_MODEL.model_type_id
   is '模型类型ID';
+alter table DME_MODEL add model_type_code varchar2(38);
+-- Add comments to the columns 
+comment on column DME_MODEL.model_type_code
+  is '模型类型编码';
+  
+insert into DME_DATASOURCE_TYPE
+values
+  (seq_dme_datasource_type.nextval,
+   '5750049705814c6cb940d0f4c19920cf',
+   'DME_FILESYSTEM',
+   'dme文件系统，主要存储于分布式文件系统');
+  commit;
+   
+  --建立索引
+  create index idx_dme_model on dme_model(syscode);
+  create index idx_DME_RULESTEP on DME_RULESTEP(syscode);
 
 
   

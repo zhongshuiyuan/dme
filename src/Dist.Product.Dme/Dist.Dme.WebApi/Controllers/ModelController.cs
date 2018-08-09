@@ -200,17 +200,6 @@ namespace Dist.Dme.WebApi.Controllers
         //    return null;
         //}
         /// <summary>
-        /// 运行模型计算
-        /// </summary>
-        /// <param name="modelVersionCode">模型版本唯一编码</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("v1/run/{modelVersionCode}")]
-        public Result Run(string modelVersionCode)
-        {
-            return base.Success(this.ModelService.RunModel(modelVersionCode), "已开始模型的云计算......");
-        }
-        /// <summary>
         /// 更新模型基本信息
         /// </summary>
         /// <param name="dto"></param>

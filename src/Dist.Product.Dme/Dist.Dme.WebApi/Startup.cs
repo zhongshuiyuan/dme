@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dist.Dme.Base.Conf;
+﻿using Dist.Dme.Base.Conf;
 using Dist.Dme.Base.Framework.Interfaces;
+using Dist.Dme.Base.Utils;
 using Dist.Dme.DAL.Context;
 using Dist.Dme.DisCache.Define;
 using Dist.Dme.DisCache.Impls;
@@ -16,8 +11,10 @@ using Dist.Dme.Extensions;
 using Dist.Dme.HSMessage.Conf;
 using Dist.Dme.HSMessage.MQ.Kafka;
 using Dist.Dme.HSMessage.Websocket.Fleck;
+using Dist.Dme.Scheduler;
 using Dist.Dme.Service.Impls;
 using Dist.Dme.Service.Interfaces;
+using Dist.Dme.Service.Scheduler;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
@@ -25,12 +22,16 @@ using Microsoft.Extensions.Caching.Redis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using MongoDB.Driver;
 using NLog;
 using NLog.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace Dist.Dme.WebApi
 {
@@ -130,7 +131,7 @@ namespace Dist.Dme.WebApi
             ServiceFactory.MongoHost = serviceProvider.GetService<MongodbHost>();
             ServiceFactory.MongoClient = serviceProvider.GetService<IMongoClient>();
             ServiceFactory.MongoDatabase = serviceProvider.GetService<IMongoDatabase>();
-            
+            // 消息相关
             IConfigurationSection messageSection = connectionStringsSection.GetSection("Message");
             if (messageSection != null)
             {
@@ -154,6 +155,16 @@ namespace Dist.Dme.WebApi
                     WebsocketFleckServer.CreateWebsocketServer(websocketSetting.NodeId, websocketSetting.Port, websocketSetting.Host);
                 }
             }
+            // scheduler，注入参数设置
+            IConfigurationSection schedulerSection = this.Configuration.GetSection("Scheduler");
+            if (schedulerSection != null)
+            {
+                var values = schedulerSection.GetChildren()
+                .Select(item => new KeyValuePair<string, string>(item.Key, item.Value))
+                .ToDictionary(x => x.Key, x => x.Value);
+
+                DmeQuartzScheduler<TaskRunnerJob>.SetSchedulerProperties(DataUtil.ToNameValueCollection(values));
+            }
 
             services.AddSwaggerGen(c =>
             {
@@ -171,6 +182,7 @@ namespace Dist.Dme.WebApi
                 c.IncludeXmlComments(xmlPath);
                 //  c.OperationFilter<HttpHeaderOperation>(); // 添加httpHeader参数
             });
+            
             // 配置日志服务
             services.AddLogging();
         }

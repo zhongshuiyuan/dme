@@ -29,12 +29,6 @@ namespace Dist.Dme.Service.Interfaces
         /// <returns></returns>
         object AddModel(ModelAddReqDTO dto);
         /// <summary>
-        /// 异步运行模型（背后依赖的是算法）
-        /// </summary>
-        /// <param name="versionCode">模型版本唯一编码</param>
-        /// <returns></returns>
-        DmeTask RunModel(string versionCode);
-        /// <summary>
         /// 根据模型唯一编码，获取模型的元数据信息
         /// </summary>
         /// <param name="modelCode">模型编码</param>

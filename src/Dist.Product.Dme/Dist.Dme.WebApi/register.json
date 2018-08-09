@@ -11,18 +11,24 @@
   ],
   "RuleStepPlugins": {
     "AlgorithmInput": {
+      "name": "AlgorithmInput",
+      "category": "输入",
       "assembly": "Dist.Dme.RuleSteps.dll",
       "classId": "Dist.Dme.RuleSteps.AlgorithmInput.AlgorithmInputStepData",
       "displayName": "算法输入",
       "description": "算法输入"
     },
     "DataSourceInput": {
+      "name": "DataSourceInput",
+      "category": "输入",
       "assembly": "Dist.Dme.RuleSteps.dll",
       "classId": "Dist.Dme.RuleSteps.DataSourceInput.DataSourceInputStepData",
       "displayName": "数据源输入",
       "description": "数据源输入，选择数据源"
     },
     "MongodbOutput": {
+      "name": "MongodbOutput",
+      "category": "输出",
       "assembly": "Dist.Dme.RuleSteps.dll",
       "classId": "Dist.Dme.RuleSteps.MongoDBOutput.MongoDBOutputStepData",
       "displayName": "mongo输出",

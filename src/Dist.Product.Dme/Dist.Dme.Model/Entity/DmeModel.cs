@@ -20,5 +20,7 @@ namespace Dist.Dme.Model.Entity
         public int Status { get; set; }
         [SugarColumn(ColumnName = "MODEL_TYPE_ID")]
         public int ModelTypeId { get; set; }
+        [SugarColumn(ColumnName = "MODEL_TYPE_CODE")]
+        public string ModelTypeCode { get; set; }
     }
 }

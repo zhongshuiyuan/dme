@@ -18,7 +18,9 @@ using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using Dist.Dme.RuleSteps;
 using Dist.Dme.RuleSteps.AlgorithmInput;
+using Dist.Dme.Scheduler;
 using Dist.Dme.Service.Interfaces;
+using Dist.Dme.Service.Scheduler;
 using MongoDB.Driver;
 using NLog;
 using SqlSugar;
@@ -191,7 +193,7 @@ namespace Dist.Dme.Service.Impls
             {
                 try
                 {
-                    if (m.ModelTypeId > 0)
+                    if (!string.IsNullOrWhiteSpace(m.ModelTypeCode))
                     {
                         DmeModelType dmeModelType = base.Db.Queryable<DmeModelType>().InSingle(m.ModelTypeId);
                         modelTypeDTO = ClassValueCopier<ModelTypeDTO>.Copy(dmeModelType);
@@ -227,8 +229,8 @@ namespace Dist.Dme.Service.Impls
             }
             var db = base.Repository.GetDbContext();
             // 使用事务
-            DbResult<DmeModel> dbResult = db.Ado.UseTran<DmeModel>(() =>
-          {
+            DbResult<ModelRegisterRespDTO> dbResult = db.Ado.UseTran<ModelRegisterRespDTO>(() =>
+            {
                 // 查询单条没有数据返回NULL, Single超过1条会报错，First不会
                 // base.DmeModelDb.GetContext().Queryable<DmeModel>().Single(m => m.SysCode == dto.SysCode);
                 DmeModel model = db.Queryable<DmeModel>().Where(m => m.SysCode == dto.SysCode).Single();
@@ -247,35 +249,41 @@ namespace Dist.Dme.Service.Impls
                   // 模型类型
                   DmeModelType modelType = db.Queryable<DmeModelType>().Single(mt => mt.SysCode == dto.TypeCode);
                   model.ModelTypeId = modelType.Id;
+                  model.ModelTypeCode = modelType.SysCode;
                   model = db.Insertable<DmeModel>(model).ExecuteReturnEntity();
                   if (null == model)
                   {
                       throw new Exception(String.Format("创建模型失败，原因未明，编码：[{0}]，名称：[{1}]。", dto.SysCode, dto.Name));
                   }
-                  // 处理版本
-                  this.HandleVersions(dto, db, model);
-                  return model;
+                 
+                  ModelRegisterRespDTO respDTO = ClassValueCopier<ModelRegisterRespDTO>.Copy(model);
+                    // 处理版本
+                  respDTO.VersionCodes = this.HandleVersions(db, model, dto);
+                  return respDTO;
               }
               else
               {
                   throw new BusinessException($"模型[{dto.SysCode}]已存在，不能重复注册");
               }
           });
-            return dbResult.Data;
+          return dbResult.Data;
         }
+
         /// <summary>
         /// 处理版本信息
         /// </summary>
-        /// <param name="dto"></param>
         /// <param name="db"></param>
         /// <param name="model"></param>
-        private void HandleVersions(ModelAddReqDTO dto, SqlSugarClient db, DmeModel model)
+        /// <param name="dto"></param>
+        /// <returns>返回版本编码数组</returns>
+        private IList<string> HandleVersions(SqlSugarClient db, DmeModel model, ModelAddReqDTO dto)
         {
             IList<ModelVersionAddDTO> versions = dto.Versions;
             if (versions?.Count == 0)
             {
                 throw new BusinessException("注册模型时，缺失版本信息。");
             }
+            IList<string> versionCodes = new List<string>();
             foreach (var subVersion in versions)
             {
                 DmeModelVersion mv = new DmeModelVersion
@@ -286,6 +294,7 @@ namespace Dist.Dme.Service.Impls
                     CreateTime = DateUtil.CurrentTimeMillis
                 };
                 mv = db.Insertable<DmeModelVersion>(mv).ExecuteReturnEntity();
+                versionCodes.Add(mv.SysCode);
                 // 添加步骤信息
                 IList<RuleStepAddDTO> stepsAdd = subVersion.Steps;
                 if (stepsAdd?.Count == 0)
@@ -321,6 +330,7 @@ namespace Dist.Dme.Service.Impls
                 // 处理步骤之间的连接关系
                 this.HandleHop(db, subVersion, model, mv, ruleStepMap);
             }
+            return versionCodes;
         }
 
         /// <summary>
@@ -495,354 +505,7 @@ namespace Dist.Dme.Service.Impls
             }
             db.Insertable<DmeRuleStepHop>(hops).ExecuteCommand();
         }
-        public DmeTask RunModel(string versionCode)
-        {
-            // 尽管使用了async关键字，如果不使用await，则还是同步操作
-            //return await Task.Run<DmeTask>(() =>
-            // {
-
-            // });
-            // 验证数据库是否存在指定模型版本信息
-            SqlSugarClient db = base.Repository.GetDbContext();
-            // 查询模型版本
-            DmeModelVersion modelVersion = db.Queryable<DmeModelVersion>().Single(mv => mv.SysCode == versionCode);
-            if (null == modelVersion)
-            {
-                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"模型的版本[{versionCode}]不存在");
-            }
-            // Single方法，如果查询数据库多条数据，会抛出异常
-            DmeModel model = db.Queryable<DmeModel>().Single(m => m.Id == modelVersion.ModelId);
-            if (null == model)
-            {
-                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"模型[{modelVersion.ModelId}]不存在");
-            }
-            // 查找关联的算法信息
-            IList<DmeRuleStep> ruleSteps = db.Queryable<DmeRuleStep>().Where(rs => rs.ModelId == model.Id && rs.VersionId == modelVersion.Id).ToList();
-            if (0 == ruleSteps?.Count)
-            {
-                LOG.Warn($"模型[{model.SysCode}]的版本[{versionCode}]下没有可执行步骤，停止运行");
-                return null;
-            }
-            DmeTask newTask = null;
-            db.Ado.UseTran<DmeTask>(() =>
-            {
-                // 每执行一次模型，生成一次任务
-                newTask = new DmeTask
-                {
-                    SysCode = GuidUtil.NewGuid(),
-                    CreateTime = DateUtil.CurrentTimeMillis,
-                    Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_RUNNING),
-                    ModelId = model.Id,
-                    VersionId = modelVersion.Id,
-                    NodeServer = NetAssist.GetLocalHost()
-                };
-                newTask.Name = "task-" + newTask.CreateTime;
-                newTask.LastTime = newTask.CreateTime;
-                newTask = db.Insertable<DmeTask>(newTask).ExecuteReturnEntity();
-                return newTask;
-            });
-            try
-            {
-                // 此时不阻塞，返回类型为Task，为了能捕获到线程异常信息
-                RunModelAsyncEx(db, model, modelVersion, newTask, ruleSteps);
-            }
-            catch (Exception ex)
-            {
-                LOG.Error(ex, ex.Message);
-                // 更改任务状态
-                newTask.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_ERROR);
-                newTask.LastTime = DateUtil.CurrentTimeMillis;
-                db.Updateable<DmeTask>(newTask).UpdateColumns(task => new { task.Status, task.LastTime }).ExecuteCommand();
-            }
-
-            return newTask;
-        }
-        /// <summary>
-        /// 构建步骤的链表信息
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="ruleSteps"></param>
-        /// <returns>多个链表</returns>
-        private IList<RuleStepLinkedListNode<DmeRuleStep>> GetRuleStepNodeLinkedList(SqlSugarClient db, DmeModel model, DmeModelVersion modelVersion, IList<DmeRuleStep> ruleSteps)
-        {
-            IList<RuleStepLinkedListNode<DmeRuleStep>> newLinkedSteps = new List<RuleStepLinkedListNode<DmeRuleStep>>();
-            // 一次性构建步骤实体字典
-            IDictionary<int, RuleStepLinkedListNode<DmeRuleStep>> ruleStepDic = new Dictionary<int, RuleStepLinkedListNode<DmeRuleStep>>();
-            foreach (var subStep in ruleSteps)
-            {
-                ruleStepDic[subStep.Id] = new RuleStepLinkedListNode<DmeRuleStep>(subStep);
-                newLinkedSteps.Add(ruleStepDic[subStep.Id]);
-            }
-            //IList<RuleStepLinkedListNode<DmeRuleStep>> multiLinkedList = new List<RuleStepLinkedListNode<DmeRuleStep>>();
-            IList<DmeRuleStepHop> hops = db.Queryable<DmeRuleStepHop>().Where(rsh => rsh.ModelId == model.Id && rsh.VersionId == modelVersion.Id).OrderBy(rsh => rsh.StepFromId).ToList();
-            if (0 == hops?.Count)
-            {
-                return newLinkedSteps;
-            }
-
-            IDictionary<int, RuleStepLinkedListNode<DmeRuleStep>> newRuleStepLinkedNodeDic = new Dictionary<int, RuleStepLinkedListNode<DmeRuleStep>>();
-            // 已经使用的步骤id集合
-            IList<int> usedStepIds = new List<int>();
-            RuleStepLinkedListNode<DmeRuleStep> linkedStepFromNode = null;
-            RuleStepLinkedListNode<DmeRuleStep> linkedStepToNode = null;
-            // 反过来构建？
-            foreach (var hop in hops)
-            {
-                if (!ruleStepDic.ContainsKey(hop.StepFromId) || !ruleStepDic.ContainsKey(hop.StepToId) || 0 == hop.Enabled)
-                {
-                    continue;
-                }
-                linkedStepFromNode = ruleStepDic[hop.StepFromId];
-                linkedStepToNode = ruleStepDic[hop.StepToId];
-                linkedStepFromNode.Next.Add(linkedStepToNode);
-                linkedStepToNode.Previous.Add(linkedStepFromNode);
-            }
-            return newLinkedSteps;
-        }
-        /// <summary>
-        /// 异步处理模型后面的步骤运算
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="task">任务实体</param>
-        /// <param name="modelVersion"></param>
-        /// <param name="model"></param>
-        /// <param name="ruleSteps"></param>
-        [Obsolete]
-        private async Task RunModelAsync(SqlSugarClient db, DmeModel model, DmeModelVersion modelVersion, DmeTask task, IList<DmeRuleStep> ruleSteps)
-        {
-            await Task.Run<DmeTask>(() =>
-            {
-                // 查询步骤前后依赖关系
-                // 形成链表
-                IList<DmeRuleStepHop> hops = db.Queryable<DmeRuleStepHop>().Where(rsh => rsh.ModelId == model.Id && rsh.VersionId == modelVersion.Id).OrderBy("STEP_FROM_ID").ToList();
-                IList<RuleStepLinkedListNode<DmeRuleStep>> rulestepLinkedList = this.GetRuleStepNodeLinkedList(db, model, modelVersion, ruleSteps);
-
-                return db.Ado.UseTran<DmeTask>(() =>
-               {
-                   try
-                   {
-                       IRuleStepData ruleStepData = null;
-                       Result stepResult = null;
-                       DmeRuleStepType ruleStepTypeTemp = null;
-                       foreach (var subRuleStep in ruleSteps)
-                       {
-                           ruleStepTypeTemp = db.Queryable<DmeRuleStepType>().Single(rst => rst.Id == subRuleStep.StepTypeId);
-                           ruleStepData = RuleStepFactory.GetRuleStepData(ruleStepTypeTemp.Code, this.Repository, task, subRuleStep);
-                           if (null == ruleStepData)
-                           {
-                               throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"步骤工厂无法创建编码为[{ruleStepTypeTemp.Code}]的流程实例节点");
-                           }
-                           stepResult = ruleStepData.Run();
-                           //if (1 == subRuleStep.StepTypeId)
-                           //{
-                           //    // 算法输入
-                           //    ruleStepData = new AlgorithmInputStepData(this.Repository, task.Id, subRuleStep);
-                           //    // 执行计算
-                           //    stepResult = ruleStepData.Run();
-                           //}
-                           if (stepResult.Code != EnumSystemStatusCode.DME_SUCCESS)
-                           {
-                               throw new BusinessException((int)stepResult.Code, stepResult.Message);
-                           }
-                       }
-                       task.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_SUCCESS);
-                       task.LastTime = DateUtil.CurrentTimeMillis;
-                       db.Updateable<DmeTask>(task).ExecuteCommand();
-                       return task;
-                   }
-                   catch (Exception ex)
-                   {
-                       // 更改任务执行的状态
-                       if (ex is BusinessException)
-                       {
-                           task.Status = EnumUtil.GetEnumDisplayName(EnumUtil.GetEnumObjByValue<EnumSystemStatusCode>(((BusinessException)ex).Code));
-                       }
-                       else
-                       {
-                           task.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_ERROR);
-                       }
-                       task.LastTime = DateUtil.CurrentTimeMillis;
-                       db.Updateable<DmeTask>(task).ExecuteCommand();
-                       // 添加日志
-                       this.LogService.AddLogAsync(Base.Common.Log.EnumLogType.ENTITY, Base.Common.Log.EnumLogLevel.ERROR, nameof(DmeTask), task.SysCode, "", ex, "", NetAssist.GetLocalHost());
-                       throw ex;
-                   }
-               }).Data;
-            });
-        }
-        /// <summary>
-        /// 运行步骤节点
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="task"></param>
-        /// <param name="node"></param>
-        private void RunRuleStepNode(SqlSugarClient db, DmeTask task, RuleStepLinkedListNode<DmeRuleStep> node)
-        {
-            // 先计算前置节点
-            if (node.Previous?.Count > 0)
-            {
-                foreach (var item in node.Previous)
-                {
-                    RunRuleStepNode(db, task, item);
-                }
-            }
-            DmeTaskRuleStep dmeTaskRuleStep = null;
-            try
-            {
-                // 先判断任务的状态，是否被停止
-                DmeTask taskStatus = db.Queryable<DmeTask>().Single(t => t.SysCode == task.SysCode);
-                if (null == taskStatus || taskStatus.Status.Equals(EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_STOP)))
-                {
-                    LOG.Info($"任务[{task.SysCode}]不存在或者已被停止");
-                    return;
-                }
-                dmeTaskRuleStep = this.GetTaskRuleStep(db, task, node.Value, out string cacheKey);
-                if (dmeTaskRuleStep != null && EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_SUCCESS).Equals(dmeTaskRuleStep.Status))
-                {
-                    // 释放
-                    dmeTaskRuleStep = null;
-                    LOG.Info($"任务[{task.SysCode}]下的步骤[{node.Value.SysCode}]已被计算过，并且状态为[success]");
-                    return;
-                }
-                // 如果前置节点没有了，则计算当前节点内容
-                DmeRuleStepType ruleStepTypeTemp = db.Queryable<DmeRuleStepType>().Single(rst => rst.Id == node.Value.StepTypeId);
-                IRuleStepData ruleStepData = RuleStepFactory.GetRuleStepData(ruleStepTypeTemp.Code, this.Repository, task, node.Value);
-                if (null == ruleStepData)
-                {
-                    throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"步骤工厂无法创建编码为[{ruleStepTypeTemp.Code}]的流程实例节点");
-                }
-                dmeTaskRuleStep = new DmeTaskRuleStep
-                {
-                    SysCode = GuidUtil.NewGuid(),
-                    TaskId = task.Id,
-                    RuleStepId = node.Value.Id,
-                    Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_RUNNING),
-                    CreateTime = DateUtil.CurrentTimeMillis,
-                    LastTime = DateUtil.CurrentTimeMillis
-                };
-                dmeTaskRuleStep = db.Insertable<DmeTaskRuleStep>(dmeTaskRuleStep).ExecuteReturnEntity();
-                // 任务步骤创建成功后，把相关信息记录在缓存中
-                ServiceFactory.CacheService.AddAsync(cacheKey, dmeTaskRuleStep, 60);
-                Result stepResult = ruleStepData.Run();
-                UpdateRuleStep(db, dmeTaskRuleStep, cacheKey, stepResult);
-                // 然后计算下一个步骤
-                if (node?.Next.Count > 0)
-                {
-                    foreach (var item in node.Next)
-                    {
-                        RunRuleStepNode(db, task, item);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                dmeTaskRuleStep.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_ERROR);
-                dmeTaskRuleStep.LastTime = DateUtil.CurrentTimeMillis;
-                // 只更新状态和最后时间
-                db.Updateable<DmeTaskRuleStep>(dmeTaskRuleStep).UpdateColumns(ts => new { ts.Status, ts.LastTime }).ExecuteCommand();
-                this.LogService.AddLogAsync(Base.Common.Log.EnumLogType.ENTITY, EnumLogLevel.ERROR, nameof(DmeTaskRuleStep), dmeTaskRuleStep.SysCode, "", ex, "", NetAssist.GetLocalHost());
-            }
-        }
-
-        /// <summary>
-        /// 从缓存或者db中获取任务步骤信息
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="task"></param>
-        /// <param name="ruleStep"></param>
-        /// <param name="cacheKey"></param>
-        /// <returns></returns>
-        private DmeTaskRuleStep GetTaskRuleStep(SqlSugarClient db, DmeTask task, DmeRuleStep ruleStep, out string cacheKey)
-        {
-            // 先从缓存查找
-            cacheKey = HashUtil.Hash_2_MD5_32($"{task.SysCode}_{ruleStep.SysCode}");
-            DmeTaskRuleStep dmeTaskRuleStep = null;
-            try
-            {
-                dmeTaskRuleStep = ServiceFactory.CacheService.Get<DmeTaskRuleStep>(cacheKey);
-                if (dmeTaskRuleStep != null)
-                {
-                    LOG.Info($"缓存中获取到任务步骤信息，任务id[{dmeTaskRuleStep.TaskId}]，步骤id[{dmeTaskRuleStep.RuleStepId}]");
-                    return dmeTaskRuleStep;
-                }
-            }
-            catch (Exception ex)
-            {
-                LOG.Warn("从缓存中获取任务步骤信息失败，详情：" + ex.Message);
-            }
-            // 从数据库中查找
-            dmeTaskRuleStep = db.Queryable<DmeTaskRuleStep>().Single(tr => tr.TaskId == task.Id && tr.RuleStepId == ruleStep.Id);
-            return dmeTaskRuleStep;
-        }
-        /// <summary>
-        /// 更新任务和步骤信息到数据和缓存
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="dmeTaskRuleStep"></param>
-        /// <param name="cacheKey"></param>
-        /// <param name="stepResult"></param>
-        private static void UpdateRuleStep(SqlSugarClient db, DmeTaskRuleStep dmeTaskRuleStep, string cacheKey, Result stepResult)
-        {
-            dmeTaskRuleStep.Status = EnumUtil.GetEnumDisplayName(stepResult.Code);
-            dmeTaskRuleStep.LastTime = DateUtil.CurrentTimeMillis;
-            // 只更新状态和最后时间
-            db.Updateable<DmeTaskRuleStep>(dmeTaskRuleStep).UpdateColumns(ts => new { ts.Status, ts.LastTime }).ExecuteCommand();
-            // 刷新缓存
-            ServiceFactory.CacheService.ReplaceAsync(cacheKey, dmeTaskRuleStep);
-        }
-
-        private Task RunModelAsyncEx(SqlSugarClient db, DmeModel model, DmeModelVersion modelVersion, DmeTask task, IList<DmeRuleStep> ruleSteps)
-        {
-            return Task.Run<DmeTask>(() =>
-            {
-                return db.Ado.UseTran<DmeTask>(() =>
-                {
-                    try
-                    {
-                        // 查询步骤前后依赖关系
-                        // 形成链表
-                        IList<DmeRuleStepHop> hops = db.Queryable<DmeRuleStepHop>().Where(rsh => rsh.ModelId == model.Id && rsh.VersionId == modelVersion.Id).OrderBy("STEP_FROM_ID").ToList();
-                        IList<RuleStepLinkedListNode<DmeRuleStep>> rulestepLinkedList = this.GetRuleStepNodeLinkedList(db, model, modelVersion, ruleSteps);
-                        foreach (var item in rulestepLinkedList)
-                        {
-                            // 开始计算步骤
-                            this.RunRuleStepNode(db, task, item);
-                        }
-                        // 完成模型计算
-                        task.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_SUCCESS);
-                        task.LastTime = DateUtil.CurrentTimeMillis;
-                        db.Updateable<DmeTask>(task).ExecuteCommand();
-                        // @TODO 发送模型计算成功的消息
-                        KafkaProducer.Send(nameof(EnumMessageType.TASK), new MessageBody() {
-                            From = "123",
-                            To = "123",
-                            ChannelType = EnumChannelType.P2P,
-                            MessageType = EnumMessageType.TASK,
-                            Payload = $"模型[{task.SysCode}]计算完成，状态[{task.Status}]"
-                        });
-                        return task;
-                    }
-                    catch (Exception ex)
-                    {
-                        // 更改任务执行的状态
-                        if (ex is BusinessException)
-                        {
-                            task.Status = EnumUtil.GetEnumDisplayName(EnumUtil.GetEnumObjByValue<EnumSystemStatusCode>(((BusinessException)ex).Code));
-                        }
-                        else
-                        {
-                            task.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_ERROR);
-                        }
-                        task.LastTime = DateUtil.CurrentTimeMillis;
-                        db.Updateable<DmeTask>(task).ExecuteCommand();
-                        // 添加日志
-                        this.LogService.AddLogAsync(Base.Common.Log.EnumLogType.ENTITY, Base.Common.Log.EnumLogLevel.ERROR, nameof(DmeTask), task.SysCode, "", ex, "", NetAssist.GetLocalHost());
-                        throw ex;
-                    }
-                }).Data;
-            });
-        }
-
+       
         public object CopyModelVersion(string versionCode)
         {
             DmeModelVersion modelVersion = base.Repository.GetDbContext().Queryable<DmeModelVersion>().Where(mv => mv.SysCode == versionCode).Single();
@@ -1112,6 +775,15 @@ namespace Dist.Dme.Service.Impls
                         .UpdateColumns(it => new DmeModelVersion() { Status = 0 })
                         .Where(it => it.ModelId == model.Id).ExecuteCommand();
                     LOG.Info($"共更新[{updateCount}]条版本记录");
+                    // 暂停模型相关的任务
+                    List<DmeTask> tasks = db.Queryable<DmeTask>().Where(t => t.ModelId == model.Id).ToList();
+                    if (tasks?.Count > 0)
+                    {
+                        foreach (var subTask in tasks)
+                        {
+                            DmeQuartzScheduler<TaskRunnerJob>.PauseJob(subTask.SysCode, model.ModelTypeCode);
+                        }
+                    }
                     return true;
                 }).Data;
             });
@@ -1195,6 +867,7 @@ namespace Dist.Dme.Service.Impls
             model.Name = dto.Name;
             model.Remark = dto.Remark;
             model.ModelTypeId = modelType.Id;
+            model.ModelTypeCode = modelType.SysCode;
             base.Db.Updateable<DmeModel>(model).ExecuteCommand();
             return true;
         }

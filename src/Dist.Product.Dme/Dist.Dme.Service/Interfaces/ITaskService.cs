@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using Dist.Dme.Model.DTO;
+using Dist.Dme.Model.Entity;
 
 namespace Dist.Dme.Service.Interfaces
 {
@@ -31,5 +34,16 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="taskCode"></param>
         /// <returns></returns>
         object GetTask(string taskCode);
+        /// <summary>
+        /// 创建任务
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        Task<DmeTask> CreateTaskAsync(NewTaskReqDTO dto);
+        /// <summary>
+        /// 调度任务运行
+        /// </summary>
+        /// <param name="taskCode">任务唯一编码</param>
+        Task RunTaskScheduleAsync(string taskCode);
     }
 }

@@ -26,6 +26,7 @@
     <ProjectReference Include="..\Dist.Dme.HSMessage\Dist.Dme.HSMessage.csproj" />
     <ProjectReference Include="..\Dist.Dme.Model\Dist.Dme.Model.csproj" />
     <ProjectReference Include="..\Dist.Dme.RuleSteps\Dist.Dme.RuleSteps.csproj" />
+    <ProjectReference Include="..\Dist.Dme.Scheduler\Dist.Dme.Scheduler.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 ﻿using Dist.Dme.Base.Common;
 using Dist.Dme.Base.Framework.AlgorithmTypes;
+using Dist.Dme.Base.Framework.Define;
 using Dist.Dme.Base.Framework.Exception;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
@@ -20,7 +21,6 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
     /// <summary>
     /// 算法输入步骤元数据
     /// </summary>
-    [RuleStepTypeAttribute(Name = "AlgorithmInput", DisplayName = "算法输入", Description = "选择已注册的算法，配置算法参数")]
     public class AlgorithmInputStepMeta : BaseRuleStepMeta, IRuleStepMeta
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
@@ -29,18 +29,19 @@ namespace Dist.Dme.Base.Framework.RuleSteps.AlgorithmInput
         /// </summary>
         private string AlgorithmCode { get; set; }
 
-        /// <summary>
-        /// 对外提供访问
-        /// </summary>
-        public object RuleStepType
+        public RuleStepTypeMeta RuleStepType
         {
             get
             {
-                var attribute = (RuleStepTypeAttribute)this.GetType().GetCustomAttributes(typeof(RuleStepTypeAttribute), false).FirstOrDefault();
-                return attribute;
+                return new RuleStepTypeMeta()
+                {
+                    Name = "AlgorithmInput",
+                    Category = "输入",
+                    DisplayName = "算法输入",
+                    Description = "选择已注册的算法，配置算法参数"
+                };
             }
         }
-        public string RuleStepName { get; set; } = "算法输入";
 
         public AlgorithmInputStepMeta(IRepository repository, DmeRuleStep step)
             : base(repository, step)

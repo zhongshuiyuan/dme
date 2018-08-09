@@ -1,4 +1,5 @@
 ﻿using Dist.Dme.Base.Common;
+using Dist.Dme.Base.Framework.Define;
 using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Base.Utils;
 using Dist.Dme.Model.Entity;
@@ -12,21 +13,24 @@ namespace Dist.Dme.RuleSteps.DataSourceInput
     /// <summary>
     /// 数据源步骤类型
     /// </summary>
-    [RuleStepTypeAttribute(Name = "DataSourceInput", DisplayName = "数据源输入", Description = "数据源输入，选择数据源")]
     public class DataSourceInputStepMeta : BaseRuleStepMeta, IRuleStepMeta
     {
         public DataSourceInputStepMeta(IRepository repository, DmeRuleStep step)
           : base(repository, step)
         {
         }
-        public string RuleStepName { get; set; } = "数据源输入";
-        // protected override EnumRuleStepTypes MyRuleStepType => EnumRuleStepTypes.DataSourceInput;
-        public object RuleStepType
+
+        public RuleStepTypeMeta RuleStepType
         {
             get
             {
-                var attribute = (RuleStepTypeAttribute)this.GetType().GetCustomAttributes(typeof(RuleStepTypeAttribute), false).FirstOrDefault();
-                return attribute;
+                return new RuleStepTypeMeta()
+                {
+                    Name = "DataSourceInput",
+                    Category = "输入",
+                    DisplayName = "数据源输入",
+                    Description = "数据源输入"
+                };
             }
         }
         public override IDictionary<string, Property> InParams
@@ -37,7 +41,13 @@ namespace Dist.Dme.RuleSteps.DataSourceInput
             }
         }
 
-        public override IDictionary<string, Property> OutParams => throw new NotImplementedException();
+        public override IDictionary<string, Property> OutParams
+        {
+            get
+            {
+                return base.OutputParameters;
+            }
+        }
 
         /// <summary>
         /// 覆写父类的方法

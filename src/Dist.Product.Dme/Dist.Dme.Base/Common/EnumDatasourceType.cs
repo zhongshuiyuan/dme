@@ -26,6 +26,8 @@ namespace Dist.Dme.Base.Common
         [Description("oracle")]
         ORACLE,
         [Description("mongodb")]
-        MONGODB
+        MONGODB,
+        [Description("dme文件系统，主要存储于分布式文件系统")]
+        DME_FILESYSTEM
     }
 }

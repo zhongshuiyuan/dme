@@ -113,7 +113,7 @@ namespace Dist.Dme.HSMessage.Websocket.Fleck
             });
         }
         /// <summary>
-        /// 踢人
+        /// 剔除连接
         /// </summary>
         /// <param name="nodeKey">节点key</param>
         /// <param name="appId">appId</param>
@@ -159,32 +159,48 @@ namespace Dist.Dme.HSMessage.Websocket.Fleck
             lock (_LOCK_OBJ)
             {
                 // 先判断分布式缓存中是否已经有对应的socket
-                IDictionary<string, HashSet<string>>  nodeSocketMap = ServiceFactory.CacheService.Get<IDictionary<string, HashSet<string>>>(messageAuthKey.AppId);
-                if (nodeSocketMap != null)
+                IDictionary<string, HashSet<string>>  node_agentTypesMap = ServiceFactory.CacheService.Get<IDictionary<string, HashSet<string>>>(messageAuthKey.AppId);
+                if (node_agentTypesMap != null)
                 {
                     // 当前用户id下跟多少个node建立了socket连接
-                    foreach (var node_agents in nodeSocketMap)
+                    bool hasSameAgentType = false;
+                    foreach (var node_agentTypesPair in node_agentTypesMap)
                     {
                         // 排除当前节点
-                        if (Object.Equals(node_agents.Key, GetNodeKey()))
+                        if (Object.Equals(node_agentTypesPair.Key, GetNodeKey()))
                         {
                             continue;
                         }
-                        HashSet<string> agentTypes = node_agents.Value;
-                        foreach (var agentType in agentTypes)
+                        HashSet<string> agentTypes = node_agentTypesPair.Value;
+                        if (agentTypes.Contains(messageAuthKey.AgentType))
                         {
-                            if (Object.Equals(messageAuthKey.AgentType, agentType))
+                            hasSameAgentType = true;
+                            // 说明需要踢掉其它节点同一个设备的socket
+                            // 发消息
+                            KafkaProducer.Send(nameof(EnumMessageType.KICK), JsonConvert.SerializeObject(new KickMessageBody()
                             {
-                                // 说明需要踢掉其它节点同一个设备的socket
-                                // 发消息
-                                KafkaProducer.Send(nameof(EnumMessageType.KICK), JsonConvert.SerializeObject(new KickMessageBody() {
-                                    AppId = messageAuthKey.AppId,
-                                    AgentType = agentType,
-                                    NodeKey = node_agents.Key
-                                }));
-                            }
+                                AppId = messageAuthKey.AppId,
+                                AgentType = messageAuthKey.AgentType,
+                                NodeKey = node_agentTypesPair.Key
+                            }));
                         }
                     }
+                    if (!hasSameAgentType)
+                    {
+                        // 如果其它节点没有相同的设备类型，则把这个设备类型添加到当前节点
+                        node_agentTypesMap[GetNodeKey()].Add(messageAuthKey.AgentType);
+                        // 添加到分布式缓存中
+                        ServiceFactory.CacheService.ReplaceAsync(messageAuthKey.AppId, node_agentTypesMap);
+                    }
+                }
+                else
+                {
+                    // 添加到分布式缓存
+                    node_agentTypesMap = new Dictionary<string, HashSet<string>>
+                    {
+                        [GetNodeKey()] = new HashSet<string>() { messageAuthKey.AgentType }
+                    };
+                    ServiceFactory.CacheService.AddAsync(messageAuthKey.AppId, node_agentTypesMap);
                 }
 
                 IDictionary<string, IWebSocketConnection> agentSocket = null;
@@ -247,6 +263,24 @@ namespace Dist.Dme.HSMessage.Websocket.Fleck
                 //}
                 appId_Agent_SocketsMap[messageAuthKey.AppId].Remove(messageAuthKey.AgentType);
                 appId_Agent_AuthKeyMap[messageAuthKey.AppId].Remove(messageAuthKey.AgentType);
+            }
+            // 删除分布式缓存记录
+            IDictionary<string, HashSet<string>> node_agentTypesMap = ServiceFactory.CacheService.Get<IDictionary<string, HashSet<string>>>(messageAuthKey.AppId);
+            if (node_agentTypesMap != null)
+            {
+                if(node_agentTypesMap.ContainsKey(GetNodeKey()))
+                {
+                    HashSet<string> agentTypes = node_agentTypesMap[GetNodeKey()];
+                    if (agentTypes.Remove(messageAuthKey.AgentType))
+                    {
+                        LOG.Info($"清理缓存appId[{messageAuthKey.AppId}]，agentType[{messageAuthKey.AgentType}]记录");
+                        ServiceFactory.CacheService.ReplaceAsync(messageAuthKey.AppId, node_agentTypesMap);
+                    }
+                    else
+                    {
+                        LOG.Info($"没有找到缓存appId[{messageAuthKey.AppId}]，agentType[{messageAuthKey.AgentType}]记录");
+                    }
+                }
             }
             return true;
         }

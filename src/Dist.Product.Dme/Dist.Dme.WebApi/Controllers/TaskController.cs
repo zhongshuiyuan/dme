@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dist.Dme.Base.Framework;
+using Dist.Dme.Model.DTO;
+using Dist.Dme.Model.Entity;
 using Dist.Dme.Service.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +47,18 @@ namespace Dist.Dme.WebApi.Controllers
         public Result ListTask(int pageIndex, int pageSize)
         {
             return base.Success(this.TaskService.ListTaskPage(pageIndex, pageSize));
+        }
+        /// <summary>
+        /// 创建任务
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("v1")]
+        public async Task<Result> CreateTask([FromBody] NewTaskReqDTO dto)
+        {
+            DmeTask task = await this.TaskService.CreateTaskAsync(dto);
+            return base.Success(task, "任务已经创建完毕......");
         }
         /// <summary>
         /// 获取任务指定步骤或所有步骤的计算结果

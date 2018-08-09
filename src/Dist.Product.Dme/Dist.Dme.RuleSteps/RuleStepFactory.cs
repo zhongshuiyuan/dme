@@ -23,7 +23,6 @@ namespace Dist.Dme.RuleSteps
         private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 获取规则步骤数据操作类
-        /// @TODO 这一块需要独立到配置文件去，否则不便于二次开发
         /// </summary>
         /// <param name="stepTypeCode">步骤类型唯一编码</param>
         /// <param name="repository"></param>
