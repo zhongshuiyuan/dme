@@ -1,8 +1,10 @@
-﻿using Dist.Dme.Base.Framework.Interfaces;
+﻿using Dist.Dme.Base.DataSource.Define;
+using Dist.Dme.Base.Framework.Interfaces;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Text;
 
 namespace Dist.Dme.Service.Interfaces
@@ -60,6 +62,7 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="port">端口</param>
         /// <returns></returns>
         IList<string> ListMongoDataBase(string host, int port);
+     
         /// <summary>
         /// 获取mongo指定数据库下的集合类
         /// </summary>
@@ -74,5 +77,12 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="dataBase"></param>
         /// <returns></returns>
         IList<string> ListMongoCollection(string host, int port, string dataBase);
+        /// <summary>
+        /// 添加dme文件系统数据源
+        /// </summary>
+        /// <param name="name">名称</param>
+        /// <param name="metas">多文件的元数据</param>
+        /// <returns></returns>
+        object AddDmeFileSystemSource(string name, IList<DmeFileSystemMeta> metas);
     }
 }

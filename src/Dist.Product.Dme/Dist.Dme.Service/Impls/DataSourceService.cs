@@ -191,5 +191,24 @@ namespace Dist.Dme.Service.Impls
             string connectionString = $"mongodb://{host}:{port}";
             return MongodbManager<object>.ListDataBases(connectionString);
         }
+        public object AddDmeFileSystemSource(string name, IList<DmeFileSystemMeta> metas)
+        {
+            DmeDataSource dmeDataSource = new DmeDataSource
+            {
+                SysCode = GuidUtil.NewGuid(),
+                Name = name,
+                Type = nameof(EnumDataSourceType.DME_FILESYSTEM),
+                CreateTime = DateUtil.CurrentTimeMillis,
+                Remark = "dme文件系统来源"
+            };
+            if (metas?.Count > 0)
+            {
+                dmeDataSource.Connection = JsonConvert.SerializeObject(metas);
+            }
+            
+            Repository.GetDbContext().Insertable<DmeDataSource>(dmeDataSource).ExecuteCommandIdentityIntoEntity();
+
+            return dmeDataSource;
+        }
     }
 }

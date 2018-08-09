@@ -16,7 +16,6 @@ using MongoDB.Driver.GridFS;
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace Dist.Dme.WebApi.Controllers
@@ -288,16 +287,9 @@ namespace Dist.Dme.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("v1/img/{modelVersionCode}")]
-        public Result UploadModelImg(string modelVersionCode, IFormFile file)
+        public Result UploadModelImg(string modelVersionCode, [FromForm]IFormFile file)
         {
-            String baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            string uploadFolderPath = baseDir + GlobalSystemConfig.DIR_TEMP;
-            //如果路径不存在，创建路径
-            if (!Directory.Exists(uploadFolderPath))
-            {
-                Directory.CreateDirectory(uploadFolderPath);
-            }
-            if (file.Length > 0)
+            if (file?.Length > 0)
             {
                 string suffix = file.FileName.Substring(file.FileName.LastIndexOf("."));
                 string localFileName = GuidUtil.NewGuid() + suffix;
@@ -320,7 +312,7 @@ namespace Dist.Dme.WebApi.Controllers
                     }
                 }
             }
-            return base.Fail("上传失败，请管理员查看详细日志");
+            return base.Fail("上传失败，没有获取到图片数据");
         }
         /// <summary>
         /// 获取模型图片

@@ -26,13 +26,9 @@ namespace Dist.Dme.WebApi.Controllers
         private static Logger LOG = LogManager.GetCurrentClassLogger();
 
         public IDataSourceService DataSourceService { get; private set; }
-        public IMongoDatabase MongoDatabase { get; private set; }
-        public MongodbHost MongodbHost { get; private set; }
-        public DataSourceController(IDataSourceService dataSourceService, IMongoDatabase mongoDatabase, MongodbHost mongodbHost)
+        public DataSourceController(IDataSourceService dataSourceService)
         {
             this.DataSourceService = dataSourceService;
-            this.MongoDatabase = mongoDatabase;
-            this.MongodbHost = mongodbHost;
         }
         /// <summary>
         /// 获取所有数据源类型
