@@ -248,8 +248,12 @@ namespace Dist.Dme.Service.Impls
                   };
                   // 模型类型
                   DmeModelType modelType = db.Queryable<DmeModelType>().Single(mt => mt.SysCode == dto.TypeCode);
-                  model.ModelTypeId = modelType.Id;
-                  model.ModelTypeCode = modelType.SysCode;
+                    if (modelType != null)
+                    {
+                        model.ModelTypeId = modelType.Id;
+                        model.ModelTypeCode = modelType.SysCode;
+                    }
+              
                   model = db.Insertable<DmeModel>(model).ExecuteReturnEntity();
                   if (null == model)
                   {
@@ -356,7 +360,7 @@ namespace Dist.Dme.Service.Impls
                 string assemblyPath = Path.Combine(baseDir, ruleStepPluginRegisterDTO.Assembly);
                 Assembly assembly = Assembly.LoadFile(assemblyPath);
                 IRuleStepData ruleStepData = (IRuleStepData)assembly.CreateInstance(ruleStepPluginRegisterDTO.ClassId, true, BindingFlags.CreateInstance, null
-                    , new object[] { Repository, -1, step }, null, null);
+                    , new object[] { Repository, null, step }, null, null);
                 if (null == ruleStepData)
                 {
                     LOG.Warn($"无法创建步骤实体[{ruleStepPluginRegisterDTO.ClassId}]");

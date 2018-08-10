@@ -11,18 +11,18 @@ namespace Dist.Dme.WebApi.Controllers
     /// 数据源服务
     /// </summary>
     [Route("api/caches")]
-    public class CacheController : BaseController
+    public class CacheController : CommonController
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
-        public ICacheService CacheService { get; private set; }
+       
         /// <summary>
         /// 自动注入（DI）
         /// </summary>
         /// <param name="cacheService"></param>
-        public CacheController(ICacheService cacheService)
-        {
-            this.CacheService = cacheService;
-        }
+        //public CacheController(ICacheService cacheService)
+        //{
+        //    this.CacheService = cacheService;
+        //}
 
         /// <summary>
         /// 添加缓存
@@ -37,7 +37,7 @@ namespace Dist.Dme.WebApi.Controllers
             string key = Convert.ToString(keyValuePair.key);
             object value = keyValuePair.value;
             LOG.Info($"添加缓存，key:{key}, value:{value}");
-            return base.Success(this.CacheService.Add(key, value));
+            return base.Success(base.cacheService.Add(key, value));
         }
         /// <summary>
         /// 获取缓存
@@ -48,7 +48,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/{key}")]
         public Result GetCache(string key)
         {
-            return base.Success(this.CacheService.Get<object>(key));
+            return base.Success(base.cacheService.Get<object>(key));
         }
     }
 }

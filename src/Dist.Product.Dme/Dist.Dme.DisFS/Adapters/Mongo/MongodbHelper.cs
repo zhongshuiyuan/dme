@@ -230,6 +230,28 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
                 throw ex;
             }
         }
+        public static async Task<UpdateResult> UpdateAsync(IMongoDatabase database, T t, string id)
+        {
+            try
+            {
+                var client = MongodbManager<T>.GetMongodbCollection(database);
+                //修改条件
+                FilterDefinition<T> filter = Builders<T>.Filter.Eq("_id", new ObjectId(id));
+                //要修改的字段
+                var list = new List<UpdateDefinition<T>>();
+                foreach (var item in t.GetType().GetProperties())
+                {
+                    if (item.Name.ToLower() == "id") continue;
+                    list.Add(Builders<T>.Update.Set(item.Name, item.GetValue(t)));
+                }
+                var updatefilter = Builders<T>.Update.Combine(list);
+                return await client.UpdateOneAsync(filter, updatefilter);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
 
         #region UpdateManay 批量修改数据

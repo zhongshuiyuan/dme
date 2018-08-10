@@ -70,6 +70,7 @@ namespace Dist.Dme.HSMessage.MQ.Kafka
                     // 任务消息，发给指定人
                     MessageBody messageBody = JsonConvert.DeserializeObject<MessageBody>(msg.Value);
                     // @TODO
+                    WebsocketFleckServer.SendMsgAsync(messageBody.To, messageBody);
                 }
                 else if (Object.Equals(nameof(EnumMessageType.KICK), msg.Topic))
                 {

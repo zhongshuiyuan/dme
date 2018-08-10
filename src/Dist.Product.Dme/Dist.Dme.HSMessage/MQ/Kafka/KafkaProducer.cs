@@ -68,9 +68,14 @@ namespace Dist.Dme.HSMessage.MQ.Kafka
             public static Task<Boolean> Send(string topic, MessageBody message)
            {
              return Task.Run(() => {
+                 if (string.IsNullOrWhiteSpace(message.SysCode))
+                 {
+                     message.SysCode = GuidUtil.NewGuid();
+                 }
                  // 发送之前先持久化
                  MessageColl messageCollection = new MessageColl
                  {
+                     SysCode = message.SysCode,
                      From = message.From,
                      To = message.To,
                      ChannelType = (int)message.ChannelType,
@@ -80,10 +85,7 @@ namespace Dist.Dme.HSMessage.MQ.Kafka
                      Delivered = (int)EnumDeliverType.UNDELIVERED,
                      Read = (int)EnumReadType.UNREAD
                  };
-                 if(string.IsNullOrWhiteSpace(messageCollection.SysCode))
-                 {
-                     messageCollection.SysCode = GuidUtil.NewGuid();
-                 }
+
                  MongodbHelper<MessageColl>.Add(ServiceFactory.MongoDatabase, messageCollection);
 
                  var dr = producer.ProduceAsync(topic, null, JsonConvert.SerializeObject(message));

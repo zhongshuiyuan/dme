@@ -35,9 +35,10 @@ namespace Dist.Dme.Service.Impls
         /// 自动注入参数
         /// </summary>
         /// <param name="repository"></param>
-        public TaskService(IRepository repository)
+        public TaskService(IRepository repository, ILogService logService)
         {
             base.Repository = repository;
+            base.LogService = logService;
         }
         public object ListTaskPage(int pageIndex, int pageSize)
         {
@@ -171,7 +172,7 @@ namespace Dist.Dme.Service.Impls
                     LOG.Info($"停止任务[{taskCode}]");
                     task.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_STOP);
                     task.LastTime = DateUtil.CurrentTimeMillis;
-                    db.Updateable<DmeTask>(task).UpdateColumns(t => new { t.Status, task.LastTime }).ExecuteCommand();
+                    db.Updateable<DmeTask>(task).UpdateColumns(t => new { task.Status, task.LastTime }).ExecuteCommand();
                     DmeQuartzScheduler<TaskRunnerJob>.PauseJob(task.SysCode, model.ModelTypeCode);
                     break;
                 case 1:
@@ -179,7 +180,7 @@ namespace Dist.Dme.Service.Impls
                     LOG.Info($"重启任务[{taskCode}]");
                     task.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_RUNNING);
                     task.LastTime = DateUtil.CurrentTimeMillis;
-                    db.Updateable<DmeTask>(task).UpdateColumns(t => new { t.Status, task.LastTime }).ExecuteCommand();
+                    db.Updateable<DmeTask>(task).UpdateColumns(t => new { task.Status, task.LastTime }).ExecuteCommand();
                     DmeQuartzScheduler<TaskRunnerJob>.ResumeJob(task.SysCode, model.ModelTypeCode);
                     break;
                 case -1:
@@ -243,7 +244,7 @@ namespace Dist.Dme.Service.Impls
                 {
                     SysCode = GuidUtil.NewGuid(),
                     CreateTime = DateUtil.CurrentTimeMillis,
-                    Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_RUNNING),
+                    Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_WAITTING),
                     ModelId = model.Id,
                     VersionId = modelVersion.Id,
                     Remark = dto.Remark,
@@ -489,9 +490,9 @@ namespace Dist.Dme.Service.Impls
             dmeTaskRuleStep = db.Queryable<DmeTaskRuleStep>().Single(tr => tr.TaskId == task.Id && tr.RuleStepId == ruleStep.Id);
             return dmeTaskRuleStep;
         }
+
         public async Task RunTaskScheduleAsync(string taskCode)
         {
-            // @TODO 运行任务
             var db = Repository.GetDbContext();
             DmeTask task = db.Queryable<DmeTask>().Single(t => t.SysCode == taskCode);
             if (null == task)
@@ -522,6 +523,7 @@ namespace Dist.Dme.Service.Impls
                 // 清理掉任务之前的过程结果
                 // 包括DME_TASK_RESULT、DME_TASK_RULESTEP和mongo TaskResultColl
                 db.Ado.UseTran(() => {
+
                     int count = db.Deleteable<DmeTaskRuleStep>().Where(trs => trs.TaskId == task.Id).ExecuteCommand();
                     LOG.Info($"删除任务关联的步骤记录[{count}]条");
                     db.Deleteable<DmeTaskResult>().Where(tr => tr.TaskId == task.Id).ExecuteCommand();
@@ -530,6 +532,18 @@ namespace Dist.Dme.Service.Impls
                         Builders<TaskResultColl>.Filter.Eq("TaskCode", task.SysCode));
                     DeleteResult deleteResult = MongodbHelper<TaskResultColl>.DeleteMany(ServiceFactory.MongoDatabase, filter);
                     LOG.Info($"删除mongo记录[{deleteResult.DeletedCount}]条");
+
+                    LOG.Info($"清理缓存计算数据");
+                    IList<string> cacheKeys = new List<string>();
+                    foreach (var item in ruleSteps)
+                    {
+                        cacheKeys.Add(HashUtil.Hash_2_MD5_32($"{task.SysCode}_{item.SysCode}"));
+                    }
+                    ServiceFactory.CacheService.RemoveAllAsync(cacheKeys);
+
+                    // 修改任务状态为running
+                    task.Status = EnumUtil.GetEnumDisplayName(EnumSystemStatusCode.DME_RUNNING);
+                    db.Updateable<DmeTask>(task).UpdateColumns(t => t.Status).ExecuteCommand();
                 });
                 // 此时不阻塞，返回类型为Task，为了能捕获到线程异常信息
                 await RunTaskAsyncEx(db, model, modelVersion, task, ruleSteps);

@@ -11,18 +11,17 @@ namespace Dist.Dme.WebApi.Controllers
     /// 版本服务
     /// </summary>
     [Route("api/versions")]
-    public class VersionController : BaseController
+    public class VersionController : CommonController
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
-        public IVersionService VersionService { get; private set; }
         /// <summary>
         /// 自动注入（DI）
         /// </summary>
         /// <param name="versionService"></param>
-        public VersionController(IVersionService versionService)
-        {
-            this.VersionService = versionService;
-        }
+        //public VersionController(IVersionService versionService)
+        //{
+        //    this.VersionService = versionService;
+        //}
 
         /// <summary>
         /// 获取当前版本信息
@@ -32,7 +31,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/")]
         public Result GetCurrentVersion()
         {
-            return base.Success(this.VersionService.GetCurrentVersion());
+            return base.Success(base.versionService.GetCurrentVersion());
         }
         /// <summary>
         /// 更新版本号
@@ -43,7 +42,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/")]
         public Result UpdateVersion([FromBody]VersionDTO dto)
         {
-            return base.Success(this.VersionService.UpdateVersion(dto));
+            return base.Success(base.versionService.UpdateVersion(dto));
         }
     }
 }

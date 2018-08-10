@@ -21,15 +21,14 @@ namespace Dist.Dme.WebApi.Controllers
     /// 数据源服务
     /// </summary>
     [Route("api/datasources")]
-    public class DataSourceController : BaseController
+    public class DataSourceController : CommonController
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
 
-        public IDataSourceService DataSourceService { get; private set; }
-        public DataSourceController(IDataSourceService dataSourceService)
-        {
-            this.DataSourceService = dataSourceService;
-        }
+        //public DataSourceController(IDataSourceService dataSourceService)
+        //{
+        //    this.DataSourceService = dataSourceService;
+        //}
         /// <summary>
         /// 获取所有数据源类型
         /// </summary>
@@ -41,7 +40,7 @@ namespace Dist.Dme.WebApi.Controllers
         public Result ListDatabaseTypes()
         {
             Register register = new Register();
-            return base.Success(DataSourceService.ListDataSourceTypes());
+            return base.Success(base.dataSourceService.ListDataSourceTypes());
         }
         /// <summary>
         /// 获取具体某个数据源类型
@@ -52,7 +51,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/types/{id}")]
         public Result GetDatabaseType(int id)
         {
-            return base.Success(DataSourceService.GetDatabaseType(id));
+            return base.Success(base.dataSourceService.GetDatabaseType(id));
         }
         //[HttpGet]
         //[Route("v1/data")]
@@ -69,7 +68,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1")]
         public Result ListRegisteredDataSources()
         {
-            return base.Success(this.DataSourceService.ListRegisteredDataSources());
+            return base.Success(base.dataSourceService.ListRegisteredDataSources());
         }
         /// <summary>
         /// 获取数据源连接的元数据信息
@@ -80,7 +79,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("conn/meta/v1/{typeCode}")]
         public Result GetDatasourceConnMeta(string typeCode)
         {
-            return base.Success(this.DataSourceService.GetDatasourceConnMeta(typeCode));
+            return base.Success(base.dataSourceService.GetDatasourceConnMeta(typeCode));
         }
         /// <summary>
         /// 注册数据源
@@ -100,7 +99,7 @@ namespace Dist.Dme.WebApi.Controllers
             {
                 return base.Error($"数据源类型不合法[{dto.Type}]");
             }
-            return base.Success(this.DataSourceService.AddDataSource(dto));
+            return base.Success(base.dataSourceService.AddDataSource(dto));
         }
   
     /// <summary>
@@ -116,7 +115,7 @@ namespace Dist.Dme.WebApi.Controllers
             {
                 return base.Error(ModelState, "验证失败");
             }
-            ValidResult validResult = (ValidResult)DataSourceService.CheckConnectionValid(dto);
+            ValidResult validResult = (ValidResult)dataSourceService.CheckConnectionValid(dto);
             if(!validResult.IsValid)
             {
                 if (validResult.Ex != null)
@@ -140,7 +139,7 @@ namespace Dist.Dme.WebApi.Controllers
             {
                 throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, "数据源编码不能为空");
             }
-            return base.Success(this.DataSourceService.ListMongoDataBase(dataSourceCode));
+            return base.Success(base.dataSourceService.ListMongoDataBase(dataSourceCode));
         }
         /// <summary>
         /// 获取mongo下的所有database
@@ -160,7 +159,7 @@ namespace Dist.Dme.WebApi.Controllers
             {
                 throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, "host不合法");
             }
-            return base.Success(this.DataSourceService.ListMongoDataBase(host, port));
+            return base.Success(base.dataSourceService.ListMongoDataBase(host, port));
         }
         /// <summary>
         /// 获取mongo下的指定数据库的集合类
@@ -175,7 +174,7 @@ namespace Dist.Dme.WebApi.Controllers
             {
                 throw new BusinessException((int)EnumSystemStatusCode.DME_FAIL, "数据源编码不能为空");
             }
-            return base.Success(this.DataSourceService.ListMongoCollection(dataSourceCode));
+            return base.Success(base.dataSourceService.ListMongoCollection(dataSourceCode));
         }
         /// <summary>
         /// 获取mongo下的指定数据库所有collections
@@ -196,7 +195,7 @@ namespace Dist.Dme.WebApi.Controllers
             {
                 throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, "host不合法");
             }
-            return base.Success(this.DataSourceService.ListMongoCollection(host, port, dataBase));
+            return base.Success(base.dataSourceService.ListMongoCollection(host, port, dataBase));
         }
     }
 }

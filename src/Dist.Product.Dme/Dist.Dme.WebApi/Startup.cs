@@ -15,6 +15,7 @@ using Dist.Dme.Scheduler;
 using Dist.Dme.Service.Impls;
 using Dist.Dme.Service.Interfaces;
 using Dist.Dme.Service.Scheduler;
+using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
@@ -160,12 +161,15 @@ namespace Dist.Dme.WebApi
             if (schedulerSection != null)
             {
                 var values = schedulerSection.GetChildren()
-                .Select(item => new KeyValuePair<string, string>(item.Key, item.Value))
+                .Select(item => new KeyValuePair<string, string>(item.Key,
+                item.Value.Contains("$")? Configuration.GetValue<string>(item.Value.Replace("${", "").Replace("}", "")) : item.Value))
                 .ToDictionary(x => x.Key, x => x.Value);
 
                 DmeQuartzScheduler<TaskRunnerJob>.SetSchedulerProperties(DataUtil.ToNameValueCollection(values));
+                DmeQuartzScheduler<TaskRunnerJob>.Start().GetAwaiter();
             }
-
+         
+            // DemoScheduler.RunProOracle().Wait();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info
@@ -201,6 +205,8 @@ namespace Dist.Dme.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            ServiceLocator.Instance = app.ApplicationServices;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

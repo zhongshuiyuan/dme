@@ -155,6 +155,28 @@ namespace Dist.Dme.Scheduler
                                          .Build();
         }
         /// <summary>
+        /// 开启scheduler
+        /// </summary>
+        /// <returns></returns>
+        public static async Task Start()
+        {
+            CheckProperties();
+
+            IScheduler scheduler = await _schedulerFactory.GetScheduler();
+            await scheduler.Start();
+        }
+        /// <summary>
+        /// 关闭scheduler
+        /// </summary>
+        /// <returns></returns>
+        public static async Task Shutdown()
+        {
+            CheckProperties();
+
+            IScheduler scheduler = await _schedulerFactory.GetScheduler();
+            await scheduler.Shutdown();
+        }
+        /// <summary>
         /// 新建job，以cronExpression调度
         /// </summary>
         /// <param name="code">任务编码</param>

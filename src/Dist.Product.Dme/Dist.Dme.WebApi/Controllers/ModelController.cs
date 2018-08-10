@@ -7,7 +7,6 @@ using Dist.Dme.DisFS.Adapters.Mongo;
 using Dist.Dme.Extensions;
 using Dist.Dme.Model.DTO;
 using Dist.Dme.Model.Entity;
-using Dist.Dme.Service.Interfaces;
 using Dist.Dme.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,17 +23,17 @@ namespace Dist.Dme.WebApi.Controllers
     /// 模型服务
     /// </summary>
     [Route("api/models")]
-    public class ModelController : BaseController
+    public class ModelController : CommonController
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 模型服务
         /// </summary>
-        public IModelService ModelService { get; private set; }
-        public ModelController(IModelService modelService)
-        {
-            this.ModelService = modelService;
-        }
+        
+        //public ModelController(IModelService modelService)
+        //{
+        //    this.ModelService = modelService;
+        //}
         /// <summary>
         /// 添加模型类型
         /// </summary>
@@ -44,7 +43,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/types")]
         public async Task<Result> AddModelTypesAsync([FromBody]string[] types)
         {
-            return  base.Success(await ModelService.AddModelTypesAsync(types));
+            return  base.Success(await base.modelService.AddModelTypesAsync(types));
         }
         /// <summary>
         /// 更新模型类型
@@ -55,7 +54,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/types")]
         public Result UpdateModelTypes([FromBody] ModelTypeUpdateDTO dto )
         {
-            return base.Success(ModelService.UpdateModelTypes(dto));
+            return base.Success(base.modelService.UpdateModelTypes(dto));
         }
         /// <summary>
         ///  获取模型类型列表
@@ -71,7 +70,7 @@ namespace Dist.Dme.WebApi.Controllers
             {
                 throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"输入参数orderType值[{orderType}]有误，不允许小于0或大于1");
             }
-            return base.Success(ModelService.ListModelTypes(orderFieldName, orderType));
+            return base.Success(base.modelService.ListModelTypes(orderFieldName, orderType));
         }
         /// <summary>
         /// 获取所有模型
@@ -87,7 +86,7 @@ namespace Dist.Dme.WebApi.Controllers
             [FromQuery(Name = "ispublish")] int isPublish = 1,
             [FromQuery(Name = "status")] int status = 1)
         {
-            return base.Success(ModelService.ListModels(1 == detail, isPublish, EnumUtil.GetEnumObjByValue<EnumModelStatus>(status)));
+            return base.Success(modelService.ListModels(1 == detail, isPublish, EnumUtil.GetEnumObjByValue<EnumModelStatus>(status)));
         }
         /// <summary>
         /// 根据模型唯一编码获取模型
@@ -99,11 +98,11 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/{code}")]
         public Result GetModel(string code, [FromQuery(Name = "detail")] int detail =0)
         {
-            if (!this.ModelService.IsBizGuid(code))
+            if (!this.modelService.IsBizGuid(code))
             {
                 return base.Fail($"业务编码格式不正确[{code}]");
             }
-            return base.Success(ModelService.GetModelMetadata(code, 1 == detail));
+            return base.Success(base.modelService.GetModelMetadata(code, 1 == detail));
         }
         /// <summary>
         /// 获取所有的规则步骤类型
@@ -113,91 +112,8 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("rulesteptypes/v1")]
         public Result ListRuleStepTypes()
         {
-            return base.Success(this.ModelService.ListRuleStepTypes());
+            return base.Success(base.modelService.ListRuleStepTypes());
         }
-        /// <summary>
-        /// 获取用地冲突分析元数据信息
-        /// </summary>
-        /// <returns></returns>
-        //[HttpGet]
-        //[Route("landconflict/v1/metadata")]
-        //public Result GetLandConflictMetadata()
-        //{
-        //    return base.Success(ModelService.GetLandConflictMetadata());
-        //}
-        /// <summary>
-        /// 用地冲突分析计算
-        /// </summary>
-        /// <param name="dto">参数输入</param>
-        /// <returns></returns>
-        //[HttpPost]
-        //[Route("landconflict/v1/execute")]
-        //public Result LandConflictExecute([FromBody][Required]LandConflictReqDTO dto)
-        //{
-            //dto.Parameters.Add("FeatureClass_Source_First", @"D:\work\data\zgkg.mdb&BZY_YDGH_PY");
-            //dto.Parameters.Add("FeatureClass_Source_Second", @"D:\work\data\zgkg.mdb&BKY_YDGH_PY");
-            //dto.Parameters.Add("Yddm_Second", "YDDM");
-            //dto.Parameters.Add("Yddm_First", "YDDM");
-
-            // return (Result)ModelService.LandConflictExecute(dto.Parameters);
-        //    return null;
-        //}
-        /// <summary>
-        /// 叠加分析计算
-        /// </summary>
-        /// <param name="dto">参数输入</param>
-        /// <returns></returns>
-        //[HttpPost]
-        //[Route("overlay/v1/execute")]
-        //public Result OverlayExecute([FromBody][Required]OverlayReqDTO dto)
-        //{
-            //if (null == dto)
-            //{
-            //    dto = new OverlayReqDTO();
-            //}
-            //JObject obj = new JObject
-            //{
-            //    { "Name", "TZFAFW" }
-            //};
-            //JObject sourceObj = new JObject();
-            //obj.Add("Source", sourceObj);
-            //sourceObj.Add("SysCode", "30143df1123449a896429854899f37f3");
-            //sourceObj.Add("IsLocal", 1);
-            //sourceObj.Add("Type", "PERSONAL_GEODATABASE");
-            //sourceObj.Add("Connection", @"{""Path"":""D:/work/dist/x_项目管理/f_福建省/x_厦门/02数据/控规调整样例.mdb""}");
-            //dto.Parameters.Add("SourceFeatureClass", obj.ToString());
-            //// dto.Parameters.Add("SourceFeatureClass", "{\"Name\":\"TZFAFW\",\"Source\":{\"SysCode\":\"30143df1123449a896429854899f37f3\",\"IsLocal\":1,\"Type\":\"PERSONAL_GEODATABASE\",\"Connection\":\"{\"Path\":\"D:\\work\\dist\\x_项目管理\f_福建省\\x_厦门\\02数据\\控规调整样例.mdb\"}\"}}");
-
-            //obj = new JObject
-            //{
-            //    { "Name", "STKZXFW_YDFW" }
-            //};
-            //sourceObj = new JObject();
-            //obj.Add("Source", sourceObj);
-            //sourceObj.Add("SysCode", "791b05180d8c4e2186f7684ecf557457");
-            //sourceObj.Add("IsLocal", 0);
-            //sourceObj.Add("Type", "ENTERPRISE_GEODATABASE");
-            //JObject connObj = new JObject
-            //{
-            //    { "name", "厦门空间库" },
-            //    { "server", "192.168.1.166" },
-            //    { "database", "orcl" },
-            //    { "port", 1521},
-            //    { "username", "xmgis"},
-            //    { "encrypted", 0},
-            //    { "password", "xmghj2014"}
-            //};
-            //sourceObj.Add("Connection", connObj.ToString());
-
-            ////sourceObj.Add("Connection", "{\"path\":\"D:\\work\\dist\\x_项目管理\\f_福建省\\x_厦门\\02数据\\控规调整样例.mdb\"}");
-            //dto.Parameters.Add("TargetFeatureClass", obj.ToString());
-            //// dto.Parameters.Add("TargetFeatureClass", "{\"Name\":\"STKZXFW_YDFW\", \"Source\":{\"SysCode\":\"30143df1123449a896429854899f37f3\",\"IsLocal\":1,\"Type\":\"PERSONAL_GEODATABASE\",\"Connection\":\"{\"name\":\"厦门空间库\",\"server\":\"192.168.200.38\",\"database\":\"orcl\",\"port\":1521,\"username\":\"xmgis\",\"encrypted\":0,\"password\":\"xmghj2014\"}\"}}");
-
-            //dto.Parameters.Add("AnalysisType", 0);
-            //dto.Parameters.Add("IsClearTemp", true);
-            //return base.Success(ModelService.OverlayExecute(dto.Parameters));
-        //    return null;
-        //}
         /// <summary>
         /// 更新模型基本信息
         /// </summary>
@@ -207,7 +123,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/basicinfo")]
         public Result UpdateModelBasicInfo([FromBody]ModelBasicInfoUpdateDTO dto)
         {
-            return base.Success(this.ModelService.UpdateModelBasicInfo(dto));
+            return base.Success(base.modelService.UpdateModelBasicInfo(dto));
         }
         /// <summary>
         /// 更新模型版本信息
@@ -218,7 +134,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/version")]
         public Result UpdateModelVersion([FromBody]ModelVersionUpdateDTO dto)
         {
-            return base.Success(this.ModelService.UpdateModelVersion(dto));
+            return base.Success(base.modelService.UpdateModelVersion(dto));
         }
         /// <summary>
         /// 模型注册
@@ -227,15 +143,15 @@ namespace Dist.Dme.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("register/v1")]
-        public Result NewModelSimple([FromBody]ModelAddReqDTO dto)
+        public Result RegisterModelSimple([FromBody]ModelAddReqDTO dto)
         {
-            if (!string.IsNullOrEmpty(dto.SysCode) && !this.ModelService.IsBizGuid(dto.SysCode))
+            if (!string.IsNullOrEmpty(dto.SysCode) && !this.modelService.IsBizGuid(dto.SysCode))
             {
                 return base.Fail($"业务编码格式不正确[{dto.SysCode}]");
             }
             if (ModelState.IsValid)
             {
-                return base.Success(ModelService.AddModel(dto));
+                return base.Success(base.modelService.AddModel(dto));
             }
             // 参数验证失败
             return base.Error(ModelState);
@@ -249,7 +165,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/copy/{modelVersionCode}")]
         public Result CopyFromModelVersion(string modelVersionCode)
         {
-            return base.Success(this.ModelService.CopyFromModelVersion(modelVersionCode));
+            return base.Success(base.modelService.CopyFromModelVersion(modelVersionCode));
         }
         /// <summary>
         /// 保存整个模型的规则步骤信息
@@ -264,7 +180,7 @@ namespace Dist.Dme.WebApi.Controllers
             {
                 return base.Error(ModelState);
             }
-            return base.Success(this.ModelService.SaveRuleStepInfos(info));
+            return base.Success(base.modelService.SaveRuleStepInfos(info));
         }
         
         /// <summary>
@@ -277,7 +193,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("publish/v1/{modelCode}/{isPublish}")]
         public Result PublishModel(string modelCode, int isPublish)
         {
-            return base.Success(this.ModelService.PublishModel(modelCode, isPublish));
+            return base.Success(base.modelService.PublishModel(modelCode, isPublish));
         }
         /// <summary>
         /// 上传模型图片
@@ -300,7 +216,7 @@ namespace Dist.Dme.WebApi.Controllers
                 ObjectId objectId = MongodbHelper<object>.UploadFileFromStream(ServiceFactory.MongoDatabase, localFileName, file.OpenReadStream(), options);
                 try
                 {
-                    return base.Success(this.ModelService.AddModelImg(modelVersionCode, file.FileName, suffix, file.ContentType, objectId.ToString()));
+                    return base.Success(base.modelService.AddModelImg(modelVersionCode, file.FileName, suffix, file.ContentType, objectId.ToString()));
                 }
                 catch (Exception ex)
                 {
@@ -328,7 +244,7 @@ namespace Dist.Dme.WebApi.Controllers
             string contentType = "image/jpeg";
             byte[] bytes = null;
 
-            DmeModelImg dmeModelImg = this.ModelService.GetModelImg(modelVersionCode);
+            DmeModelImg dmeModelImg = base.modelService.GetModelImg(modelVersionCode);
             if (null == dmeModelImg)
             {
                 LOG.Warn($"模型版本[{modelVersionCode}]还没设置图片，使用默认图片");
@@ -361,7 +277,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/{modelCode}")]
         public async Task<Result> DeleteModelAsync(string modelCode)
         {
-            Boolean result = await ModelService.DeleteModelAsync(modelCode);
+            Boolean result = await modelService.DeleteModelAsync(modelCode);
             if (result)
             {
                 return base.Success(result);
@@ -377,7 +293,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/restore/{modelCode}")]
         public async Task<Result> RestoreModelAsync(string modelCode)
         {
-            Boolean result = await ModelService.RestoreModelAsync(modelCode);
+            Boolean result = await base.modelService.RestoreModelAsync(modelCode);
             if (result)
             {
                 return base.Success(result);

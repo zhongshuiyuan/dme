@@ -19,14 +19,10 @@ namespace Dist.Dme.WebApi.Controllers
     /// 文件控制器
     /// </summary>
     [Route("api/files")]
-    public class FileController : BaseController
+    public class FileController : CommonController
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
-        public IDataSourceService DataSourceService { get; private set; }
-        public FileController(IDataSourceService dataSourceService)
-        {
-            this.DataSourceService = dataSourceService;
-        }
+       
         [HttpPost]
         [Route("v1/filesystem")]
         public Result UploadDmeFileSystem([FromForm][Required] string name, [FromForm]IFormFile[] files)
@@ -45,6 +41,7 @@ namespace Dist.Dme.WebApi.Controllers
                         };
                         ObjectId objectId = MongodbHelper<object>.UploadFileFromStream(ServiceFactory.MongoDatabase, file.FileName, file.OpenReadStream(), options);
                         metas.Add(new DmeFileSystemMeta() {
+                            Name = file.FileName,
                             Suffix = suffix,
                             ContentType = file.ContentType,
                            ObjectId = objectId.ToString()
@@ -57,7 +54,7 @@ namespace Dist.Dme.WebApi.Controllers
                 }
                 try
                 {
-                    return base.Success(this.DataSourceService.AddDmeFileSystemSource(name, metas));
+                    return base.Success(base.dataSourceService.AddDmeFileSystemSource(name, metas));
                 }
                 catch (Exception ex)
                 {

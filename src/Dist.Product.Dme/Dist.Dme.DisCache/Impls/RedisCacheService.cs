@@ -212,7 +212,7 @@ namespace Dist.Dme.DisCache.Impls
         /// <returns></returns>
         public bool Remove(string key)
         {
-            if (key == null)
+            if (string.IsNullOrWhiteSpace(key))
             {
                 throw new ArgumentNullException(nameof(key));
             }
@@ -226,7 +226,11 @@ namespace Dist.Dme.DisCache.Impls
         /// <returns></returns>
         public Task<bool> RemoveAsync(string key)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+            return cache.KeyDeleteAsync(GetKeyForRedis(key));
         }
 
         /// <summary>
@@ -251,7 +255,13 @@ namespace Dist.Dme.DisCache.Impls
         /// <returns></returns>
         public Task RemoveAllAsync(IEnumerable<string> keys)
         {
-            throw new NotImplementedException();
+            if (keys == null)
+            {
+                throw new ArgumentNullException(nameof(keys));
+            }
+           return  Task.Run(() => {
+                keys.ToList().ForEach(item => RemoveAsync(GetKeyForRedis(item)));
+            });
         }
         #endregion
 

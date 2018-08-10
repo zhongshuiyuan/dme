@@ -16,7 +16,7 @@ using NLog;
 namespace Dist.Dme.WebApi.Controllers
 {
     [Route("api/messages")]
-    public class MessageController : BaseController
+    public class MessageController : CommonController
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
         /// <summary>

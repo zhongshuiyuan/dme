@@ -13,6 +13,9 @@ namespace Dist.Dme.Base.Common
         [Description("已停止")]
         [DisplayName("stop")]
         DME_STOP = 1,
+        [Description("等待")]
+        [DisplayName("waitting")]
+        DME_WAITTING = 2,
         /// <summary>
         ///  业务成功状态码 
         /// </summary>

@@ -10,6 +10,10 @@ namespace Dist.Dme.Base.DataSource.Define
     public class DmeFileSystemMeta
     {
         /// <summary>
+        /// 文件名
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
         /// 后缀，带点
         /// </summary>
         public string Suffix { get; set; }

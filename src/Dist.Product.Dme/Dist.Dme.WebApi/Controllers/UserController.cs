@@ -10,18 +10,18 @@ namespace Dist.Dme.WebApi.Controllers
     /// 用户服务
     /// </summary>
     [Route("api/users")]
-    public class UserController : BaseController
+    public class UserController : CommonController
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
-        public IUserService UserService { get; private set; }
+      
         /// <summary>
         /// 自动注入（DI）
         /// </summary>
         /// <param name="userService"></param>
-        public UserController(IUserService userService)
-        {
-            this.UserService = userService;
-        }
+        //public UserController(IUserService userService)
+        //{
+        //    this.UserService = userService;
+        //}
 
         /// <summary>
         /// 获取用户列表
@@ -31,7 +31,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/")]
         public Result ListUsers()
         {
-            return base.Success(this.UserService.ListUsers());
+            return base.Success(base.userService.ListUsers());
         }
     }
 }

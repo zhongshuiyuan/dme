@@ -389,26 +389,69 @@ namespace Dist.Dme.HSMessage.Websocket.Fleck
         /// </summary>
         /// <param name="appId">客户端标识符id，如果为空，则认为是广播模式，发送给所有客户端；否则单点发送</param>
         /// <param name="message">消息内容</param>
-        public static void SendMsgAsync(string appId, string message)
+        public static Task SendMsgAsync(string appId, string message)
         {
-            if (string.IsNullOrWhiteSpace(appId))
-            {
-                Broadcast(message);
-                return;
-            }
-            else
-            {
-                // 发给指定的客户端
-                if (appId_Agent_SocketsMap.ContainsKey(appId))
+            return Task.Run(() => {
+                if (string.IsNullOrWhiteSpace(appId))
                 {
-
+                    Broadcast(message);
                 }
                 else
                 {
-                    LOG.Info($"客户端[{appId}]离线，发送离线消息");
-                    // TODO 保存离线消息
+                    // 发给指定的客户端
+                    if (appId_Agent_SocketsMap.ContainsKey(appId))
+                    {
+                       IDictionary<string, IWebSocketConnection> agentConns = appId_Agent_SocketsMap[appId];
+                        foreach (var item in agentConns)
+                        {
+                            LOG.Info($"给客户端[{item.Key}]发送消息");
+                            item.Value.Send(message).GetAwaiter();
+                        }
+                    }
+                    else
+                    {
+                        LOG.Info($"客户端[{appId}]离线，发送离线消息");
+                        // TODO 保存离线消息
+                    }
                 }
-            }
+            });
+        }
+        public static Task SendMsgAsync(string appId, MessageBody message)
+        {
+            return Task.Run(() => {
+                if (string.IsNullOrWhiteSpace(appId))
+                {
+                    Broadcast(message.Payload);
+                }
+                else
+                {
+                    // 发给指定的客户端
+                    if (appId_Agent_SocketsMap.ContainsKey(appId))
+                    {
+                        IDictionary<string, IWebSocketConnection> agentConns = appId_Agent_SocketsMap[appId];
+                        foreach (var item in agentConns)
+                        {
+                            LOG.Info($"给客户端[{item.Key}]发送消息");
+                            item.Value.Send(message.Payload).GetAwaiter();
+                            // 更改消息的可达标识
+                            //修改条件
+                            var filter = Builders<MessageColl>.Filter.And(
+                             Builders<MessageColl>.Filter.Eq("SysCode", message.SysCode));
+                            List<MessageColl> list = MongodbHelper<MessageColl>.FindList(ServiceFactory.MongoDatabase, filter);
+                            if (list?.Count > 0)
+                            {
+                                list[0].Delivered = (int)EnumDeliverType.DELIVERED;
+                            }
+                            MongodbHelper<MessageColl>.UpdateAsync(ServiceFactory.MongoDatabase, list[0], list[0]._id.ToString()).GetAwaiter();
+                        }
+                    }
+                    else
+                    {
+                        LOG.Info($"客户端[{appId}]离线，发送离线消息");
+                        // TODO 保存离线消息
+                    }
+                }
+            });
         }
         /// <summary>
         /// 关闭与客户端的所有的连接

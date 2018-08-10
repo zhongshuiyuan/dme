@@ -16,15 +16,14 @@ namespace Dist.Dme.WebApi.Controllers
     /// 任务控制器
     /// </summary>
     [Route("api/tasks")]
-    public class TaskController : BaseController
+    public class TaskController : CommonController
     {
         private static Logger LOG = LogManager.GetCurrentClassLogger();
 
-        public ITaskService TaskService { get; private set; }
-        public TaskController(ITaskService taskService)
-        {
-            TaskService = taskService;
-        }
+        //public TaskController(ITaskService taskService)
+        //{
+        //    TaskService = taskService;
+        //}
         /// <summary>
         /// 获取任务
         /// </summary>
@@ -34,7 +33,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/{taskCode}")]
         public Result GetTask(string taskCode)
         {
-            return base.Success(this.TaskService.GetTask(taskCode));
+            return base.Success(base.taskService.GetTask(taskCode));
         }
         /// <summary>
         /// 分页获取任务清单，以创建时间倒序
@@ -46,19 +45,18 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/{pageIndex}/{pageSize}")]
         public Result ListTask(int pageIndex, int pageSize)
         {
-            return base.Success(this.TaskService.ListTaskPage(pageIndex, pageSize));
+            return base.Success(base.taskService.ListTaskPage(pageIndex, pageSize));
         }
         /// <summary>
         /// 创建任务
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         [Route("v1")]
         public async Task<Result> CreateTask([FromBody] NewTaskReqDTO dto)
         {
-            DmeTask task = await this.TaskService.CreateTaskAsync(dto);
-            return base.Success(task, "任务已经创建完毕......");
+            return base.Success(await base.taskService.CreateTaskAsync(dto), "任务已经创建完毕......");
         }
         /// <summary>
         /// 获取任务指定步骤或所有步骤的计算结果
@@ -70,7 +68,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("result/v1/{taskCode}/{ruleStepId}")]
         public Result GetTaskOutput(string taskCode, int ruleStepId)
         {
-            return base.Success(this.TaskService.GetTaskResult(taskCode, ruleStepId));
+            return base.Success(base.taskService.GetTaskResult(taskCode, ruleStepId));
         }
         /// <summary>
         /// 停止任务
@@ -81,7 +79,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/stop/{taskCode}")]
         public Result StopTask(string taskCode)
         {
-            return base.Success(this.TaskService.OperateTask(taskCode, 0));
+            return base.Success(base.taskService.OperateTask(taskCode, 0));
         }
         /// <summary>
         /// 重启任务
@@ -92,7 +90,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/restart/{taskCode}")]
         public Result RestartTask(string taskCode)
         {
-            return base.Success(this.TaskService.OperateTask(taskCode, 1));
+            return base.Success(base.taskService.OperateTask(taskCode, 1));
         }
         /// <summary>
         /// 删除任务
@@ -103,7 +101,7 @@ namespace Dist.Dme.WebApi.Controllers
         [Route("v1/{taskCode}")]
         public Result DeleteTask(string taskCode)
         {
-            return base.Success(this.TaskService.OperateTask(taskCode, -1));
+            return base.Success(base.taskService.OperateTask(taskCode, -1));
         }
     }
 }
