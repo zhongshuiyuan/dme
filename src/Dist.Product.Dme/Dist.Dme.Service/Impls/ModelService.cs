@@ -370,38 +370,7 @@ namespace Dist.Dme.Service.Impls
                 // DmeRuleStepAttribute dmeRuleStepAttribute = null;
                 foreach (var p in properties)
                 {
-                    //if (nameof(EnumValueMetaType.TYPE_FEATURECLASS).Equals(p.DataTypeCode)
-                    //    || nameof(EnumValueMetaType.TYPE_MDB_FEATURECLASS).Equals(p.DataTypeCode)
-                    //    || nameof(EnumValueMetaType.TYPE_SDE_FEATURECLASS).Equals(p.DataTypeCode))
-                    //{
-                    //    attributes[p.Name] = new Property(p.Name, p.Name, EnumValueMetaType.TYPE_UNKNOWN, "{\"name\":\"" + p.Value + "\",\"source\":\"" + p.DataSourceCode + "\"}",
-                    //        null, null, null, 1, 0, 1, p.DataSourceCode, p.IsNeedPrecursor);
-                    //    // 要素类的属性，注意值的存储格式
-                    //    //dmeRuleStepAttribute = new DmeRuleStepAttribute
-                    //    //{
-                    //    //    RuleStepId = step.Id,
-                    //    //    ModelId = model.Id,
-                    //    //    VersionId = version.Id,
-                    //    //    IsNeedPrecursor = p.IsNeedPrecursor,
-                    //    //    AttributeCode = p.Name,
-                    //    //    AttributeValue = "{\"name\":\"" + p.Value + "\",\"source\":\"" + p.DataSourceCode + "\"}"
-                    //    //};
-                    //}
-                    //else
-                    //{
-                    //    //dmeRuleStepAttribute = new DmeRuleStepAttribute
-                    //    //{
-                    //    //    RuleStepId = step.Id,
-                    //    //    ModelId = model.Id,
-                    //    //    VersionId = version.Id,
-                    //    //    IsNeedPrecursor = p.IsNeedPrecursor,
-                    //    //    AttributeCode = p.Name,
-                    //    //    AttributeValue = p.Value
-                    //    //};
-                    //    attributes[p.Name] = new Property(p.Name, p.Name, EnumValueMetaType.TYPE_UNKNOWN, p.Value,
-                    //       null, null, null, 1, 0, 1, p.DataSourceCode, p.IsNeedPrecursor);
-                    //}
-                    EnumValueMetaType enumValueMetaType;
+                    EnumValueMetaType enumValueMetaType = new EnumValueMetaType();
                     if (string.IsNullOrEmpty(p.DataTypeCode))
                     {
                         enumValueMetaType = EnumValueMetaType.TYPE_UNKNOWN;
@@ -411,71 +380,10 @@ namespace Dist.Dme.Service.Impls
                         enumValueMetaType = EnumUtil.GetEnumObjByName<EnumValueMetaType>(p.DataTypeCode);
                     }
                     attributes[p.Name] = new Property(p.Name, p.Name, enumValueMetaType, p.Value,
-                          null, null, null, 1, 0, 1, p.DataSourceCode, p.IsNeedPrecursor);
-                    //if (1 == p.IsNeedPrecursor)
-                    //{
-                    //    dmeRuleStepAttribute.AttributeValue = "${" + p.Value + "}";
-                    //}
-                    // attributes.Add(dmeRuleStepAttribute);
+                          null, null, null, 1, 0, 1, p.DataSourceCode, p.IsNeedPrecursor, p.Type);
                 }
                 ruleStepData.SaveAttributes(attributes);
             }
-
-            // 属性
-            //if (nameof(EnumRuleStepTypes.DataSourceInput).Equals(subStepAdd.StepType.Code))
-            //{
-            //    // 数据源类型的步骤，下面有且仅有一个属性
-            //    DmeRuleStepDataSource dmeRuleStepDataSource = new DmeRuleStepDataSource
-            //    {
-            //        ModelId = model.Id,
-            //        VersionId = version.Id,
-            //        RuleStepId = step.Id
-            //    };
-            //    DmeDataSource dmeDataSource = db.Queryable<DmeDataSource>().Single(ds => ds.SysCode == properties[0].DataSourceCode);
-            //    dmeRuleStepDataSource.DataSourceId = dmeDataSource.Id;
-            //    db.Insertable<DmeRuleStepDataSource>(dmeRuleStepDataSource).ExecuteCommand();
-            //}
-            //else
-            //{
-            //    List<DmeRuleStepAttribute> attributes = new List<DmeRuleStepAttribute>();
-            //    DmeRuleStepAttribute dmeRuleStepAttribute = null;
-            //    foreach (var p in properties)
-            //    {
-            //        if (nameof(EnumValueMetaType.TYPE_FEATURECLASS).Equals(p.DataTypeCode)
-            //            || nameof(EnumValueMetaType.TYPE_MDB_FEATURECLASS).Equals(p.DataTypeCode)
-            //            || nameof(EnumValueMetaType.TYPE_SDE_FEATURECLASS).Equals(p.DataTypeCode))
-            //        {
-            //            // 要素类的属性，注意值的存储格式
-            //            dmeRuleStepAttribute = new DmeRuleStepAttribute
-            //            {
-            //                RuleStepId = step.Id,
-            //                ModelId = model.Id,
-            //                VersionId = version.Id,
-            //                IsNeedPrecursor = p.IsNeedPrecursor,
-            //                AttributeCode = p.Name,
-            //                AttributeValue = "{\"name\":\"" + p.Value + "\",\"source\":\"" + p.DataSourceCode + "\"}"
-            //            };
-            //        }
-            //        else
-            //        {
-            //            dmeRuleStepAttribute = new DmeRuleStepAttribute
-            //            {
-            //                RuleStepId = step.Id,
-            //                ModelId = model.Id,
-            //                VersionId = version.Id,
-            //                IsNeedPrecursor = p.IsNeedPrecursor,
-            //                AttributeCode = p.Name,
-            //                AttributeValue = p.Value
-            //            };
-            //        }
-            //        //if (1 == p.IsNeedPrecursor)
-            //        //{
-            //        //    dmeRuleStepAttribute.AttributeValue = "${" + p.Value + "}";
-            //        //}
-            //        attributes.Add(dmeRuleStepAttribute);
-            //    }
-            //    db.Insertable<DmeRuleStepAttribute>(attributes).ExecuteCommand();
-            //}
         }
 
         /// <summary>

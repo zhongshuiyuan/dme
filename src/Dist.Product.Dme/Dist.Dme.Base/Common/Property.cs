@@ -66,6 +66,10 @@ namespace Dist.Dme.Base.Common
         /// 是否需要前驱依赖
         /// </summary>
         public int IsNeedPrecursor { get; set; } = 0;
+        /// <summary>
+        /// 属性类别。0：一般属性；1：运行时属性
+        /// </summary>
+        public EnumAttributeType Type { get; set; }
 
         /// <summary>
         /// 构造函数
@@ -81,7 +85,10 @@ namespace Dist.Dme.Base.Common
         /// <param name="readOnly">是否只读</param>
         /// <param name="dataSourceCode">数据源编码</param>
         /// <param name="isNeedPrecursor">是否需要前驱依赖，0和1</param>
-        public Property(string name, string alias, EnumValueMetaType dataType, object value = null, object defaultValue = null, string remark = "", object[] valueSet = null, int isVisible = 1, int readOnly = 0, int required = 1, string dataSourceCode = "", int isNeedPrecursor = 0)
+        /// <param name="attributeType">属性类别，枚举：EnumAttributeType：一般属性和运行时属性</param>
+        public Property(string name, string alias, EnumValueMetaType dataType, object value = null, 
+            object defaultValue = null, string remark = "", object[] valueSet = null, int isVisible = 1, int readOnly = 0, 
+            int required = 1, string dataSourceCode = "", int isNeedPrecursor = 0, EnumAttributeType attributeType = EnumAttributeType.NORMAL)
         {
             this.Name = name;
             this.Alias = alias;
@@ -97,6 +104,7 @@ namespace Dist.Dme.Base.Common
             this.Required = required;
             this.DataSourceCode = dataSourceCode;
             this.IsNeedPrecursor = isNeedPrecursor;
+            this.Type = attributeType;
         }
         /// <summary>
         /// 覆写ToString方法

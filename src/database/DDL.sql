@@ -980,10 +980,18 @@ values
    'DME_FILESYSTEM',
    'dme文件系统，主要存储于分布式文件系统');
   commit;
-   
+  
+     -- Add/modify columns 
+alter table DME_RULESTEP_ATTRIBUTE add attribute_type integer default 0;
+-- Add comments to the columns 
+comment on column DME_RULESTEP_ATTRIBUTE.attribute_type
+  is '属性类别。0：一般属性；1：运行时属性（意味模型运行时需要指定）';
+  
   --建立索引
   create index idx_dme_model on dme_model(syscode);
   create index idx_DME_RULESTEP on DME_RULESTEP(syscode);
+  
+
 
 
   

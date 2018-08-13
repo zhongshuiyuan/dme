@@ -16,7 +16,11 @@ namespace Dist.Dme.WebApi
 
             IWebHostBuilder webHostBuilder = CreateWebHostBuilder(args);
             IWebHost webHost = webHostBuilder
-                .UseKestrel()
+                .UseKestrel(options =>
+                {
+                    //所有controller都不限制post的body大小
+                    options.Limits.MaxRequestBodySize = null;
+                })
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()

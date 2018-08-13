@@ -47,6 +47,7 @@ namespace Dist.Dme.WebApi
 
         public IConfiguration Configuration { get; }
 
+       
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -160,15 +161,20 @@ namespace Dist.Dme.WebApi
             IConfigurationSection schedulerSection = this.Configuration.GetSection("Scheduler");
             if (schedulerSection != null)
             {
-                var values = schedulerSection.GetChildren()
-                .Select(item => new KeyValuePair<string, string>(item.Key,
-                item.Value.Contains("$")? Configuration.GetValue<string>(item.Value.Replace("${", "").Replace("}", "")) : item.Value))
-                .ToDictionary(x => x.Key, x => x.Value);
+                if (schedulerSection.GetValue<Boolean>("switch"))
+                {
+                    IConfigurationSection propertiesSection = schedulerSection.GetSection("properties");
+                    var values = propertiesSection.GetChildren()
+                    .Select(item => new KeyValuePair<string, string>(item.Key,
+                    item.Value.Contains("$") ? Configuration.GetValue<string>(item.Value.Replace("${", "").Replace("}", "")) : item.Value))
+                    .ToDictionary(x => x.Key, x => x.Value);
 
-                DmeQuartzScheduler<TaskRunnerJob>.SetSchedulerProperties(DataUtil.ToNameValueCollection(values));
-                DmeQuartzScheduler<TaskRunnerJob>.Start().GetAwaiter();
+                    DmeQuartzScheduler<TaskRunnerJob>.SetSchedulerProperties(DataUtil.ToNameValueCollection(values));
+                    // 调取开启。如果不开启，则不会执行。
+                    DmeQuartzScheduler<TaskRunnerJob>.Start().GetAwaiter();
+                }
             }
-         
+
             // DemoScheduler.RunProOracle().Wait();
             services.AddSwaggerGen(c =>
             {
@@ -205,6 +211,7 @@ namespace Dist.Dme.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            // 获取注册的服务
             ServiceLocator.Instance = app.ApplicationServices;
 
             if (env.IsDevelopment())

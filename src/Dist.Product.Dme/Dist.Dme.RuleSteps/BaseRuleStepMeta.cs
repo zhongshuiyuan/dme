@@ -119,7 +119,8 @@ namespace Dist.Dme.RuleSteps
                     ModelId = this.step.ModelId,
                     VersionId = this.step.VersionId,
                     AttributeCode = item.Key,
-                    AttributeValue = item.Value.Value
+                    AttributeValue = item.Value.Value,
+                    AttributeType = item.Value.Type
                 };
 
                 if (nameof(EnumValueMetaType.TYPE_FEATURECLASS).Equals(item.Value.DataTypeCode)
