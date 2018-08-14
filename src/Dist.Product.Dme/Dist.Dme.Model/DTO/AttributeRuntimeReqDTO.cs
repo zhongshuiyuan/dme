@@ -7,7 +7,7 @@ namespace Dist.Dme.Model.DTO
     /// <summary>
     /// 运行时属性设置
     /// </summary>
-    public class AttributeRuntimeDTO
+    public class AttributeRuntimeReqDTO
     {
         public int RuleStepId { get; set; }
         public string Name { get; set; }

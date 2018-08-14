@@ -9,6 +9,12 @@ namespace Dist.Dme.Model.DTO
     /// </summary>
     public class AttributeRuntimeRespDTO
     {
+       public RuleStepRespDTO RuleStep { get; set; }
+       public IList<AttributeRuntimeDTO> RuntimeAtts { get; set; }
+    }
+
+    public class AttributeRuntimeDTO
+    {
         public int ModelId { get; set; }
         public int VersionId { get; set; }
         public int RuleStepId { get; set; }

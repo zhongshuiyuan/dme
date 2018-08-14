@@ -163,6 +163,13 @@ namespace Dist.Dme.Service.Interfaces
         /// <returns></returns>
         object GetRuntimeAttributes(string modelVersionCode);
         /// <summary>
+        /// 删除指定模型版本
+        /// </summary>
+        /// <param name="modelVersionCode"></param>
+        /// <returns></returns>
+        object DeleteModelVersion(string modelVersionCode);
+
+        /// <summary>
         /// 添加模型版本
         /// </summary>
         /// <param name="dto"></param>

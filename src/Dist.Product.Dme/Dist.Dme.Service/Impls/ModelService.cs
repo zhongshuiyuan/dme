@@ -246,13 +246,12 @@ namespace Dist.Dme.Service.Impls
                 // 自动赋予一个唯一编码
                 dto.SysCode = GuidUtil.NewGuid();
             }
-            var db = base.Repository.GetDbContext();
             // 使用事务
-            DbResult<ModelRegisterRespDTO> dbResult = db.Ado.UseTran<ModelRegisterRespDTO>(() =>
+            DbResult<ModelRegisterRespDTO> dbResult = base.Db.Ado.UseTran<ModelRegisterRespDTO>(() =>
             {
                 // 查询单条没有数据返回NULL, Single超过1条会报错，First不会
                 // base.DmeModelDb.GetContext().Queryable<DmeModel>().Single(m => m.SysCode == dto.SysCode);
-                DmeModel model = db.Queryable<DmeModel>().Where(m => m.SysCode == dto.SysCode).Single();
+                DmeModel model = base.Db.Queryable<DmeModel>().Where(m => m.SysCode == dto.SysCode).Single();
               if (null == model)
               {
                   model = new DmeModel
@@ -266,29 +265,28 @@ namespace Dist.Dme.Service.Impls
                       Status = 1
                   };
                   // 模型类型
-                  DmeModelType modelType = db.Queryable<DmeModelType>().Single(mt => mt.SysCode == dto.TypeCode);
+                  DmeModelType modelType = base.Db.Queryable<DmeModelType>().Single(mt => mt.SysCode == dto.TypeCode);
                     if (modelType != null)
                     {
                         model.ModelTypeId = modelType.Id;
                         model.ModelTypeCode = modelType.SysCode;
                     }
               
-                  model = db.Insertable<DmeModel>(model).ExecuteReturnEntity();
+                  model = base.Db.Insertable<DmeModel>(model).ExecuteReturnEntity();
                   if (null == model)
                   {
                       throw new Exception(String.Format("创建模型失败，原因未明，编码：[{0}]，名称：[{1}]。", dto.SysCode, dto.Name));
                   }
-                 
-                  ModelRegisterRespDTO respDTO = ClassValueCopier<ModelRegisterRespDTO>.Copy(model);
-                    // 处理版本
-                  respDTO.VersionCodes = this.HandleVersions(db, model, dto);
-                  return respDTO;
               }
               else
               {
-                  throw new BusinessException($"模型[{dto.SysCode}]已存在，不能重复注册");
+                    LOG.Info($"模型[{dto.SysCode}]已存在，作为新增版本信息");   
               }
-          });
+              ModelRegisterRespDTO respDTO = ClassValueCopier<ModelRegisterRespDTO>.Copy(model);
+              // 处理版本
+              respDTO.VersionCodes = this.HandleVersions(base.Db, model, dto);
+              return respDTO;
+            });
           return dbResult.Data;
         }
 
@@ -825,9 +823,8 @@ namespace Dist.Dme.Service.Impls
                 LOG.Warn($"模型版本[{modelVersionCode}]下没有找到步骤信息");
                 return null;
             }
-            IDictionary<RuleStepRespDTO, IList<AttributeRuntimeRespDTO>> ruleStep_attributeMap = new Dictionary<RuleStepRespDTO, IList<AttributeRuntimeRespDTO>>();
-            RuleStepRespDTO ruleStepRespDTO = null;
-            IList<AttributeRuntimeRespDTO> runtimeAttriRespDTOs = null;
+            IList<AttributeRuntimeRespDTO> ruleStepRuntimeAttributes = new List<AttributeRuntimeRespDTO>();
+            IList<AttributeRuntimeDTO> runtimeAttriRespDTOs = null;
             foreach (var step in steps)
             {
                 LOG.Info($"模型版本[{modelVersionCode}]，步骤编码[{step.SysCode}]，步骤名称[{step.Name}]");
@@ -852,13 +849,13 @@ namespace Dist.Dme.Service.Impls
                     LOG.Warn($"步骤编码[{step.SysCode}]，步骤名称[{step.Name}]，获取不到步骤元数据的输入参数");
                     continue;
                 }
-                runtimeAttriRespDTOs = new List<AttributeRuntimeRespDTO>();
+                runtimeAttriRespDTOs = new List<AttributeRuntimeDTO>();
                 foreach (var item in runtimeAtts)
                 {
                     if (inParams.ContainsKey(item.AttributeCode))
                     {
                         Property property = inParams[item.AttributeCode];
-                        runtimeAttriRespDTOs.Add(new AttributeRuntimeRespDTO() {
+                        runtimeAttriRespDTOs.Add(new AttributeRuntimeDTO() {
                             ModelId = step.ModelId,
                             VersionId = step.VersionId,
                             RuleStepId = step.Id,
@@ -873,16 +870,20 @@ namespace Dist.Dme.Service.Impls
                 {
                     continue;
                 }
-                ruleStepRespDTO = new RuleStepRespDTO() {
-                    SysCode = step.SysCode,
-                    Name = step.Name,
-                    Remark = step.Remark,
-                    ModelId = step.ModelId,
-                    VersionId = step.VersionId
-                };
-                ruleStep_attributeMap[ruleStepRespDTO] = runtimeAttriRespDTOs;
+                ruleStepRuntimeAttributes.Add(new AttributeRuntimeRespDTO()
+                {
+                    RuleStep = new RuleStepRespDTO()
+                    {
+                        SysCode = step.SysCode,
+                        Name = step.Name,
+                        Remark = step.Remark,
+                        ModelId = step.ModelId,
+                        VersionId = step.VersionId
+                    },
+                    RuntimeAtts = runtimeAttriRespDTOs
+                });
             }
-            return ruleStep_attributeMap;
+            return ruleStepRuntimeAttributes;
         }
         public object AddModelVersion(ModelVersionSimpleAddDTO dto)
         {
@@ -895,6 +896,10 @@ namespace Dist.Dme.Service.Impls
                 Status = 1
             };
             return base.Db.Insertable<DmeModelVersion>(dmeModelVersion).ExecuteReturnEntity();
+        }
+        public object DeleteModelVersion(string modelVersionCode)
+        {
+            return base.Db.Updateable<DmeModelVersion>().UpdateColumns(mv => mv.Status == 0).Where(mv => mv.SysCode == modelVersionCode).ExecuteCommand() > 0;
         }
     }
 }

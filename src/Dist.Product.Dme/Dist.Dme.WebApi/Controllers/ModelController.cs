@@ -137,12 +137,13 @@ namespace Dist.Dme.WebApi.Controllers
             return base.Success(base.modelService.UpdateModelBasicInfo(dto));
         }
         /// <summary>
-        /// 添加模型版本
+        /// 添加模型版本简单信息
         /// </summary>
         /// <param name="dto">参数模型</param>
         /// <returns></returns>
         [HttpPost]
         [Route("v1/version")]
+        [Obsolete("use POST [register/v1] instead")]
         public Result AddModelVersion([FromBody]ModelVersionSimpleAddDTO dto)
         {
             return base.Success(base.modelService.AddModelVersion(dto));
@@ -159,7 +160,18 @@ namespace Dist.Dme.WebApi.Controllers
             return base.Success(base.modelService.UpdateModelVersion(dto));
         }
         /// <summary>
-        /// 模型注册
+        /// 逻辑删除模型版本
+        /// </summary>
+        /// <param name="modelVersionCode">模型版本唯一编码</param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("v1/version/{modelVersionCode}")]
+        public Result DeleteModelVersion(string modelVersionCode)
+        {
+            return base.Success(base.modelService.DeleteModelVersion(modelVersionCode));
+        }
+        /// <summary>
+        /// 模型注册和版本注册
         /// </summary>
         /// <param name="dto">参数模型，当SysCode为空时，系统会自动附上一个唯一编码</param>
         /// <returns></returns>

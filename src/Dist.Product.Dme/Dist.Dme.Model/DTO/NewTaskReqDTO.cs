@@ -69,6 +69,6 @@ namespace Dist.Dme.Model.DTO
         /// <summary>
         /// 运行时的属性设置列表
         /// </summary>
-        public IList<AttributeRuntimeDTO> RuntimeAttributes { get; set; } = new List<AttributeRuntimeDTO>();
+        public IList<AttributeRuntimeReqDTO> RuntimeAttributes { get; set; } = new List<AttributeRuntimeReqDTO>();
     }
 }
