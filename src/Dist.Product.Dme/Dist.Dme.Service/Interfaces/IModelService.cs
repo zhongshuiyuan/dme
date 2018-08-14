@@ -52,6 +52,7 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="parameters"></param>
         /// <returns></returns>
         object OverlayExecute(IDictionary<String, Property> parameters);
+  
         /// <summary>
         /// 复制模型的一个版本
         /// </summary>
@@ -137,6 +138,12 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="dto"></param>
         /// <returns></returns>
         object UpdateModelTypes(ModelTypeUpdateDTO dto);
+        /// <summary>
+        /// 删除模型类型
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        object DeleteModelTypes(string code);
         /// <summary>
         /// 更新模型基本信息
         /// </summary>

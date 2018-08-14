@@ -64,6 +64,17 @@ namespace Dist.Dme.WebApi.Controllers
             return base.Error(ModelState);
         }
         /// <summary>
+        /// 删除算法
+        /// </summary>
+        /// <param name="code">算法唯一编码</param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("v1/{code}")]
+        public Result DeleteAlgorithm(string code)
+        {
+            return base.Success(base.algorithmService.DeleteAlgorithm(code));
+        }
+        /// <summary>
         /// 注册本地算法（从本地DLL获取）
         /// </summary>
         /// <param name="algCode">算法唯一编码。输入为空，说明是遍历全部</param>

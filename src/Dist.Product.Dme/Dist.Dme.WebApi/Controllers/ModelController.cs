@@ -57,6 +57,17 @@ namespace Dist.Dme.WebApi.Controllers
             return base.Success(base.modelService.UpdateModelTypes(dto));
         }
         /// <summary>
+        /// 删除模型类型
+        /// </summary>
+        /// <param name="code">类型唯一编码</param>
+        /// <returns>true/false</returns>
+        [HttpDelete]
+        [Route("v1/types/{code}")]
+        public Result DeleteModelTypes(string code)
+        {
+            return base.Success(base.modelService.DeleteModelTypes(code));
+        }
+        /// <summary>
         ///  获取模型类型列表
         /// </summary>
         /// <param name="orderFieldName">排序字段名称（仅限一个）</param>

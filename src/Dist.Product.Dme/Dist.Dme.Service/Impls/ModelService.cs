@@ -173,12 +173,12 @@ namespace Dist.Dme.Service.Impls
             // 倒序
             if (-1 == isPublish)
             {
-                models = base.Repository.GetDbContext().Queryable<DmeModel>().Where(m => m.Status == (int)enumModelStatus).OrderBy(m => m.CreateTime, OrderByType.Desc).ToList();
+                models = base.Db.Queryable<DmeModel>().Where(m => m.Status == (int)enumModelStatus).OrderBy(m => m.CreateTime, OrderByType.Desc).ToList();
             }
             else
             {
                 // 是否发布
-                models = base.Repository.GetDbContext().Queryable<DmeModel>().Where(m => m.IsPublish == isPublish && m.Status == (int)enumModelStatus).OrderBy(m => m.CreateTime, OrderByType.Desc).ToList();
+                models = base.Db.Queryable<DmeModel>().Where(m => m.IsPublish == isPublish && m.Status == (int)enumModelStatus).OrderBy(m => m.CreateTime, OrderByType.Desc).ToList();
             }
 
             if (null == models || 0 == models.Count)
@@ -196,7 +196,26 @@ namespace Dist.Dme.Service.Impls
                     if (!string.IsNullOrWhiteSpace(m.ModelTypeCode))
                     {
                         DmeModelType dmeModelType = base.Db.Queryable<DmeModelType>().InSingle(m.ModelTypeId);
-                        modelTypeDTO = ClassValueCopier<ModelTypeDTO>.Copy(dmeModelType);
+                        if (dmeModelType != null)
+                        {
+                            modelTypeDTO = ClassValueCopier<ModelTypeDTO>.Copy(dmeModelType);
+                        }
+                        else
+                        {
+                            // 如果没有找到数据，设置为默认
+                            modelTypeDTO = new ModelTypeDTO
+                            {
+                                Id = -1,
+                                SysCode = "-",
+                                Name = "默认"
+                            };
+                            Task.Run(() => {
+                                LOG.Info($"当前模型[{m.SysCode}][{m.Name}]类型已失效，更新模型类型数据");
+                                m.ModelTypeId = null;
+                                m.ModelTypeCode = "";
+                                base.Db.Updateable<DmeModel>(m).ExecuteCommand();
+                            });
+                        }
                     }
                     modelDTO = this.GetModelMetadata(m, detail);
                     modelDTO.Type = modelTypeDTO;
@@ -763,6 +782,10 @@ namespace Dist.Dme.Service.Impls
                 .UpdateColumns(mt => new DmeModelType { Name = dto.NewName, LastTime = DateUtil.CurrentTimeMillis })
                 .Where(mt2 => mt2.SysCode == dto.SysCode).ExecuteCommand();
             return true;
+        }
+        public object DeleteModelTypes(string code)
+        {
+            return base.Repository.GetDbContext().Deleteable<DmeModelType>().Where(mt => mt.SysCode == code).ExecuteCommand() > 0;
         }
         public object UpdateModelBasicInfo(ModelBasicInfoUpdateDTO dto)
         {

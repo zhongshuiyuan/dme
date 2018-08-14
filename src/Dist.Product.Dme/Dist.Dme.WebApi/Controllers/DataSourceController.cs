@@ -101,13 +101,23 @@ namespace Dist.Dme.WebApi.Controllers
             }
             return base.Success(base.dataSourceService.AddDataSource(dto));
         }
-  
+        /// <summary>
+        /// 删除数据源
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("v1/{code}")]
+        public Result DeleteDataSource(string code)
+        {
+            return base.Success(base.dataSourceService.DeleteDataSource(code));
+        }
     /// <summary>
     /// 验证连接是否有效
     /// </summary>
     /// <param name="dto"></param>
     /// <returns>true/false</returns>
-    [HttpPost]
+        [HttpPost]
         [Route("conn/valid/v1")]
         public Result CheckConnectionValid([FromBody]DataSourceConnDTO dto)
         {

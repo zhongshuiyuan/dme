@@ -242,7 +242,7 @@ namespace Dist.Dme.Service.Impls
                 }
                 catch (Exception ex)
                 {
-                    LOG.Error("获取本地算法对象失败", ex);
+                    LOG.Error(ex, "获取本地算法对象失败");
                     continue;
                 }
             }
@@ -309,11 +309,11 @@ namespace Dist.Dme.Service.Impls
                         };
                         algorithmAddReqDTO.Metas = new List<AlgorithmMetaReqDTO>();
                         // 输入参数
-                        this.GetAlgParameters((IDictionary<String, Property>)tempAlgorithm.InParams, ParameterType.IN, algorithmAddReqDTO);
+                        this.GetAlgParameters((IDictionary<String, Property>)tempAlgorithm.InParams, AlgorithmParameterType.IN, algorithmAddReqDTO);
                         // 输出参数
-                        this.GetAlgParameters((IDictionary<String, Property>)tempAlgorithm.OutParams, ParameterType.OUT, algorithmAddReqDTO);
+                        this.GetAlgParameters((IDictionary<String, Property>)tempAlgorithm.OutParams, AlgorithmParameterType.OUT, algorithmAddReqDTO);
                         // 特征参数
-                        this.GetAlgParameters((IDictionary<String, Property>)tempAlgorithm.FeatureParams, ParameterType.IN_F, algorithmAddReqDTO);
+                        this.GetAlgParameters((IDictionary<String, Property>)tempAlgorithm.FeatureParams, AlgorithmParameterType.IN_F, algorithmAddReqDTO);
                         // 持久化数据
                         this.AddAlgorithm(algorithmAddReqDTO);
                         if (string.IsNullOrEmpty(algCode))
@@ -330,74 +330,11 @@ namespace Dist.Dme.Service.Impls
                 }
                 catch (Exception ex)
                 {
-                    LOG.Error("注册本地算法失败", ex);
+                    LOG.Error(ex, "注册本地算法失败");
                     continue;
                 }
             }
             return true;
-            //var types = AppDomain.CurrentDomain.GetAssemblies()
-            //      .SelectMany(a => a.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IAlgorithm))))
-            //      .ToArray();
-            //if (null == types || 0 == types.Count())
-            //{
-            //    LOG.Warn($"没有找到算法接口[{nameof(IAlgorithm)}]的相关实现体");
-            //    return false;
-            //}
-            //IAlgorithm tempAlgorithm = null;
-            //foreach (var type in types)
-            //{
-            //    if (type.IsAbstract)
-            //    {
-            //        // 抽象类排除
-            //        continue;
-            //    }
-            //    try
-            //    {
-            //        tempAlgorithm = (IAlgorithm)type.Assembly.CreateInstance(type.FullName, true);
-            //        if (null == tempAlgorithm)
-            //        {
-            //            continue;
-            //        }
-            //        if (string.IsNullOrEmpty(algCode) || algCode.Equals(tempAlgorithm.SysCode))
-            //        {
-            //            AlgorithmAddReqDTO algorithmAddReqDTO = new AlgorithmAddReqDTO
-            //            {
-            //                SysCode = tempAlgorithm.SysCode,
-            //                Name = tempAlgorithm.Name,
-            //                Alias = tempAlgorithm.Alias,
-            //                Version = tempAlgorithm.Version,
-            //                Remark = tempAlgorithm.Remark,
-            //                Type = tempAlgorithm.AlgorithmType.Code,
-            //                Extension = JsonConvert.SerializeObject(tempAlgorithm.AlgorithmType.Metadata)
-            //            };
-            //            algorithmAddReqDTO.Metas = new List<AlgorithmMetaReqDTO>();
-            //            // 输入参数
-            //            this.GetAlgParameters((IDictionary<String, Property>)tempAlgorithm.InParams, ParameterType.IN, algorithmAddReqDTO);
-            //            // 输出参数
-            //            this.GetAlgParameters((IDictionary<String, Property>)tempAlgorithm.OutParams, ParameterType.OUT, algorithmAddReqDTO);
-            //            // 特征参数
-            //            this.GetAlgParameters((IDictionary<String, Property>)tempAlgorithm.FeatureParams, ParameterType.IN_F, algorithmAddReqDTO);
-            //            // 持久化数据
-            //            this.AddAlgorithm(algorithmAddReqDTO);
-            //            if (string.IsNullOrEmpty(algCode))
-            //            {
-            //                // 表示所有，继续遍历其它算法
-            //                continue;
-            //            }
-            //            else
-            //            {
-            //                // 表示指定算法
-            //                break;
-            //            }
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        LOG.Error("从本地注册算法对象失败", ex);
-            //        continue;
-            //    }
-            //}
-            //return true;
         }
 
         private void GetAlgParameters(IDictionary<String, Property> parameters, string parameterType, AlgorithmAddReqDTO algorithmAddReqDTO)
@@ -420,6 +357,22 @@ namespace Dist.Dme.Service.Impls
                     algorithmAddReqDTO.Metas.Add(tempAlgMeta);
                 }
             }
+        }
+        public object DeleteAlgorithm(string code)
+        {
+            DmeAlgorithm dmeAlgorithm = base.Db.Queryable<DmeAlgorithm>().Single(alg => alg.SysCode == code);
+            if (null == dmeAlgorithm)
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"算法[{code}]不存在");
+            }
+            LOG.Info($"删除模型中依赖的算法[{code}]");
+            base.Db.Deleteable<DmeRuleStepAttribute>().Where(rsa => rsa.AttributeValue.ToString() == code).ExecuteCommand();
+            LOG.Info($"删除模型中依赖的算法参数信息");
+            base.Db.Deleteable<DmeAlgorithmMeta>().Where(am => am.AlgorithmId == dmeAlgorithm.Id).ExecuteCommand();
+            LOG.Info($"删除模型中依赖的算法实体信息");
+            base.Db.Deleteable<DmeAlgorithm>().In(dmeAlgorithm.Id);
+
+            return true;
         }
     }
 }

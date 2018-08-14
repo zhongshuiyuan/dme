@@ -206,9 +206,22 @@ namespace Dist.Dme.Service.Impls
                 dmeDataSource.Connection = JsonConvert.SerializeObject(metas);
             }
             
-            Repository.GetDbContext().Insertable<DmeDataSource>(dmeDataSource).ExecuteCommandIdentityIntoEntity();
+            base.Db.Insertable<DmeDataSource>(dmeDataSource).ExecuteCommandIdentityIntoEntity();
 
             return dmeDataSource;
+        }
+        public object DeleteDataSource(string code)
+        {
+            DmeDataSource dmeDataSource = base.Db.Queryable<DmeDataSource>().Single(ds => ds.SysCode == code);
+            if (null == dmeDataSource)
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"数据源[{code}]不存在");
+            }
+            LOG.Info($"删除步骤与数据源[{code}]的关联数据");
+            base.Db.Deleteable<DmeRuleStepDataSource>().Where(rsds => rsds.DataSourceId == dmeDataSource.Id).ExecuteCommand();
+            LOG.Info($"删除数据源[{code}]的信息");
+            base.Db.Deleteable<DmeDataSource>().Where(ds => ds.SysCode == code).ExecuteCommand();
+            return true;
         }
     }
 }

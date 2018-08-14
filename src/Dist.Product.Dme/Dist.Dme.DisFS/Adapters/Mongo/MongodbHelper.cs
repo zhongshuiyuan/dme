@@ -451,7 +451,7 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
             try
             {
                 var client = MongodbManager<T>.GetMongodbCollection(host);
-                return client.Count(filter);
+                return client.CountDocuments(filter);
             }
             catch (Exception ex)
             {
@@ -689,7 +689,7 @@ namespace Dist.Dme.DisFS.Adapters.Mongo
             try
             {
                 var client = MongodbManager<T>.GetMongodbCollection(host);
-                count = client.Count(filter);
+                count = client.CountDocuments(filter);
                 //不指定查询字段
                 if (field == null || field.Length == 0)
                 {

@@ -75,7 +75,7 @@ namespace Dist.Dme.SRCE.Esri.AnalysisTools.Overlay
             }
             catch (Exception e)
             {
-                LOG.Error($"{nameof(GetTopounionGeometryByQuery)}抛异常", e);
+                LOG.Error(e, $"{nameof(GetTopounionGeometryByQuery)}抛异常");
             }
         }
         /// <summary>

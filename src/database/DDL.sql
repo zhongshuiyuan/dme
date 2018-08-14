@@ -989,7 +989,10 @@ comment on column DME_RULESTEP_ATTRIBUTE.attribute_type
   
   --½¨Á¢Ë÷Òý
   create index idx_dme_model on dme_model(syscode);
+  create index idx_dme_model_type on dme_model_type(syscode);
   create index idx_DME_RULESTEP on DME_RULESTEP(syscode);
+
+  
   
 
 

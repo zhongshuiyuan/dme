@@ -84,5 +84,11 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="metas">多文件的元数据</param>
         /// <returns></returns>
         object AddDmeFileSystemSource(string name, IList<DmeFileSystemMeta> metas);
+        /// <summary>
+        /// 删除数据源
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        object DeleteDataSource(string code);
     }
 }

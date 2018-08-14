@@ -41,5 +41,11 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="algCode">算法唯一编码</param>
         /// <returns></returns>
         object RegistryAlgorithmFromLocal(string algCode);
+        /// <summary>
+        /// 删除算法
+        /// </summary>
+        /// <param name="code">算法唯一编码</param>
+        /// <returns></returns>
+        object DeleteAlgorithm(string code);
     }
 }
