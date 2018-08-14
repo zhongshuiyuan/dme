@@ -156,5 +156,17 @@ namespace Dist.Dme.Service.Interfaces
         /// <param name="dto"></param>
         /// <returns></returns>
         object UpdateModelVersion(ModelVersionUpdateDTO dto);
+        /// <summary>
+        /// 获取模型运行时参数
+        /// </summary>
+        /// <param name="modelVersionCode">模型版本唯一编码</param>
+        /// <returns></returns>
+        object GetRuntimeAttributes(string modelVersionCode);
+        /// <summary>
+        /// 添加模型版本
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        object AddModelVersion(ModelVersionSimpleAddDTO dto);
     }
 }

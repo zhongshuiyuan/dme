@@ -18,7 +18,7 @@ namespace Dist.Dme.Model.DTO
         public RuleStepTypeDTO StepType { get; set; }
 
         /// <summary>
-        /// 步骤关联的属性键值对
+        /// 步骤关联的属性列表
         /// </summary>
         public IList<AttributeReqDTO> Attributes { get; set; } = new List<AttributeReqDTO>();
     }

@@ -23,6 +23,6 @@ namespace Dist.Dme.Model.Entity
         public int IsNeedPrecursor { get; set; }
         public int RowIndex { get; set; }
         [SugarColumn(ColumnName = "ATTRIBUTE_TYPE")]
-        public object AttributeType { get; set; }
+        public int AttributeType { get; set; }
     }
 }

@@ -137,6 +137,17 @@ namespace Dist.Dme.WebApi.Controllers
             return base.Success(base.modelService.UpdateModelBasicInfo(dto));
         }
         /// <summary>
+        /// 添加模型版本
+        /// </summary>
+        /// <param name="dto">参数模型</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("v1/version")]
+        public Result AddModelVersion([FromBody]ModelVersionSimpleAddDTO dto)
+        {
+            return base.Success(base.modelService.AddModelVersion(dto));
+        }
+        /// <summary>
         /// 更新模型版本信息
         /// </summary>
         /// <param name="dto"></param>
@@ -310,6 +321,17 @@ namespace Dist.Dme.WebApi.Controllers
                 return base.Success(result);
             }
             return base.Fail("删除模型失败，详情请管理员查看具体日志信息。");
+        }
+        /// <summary>
+        /// 获取模型运行时参数
+        /// </summary>
+        /// <param name="modelVersionCode"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("v1/runtime/attributes/{modelVersionCode}")]
+        public Result GetRuntimeAttributes(string modelVersionCode)
+        {
+            return base.Success(base.modelService.GetRuntimeAttributes(modelVersionCode));
         }
     }
 }

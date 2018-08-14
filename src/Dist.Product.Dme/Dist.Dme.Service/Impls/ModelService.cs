@@ -811,5 +811,90 @@ namespace Dist.Dme.Service.Impls
             base.Db.Updateable<DmeModelVersion>().UpdateColumns(mv => new DmeModelVersion { Name = dto.NewName }).Where(mv => mv.SysCode == dto.SysCode).ExecuteCommand();
             return true;
         }
+        public object GetRuntimeAttributes(string modelVersionCode)
+        {
+            DmeModelVersion dmeModelVersion = base.Db.Queryable<DmeModelVersion>().Single(mv => mv.SysCode == modelVersionCode);
+            if (null == dmeModelVersion)
+            {
+                throw new BusinessException((int)EnumSystemStatusCode.DME_ERROR, $"模型版本[{modelVersionCode}]不存在");
+            }
+            // 查找模型版本下步骤信息
+            List<DmeRuleStep> steps = base.Db.Queryable<DmeRuleStep>().Where(rs => rs.ModelId == dmeModelVersion.ModelId && rs.VersionId == dmeModelVersion.Id).ToList();
+            if (0 == steps?.Count)
+            {
+                LOG.Warn($"模型版本[{modelVersionCode}]下没有找到步骤信息");
+                return null;
+            }
+            IDictionary<RuleStepRespDTO, IList<AttributeRuntimeRespDTO>> ruleStep_attributeMap = new Dictionary<RuleStepRespDTO, IList<AttributeRuntimeRespDTO>>();
+            RuleStepRespDTO ruleStepRespDTO = null;
+            IList<AttributeRuntimeRespDTO> runtimeAttriRespDTOs = null;
+            foreach (var step in steps)
+            {
+                LOG.Info($"模型版本[{modelVersionCode}]，步骤编码[{step.SysCode}]，步骤名称[{step.Name}]");
+                // 查找运行时参数
+                List<DmeRuleStepAttribute> runtimeAtts = base.Db.Queryable<DmeRuleStepAttribute>().Where(rsa => rsa.RuleStepId == step.Id && rsa.AttributeType == (int)EnumAttributeType.RUNTIME).ToList();
+                if (0 == runtimeAtts?.Count)
+                {
+                    LOG.Warn($"步骤[{step.Name}]下没有设置属性");
+                    continue;
+                }
+                // 查找步骤类型
+                DmeRuleStepType ruleStepType = base.Db.Queryable<DmeRuleStepType>().InSingle(step.StepTypeId);
+                if (null == ruleStepType)
+                {
+                    LOG.Warn($"步骤类型id[{step.StepTypeId}]不存在");
+                    continue;
+                }
+                IRuleStepData ruleStepData = RuleStepFactory.GetRuleStepData(ruleStepType.Code, base.Repository, null, step);
+                IDictionary<string, Property> inParams = ruleStepData.RuleStepMeta.InParams;
+                if (null == inParams)
+                {
+                    LOG.Warn($"步骤编码[{step.SysCode}]，步骤名称[{step.Name}]，获取不到步骤元数据的输入参数");
+                    continue;
+                }
+                runtimeAttriRespDTOs = new List<AttributeRuntimeRespDTO>();
+                foreach (var item in runtimeAtts)
+                {
+                    if (inParams.ContainsKey(item.AttributeCode))
+                    {
+                        Property property = inParams[item.AttributeCode];
+                        runtimeAttriRespDTOs.Add(new AttributeRuntimeRespDTO() {
+                            ModelId = step.ModelId,
+                            VersionId = step.VersionId,
+                            RuleStepId = step.Id,
+                            Name = item.AttributeCode,
+                            Alias = property.Alias,
+                            DataTypeCode = property.DataTypeCode,
+                            DataTypeDesc = property.DataTypeDesc
+                        });
+                    }
+                }
+                if (0 == runtimeAttriRespDTOs.Count)
+                {
+                    continue;
+                }
+                ruleStepRespDTO = new RuleStepRespDTO() {
+                    SysCode = step.SysCode,
+                    Name = step.Name,
+                    Remark = step.Remark,
+                    ModelId = step.ModelId,
+                    VersionId = step.VersionId
+                };
+                ruleStep_attributeMap[ruleStepRespDTO] = runtimeAttriRespDTOs;
+            }
+            return ruleStep_attributeMap;
+        }
+        public object AddModelVersion(ModelVersionSimpleAddDTO dto)
+        {
+            DmeModelVersion dmeModelVersion = new DmeModelVersion
+            {
+                SysCode = GuidUtil.NewGuid(),
+                ModelId = dto.ModelId,
+                Name = dto.Name,
+                CreateTime = DateUtil.CurrentTimeMillis,
+                Status = 1
+            };
+            return base.Db.Insertable<DmeModelVersion>(dmeModelVersion).ExecuteReturnEntity();
+        }
     }
 }

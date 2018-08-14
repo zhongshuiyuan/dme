@@ -987,6 +987,38 @@ alter table DME_RULESTEP_ATTRIBUTE add attribute_type integer default 0;
 comment on column DME_RULESTEP_ATTRIBUTE.attribute_type
   is '属性类别。0：一般属性；1：运行时属性（意味模型运行时需要指定）';
   
+  -- Create table
+create table DME_TASK_attribute
+(
+  id              number(8),
+  taskId      number(8),
+  modelid         number(8),
+  versionid       number(8),
+  rulestepId     number(8),
+  attribute_code  varchar2(50),
+  attribute_value clob
+)
+;
+-- Add comments to the table 
+comment on table DME_TASK_attribute
+  is '模型运行时属性设置';
+-- Add comments to the columns 
+comment on column DME_TASK_attribute.id
+  is '主键id';
+comment on column DME_TASK_attribute.taskid
+  is '任务id';
+comment on column DME_TASK_attribute.modelid
+  is '模型id';
+comment on column DME_TASK_attribute.versionid
+  is '版本id';
+comment on column DME_TASK_attribute.rulestepId
+  is '步骤id';
+comment on column DME_TASK_attribute.attribute_code
+  is '属性编码';
+comment on column DME_TASK_attribute.attribute_value
+  is '属性值';
+alter table DME_TASK_attribute add primary key(id);
+  
   --建立索引
   create index idx_dme_model on dme_model(syscode);
   create index idx_dme_model_type on dme_model_type(syscode);
